@@ -2,8 +2,6 @@
 #include "KeyRunner.h"
 #include "InfoBar.h"
 
-#define LEVEL_COUNT 5
-
 Level level;
 State state;
 int levelNum;

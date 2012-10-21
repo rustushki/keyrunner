@@ -20,6 +20,10 @@ int getHeight() {
 }
 
 void exitGame() {
+	SDL_Event quitEvent;
+	quitEvent.type = SDL_QUIT;
+	SDL_PushEvent(&quitEvent);
+
 	exit(1);
 }
 
@@ -104,6 +108,7 @@ int clockTick(void* unused) {
 
 	state = QUIT;
 
+	SDL_CondSignal(levelCond);
 	return 0;
 }
 

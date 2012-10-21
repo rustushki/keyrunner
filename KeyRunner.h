@@ -5,6 +5,8 @@
 #include <SDL/SDL_image.h>
 #include <iostream>
 
+#define LEVEL_COUNT 5
+
 class Level;
 
 // Game State.
