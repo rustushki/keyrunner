@@ -6,6 +6,7 @@
 #include <iostream>
 
 #define LEVEL_COUNT 5
+#define VERSION 1
 
 class Level;
 

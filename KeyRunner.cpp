@@ -1,6 +1,7 @@
 #include "KeyRunner.h"
 #include "InfoBar.h"
 #include "Level.h"
+#include <sstream>
 #include <SDL/SDL_ttf.h>
 
 SDL_Surface *screen;
@@ -49,6 +50,10 @@ void initScreen() {
 	if (TTF_Init() == -1) {
 		std::cout << "Error initializing SDL_ttf: " << TTF_GetError() << std::endl;
 	}
+
+	std::stringstream ss;
+	ss << "Key Runner r" << VERSION;
+	SDL_WM_SetCaption(ss.str().c_str(), "");
 }
 
 /* ------------------------------------------------------------------------------
