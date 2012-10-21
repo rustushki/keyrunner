@@ -1,0 +1,14 @@
+--------------------------------------------------------------------------------
+* KeyRunner, a Killer Game by Rustushki
+--------------------------------------------------------------------------------
+
+Compilation Instructions:
+
+$ tar xvf keyrunner-r1.tar.gz
+$ cd keyrunner-r1
+$ g++ *.cpp -lSDL -lSDL_image -lSDL_ttf -o keyrunner
+$ ./keyrunner
+
+I hope to create a Debian package soon.
+
+Thanks for your interest!
