@@ -8,6 +8,9 @@ int timeClock;
 SDL_cond* flipCond;
 SDL_mutex* flipLock;
 
+SDL_cond* levelCond;
+SDL_mutex* levelLock;
+
 int getWidth() {
 	return GRID_WIDTH*25;
 }
@@ -82,7 +85,7 @@ int handleEvents(void* unused) {
 
 		if (level.isComplete()) {
 			levelNum++;
-			return 0;
+			SDL_CondSignal(levelCond);
 		}
 	}
 }

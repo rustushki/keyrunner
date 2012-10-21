@@ -23,6 +23,9 @@ extern int timeClock;
 
 extern SDL_cond* flipCond;
 extern SDL_mutex* flipLock;
+extern SDL_cond* levelCond;
+extern SDL_mutex* levelLock;
+
 extern State state;
 extern int levelNum;
 

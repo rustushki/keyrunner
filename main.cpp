@@ -15,6 +15,9 @@ int main() {
 	flipLock = SDL_CreateMutex();
 	flipCond = SDL_CreateCond();
 
+	levelLock = SDL_CreateMutex();
+	levelCond = SDL_CreateCond();
+
 	initScreen();
 
 	timeClock = 10000;
@@ -26,15 +29,21 @@ int main() {
 
 	while (levelNum <= LEVEL_COUNT && state != QUIT) {
 
+		if (levelNum != 1) {
+			timeClock += 10000;
+		}
+
 		level = Level();
 
 		level.load(levelNum);
 		level.draw();
 
+		SDL_LockMutex(levelLock);
+		SDL_CondWait(levelCond, levelLock);
 
-		timeClock += 10000;
-		
 	}
+
+	state = QUIT;
 
 	SDL_WaitThread(udThread, NULL);
 	SDL_WaitThread(ctThread, NULL);
