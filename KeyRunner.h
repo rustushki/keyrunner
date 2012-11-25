@@ -5,7 +5,7 @@
 #include <SDL/SDL_image.h>
 #include <iostream>
 
-#define LEVEL_COUNT 10 
+#define LEVEL_COUNT 13
 #define VERSION 1
 
 class Level;
