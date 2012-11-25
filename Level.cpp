@@ -61,10 +61,21 @@ bool Level::parseLine(std::string line) {
 			this->keyX = parseX;
 			this->keyY = parseY;
 			tt = TILETYPE_EMPTY;
+
 		} else if (b == 'p') {
 			this->playerX = parseX;
 			this->playerY = parseY;
 			tt = TILETYPE_EMPTY;
+
+		} else if (b == 't') {
+			tt = TILETYPE_TELEPORTER_RED;
+
+		} else if (b == 'u') {
+			tt = TILETYPE_TELEPORTER_GREEN;
+
+		} else if (b == 'v') {
+			tt = TILETYPE_TELEPORTER_BLUE;
+
 		} else {
 			tt = (TileType)(b - 0x30);
 		}
@@ -137,12 +148,27 @@ SDL_Surface* Level::getTileImage(TileType type) {
 	if (type == TILETYPE_EMPTY) {
 		static SDL_Surface* tile = IMG_Load("img/tile.png");
 		return tile;
+
 	} else if (type == TILETYPE_WALL) {
 		static SDL_Surface* wall = IMG_Load("img/wall.png");
 		return wall;
+
 	} else if (type == TILETYPE_DOOR) {
 		static SDL_Surface* door = IMG_Load("img/door.png");
 		return door;
+
+	} else if (type == TILETYPE_TELEPORTER_RED) {
+		static SDL_Surface* tilered = IMG_Load("img/teleporter_red.png");
+		return tilered;
+
+	} else if (type == TILETYPE_TELEPORTER_GREEN) {
+		static SDL_Surface* tilered = IMG_Load("img/teleporter_green.png");
+		return tilered;
+
+	} else if (type == TILETYPE_TELEPORTER_BLUE) {
+		static SDL_Surface* tilered = IMG_Load("img/teleporter_blue.png");
+		return tilered;
+
 	} else {
 		std::cout << "Invalid Tile Type. " << (int)type << std::endl;
 		exitGame();
@@ -175,6 +201,17 @@ bool Level::isWall(int x, int y) {
 
 bool Level::isDoor(int x, int y) {
 	return (this->tile[y][x] == TILETYPE_DOOR);
+}
+
+/* ------------------------------------------------------------------------------
+ * isTeleporterTile - Return true if the tile is a teleporter tile.
+ */
+bool Level::isTeleporterTile(int x, int y) {
+	TileType tt = this->tile[y][x];
+
+	return (    tt == TILETYPE_TELEPORTER_RED
+	         || tt == TILETYPE_TELEPORTER_GREEN
+	         || tt == TILETYPE_TELEPORTER_BLUE);
 }
 
 void Level::movePlayer(Direction d) {
@@ -219,7 +256,64 @@ void Level::movePlayer(Direction d) {
 		this->playerHasKey = true;
 	}
 
+	// Handle Teleporter Tiles.
+	if (this->isTeleporterTile(newPlayerX, newPlayerY)) {
+
+		std::vector<int> newPos;
+		newPos = this->getMatchingTeleporterTile(newPlayerX, newPlayerY);
+
+		this->playerX = newPos[0];
+		this->playerY = newPos[1];
+		this->addChangedTile(this->playerX, this->playerY);
+	}
+
 	this->redrawChangedTiles();
+
+}
+
+/* ------------------------------------------------------------------------------
+ * getMatchingTeleporterTile - Given a teleporter tile X and Y, return the
+ * matching teleporter tile's X and Y.  Return as a vector int.
+ */
+std::vector<int> Level::getMatchingTeleporterTile(int tileX, int tileY) {
+
+	std::vector<int> matching;
+
+	// Handle case where a non-telepoprter tile is passed in.  Return the same
+	// tile provided.  This should never happen.
+	if (!this->isTeleporterTile(tileX, tileY)) {
+		matching.push_back(tileX);
+		matching.push_back(tileY);
+
+
+	// Normal case. Find the first matching teleporter tile.
+	} else {
+
+		// Search for the matching tile.
+		bool found = false;
+		for (int x = 0; x < GRID_WIDTH; x++) {
+			for (int y = 0; y < GRID_HEIGHT; y++) {
+
+				if (x != tileX || y != tileY) {
+
+					// Found the a Teleporter Tile of the same color which is not this tile.
+					if (tile[tileY][tileX] == tile[y][x]) {
+						matching.push_back(x);
+						matching.push_back(y);
+						found = true;
+						break;
+					}
+
+				}
+			}
+			if (found) {
+				break;
+			}
+		}
+	}
+
+	return matching;
+
 
 }
 

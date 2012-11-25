@@ -13,6 +13,9 @@ enum TileType {
 	  TILETYPE_EMPTY
 	, TILETYPE_WALL
 	, TILETYPE_DOOR
+	, TILETYPE_TELEPORTER_RED
+	, TILETYPE_TELEPORTER_GREEN
+	, TILETYPE_TELEPORTER_BLUE
 	, TILETYPE_COUNT
 
 };
@@ -49,6 +52,8 @@ private:
 	std::vector< std::vector<int> > changedTiles;
 	void addChangedTile(int x, int y);
 
+	std::vector<int> getMatchingTeleporterTile(int x, int y);
+
 public:
 	Level();
 	void load(int level);
@@ -63,6 +68,7 @@ public:
 	bool hasPlayer(int x, int y);
 	bool isWall(int x, int y);
 	bool isDoor(int x, int y);
+	bool isTeleporterTile(int x, int y);
 
 	void movePlayer(Direction d);
 
