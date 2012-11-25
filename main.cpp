@@ -6,7 +6,14 @@ Level level;
 State state;
 int levelNum;
 
-int main() {
+int main(int argc, char** argv) {
+
+	// Simple Support for Starting on a Different Level.
+	if (argc > 1) {
+		levelNum = atoi(argv[1]);
+	} else {
+		levelNum  = 1;
+	}
 
 	state = PLAY;
 
@@ -19,15 +26,15 @@ int main() {
 	initScreen();
 
 	timeClock = 10000;
-	levelNum  = 1;
 
 	SDL_Thread *heThread = SDL_CreateThread(handleEvents, NULL);
 	SDL_Thread *ctThread = SDL_CreateThread(clockTick, NULL);
 	SDL_Thread *udThread = SDL_CreateThread(updateDisplay, NULL);
 
+	bool firstLevelPlayed = true;
 	while (levelNum <= LEVEL_COUNT && state != QUIT) {
 
-		if (levelNum != 1) {
+		if (!firstLevelPlayed) {
 			timeClock += 10000;
 		}
 
@@ -38,6 +45,8 @@ int main() {
 
 		SDL_LockMutex(levelLock);
 		SDL_CondWait(levelCond, levelLock);
+
+		firstLevelPlayed = false;
 
 	}
 
