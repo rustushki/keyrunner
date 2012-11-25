@@ -245,8 +245,6 @@ void Level::movePlayer(Direction d) {
 
 		this->playerX = newPlayerX;
 		this->playerY = newPlayerY;
-
-		this->addChangedTile(this->playerX, this->playerY);
 	}
 
 	if (this->hasKey(newPlayerX, newPlayerY)) {
@@ -264,8 +262,27 @@ void Level::movePlayer(Direction d) {
 
 		this->playerX = newPos[0];
 		this->playerY = newPos[1];
-		this->addChangedTile(this->playerX, this->playerY);
 	}
+
+
+	// Boundary wrap-around conditions.
+	if (this->playerX < 0) {
+		this->playerX = GRID_WIDTH-1;
+	}
+
+	if (this->playerY < 0) {
+		this->playerY = GRID_HEIGHT-1;
+	}
+
+	if (this->playerX >= GRID_WIDTH) {
+		this->playerX = 0;
+	}
+
+	if (this->playerY >= GRID_HEIGHT) {
+		this->playerY = 0;
+	}
+
+	this->addChangedTile(this->playerX, this->playerY);
 
 	this->redrawChangedTiles();
 
