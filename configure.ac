@@ -1,5 +1,5 @@
 AC_INIT([KeyRunner], [r2], [russ.adams@gmail.com],
-             [KeyRunner], [http://killergame.net/keyrunner])
+             [keyrunner], [http://killergame.net/keyrunner])
 AC_PREREQ([2.59])
 AM_INIT_AUTOMAKE([1.10 -Wall no-define])
 AC_CONFIG_HEADERS([config.h])
