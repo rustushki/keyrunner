@@ -1,0 +1,5 @@
+.gitattributes export-ignore
+.gitignore export-ignore
+svg export-ignore
+configure.ac export-ignore
+Makefile.am export-ignore
