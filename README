@@ -2,13 +2,91 @@
 * KeyRunner, a Killer Game by Rustushki
 --------------------------------------------------------------------------------
 
-Compilation Instructions:
+--------------------------------------------------------------------------------
+* Ubuntu Linux Compilation Instructions:
+--------------------------------------------------------------------------------
 
-$ tar xvf keyrunner-r1.tar.gz
-$ cd keyrunner-r1
-$ g++ *.cpp -lSDL -lSDL_image -lSDL_ttf -o keyrunner
-$ ./keyrunner
+$ apt-get install libsdl-ttf2.0-0 libsdl-ttf2.0-dev libsdl-image1.2 \
+  libsdl-image1.2-dev libsdl1.2-dev libsdl1.2debian
 
-I hope to create a Debian package soon.
+$ tar xvf keyrunner-r2.tar.gz
+$ cd keyrunner-r2
+$ g++ *.cpp -lSDL -lSDL_image -lSDL_ttf -o KeyRunner
+$ ./KeyRunner
+
+
+
+
+
+
+--------------------------------------------------------------------------------
+* Windows Compilation Instructions:
+--------------------------------------------------------------------------------
+
+
+I don't have much experience compiling in Windows.  After much effort and $0 of
+investment, I managed to compile KeyRunner with CodeBlocks via MinGW on Windows
+XP.  Here are some basic instructions so that it's easier to reproduce:
+
+1. Download and Install CodeBlocks  (http://codeblocks.org; get
+'codeblocks-10.05-setup.exe').  Note that there is also a CodeBlocks package
+which contains MinGW; I've not tried it yet, but I'll do so soon and update
+these instructions.
+
+2. Download and Install MinGW.  I used the mingw-get-inst-20120426.exe package.
+
+3. Download the SDL-devel / MinGW package from libsdl.org.  I used
+SDL-devel-1.2.15-mingw32.tar.gz.
+
+4. Unpackage SDL-devel.
+
+5. Copy SDL-devel\lib\* to C:\Program Files\CodeBlocks\lib\ (create a directory if
+you need to).
+
+6. Copy SDL-devel\include\SDL  to C:\Program Files\CodeBlocks\include\SDL.
+
+7. Copy SDL-devel\bin\SDL.dll to C:\Windows\.
+
+8. Download SDL_ttf-2.0.11-win32.zip from http://www.libsdl.org/projects/SDL_ttf/.
+
+9. Extract all DLLs from the SDL_ttf package to C:\Windows\.
+
+10. Download SDL_ttf-2.0.11.tar.gz from http://www.libsdl.org/projects/SDL_ttf/.
+
+11. Extract SDL_ttf.h to C:\Program Files\CodeBlocks\include\SDL.
+
+12. Download SDL_image-1.2.12-win32.zip from http://www.libsdl.org/projects/SDL_image/.
+
+13. Extract all DLLs to C:\Windows\.
+
+14. Download SDL_image-1.2.12.tar.gz from http://www.libsdl.org/projects/SDL_image/.
+
+15. Extract SDL_image.h to C:\Program Files\CodeBlocks\include\SDL. 
+
+You've now unpacked DLLs and header files for SDL, SDL_ttf, SDL_image, and
+libpng (via SDL_image).  You've added the MinGW compiler to your
+system.  The CodeBlocks IDE is also installed and will automatically detect
+that MinGW is compiled.
+
+16. Extract the KeyRunner Package somewhere.
+
+17. Run CodeBlocks create a new Console Project.  Name it KeyRunner.
+
+18. Add all of KeyRunner's *.h and *.cpp files.
+
+19. Add the img\ and level\ folders.  You will also need to add these to the
+Release\ and Debug\ folders.
+
+20. CodeBlocks can now successfully compile the project using the Build
+functionality.
+
+--------------------------------------------------------------------------------
+
+
+
+
+
+
 
 Thanks for your interest!
+Rustushki
