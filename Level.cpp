@@ -27,7 +27,10 @@ void Level::load(int level) {
 	this->parseY = 0;
 
 	while (!feof(fp)) {
-		fgets(line, sizeof(line), fp);
+		if (!fgets(line, sizeof(line), fp)) {
+			std::cout << "Failed to read level." << std::endl;
+			exitGame();
+		}
 		parseLine(std::string(line));
 	}
 
