@@ -1,10 +1,14 @@
+EXTRA_DIST = img level svg
 
 bin_PROGRAMS = KeyRunner
 
 KeyRunner_SOURCES =  \
 InfoBar.cpp          \
+InfoBar.h            \
 KeyRunner.cpp        \
+KeyRunner.h          \
 Level.cpp            \
+Level.h              \
 main.cpp
 
 KeyRunner_LDADD =    \
