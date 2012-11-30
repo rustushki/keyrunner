@@ -39,9 +39,7 @@ void Level::load(int level) {
 
 bool Level::parseLine(std::string line) {
 
-	int n = 0;
-
-	for (int n = 0; n < line.length(); n++) {
+	for (unsigned int n = 0; n < line.length(); n++) {
 
 		char b = line[n];
 
@@ -166,7 +164,6 @@ std::string Level::getImgPath(std::string fn) {
 
 SDL_Surface* Level::getTileImage(TileType type) {
 
-	SDL_Surface* surf;
 	if (type == TILETYPE_EMPTY) {
 		static SDL_Surface* tile = IMG_Load(this->getImgPath("tile.png").c_str());
 		return tile;
@@ -196,7 +193,7 @@ SDL_Surface* Level::getTileImage(TileType type) {
 		exitGame();
 	}
 
-	return surf;
+	return NULL;
 }
 
 SDL_Surface* Level::getKeyImage() {
