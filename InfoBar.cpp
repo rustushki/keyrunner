@@ -150,7 +150,7 @@ TTF_Font* InfoBar::getFont() const {
 	if (font == NULL) {
 
 		// Is there a way to find these fonts in the filesystem?
-		font = TTF_OpenFont("/usr/share/fonts/truetype/msttcorefonts/verdana.ttf", 28);
+		font = TTF_OpenFont(FONTPATH, 28);
 
 	}
 

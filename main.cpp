@@ -4,7 +4,6 @@
 
 Level level;
 State state;
-int levelNum;
 
 int main(int argc, char** argv) {
 
@@ -19,46 +18,62 @@ int main(int argc, char** argv) {
 
 	flipLock = SDL_CreateMutex();
 	flipCond = SDL_CreateCond();
+	blitCond = SDL_CreateCond();
 
 	levelLock = SDL_CreateMutex();
 	levelCond = SDL_CreateCond();
 
-	initScreen();
-
 	timeClock = 10000;
 
-	SDL_Thread *heThread = SDL_CreateThread(handleEvents, NULL);
+	initScreen();
+
 	SDL_Thread *ctThread = SDL_CreateThread(clockTick, NULL);
 	SDL_Thread *udThread = SDL_CreateThread(updateDisplay, NULL);
+	SDL_Thread *ulThread = SDL_CreateThread(updateLevel, NULL);
 
-	bool firstLevelPlayed = true;
-	while (levelNum <= LEVEL_COUNT && state != QUIT) {
+	// Wait for an Event.
+	SDL_Event event;
+	while (SDL_WaitEvent(&event)) {
 
-		if (!firstLevelPlayed) {
-			timeClock += 10000;
+		// Keydown.
+		if (event.type == SDL_KEYDOWN) {
+
+			// User Presses Q
+			if (event.key.keysym.sym == SDLK_q) {
+				
+				// Quit Game.
+				exitGame();
+
+			} else if (event.key.keysym.sym == SDLK_DOWN) {
+				level.movePlayer(DIRECTION_DOWN);
+			} else if (event.key.keysym.sym == SDLK_UP) {
+				level.movePlayer(DIRECTION_UP);
+			} else if (event.key.keysym.sym == SDLK_LEFT) {
+				level.movePlayer(DIRECTION_LEFT);
+			} else if (event.key.keysym.sym == SDLK_RIGHT) {
+				level.movePlayer(DIRECTION_RIGHT);
+			}
+
+
+		// Handle Quit Event.
+		} else if (event.type == SDL_QUIT) {
+
+			exitGame();
 		}
 
-		level = Level();
 
-		level.load(levelNum);
-		level.draw();
-
-		SDL_LockMutex(levelLock);
-		SDL_CondWait(levelCond, levelLock);
-
-		firstLevelPlayed = false;
-
+		if (level.isComplete()) {
+			levelNum++;
+			SDL_mutexV(levelLock);
+			SDL_CondSignal(levelCond);
+		}
 	}
 
-	state = QUIT;
-
+	SDL_WaitThread(ulThread, NULL);
 	SDL_WaitThread(udThread, NULL);
 	SDL_WaitThread(ctThread, NULL);
 
 	exitGame();
-
-	SDL_WaitThread(heThread, NULL);
-
 
 	return 0;
 }

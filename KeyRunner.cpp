@@ -6,8 +6,12 @@
 
 SDL_Surface *screen;
 int timeClock;
+SDL_cond* blitCond;
 SDL_cond* flipCond;
 SDL_mutex* flipLock;
+bool flipping;
+bool blitting;
+int levelNum;
 
 SDL_cond* levelCond;
 SDL_mutex* levelLock;
@@ -54,49 +58,9 @@ void initScreen() {
 	std::stringstream ss;
 	ss << "Key Runner r" << VERSION;
 	SDL_WM_SetCaption(ss.str().c_str(), "");
-}
 
-/* ------------------------------------------------------------------------------
- * handleEvents - Handle events from the user.
- */
-int handleEvents(void* unused) {
-
-	// Wait for an Event.
-	SDL_Event event;
-	while (SDL_WaitEvent(&event)) {
-
-		// Keydown.
-		if (event.type == SDL_KEYDOWN) {
-
-			// User Presses Q
-			if (event.key.keysym.sym == SDLK_q) {
-				
-				// Quit Game.
-				exitGame();
-
-			} else if (event.key.keysym.sym == SDLK_DOWN) {
-				level.movePlayer(DIRECTION_DOWN);
-			} else if (event.key.keysym.sym == SDLK_UP) {
-				level.movePlayer(DIRECTION_UP);
-			} else if (event.key.keysym.sym == SDLK_LEFT) {
-				level.movePlayer(DIRECTION_LEFT);
-			} else if (event.key.keysym.sym == SDLK_RIGHT) {
-				level.movePlayer(DIRECTION_RIGHT);
-			}
-
-
-		// Handle Quit Event.
-		} else if (event.type == SDL_QUIT) {
-
-			exitGame();
-		}
-
-
-		if (level.isComplete()) {
-			levelNum++;
-			SDL_CondSignal(levelCond);
-		}
-	}
+	flipping = false;
+	blitting = false;
 }
 
 int clockTick(void* unused) {
@@ -114,24 +78,64 @@ int clockTick(void* unused) {
 	state = QUIT;
 
 	SDL_CondSignal(levelCond);
+	exitGame();
 	return 0;
 }
 
 int updateDisplay(void* unused) {
 	int fps = 25;
 
-	SDL_mutex *flipLock = SDL_CreateMutex();
-
 	int delay = 1000/fps;
 	while(state != QUIT) {
 
-		// Safely flip the screen.
-		SDL_CondWait(flipCond, flipLock);
+		SDL_mutexP(flipLock);
+
+		// Wait until the blitter is finished blitting.
+		if (blitting) {
+
+			// Safely flip the screen.
+			SDL_CondWait(flipCond, flipLock);
+
+		}
+
+		flipping = true;
+
 		SDL_Flip(screen);
-		SDL_CondSignal(flipCond);
+
+		flipping = false;
+		SDL_mutexV(flipLock);
+		SDL_CondSignal(blitCond);
 
 		SDL_Delay(delay);
 	}
+
+	exitGame();
+	return 0;
+}
+
+int updateLevel(void* unused) {
+
+	bool firstLevelPlayed = true;
+	while (levelNum <= LEVEL_COUNT && state != QUIT) {
+
+		if (!firstLevelPlayed) {
+			timeClock += 10000;
+		}
+
+		level = Level();
+
+		level.load(levelNum);
+		level.draw();
+
+		SDL_LockMutex(levelLock);
+		SDL_CondWait(levelCond, levelLock);
+
+		firstLevelPlayed = false;
+
+	}
+
+	state = QUIT;
+	exitGame();
 
 	return 0;
 }

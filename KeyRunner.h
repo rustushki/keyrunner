@@ -5,6 +5,16 @@
 #include <SDL/SDL_image.h>
 #include <iostream>
 
+#if _WIN32
+#define FONTPATH "\\windows\\fonts\\verdana.ttf"
+#define LEVELPATH ".\\level\\"
+#define IMGPATH ".\\img\\"
+#elif linux
+#define FONTPATH "/usr/share/fonts/truetype/msttcorefonts/verdana.ttf"
+#define LEVELPATH "./level/"
+#define IMGPATH "./img/"
+#endif
+
 #define LEVEL_COUNT 15
 #define VERSION 2
 
@@ -25,6 +35,7 @@ extern Level level;
 extern int timeClock;
 
 extern SDL_cond* flipCond;
+extern SDL_cond* blitCond;
 extern SDL_mutex* flipLock;
 extern SDL_cond* levelCond;
 extern SDL_mutex* levelLock;
@@ -32,12 +43,15 @@ extern SDL_mutex* levelLock;
 extern State state;
 extern int levelNum;
 
+extern bool flipping;
+extern bool blitting;
+
 int getWidth();
 int getHeight();
 void exitGame();
 void initScreen();
-int handleEvents(void* unused);
 int clockTick(void* unused);
 int updateDisplay(void* unused);
+int updateLevel(void* unused);
 
 #endif//KEYRUNNER_H

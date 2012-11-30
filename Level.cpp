@@ -10,7 +10,7 @@ void Level::load(int level) {
 
 	this->level = level;
 
-	std::string levelFile = "./level/";
+	std::string levelFile = LEVELPATH;
 
 	// Covert level integer into string.
 	std::stringstream ss;
@@ -123,50 +123,69 @@ void Level::drawTile(int x, int y) {
 	scrRect.x = xOffset + x*srcRect.w;
 	scrRect.y = yOffset + y*srcRect.h;
 
+
+	// Are we currently flipping buffers?
+	if (flipping) {
+		
+		// If so,
+		// Wait until it's safe to blit to the screen.
+		SDL_mutexP(flipLock);
+		SDL_CondWait(blitCond, flipLock);
+
+	}
+
+	blitting = true;
+
 	// Blit the Tile to the Screen.
-	SDL_CondWait(flipCond, flipLock);
 	SDL_BlitSurface(surf, &srcRect, screen, &scrRect);
-	SDL_CondSignal(flipCond);
 
 	if (this->hasKey(x, y)) {
 		SDL_Surface* key = this->getKeyImage();
-		SDL_CondWait(flipCond, flipLock);
 		SDL_BlitSurface(key, &srcRect, screen, &scrRect);
-		SDL_CondSignal(flipCond);
 	} else if (this->hasPlayer(x, y)) {
 		SDL_Surface* player = this->getPlayerImage();
-		SDL_CondWait(flipCond, flipLock);
 		SDL_BlitSurface(player, &srcRect, screen, &scrRect);
-		SDL_CondSignal(flipCond);
 	}
 
+	blitting = false;
+
+	// Signal that it's safe to flip the screen.
+	SDL_mutexV(flipLock);
+	SDL_CondSignal(flipCond);
+
+}
+
+std::string Level::getImgPath(std::string fn) {
+	std::stringstream ss;
+	ss << IMGPATH << fn;
+	return ss.str();
 }
 
 SDL_Surface* Level::getTileImage(TileType type) {
 
 	SDL_Surface* surf;
 	if (type == TILETYPE_EMPTY) {
-		static SDL_Surface* tile = IMG_Load("img/tile.png");
+		static SDL_Surface* tile = IMG_Load(this->getImgPath("tile.png").c_str());
 		return tile;
 
 	} else if (type == TILETYPE_WALL) {
-		static SDL_Surface* wall = IMG_Load("img/wall.png");
+		static SDL_Surface* wall = IMG_Load(this->getImgPath("wall.png").c_str());
 		return wall;
 
 	} else if (type == TILETYPE_DOOR) {
-		static SDL_Surface* door = IMG_Load("img/door.png");
+		static SDL_Surface* door = IMG_Load(this->getImgPath("door.png").c_str());
 		return door;
 
 	} else if (type == TILETYPE_TELEPORTER_RED) {
-		static SDL_Surface* tilered = IMG_Load("img/teleporter_red.png");
+		static SDL_Surface* tilered = IMG_Load(this->getImgPath("teleporter_red.png").c_str());
 		return tilered;
 
 	} else if (type == TILETYPE_TELEPORTER_GREEN) {
-		static SDL_Surface* tilered = IMG_Load("img/teleporter_green.png");
+		static SDL_Surface* tilered = IMG_Load(this->getImgPath("teleporter_green.png").c_str());
 		return tilered;
 
 	} else if (type == TILETYPE_TELEPORTER_BLUE) {
-		static SDL_Surface* tilered = IMG_Load("img/teleporter_blue.png");
+		static SDL_Surface* tilered = IMG_Load(this->getImgPath("teleporter_blue.png").c_str());
 		return tilered;
 
 	} else {
@@ -178,12 +197,12 @@ SDL_Surface* Level::getTileImage(TileType type) {
 }
 
 SDL_Surface* Level::getKeyImage() {
-	static SDL_Surface* key = IMG_Load("img/key.png");
+	static SDL_Surface* key = IMG_Load(this->getImgPath("key.png").c_str());
 	return key;
 }
 
 SDL_Surface* Level::getPlayerImage() {
-	static SDL_Surface* pumpkin = IMG_Load("img/pumpkin.png");
+	static SDL_Surface* pumpkin = IMG_Load(this->getImgPath("pumpkin.png").c_str());
 	return pumpkin;
 }
 

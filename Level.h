@@ -60,6 +60,7 @@ public:
 	void draw();
 	void drawTile(int x, int y);
 	void redrawChangedTiles();
+	std::string getImgPath(std::string);
 	SDL_Surface* getTileImage(TileType tt);
 	SDL_Surface* getKeyImage();
 	SDL_Surface* getPlayerImage();
