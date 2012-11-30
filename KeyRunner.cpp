@@ -116,7 +116,7 @@ int updateDisplay(void* unused) {
 int updateLevel(void* unused) {
 
 	bool firstLevelPlayed = true;
-	while (levelNum <= LEVEL_COUNT && state != QUIT) {
+	while (levelNum <= Level::GetTotal() && state != QUIT) {
 
 		if (!firstLevelPlayed) {
 			timeClock += 10000;

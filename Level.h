@@ -76,6 +76,8 @@ public:
 	bool isComplete();
 	int toInt();
 
+	static unsigned int GetTotal();
+
 };
 
 #endif//LEVEL_H

@@ -15,7 +15,6 @@
 #define IMGPATH "./img/"
 #endif
 
-#define LEVEL_COUNT 15
 #define VERSION 2
 
 class Level;
