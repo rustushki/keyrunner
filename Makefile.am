@@ -1,6 +1,9 @@
+SUBDIRS = level img
 EXTRA_DIST = img level svg
 
-bin_PROGRAMS = KeyRunner
+gamesdir = $(prefix)/games
+
+games_PROGRAMS = KeyRunner
 
 KeyRunner_SOURCES =  \
 InfoBar.cpp          \

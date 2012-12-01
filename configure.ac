@@ -4,7 +4,7 @@ AC_PREREQ([2.59])
 AM_INIT_AUTOMAKE([1.10 -Wall no-define])
 AC_CONFIG_HEADERS([config.h])
 AC_PROG_CXX
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile level/Makefile img/Makefile])
 PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
 PKG_CHECK_MODULES([SDL_image], [SDL_image])
 PKG_CHECK_MODULES([SDL_ttf], [SDL_ttf])
