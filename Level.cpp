@@ -249,40 +249,54 @@ void Level::movePlayer(Direction d) {
 
 		this->playerX = newPlayerX;
 		this->playerY = newPlayerY;
+
+		// New location from movement to non-wall tile.
+		this->addChangedTile(this->playerX, this->playerY);
 	}
 
-	// Handle Teleporter Tiles.
-	if (this->isTeleporterTile(newPlayerX, newPlayerY)) {
-
-		std::vector<int> newPos;
-		newPos = this->getMatchingTeleporterTile(newPlayerX, newPlayerY);
-
-		this->playerX = newPos[0];
-		this->playerY = newPos[1];
-	}
-
+	// Stop referencing newPlayerX and newPlayerY.
 
 	// Boundary wrap-around conditions.
+	bool wrapAround = false;
 	if (this->playerX < 0) {
 		this->playerX = GRID_WIDTH-1;
+		wrapAround = true;
 	}
 
 	if (this->playerY < 0) {
 		this->playerY = GRID_HEIGHT-1;
+		wrapAround = true;
 	}
 
 	if (this->playerX >= GRID_WIDTH) {
 		this->playerX = 0;
+		wrapAround = true;
 	}
 
 	if (this->playerY >= GRID_HEIGHT) {
 		this->playerY = 0;
+		wrapAround = true;
 	}
 
-	this->addChangedTile(this->playerX, this->playerY);
+	if (wrapAround) {
+		// New location from wrapping around.
+		this->addChangedTile(this->playerX, this->playerY);
+	}
+
+	// Handle Teleporter Tiles.
+	if (this->isTeleporterTile(this->playerX, this->playerY)) {
+
+		std::vector<int> newPos;
+		newPos = this->getMatchingTeleporterTile(this->playerX, this->playerY);
+
+		this->playerX = newPos[0];
+		this->playerY = newPos[1];
+
+		// Redraw new location. 
+		this->addChangedTile(this->playerX, this->playerY);
+	}
 
 	if (this->hasKey(this->playerX, this->playerY)) {
-		this->addChangedTile(this->keyX, this->keyY);
 		this->keyX = -1;
 		this->keyY = -1;
 		this->playerHasKey = true;
