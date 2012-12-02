@@ -5,14 +5,18 @@
 #include <SDL/SDL_image.h>
 #include <iostream>
 
+#ifndef _ROOT_
+#define _ROOT_ "."
+#endif
+
 #if _WIN32
 #define FONTPATH "\\windows\\fonts\\verdana.ttf"
-#define LEVELPATH ".\\level\\"
-#define IMGPATH ".\\img\\"
+#define LEVELPATH _ROOT_ "\\level\\"
+#define IMGPATH _ROOT_ "\\img\\"
 #elif linux
 #define FONTPATH "/usr/share/fonts/truetype/msttcorefonts/verdana.ttf"
-#define LEVELPATH "./level/"
-#define IMGPATH "./img/"
+#define LEVELPATH _ROOT_ "/level/"
+#define IMGPATH _ROOT_ "/img/"
 #endif
 
 #define VERSION 2
