@@ -1,6 +1,7 @@
 a.out
 *.swo
 *.swp
+keyrunner
 KeyRunner
 *.o
 configure

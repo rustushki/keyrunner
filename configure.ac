@@ -1,4 +1,4 @@
-AC_INIT([KeyRunner], [r2], [russ.adams@gmail.com],
+AC_INIT([keyrunner], [2], [russ.adams@gmail.com],
              [keyrunner], [http://killergame.net/keyrunner])
 AC_PREREQ([2.59])
 AM_INIT_AUTOMAKE([1.10 -Wall no-define])

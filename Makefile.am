@@ -3,9 +3,9 @@ EXTRA_DIST = img level svg
 
 gamesdir = $(prefix)/games
 
-games_PROGRAMS = KeyRunner
+games_PROGRAMS = keyrunner
 
-KeyRunner_SOURCES =  \
+keyrunner_SOURCES =  \
 InfoBar.cpp          \
 InfoBar.h            \
 KeyRunner.cpp        \
@@ -14,7 +14,7 @@ Level.cpp            \
 Level.h              \
 main.cpp
 
-KeyRunner_LDADD =    \
+keyrunner_LDADD =    \
 $(SDL_LIBS)          \
 $(SDL_image_LIBS)    \
 $(SDL_ttf_LIBS)      \
