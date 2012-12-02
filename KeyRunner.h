@@ -43,7 +43,7 @@ extern SDL_cond* levelCond;
 extern SDL_mutex* levelLock;
 
 extern State state;
-extern int levelNum;
+extern unsigned int levelNum;
 
 extern bool flipping;
 extern bool blitting;

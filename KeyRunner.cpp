@@ -7,10 +7,12 @@
 SDL_Surface *screen;
 int timeClock;
 SDL_mutex* screenLock;
-int levelNum;
 
 SDL_cond* levelCond;
 SDL_mutex* levelLock;
+
+unsigned int levelNum;
+
 
 int getWidth() {
 	return GRID_WIDTH*25;
@@ -110,6 +112,8 @@ int updateLevel(void* unused) {
 
 		SDL_LockMutex(levelLock);
 		SDL_CondWait(levelCond, levelLock);
+
+		levelNum++;
 
 		firstLevelPlayed = false;
 

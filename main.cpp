@@ -17,7 +17,6 @@ int main(int argc, char** argv) {
 	state = PLAY;
 
 	screenLock = SDL_CreateMutex();
-
 	levelLock = SDL_CreateMutex();
 	levelCond = SDL_CreateCond();
 
@@ -61,7 +60,6 @@ int main(int argc, char** argv) {
 
 
 		if (level.isComplete()) {
-			levelNum++;
 			SDL_mutexV(levelLock);
 			SDL_CondSignal(levelCond);
 		}
