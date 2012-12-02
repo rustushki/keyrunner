@@ -89,6 +89,8 @@ bool Level::parseLine(std::string line) {
 
 void Level::draw() {
 
+	SDL_mutexP(screenLock);
+
 	// Blit all Tiles.
 	for (int x = 0; x < GRID_WIDTH; x++) {
 
@@ -97,6 +99,8 @@ void Level::draw() {
 
 		}
 	}
+
+	SDL_mutexV(screenLock);
 
 }
 
@@ -124,18 +128,6 @@ void Level::drawTile(int x, int y) {
 	scrRect.y = yOffset + y*srcRect.h;
 
 
-	// Are we currently flipping buffers?
-	if (flipping) {
-		
-		// If so,
-		// Wait until it's safe to blit to the screen.
-		SDL_mutexP(flipLock);
-		SDL_CondWait(blitCond, flipLock);
-
-	}
-
-	blitting = true;
-
 	// Blit the Tile to the Screen.
 	SDL_BlitSurface(surf, &srcRect, screen, &scrRect);
 
@@ -146,12 +138,6 @@ void Level::drawTile(int x, int y) {
 		SDL_Surface* player = this->getPlayerImage();
 		SDL_BlitSurface(player, &srcRect, screen, &scrRect);
 	}
-
-	blitting = false;
-
-	// Signal that it's safe to flip the screen.
-	SDL_mutexV(flipLock);
-	SDL_CondSignal(flipCond);
 
 }
 

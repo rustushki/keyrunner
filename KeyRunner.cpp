@@ -6,11 +6,7 @@
 
 SDL_Surface *screen;
 int timeClock;
-SDL_cond* blitCond;
-SDL_cond* flipCond;
-SDL_mutex* flipLock;
-bool flipping;
-bool blitting;
+SDL_mutex* screenLock;
 int levelNum;
 
 SDL_cond* levelCond;
@@ -58,9 +54,6 @@ void initScreen() {
 	std::stringstream ss;
 	ss << "Key Runner r" << VERSION;
 	SDL_WM_SetCaption(ss.str().c_str(), "");
-
-	flipping = false;
-	blitting = false;
 }
 
 int clockTick(void* unused) {
@@ -88,23 +81,11 @@ int updateDisplay(void* unused) {
 	int delay = 1000/fps;
 	while(state != QUIT) {
 
-		SDL_mutexP(flipLock);
-
-		// Wait until the blitter is finished blitting.
-		if (blitting) {
-
-			// Safely flip the screen.
-			SDL_CondWait(flipCond, flipLock);
-
-		}
-
-		flipping = true;
+		SDL_mutexP(screenLock);
 
 		SDL_Flip(screen);
 
-		flipping = false;
-		SDL_mutexV(flipLock);
-		SDL_CondSignal(blitCond);
+		SDL_mutexV(screenLock);
 
 		SDL_Delay(delay);
 	}

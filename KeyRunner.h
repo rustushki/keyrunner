@@ -37,9 +37,8 @@ extern SDL_Surface *screen;
 extern Level level;
 extern int timeClock;
 
-extern SDL_cond* flipCond;
-extern SDL_cond* blitCond;
-extern SDL_mutex* flipLock;
+extern SDL_mutex* screenLock;
+
 extern SDL_cond* levelCond;
 extern SDL_mutex* levelLock;
 

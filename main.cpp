@@ -16,9 +16,7 @@ int main(int argc, char** argv) {
 
 	state = PLAY;
 
-	flipLock = SDL_CreateMutex();
-	flipCond = SDL_CreateCond();
-	blitCond = SDL_CreateCond();
+	screenLock = SDL_CreateMutex();
 
 	levelLock = SDL_CreateMutex();
 	levelCond = SDL_CreateCond();
