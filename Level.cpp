@@ -265,13 +265,6 @@ void Level::movePlayer(Direction d) {
 		this->playerY = newPlayerY;
 	}
 
-	if (this->hasKey(newPlayerX, newPlayerY)) {
-		this->addChangedTile(this->keyX, this->keyY);
-		this->keyX = -1;
-		this->keyY = -1;
-		this->playerHasKey = true;
-	}
-
 	// Handle Teleporter Tiles.
 	if (this->isTeleporterTile(newPlayerX, newPlayerY)) {
 
@@ -301,6 +294,13 @@ void Level::movePlayer(Direction d) {
 	}
 
 	this->addChangedTile(this->playerX, this->playerY);
+
+	if (this->hasKey(this->playerX, this->playerY)) {
+		this->addChangedTile(this->keyX, this->keyY);
+		this->keyX = -1;
+		this->keyY = -1;
+		this->playerHasKey = true;
+	}
 
 	this->redrawChangedTiles();
 
