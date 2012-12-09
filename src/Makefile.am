@@ -9,6 +9,8 @@ KeyRunner.cpp        \
 KeyRunner.h          \
 Level.cpp            \
 Level.h              \
+SpriteSheet.cpp      \
+SpriteSheet.h        \
 main.cpp
 
 
