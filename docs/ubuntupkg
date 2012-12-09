@@ -1,0 +1,45 @@
+cd ~/Source/KeyRunner
+
+make dist
+
+mkdir ~/Desktop/KeyRunnerWksp
+
+mv keyrunner-x.tar.gz ~/Desktop/KeyRunnerWksp
+
+cd ~/Desktop/KeyRunnerWksp
+
+tar xvf keyrunner-x-tar.gz
+
+cd keyrunner-x
+
+# If never before created PKG,
+
+	fakeroot dh_make --createorig
+
+	# Choose single (s)
+
+	cd debian
+	rm *ex *EX README.Debian README.Source
+
+	# Ensure that rules, changelog, control, and copyright are created and
+	# correct.
+
+# If updating a PKG with new version,
+
+	TODO: fill in later.
+
+# endif
+
+cd ../
+debuild
+
+# Install
+cd ../
+dpkg -i keyrunner_x-1_amd64.deb
+
+# Test
+which keyrunner
+keyrunner
+
+# Uninstall
+sudo dpkg -r keyrunner
