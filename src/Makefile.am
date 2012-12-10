@@ -3,6 +3,9 @@ gamesdir = $(prefix)/games
 games_PROGRAMS = keyrunner
 
 keyrunner_SOURCES =  \
+Animation.cpp        \
+Animation.h          \
+AnimationType.h      \
 InfoBar.cpp          \
 InfoBar.h            \
 KeyRunner.cpp        \
