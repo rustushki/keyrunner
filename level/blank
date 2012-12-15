@@ -24,7 +24,7 @@
 
 t = teleporter red
 u = teleporter green
-v = teleporter blue
+w = teleporter blue
 
 p = player
 k = key

@@ -78,8 +78,20 @@ bool Level::parseLine(std::string line) {
 		} else if (b == 'u') {
 			tt = TILETYPE_TELEPORTER_GREEN;
 
-		} else if (b == 'v') {
+		} else if (b == 'w') {
 			tt = TILETYPE_TELEPORTER_BLUE;
+
+		} else if (b == '^') {
+			tt = TILETYPE_CONVEY_UP;
+
+		} else if (b == 'v') {
+			tt = TILETYPE_CONVEY_DOWN;
+
+		} else if (b == '<') {
+			tt = TILETYPE_CONVEY_LEFT;
+
+		} else if (b == '>') {
+			tt = TILETYPE_CONVEY_RIGHT;
 
 		} else {
 			tt = (TileType)(b - 0x30);
