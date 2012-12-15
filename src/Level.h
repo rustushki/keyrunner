@@ -2,37 +2,23 @@
 #define LEVEL_H
 
 #include "KeyRunner.h"
+#include "TileType.h"
+#include "AnimationType.h"
+#include "Direction.h"
+#include "Tile.h"
 #include <string>
 #include <vector>
 
+class Animation;
+
 #define GRID_HEIGHT 16
 #define GRID_WIDTH 25
-
-enum TileType {
-
-	  TILETYPE_EMPTY
-	, TILETYPE_WALL
-	, TILETYPE_DOOR
-	, TILETYPE_TELEPORTER_RED
-	, TILETYPE_TELEPORTER_GREEN
-	, TILETYPE_TELEPORTER_BLUE
-	, TILETYPE_COUNT
-
-};
-
-enum Direction {
-	  DIRECTION_UP
-	, DIRECTION_DOWN
-	, DIRECTION_LEFT
-	, DIRECTION_RIGHT
-	, DIRECTION_COUNT
-};
 
 class Level {
 
 private:
 
-	TileType tile[GRID_HEIGHT][GRID_WIDTH];
+	Tile* tile[GRID_HEIGHT][GRID_WIDTH];
 
 	int level;
 
@@ -49,6 +35,9 @@ private:
 	int parseX;
 	int parseY;
 
+	Animation* keyAnim;
+	Animation* playerAnim;
+
 	std::vector< std::vector<int> > changedTiles;
 	void addChangedTile(int x, int y);
 
@@ -60,10 +49,6 @@ public:
 	void draw();
 	void drawTile(int x, int y);
 	void redrawChangedTiles();
-	std::string getImgPath(std::string);
-	SDL_Surface* getTileImage(TileType tt);
-	SDL_Surface* getKeyImage();
-	SDL_Surface* getPlayerImage();
 
 	bool hasKey(int x, int y);
 	bool hasPlayer(int x, int y);

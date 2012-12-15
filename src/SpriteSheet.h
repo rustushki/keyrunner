@@ -11,6 +11,9 @@ public:
 	SpriteSheet(std::string filename, uint width, uint height);
 	void blitFrame(uint x, uint y, SDL_Rect& where) const; 
 
+	uint getWidth();
+	uint getHeight();
+
 private:
 	SDL_Surface* sheet;
 	uint height;

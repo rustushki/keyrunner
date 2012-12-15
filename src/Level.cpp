@@ -1,9 +1,14 @@
+#include "Animation.h"
 #include "Level.h"
+#include "TileType.h"
 #include <sstream>
 #include <cstdio>
 
 Level::Level() {
 	this->playerHasKey = false;
+
+	this->keyAnim    = Animation::AnimationFactory(ANIMATION_TYPE_KEY);
+	this->playerAnim = Animation::AnimationFactory(ANIMATION_TYPE_PUMPKIN);
 }
 
 void Level::load(int level) {
@@ -80,7 +85,7 @@ bool Level::parseLine(std::string line) {
 			tt = (TileType)(b - 0x30);
 		}
 
-		this->tile[parseY][parseX] = tt;
+		this->tile[parseY][parseX] = new Tile(tt);
 		parseX++;
 	}
 
@@ -105,90 +110,26 @@ void Level::draw() {
 }
 
 void Level::drawTile(int x, int y) {
+	
+	const uint tileSize = 25;
 
-	// X/Y Offset to center the tiles in the screen.
-	static int xOffset = 0;
-	static int yOffset = 0;
+	// Determine the coordinate to draw the tile animation..
+	uint xp = x*tileSize;
+	uint yp = y*tileSize;
 
-	SDL_Surface* surf = this->getTileImage(this->tile[y][x]);
+	Tile* tile = this->tile[y][x];
+	tile->getAnimation()->advance(xp, yp);
 
-	// Source Rect
-	SDL_Rect srcRect;
-	srcRect.h = surf->h;
-	srcRect.w = surf->w;
-	srcRect.x = 0;
-	srcRect.y = 0;
-
-	// Dest Rect
-	SDL_Rect scrRect;
-	scrRect.h = surf->h;
-	scrRect.w = surf->w;
-
-	scrRect.x = xOffset + x*srcRect.w;
-	scrRect.y = yOffset + y*srcRect.h;
-
-
-	// Blit the Tile to the Screen.
-	SDL_BlitSurface(surf, &srcRect, screen, &scrRect);
-
+	// Redraw the Key.
 	if (this->hasKey(x, y)) {
-		SDL_Surface* key = this->getKeyImage();
-		SDL_BlitSurface(key, &srcRect, screen, &scrRect);
-	} else if (this->hasPlayer(x, y)) {
-		SDL_Surface* player = this->getPlayerImage();
-		SDL_BlitSurface(player, &srcRect, screen, &scrRect);
+		this->keyAnim->advance(xp, yp);
+	}
+	
+	// Redraw the Player.
+	if (this->hasPlayer(x, y)) {
+		this->playerAnim->advance(xp, yp);
 	}
 
-}
-
-std::string Level::getImgPath(std::string fn) {
-	std::stringstream ss;
-	ss << IMGPATH << fn;
-	return ss.str();
-}
-
-SDL_Surface* Level::getTileImage(TileType type) {
-
-	if (type == TILETYPE_EMPTY) {
-		static SDL_Surface* tile = IMG_Load(this->getImgPath("tile.png").c_str());
-		return tile;
-
-	} else if (type == TILETYPE_WALL) {
-		static SDL_Surface* wall = IMG_Load(this->getImgPath("wall.png").c_str());
-		return wall;
-
-	} else if (type == TILETYPE_DOOR) {
-		static SDL_Surface* door = IMG_Load(this->getImgPath("door.png").c_str());
-		return door;
-
-	} else if (type == TILETYPE_TELEPORTER_RED) {
-		static SDL_Surface* tilered = IMG_Load(this->getImgPath("teleporter_red.png").c_str());
-		return tilered;
-
-	} else if (type == TILETYPE_TELEPORTER_GREEN) {
-		static SDL_Surface* tilered = IMG_Load(this->getImgPath("teleporter_green.png").c_str());
-		return tilered;
-
-	} else if (type == TILETYPE_TELEPORTER_BLUE) {
-		static SDL_Surface* tilered = IMG_Load(this->getImgPath("teleporter_blue.png").c_str());
-		return tilered;
-
-	} else {
-		std::cout << "Invalid Tile Type. " << (int)type << std::endl;
-		exitGame();
-	}
-
-	return NULL;
-}
-
-SDL_Surface* Level::getKeyImage() {
-	static SDL_Surface* key = IMG_Load(this->getImgPath("key.png").c_str());
-	return key;
-}
-
-SDL_Surface* Level::getPlayerImage() {
-	static SDL_Surface* pumpkin = IMG_Load(this->getImgPath("pumpkin.png").c_str());
-	return pumpkin;
 }
 
 bool Level::hasPlayer(int x, int y) {
@@ -200,18 +141,18 @@ bool Level::hasKey(int x, int y) {
 }
 
 bool Level::isWall(int x, int y) {
-	return (this->tile[y][x] == TILETYPE_WALL);
+	return (this->tile[y][x]->getType() == TILETYPE_WALL);
 }
 
 bool Level::isDoor(int x, int y) {
-	return (this->tile[y][x] == TILETYPE_DOOR);
+	return (this->tile[y][x]->getType() == TILETYPE_DOOR);
 }
 
 /* ------------------------------------------------------------------------------
  * isTeleporterTile - Return true if the tile is a teleporter tile.
  */
 bool Level::isTeleporterTile(int x, int y) {
-	TileType tt = this->tile[y][x];
+	TileType tt = this->tile[y][x]->getType();
 
 	return (    tt == TILETYPE_TELEPORTER_RED
 	         || tt == TILETYPE_TELEPORTER_GREEN

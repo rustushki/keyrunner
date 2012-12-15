@@ -6,6 +6,7 @@ keyrunner_SOURCES =  \
 Animation.cpp        \
 Animation.h          \
 AnimationType.h      \
+Direction.h	         \
 InfoBar.cpp          \
 InfoBar.h            \
 KeyRunner.cpp        \
@@ -14,6 +15,9 @@ Level.cpp            \
 Level.h              \
 SpriteSheet.cpp      \
 SpriteSheet.h        \
+TileType.h           \
+Tile.cpp             \
+Tile.h               \
 main.cpp
 
 
@@ -23,4 +27,4 @@ $(SDL_image_LIBS)    \
 $(SDL_ttf_LIBS)      \
 $(libpng_LIBS)
 
-AM_CPPFLAGS= -D '_ROOT_="$(prefix)/share/keyrunner"'
+AM_CPPFLAGS= -O0 -D '_ROOT_="$(prefix)/share/keyrunner"'
