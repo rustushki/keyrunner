@@ -130,16 +130,19 @@ void Level::drawTile(int x, int y) {
 	uint yp = y*tileSize;
 
 	Tile* tile = this->tile[y][x];
-	tile->getAnimation()->advance(xp, yp);
+	tile->getAnimation()->move(xp, yp);
+	tile->getAnimation()->blit();
 
 	// Redraw the Key.
 	if (this->hasKey(x, y)) {
-		this->keyAnim->advance(xp, yp);
+		this->keyAnim->move(xp, yp);
+		this->keyAnim->blit();
 	}
 	
 	// Redraw the Player.
 	if (this->hasPlayer(x, y)) {
-		this->playerAnim->advance(xp, yp);
+		this->playerAnim->move(xp, yp);
+		this->playerAnim->blit();
 	}
 
 }
@@ -285,7 +288,7 @@ std::vector<int> Level::getMatchingTeleporterTile(int tileX, int tileY) {
 				if (x != tileX || y != tileY) {
 
 					// Found the a Teleporter Tile of the same color which is not this tile.
-					if (tile[tileY][tileX] == tile[y][x]) {
+					if (tile[tileY][tileX]->getType() == tile[y][x]->getType()) {
 						matching.push_back(x);
 						matching.push_back(y);
 						found = true;

@@ -11,7 +11,12 @@ class Animation {
 
 public:
 	static Animation* AnimationFactory(AnimationType at);
-	void advance(uint x, uint y);
+	static void PushAnimatable(Animation* anim);
+	static void AdvanceAnimatables();
+	static void ClearAnimatables();
+	void advance();
+	void blit();
+	void move(uint x, uint y);
 
 private:
 	Animation(AnimationType at);
@@ -19,12 +24,18 @@ private:
 	static std::string       GetSpriteSFN(AnimationType at); 
 	static std::vector<uint> GetFrameSize(AnimationType at); 
 	static std::vector<uint> GetFrameList(AnimationType at);
+	static std::vector<Animation*> Animatables;
 	SpriteSheet* sheet;
 	uint sps;
 	bool firstBlit;
 	std::vector<uint> frameList;
 	uint currentFrame;
 	AnimationType type;
+	uint x;
+	uint y;
+
+	uint framesPerStill;
+	uint advanceCount;
 
 };
 

@@ -1,3 +1,4 @@
+#include "Animation.h"
 #include "KeyRunner.h"
 #include "InfoBar.h"
 #include "Level.h"
@@ -77,11 +78,17 @@ int clockTick(void* unused) {
 	return 0;
 }
 
+/* ------------------------------------------------------------------------------
+ * updateDisplay - Thread.  Flip the screen 25 times per second.  Update any
+ * and all animations.
+ */
 int updateDisplay(void* unused) {
 	int fps = 25;
 
 	int delay = 1000/fps;
 	while(state != QUIT) {
+
+		Animation::AdvanceAnimatables();
 
 		SDL_mutexP(screenLock);
 
@@ -114,6 +121,8 @@ int updateLevel(void* unused) {
 		SDL_CondWait(levelCond, levelLock);
 
 		levelNum++;
+
+		Animation::ClearAnimatables();
 
 		firstLevelPlayed = false;
 

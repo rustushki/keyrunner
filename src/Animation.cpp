@@ -5,6 +5,9 @@
 
 #define FL(x,y) frameList.push_back(x);frameList.push_back(y);
 
+std::vector<Animation*> Animation::Animatables;
+
+
 /* ------------------------------------------------------------------------------
  * Animation - Build an animation based upon it's type.
  */
@@ -32,6 +35,15 @@ Animation::Animation(AnimationType at) {
 	this->firstBlit    = true;
 	this->currentFrame = 0;
 	this->type         = at;
+
+	int fps = 25;
+
+	if (this->sps != 0) {
+		this->framesPerStill = fps/this->sps;
+		Animation::PushAnimatable(this);
+	}
+
+	this->advanceCount = 0;
 }
 
 /* ------------------------------------------------------------------------------
@@ -43,25 +55,47 @@ Animation* Animation::AnimationFactory(AnimationType at) {
 
 }
 
-void Animation::advance(uint x, uint y) {
+/* ------------------------------------------------------------------------------
+ * PushAnimatable - Push the provided animation onto the vector of animations
+ * which require advancing.
+ */
+void Animation::PushAnimatable(Animation* anim) {
+	Animation::Animatables.push_back(anim);
+}
+
+/* ------------------------------------------------------------------------------
+ * ClearAnimatables - Empty the vector containing the Animations to be rendered
+ * on screen updates.
+ */
+void Animation::ClearAnimatables() {
+	Animation::Animatables.clear();
+}
+
+/* ------------------------------------------------------------------------------
+ * AdvanceAnimatables - Iterate the list of Animations which require advancing,
+ * and advance each one.
+ */
+void Animation::AdvanceAnimatables() {
+	for (uint x = 0; x < Animation::Animatables.size(); x++) {
+		Animation::Animatables[x]->advance();
+	}
+}
+
+/* ------------------------------------------------------------------------------
+ * advance - Increment the advanceCount.  If the advanceCount equals the number
+ * of frame required per still, the increment the current frame and blit it in
+ * place.
+ *
+ * Circular wrap the still list.
+ */
+void Animation::advance() {
+
+	this->advanceCount++;
 	
-	if (this->firstBlit) {
+	if (this->advanceCount == framesPerStill) {
 
-		// Look into the frame list to determine the logical coordinates of the
-		// frame in the spritesheet.
-		uint frameXc = this->currentFrame*2 + 0;
-		uint frameYc = this->currentFrame*2 + 1;
-		uint frameX = this->frameList[frameXc];
-		uint frameY = this->frameList[frameYc];
-
-		SDL_Rect r;
-		r.x = x;
-		r.y = y;
-		r.w = this->sheet->getWidth();
-		r.h = this->sheet->getHeight();
-
-		this->sheet->blitFrame(frameX, frameY, r); 
-
+		this->advanceCount = 0;
+		this->blit();
 		this->currentFrame++;
 
 		if (this->currentFrame >= this->frameList.size()/2) {
@@ -69,6 +103,37 @@ void Animation::advance(uint x, uint y) {
 		}
 	}
 
+}
+
+/* ------------------------------------------------------------------------------
+ * blit - Draw the current frame of the animation onto the screen.
+ */
+void Animation::blit() {
+
+	// Look into the frame list to determine the logical coordinates of the
+	// frame in the spritesheet.
+	uint frameXc = this->currentFrame*2 + 0;
+	uint frameYc = this->currentFrame*2 + 1;
+	uint frameX  = this->frameList[frameXc];
+	uint frameY  = this->frameList[frameYc];
+
+	SDL_Rect r;
+	r.x = this->x;
+	r.y = this->y;
+	r.w = this->sheet->getWidth();
+	r.h = this->sheet->getHeight();
+
+	this->sheet->blitFrame(frameX, frameY, r); 
+
+
+}
+
+/* ------------------------------------------------------------------------------
+ * move - Move the blitting location of this Animation elsewhere.
+ */
+void Animation::move(uint x, uint y) {
+	this->x = x;
+	this->y = y;
 }
 
 /* ------------------------------------------------------------------------------
