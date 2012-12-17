@@ -8,7 +8,7 @@ class Animation;
 class Tile {
 
 public:
-	Tile(TileType type, uint x, uint y);
+	Tile(TileType type, uint x, uint y, Level*);
 	~Tile();
 
 	Animation* getAnimation() const;
@@ -22,11 +22,14 @@ public:
 	bool isTeleporter() const;
 	bool isDoor() const;
 	bool isWall() const;
+	bool hasPlayer() const;
+	bool hasKey() const;
 
 private:
 	TileType type;
 	AnimationType animType;
 	Animation* anim;
+	Level* level;
 
 	uint x;
 	uint y;

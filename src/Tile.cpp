@@ -2,15 +2,17 @@
 #include "Animation.h"
 #include "AnimationType.h"
 #include "KeyRunner.h"
+#include "Level.h"
 #include "TileType.h"
 #include "Tile.h"
 
-Tile::Tile(TileType type, uint x, uint y) {
+Tile::Tile(TileType type, uint x, uint y, Level* level) {
 	AnimationType at = Tile::TileTypeToAnimType(type);
 	this->anim = Animation::AnimationFactory(at);
 	this->type = type;
 	this->x = x;
 	this->y = y;
+	this->level = level;
 }
 
 Tile::~Tile() {
@@ -87,6 +89,24 @@ bool Tile::isDoor() const {
 
 bool Tile::isWall() const {
 	return (this->getType() == TILETYPE_WALL);
+}
+
+/* ------------------------------------------------------------------------------
+ * hasPlayer - Determine whether this tile has the player.
+ */
+bool Tile::hasPlayer() const {
+	uint x = this->getX();
+	uint y = this->getY();
+	return (this->level->hasPlayer(x, y));
+}
+
+/* ------------------------------------------------------------------------------
+ * hasKey - Determine whether this tile has the key.
+ */
+bool Tile::hasKey() const {
+	uint x = this->getX();
+	uint y = this->getY();
+	return (this->level->hasKey(x, y));
 }
 
 uint Tile::getX() const {

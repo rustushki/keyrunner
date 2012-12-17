@@ -104,7 +104,7 @@ bool Level::parseLine(std::string line) {
 			tt = (TileType)(b - 0x30);
 		}
 
-		Tile* tile = new Tile(tt, parseX, parseY);
+		Tile* tile = new Tile(tt, parseX, parseY, this);
 
 
 		if (tileHasPlayer) {
