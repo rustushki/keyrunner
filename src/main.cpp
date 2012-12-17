@@ -1,3 +1,4 @@
+#include "Animation.h"
 #include "Level.h"
 #include "KeyRunner.h"
 #include "InfoBar.h"
@@ -23,6 +24,10 @@ int main(int argc, char** argv) {
 	timeClock = 10000;
 
 	initScreen();
+
+	// There's not a good place for these yet.  Putting them here for now.
+	KeyAnim    = Animation::AnimationFactory(ANIMATION_TYPE_KEY);
+	PlayerAnim = Animation::AnimationFactory(ANIMATION_TYPE_PUMPKIN);
 
 	SDL_Thread *ctThread = SDL_CreateThread(clockTick, NULL);
 	SDL_Thread *udThread = SDL_CreateThread(updateDisplay, NULL);

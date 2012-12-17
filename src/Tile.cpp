@@ -116,3 +116,29 @@ uint Tile::getX() const {
 uint Tile::getY() const {
 	return this->y;
 }
+
+void Tile::draw() {
+	
+	const uint tileSize = 25;
+
+	// Determine the coordinate to draw the tile animation..
+	uint xp = this->x*tileSize;
+	uint yp = this->y*tileSize;
+
+	this->getAnimation()->move(xp, yp);
+	this->getAnimation()->blit();
+
+	// Redraw the Key.
+	if (this->hasKey()) {
+		KeyAnim->move(xp, yp);
+		KeyAnim->blit();
+	}
+	
+	// Redraw the Player.
+	if (this->hasPlayer()) {
+		PlayerAnim->move(xp, yp);
+		PlayerAnim->blit();
+	}
+
+}
+

@@ -11,6 +11,8 @@ public:
 	Tile(TileType type, uint x, uint y, Level*);
 	~Tile();
 
+	void draw();
+
 	Animation* getAnimation() const;
 	static AnimationType TileTypeToAnimType(TileType tt);
 

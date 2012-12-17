@@ -12,6 +12,9 @@ SDL_mutex* screenLock;
 SDL_cond* levelCond;
 SDL_mutex* levelLock;
 
+Animation* KeyAnim;
+Animation* PlayerAnim;
+
 unsigned int levelNum;
 
 

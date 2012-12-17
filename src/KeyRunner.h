@@ -22,6 +22,7 @@
 #define VERSION 2
 
 class Level;
+class Animation;
 
 // Game State.
 enum State {
@@ -47,6 +48,9 @@ extern unsigned int levelNum;
 
 extern bool flipping;
 extern bool blitting;
+
+extern Animation* KeyAnim;
+extern Animation* PlayerAnim;
 
 int getWidth();
 int getHeight();

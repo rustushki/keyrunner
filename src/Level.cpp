@@ -6,9 +6,6 @@
 
 Level::Level() {
 	this->playerHasKey = false;
-
-	this->keyAnim    = Animation::AnimationFactory(ANIMATION_TYPE_KEY);
-	this->playerAnim = Animation::AnimationFactory(ANIMATION_TYPE_PUMPKIN);
 }
 
 void Level::load(int level) {
@@ -130,40 +127,12 @@ void Level::draw() {
 	for (int x = 0; x < GRID_WIDTH; x++) {
 
 		for (int y = 0; y < GRID_HEIGHT; y++) {
-			this->drawTile(this->getTile(x, y));
+			this->getTile(x, y)->draw();
 
 		}
 	}
 
 	SDL_mutexV(screenLock);
-
-}
-
-void Level::drawTile(Tile* tile) {
-	
-	const uint tileSize = 25;
-
-	uint x = tile->getX();
-	uint y = tile->getY();
-
-	// Determine the coordinate to draw the tile animation..
-	uint xp = x*tileSize;
-	uint yp = y*tileSize;
-
-	tile->getAnimation()->move(xp, yp);
-	tile->getAnimation()->blit();
-
-	// Redraw the Key.
-	if (this->hasKey(x, y)) {
-		this->keyAnim->move(xp, yp);
-		this->keyAnim->blit();
-	}
-	
-	// Redraw the Player.
-	if (this->hasPlayer(x, y)) {
-		this->playerAnim->move(xp, yp);
-		this->playerAnim->blit();
-	}
 
 }
 
@@ -318,7 +287,7 @@ void Level::redrawChangedTiles() {
 		Tile* t = this->changedTiles.back();
 		
 		// Redraw the tile referenced by that pair.
-		this->drawTile(t);
+		t->draw();
 
 		// Remove that pair from the changed tiles list.
 		this->changedTiles.pop_back();

@@ -46,7 +46,6 @@ public:
 	Level();
 	void load(int level);
 	void draw();
-	void drawTile(Tile*);
 	void redrawChangedTiles();
 
 	bool hasKey(int x, int y);
