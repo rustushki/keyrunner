@@ -22,11 +22,8 @@ private:
 
 	int level;
 
-	int keyX;
-	int keyY;
-
-	int playerX;
-	int playerY;
+	Tile* tileHasPlayer;
+	Tile* tileHasKey;
 
 	bool parseLine(std::string line);
 
@@ -38,23 +35,23 @@ private:
 	Animation* keyAnim;
 	Animation* playerAnim;
 
-	std::vector< std::vector<int> > changedTiles;
-	void addChangedTile(int x, int y);
+	std::vector< Tile* > changedTiles;
+	void addChangedTile(Tile* tile);
 
-	std::vector<int> getMatchingTeleporterTile(int x, int y);
+	Tile* getMatchingTeleporterTile(Tile*);
+
+	Tile* getTile(uint x, uint y) const;
 
 public:
 	Level();
 	void load(int level);
 	void draw();
-	void drawTile(int x, int y);
+	void drawTile(Tile*);
 	void redrawChangedTiles();
 
 	bool hasKey(int x, int y);
 	bool hasPlayer(int x, int y);
 	bool isWall(int x, int y);
-	bool isDoor(int x, int y);
-	bool isTeleporterTile(int x, int y);
 
 	void movePlayer(Direction d);
 

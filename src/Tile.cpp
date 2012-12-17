@@ -5,10 +5,12 @@
 #include "TileType.h"
 #include "Tile.h"
 
-Tile::Tile(TileType type) {
+Tile::Tile(TileType type, uint x, uint y) {
 	AnimationType at = Tile::TileTypeToAnimType(type);
 	this->anim = Animation::AnimationFactory(at);
 	this->type = type;
+	this->x = x;
+	this->y = y;
 }
 
 Tile::~Tile() {
@@ -66,4 +68,31 @@ AnimationType Tile::TileTypeToAnimType(TileType tt) {
 
 TileType Tile::getType() const {
 	return this->type;
+}
+
+/* ------------------------------------------------------------------------------
+ * isTeleporter - Return true if the tile is a teleporter tile.
+ */
+bool Tile::isTeleporter() const {
+	TileType tt = this->getType();
+
+	return (    tt == TILETYPE_TELEPORTER_RED
+	         || tt == TILETYPE_TELEPORTER_GREEN
+	         || tt == TILETYPE_TELEPORTER_BLUE);
+}
+
+bool Tile::isDoor() const {
+	return (this->getType() == TILETYPE_DOOR);
+}
+
+bool Tile::isWall() const {
+	return (this->getType() == TILETYPE_WALL);
+}
+
+uint Tile::getX() const {
+	return this->x;
+}
+
+uint Tile::getY() const {
+	return this->y;
 }

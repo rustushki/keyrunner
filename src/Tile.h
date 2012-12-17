@@ -8,7 +8,7 @@ class Animation;
 class Tile {
 
 public:
-	Tile(TileType type);
+	Tile(TileType type, uint x, uint y);
 	~Tile();
 
 	Animation* getAnimation() const;
@@ -16,10 +16,21 @@ public:
 
 	TileType getType() const;
 
+	uint getX() const;
+	uint getY() const;
+
+	bool isTeleporter() const;
+	bool isDoor() const;
+	bool isWall() const;
+
 private:
 	TileType type;
 	AnimationType animType;
 	Animation* anim;
+
+	uint x;
+	uint y;
+
 };
 
 #endif//TILE_H

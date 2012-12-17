@@ -41,11 +41,20 @@ void Level::load(int level) {
 	fclose(fp);
 }
 
+Tile* Level::getTile(uint x, uint y) const {
+	if (y >= GRID_HEIGHT || x >= GRID_WIDTH) {
+		return NULL;
+	}
+	return this->tile[y][x];
+}
+
 bool Level::parseLine(std::string line) {
 
 	for (unsigned int n = 0; n < line.length(); n++) {
 
 		char b = line[n];
+		bool tileHasPlayer = false;
+		bool tileHasKey    = false;
 
 		// Ignore whitespace in level files.
 		if (b == '\t' || b == '\n' || b == '\r' || b == ' ') {
@@ -63,13 +72,11 @@ bool Level::parseLine(std::string line) {
 
 		TileType tt;
 		if (b == 'k') {
-			this->keyX = parseX;
-			this->keyY = parseY;
+			tileHasKey = true;
 			tt = TILETYPE_EMPTY;
 
 		} else if (b == 'p') {
-			this->playerX = parseX;
-			this->playerY = parseY;
+			tileHasPlayer = true;
 			tt = TILETYPE_EMPTY;
 
 		} else if (b == 't') {
@@ -97,7 +104,18 @@ bool Level::parseLine(std::string line) {
 			tt = (TileType)(b - 0x30);
 		}
 
-		this->tile[parseY][parseX] = new Tile(tt);
+		Tile* tile = new Tile(tt, parseX, parseY);
+
+
+		if (tileHasPlayer) {
+			this->tileHasPlayer = tile;
+		}
+
+		if (tileHasKey) {
+			this->tileHasKey = tile;
+		}
+
+		this->tile[parseY][parseX] = tile;
 		parseX++;
 	}
 
@@ -112,7 +130,7 @@ void Level::draw() {
 	for (int x = 0; x < GRID_WIDTH; x++) {
 
 		for (int y = 0; y < GRID_HEIGHT; y++) {
-			this->drawTile(x, y);
+			this->drawTile(this->getTile(x, y));
 
 		}
 	}
@@ -121,15 +139,17 @@ void Level::draw() {
 
 }
 
-void Level::drawTile(int x, int y) {
+void Level::drawTile(Tile* tile) {
 	
 	const uint tileSize = 25;
+
+	uint x = tile->getX();
+	uint y = tile->getY();
 
 	// Determine the coordinate to draw the tile animation..
 	uint xp = x*tileSize;
 	uint yp = y*tileSize;
 
-	Tile* tile = this->tile[y][x];
 	tile->getAnimation()->move(xp, yp);
 	tile->getAnimation()->blit();
 
@@ -148,30 +168,11 @@ void Level::drawTile(int x, int y) {
 }
 
 bool Level::hasPlayer(int x, int y) {
-	return (x == playerX && y == playerY);
+	return (this->tileHasPlayer == this->getTile(x, y));
 }
 
 bool Level::hasKey(int x, int y) {
-	return (x == keyX && y == keyY);
-}
-
-bool Level::isWall(int x, int y) {
-	return (this->tile[y][x]->getType() == TILETYPE_WALL);
-}
-
-bool Level::isDoor(int x, int y) {
-	return (this->tile[y][x]->getType() == TILETYPE_DOOR);
-}
-
-/* ------------------------------------------------------------------------------
- * isTeleporterTile - Return true if the tile is a teleporter tile.
- */
-bool Level::isTeleporterTile(int x, int y) {
-	TileType tt = this->tile[y][x]->getType();
-
-	return (    tt == TILETYPE_TELEPORTER_RED
-	         || tt == TILETYPE_TELEPORTER_GREEN
-	         || tt == TILETYPE_TELEPORTER_BLUE);
+	return (this->tileHasKey == this->getTile(x, y));
 }
 
 void Level::movePlayer(Direction d) {
@@ -181,8 +182,8 @@ void Level::movePlayer(Direction d) {
 		exitGame();
 	}
 
-	int newPlayerX = this->playerX;
-	int newPlayerY = this->playerY;
+	int newPlayerX = this->tileHasPlayer->getX();
+	int newPlayerY = this->tileHasPlayer->getY();
 
 	if (d == DIRECTION_UP) {
 		newPlayerY--;
@@ -200,61 +201,60 @@ void Level::movePlayer(Direction d) {
 		newPlayerX++;
 	}
 
-	if (!this->isWall(newPlayerX, newPlayerY)) {
-		this->addChangedTile(this->playerX, this->playerY);
+	// Boundary wrap-around conditions.
+	bool wrapAround = false;
+	if (newPlayerX < 0) {
+		newPlayerX = GRID_WIDTH-1;
+		wrapAround = true;
+	}
 
-		this->playerX = newPlayerX;
-		this->playerY = newPlayerY;
+	if (newPlayerY < 0) {
+		newPlayerY = GRID_HEIGHT-1;
+		wrapAround = true;
+	}
+
+	if (newPlayerX >= GRID_WIDTH) {
+		newPlayerX = 0;
+		wrapAround = true;
+	}
+
+	if (newPlayerY >= GRID_HEIGHT) {
+		newPlayerY = 0;
+		wrapAround = true;
+	}
+
+	Tile* newTile = this->getTile(newPlayerX, newPlayerY);
+	if (newTile != NULL && !newTile->isWall()) {
+		this->addChangedTile(this->tileHasPlayer);
+
+		// New tile has the player.
+		this->tileHasPlayer = this->getTile(newPlayerX, newPlayerY);
 
 		// New location from movement to non-wall tile.
-		this->addChangedTile(this->playerX, this->playerY);
+		this->addChangedTile(this->tileHasPlayer);
 	}
 
 	// Stop referencing newPlayerX and newPlayerY.
 
-	// Boundary wrap-around conditions.
-	bool wrapAround = false;
-	if (this->playerX < 0) {
-		this->playerX = GRID_WIDTH-1;
-		wrapAround = true;
-	}
-
-	if (this->playerY < 0) {
-		this->playerY = GRID_HEIGHT-1;
-		wrapAround = true;
-	}
-
-	if (this->playerX >= GRID_WIDTH) {
-		this->playerX = 0;
-		wrapAround = true;
-	}
-
-	if (this->playerY >= GRID_HEIGHT) {
-		this->playerY = 0;
-		wrapAround = true;
-	}
-
 	if (wrapAround) {
 		// New location from wrapping around.
-		this->addChangedTile(this->playerX, this->playerY);
+		this->addChangedTile(this->tileHasPlayer);
 	}
 
 	// Handle Teleporter Tiles.
-	if (this->isTeleporterTile(this->playerX, this->playerY)) {
+	if (this->tileHasPlayer->isTeleporter()) {
 
 		std::vector<int> newPos;
-		newPos = this->getMatchingTeleporterTile(this->playerX, this->playerY);
+		Tile* matching = this->getMatchingTeleporterTile(this->tileHasPlayer);
 
-		this->playerX = newPos[0];
-		this->playerY = newPos[1];
+		this->tileHasPlayer = matching;
 
 		// Redraw new location. 
-		this->addChangedTile(this->playerX, this->playerY);
+		this->addChangedTile(this->tileHasPlayer);
 	}
 
-	if (this->hasKey(this->playerX, this->playerY)) {
-		this->keyX = -1;
-		this->keyY = -1;
+	if (this->hasKey(this->tileHasPlayer->getX(), this->tileHasPlayer->getY())) {
+		this->tileHasKey = NULL;
 		this->playerHasKey = true;
 	}
 
@@ -266,15 +266,14 @@ void Level::movePlayer(Direction d) {
  * getMatchingTeleporterTile - Given a teleporter tile X and Y, return the
  * matching teleporter tile's X and Y.  Return as a vector int.
  */
-std::vector<int> Level::getMatchingTeleporterTile(int tileX, int tileY) {
+Tile* Level::getMatchingTeleporterTile(Tile* t) {
 
-	std::vector<int> matching;
+	Tile* matching = NULL;
 
 	// Handle case where a non-telepoprter tile is passed in.  Return the same
 	// tile provided.  This should never happen.
-	if (!this->isTeleporterTile(tileX, tileY)) {
-		matching.push_back(tileX);
-		matching.push_back(tileY);
+	if (!t->isTeleporter()) {
+		matching = t;
 
 
 	// Normal case. Find the first matching teleporter tile.
@@ -285,12 +284,11 @@ std::vector<int> Level::getMatchingTeleporterTile(int tileX, int tileY) {
 		for (int x = 0; x < GRID_WIDTH; x++) {
 			for (int y = 0; y < GRID_HEIGHT; y++) {
 
-				if (x != tileX || y != tileY) {
+				if (x != t->getX() || y != t->getY()) {
 
 					// Found the a Teleporter Tile of the same color which is not this tile.
-					if (tile[tileY][tileX]->getType() == tile[y][x]->getType()) {
-						matching.push_back(x);
-						matching.push_back(y);
+					if (t->getType() == this->getTile(x,y)->getType()) {
+						matching = this->getTile(x, y);
 						found = true;
 						break;
 					}
@@ -309,7 +307,7 @@ std::vector<int> Level::getMatchingTeleporterTile(int tileX, int tileY) {
 }
 
 bool Level::isComplete() {
-	return (this->playerHasKey && this->isDoor(this->playerX, this->playerY));
+	return (this->playerHasKey && this->tileHasPlayer->isDoor());
 }
 
 void Level::redrawChangedTiles() {
@@ -317,13 +315,10 @@ void Level::redrawChangedTiles() {
 	while (!changedTiles.empty()) {
 
 		// Get pair to update.
-		std::vector<int> pair = this->changedTiles.back();
-		int x = pair[0];
-		int y = pair[1];
-
+		Tile* t = this->changedTiles.back();
 		
 		// Redraw the tile referenced by that pair.
-		this->drawTile(x, y);
+		this->drawTile(t);
 
 		// Remove that pair from the changed tiles list.
 		this->changedTiles.pop_back();
@@ -331,11 +326,8 @@ void Level::redrawChangedTiles() {
 
 }
 
-void Level::addChangedTile(int x, int y) {
-	std::vector<int> pair;
-	pair.push_back(x);
-	pair.push_back(y);
-	this->changedTiles.push_back(pair);
+void Level::addChangedTile(Tile* tile) {
+	this->changedTiles.push_back(tile);
 }
 
 int Level::toInt() {
