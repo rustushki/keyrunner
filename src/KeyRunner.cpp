@@ -91,7 +91,8 @@ int updateDisplay(void* unused) {
 	int delay = 1000/fps;
 	while(state != QUIT) {
 
-		Animation::AdvanceAnimatables();
+		Tile::AnimateTiles();
+		Tile::RedrawChangedTiles();
 
 		SDL_mutexP(screenLock);
 
@@ -125,7 +126,7 @@ int updateLevel(void* unused) {
 
 		levelNum++;
 
-		Animation::ClearAnimatables();
+		Tile::ClearAnimatedTiles();
 
 		firstLevelPlayed = false;
 

@@ -5,8 +5,6 @@
 
 #define FL(x,y) frameList.push_back(x);frameList.push_back(y);
 
-std::vector<Animation*> Animation::Animatables;
-
 
 /* ------------------------------------------------------------------------------
  * Animation - Build an animation based upon it's type.
@@ -40,7 +38,6 @@ Animation::Animation(AnimationType at) {
 
 	if (this->sps != 0) {
 		this->framesPerStill = fps/this->sps;
-		Animation::PushAnimatable(this);
 	}
 
 	this->advanceCount = 0;
@@ -56,46 +53,24 @@ Animation* Animation::AnimationFactory(AnimationType at) {
 }
 
 /* ------------------------------------------------------------------------------
- * PushAnimatable - Push the provided animation onto the vector of animations
- * which require advancing.
- */
-void Animation::PushAnimatable(Animation* anim) {
-	Animation::Animatables.push_back(anim);
-}
-
-/* ------------------------------------------------------------------------------
- * ClearAnimatables - Empty the vector containing the Animations to be rendered
- * on screen updates.
- */
-void Animation::ClearAnimatables() {
-	Animation::Animatables.clear();
-}
-
-/* ------------------------------------------------------------------------------
- * AdvanceAnimatables - Iterate the list of Animations which require advancing,
- * and advance each one.
- */
-void Animation::AdvanceAnimatables() {
-	for (uint x = 0; x < Animation::Animatables.size(); x++) {
-		Animation::Animatables[x]->advance();
-	}
-}
-
-/* ------------------------------------------------------------------------------
  * advance - Increment the advanceCount.  If the advanceCount equals the number
  * of frame required per still, the increment the current frame and blit it in
  * place.
  *
  * Circular wrap the still list.
+ *
+ * Return true if the still changed due to this advance.
  */
-void Animation::advance() {
+bool Animation::advance() {
+
+	bool advanced = false;
 
 	this->advanceCount++;
 	
 	if (this->advanceCount == framesPerStill) {
 
 		this->advanceCount = 0;
-		this->blit();
+		advanced = true;
 		this->currentFrame++;
 
 		if (this->currentFrame >= this->frameList.size()/2) {
@@ -103,6 +78,7 @@ void Animation::advance() {
 		}
 	}
 
+	return advanced;
 }
 
 /* ------------------------------------------------------------------------------
@@ -134,6 +110,13 @@ void Animation::blit() {
 void Animation::move(uint x, uint y) {
 	this->x = x;
 	this->y = y;
+}
+
+/* ------------------------------------------------------------------------------
+ * isAnimating - Return true if the Animation is or can animate.
+ */
+bool Animation::isAnimating() const {
+	return (this->sps != 0);
 }
 
 /* ------------------------------------------------------------------------------

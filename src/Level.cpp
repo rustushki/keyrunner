@@ -194,20 +194,20 @@ void Level::movePlayer(Direction d) {
 
 	Tile* newTile = this->getTile(newPlayerX, newPlayerY);
 	if (newTile != NULL && !newTile->isWall()) {
-		this->addChangedTile(this->tileHasPlayer);
+		Tile::AddChangedTile(this->tileHasPlayer);
 
 		// New tile has the player.
 		this->tileHasPlayer = this->getTile(newPlayerX, newPlayerY);
 
 		// New location from movement to non-wall tile.
-		this->addChangedTile(this->tileHasPlayer);
+		Tile::AddChangedTile(this->tileHasPlayer);
 	}
 
 	// Stop referencing newPlayerX and newPlayerY.
 
 	if (wrapAround) {
 		// New location from wrapping around.
-		this->addChangedTile(this->tileHasPlayer);
+		Tile::AddChangedTile(this->tileHasPlayer);
 	}
 
 	// Handle Teleporter Tiles.
@@ -219,15 +219,13 @@ void Level::movePlayer(Direction d) {
 		this->tileHasPlayer = matching;
 
 		// Redraw new location. 
-		this->addChangedTile(this->tileHasPlayer);
+		Tile::AddChangedTile(this->tileHasPlayer);
 	}
 
 	if (this->hasKey(this->tileHasPlayer->getX(), this->tileHasPlayer->getY())) {
 		this->tileHasKey = NULL;
 		this->playerHasKey = true;
 	}
-
-	this->redrawChangedTiles();
 
 }
 
@@ -277,26 +275,6 @@ Tile* Level::getMatchingTeleporterTile(Tile* t) {
 
 bool Level::isComplete() {
 	return (this->playerHasKey && this->tileHasPlayer->isDoor());
-}
-
-void Level::redrawChangedTiles() {
-
-	while (!changedTiles.empty()) {
-
-		// Get pair to update.
-		Tile* t = this->changedTiles.back();
-		
-		// Redraw the tile referenced by that pair.
-		t->draw();
-
-		// Remove that pair from the changed tiles list.
-		this->changedTiles.pop_back();
-	}
-
-}
-
-void Level::addChangedTile(Tile* tile) {
-	this->changedTiles.push_back(tile);
 }
 
 int Level::toInt() {

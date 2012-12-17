@@ -6,9 +6,18 @@
 #include "TileType.h"
 #include "Tile.h"
 
+std::vector<Tile*> Tile::AnimatedTiles;
+std::vector<Tile*> Tile::ChangedTiles;
+
+
 Tile::Tile(TileType type, uint x, uint y, Level* level) {
 	AnimationType at = Tile::TileTypeToAnimType(type);
 	this->anim = Animation::AnimationFactory(at);
+	
+	if (this->anim->isAnimating()) {
+		Tile::PushAnimatedTile(this);
+	}
+
 	this->type = type;
 	this->x = x;
 	this->y = y;
@@ -17,6 +26,35 @@ Tile::Tile(TileType type, uint x, uint y, Level* level) {
 
 Tile::~Tile() {
 	delete this->anim;
+}
+
+/* ------------------------------------------------------------------------------
+ * PushAnimatedTile - Push the provided animated tile onto the vector of tiles
+ * which have animations which require advancing.
+ */
+void Tile::PushAnimatedTile(Tile* tile) {
+	Tile::AnimatedTiles.push_back(tile);
+}
+
+/* ------------------------------------------------------------------------------
+ * ClearAnimatedTiles - Empty the vector containing Tiles which have Animations
+ * which would otherwise be rendered on screen updates.
+ */
+void Tile::ClearAnimatedTiles() {
+	Tile::AnimatedTiles.clear();
+}
+
+/* ------------------------------------------------------------------------------
+ * AdvanceAnimatables - Iterate the list of Animations which require advancing,
+ * and advance each one.
+ */
+void Tile::AnimateTiles() {
+	for (uint x = 0; x < Tile::AnimatedTiles.size(); x++) {
+		Tile* tile = Tile::AnimatedTiles[x];
+		if (tile->getAnimation()->advance()) {
+			Tile::AddChangedTile(tile);
+		}
+	}
 }
 
 Animation* Tile::getAnimation() const {
@@ -142,3 +180,23 @@ void Tile::draw() {
 
 }
 
+void Tile::RedrawChangedTiles() {
+
+	while (!Tile::ChangedTiles.empty()) {
+
+		// Get pair to update.
+		Tile* t = Tile::ChangedTiles.back();
+		
+		// Redraw the tile referenced by that pair.
+		t->draw();
+
+		// Remove that pair from the changed tiles list.
+		Tile::ChangedTiles.pop_back();
+	}
+
+}
+
+void Tile::AddChangedTile(Tile* tile) {
+	Tile::ChangedTiles.push_back(tile);
+	std::cout << Tile::ChangedTiles.size() << std::endl;
+}

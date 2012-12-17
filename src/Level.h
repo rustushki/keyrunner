@@ -35,9 +35,6 @@ private:
 	Animation* keyAnim;
 	Animation* playerAnim;
 
-	std::vector< Tile* > changedTiles;
-	void addChangedTile(Tile* tile);
-
 	Tile* getMatchingTeleporterTile(Tile*);
 
 	Tile* getTile(uint x, uint y) const;
@@ -46,7 +43,6 @@ public:
 	Level();
 	void load(int level);
 	void draw();
-	void redrawChangedTiles();
 
 	bool hasKey(int x, int y);
 	bool hasPlayer(int x, int y);
