@@ -15,6 +15,8 @@ public:
 	void blit();
 	void move(uint x, uint y);
 	bool isAnimating() const;
+	void play();
+	void stop();
 
 private:
 	Animation(AnimationType at);
@@ -30,6 +32,7 @@ private:
 	AnimationType type;
 	uint x;
 	uint y;
+	bool shouldAdvance;
 
 	uint framesPerStill;
 	uint advanceCount;

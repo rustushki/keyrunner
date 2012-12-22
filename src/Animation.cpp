@@ -30,9 +30,10 @@ Animation::Animation(AnimationType at) {
 	// Get List of Frames for this kind of Animation.
 	this->frameList = Animation::GetFrameList(at);
 
-	this->firstBlit    = true;
-	this->currentFrame = 0;
-	this->type         = at;
+	this->firstBlit     = true;
+	this->currentFrame  = 0;
+	this->type          = at;
+	this->shouldAdvance = false;
 
 	int fps = 25;
 
@@ -65,16 +66,19 @@ bool Animation::advance() {
 
 	bool advanced = false;
 
-	this->advanceCount++;
-	
-	if (this->advanceCount == framesPerStill) {
+	if (this->shouldAdvance) {
 
-		this->advanceCount = 0;
-		advanced = true;
-		this->currentFrame++;
+		this->advanceCount++;
+		
+		if (this->advanceCount == framesPerStill) {
 
-		if (this->currentFrame >= this->frameList.size()/2) {
-			this->currentFrame = 0;
+			this->advanceCount = 0;
+			advanced = true;
+			this->currentFrame++;
+
+			if (this->currentFrame >= this->frameList.size()/2) {
+				this->currentFrame = 0;
+			}
 		}
 	}
 
@@ -116,7 +120,21 @@ void Animation::move(uint x, uint y) {
  * isAnimating - Return true if the Animation is or can animate.
  */
 bool Animation::isAnimating() const {
-	return (this->sps != 0);
+	return (this->sps != 0 && this->shouldAdvance);
+}
+
+/* ------------------------------------------------------------------------------
+ * play - Cause an animation to advance stills on advance().
+ */
+void Animation::play() {
+	this->shouldAdvance = true;
+}
+
+/* ------------------------------------------------------------------------------
+ * stop - Do no advance stills on advance().
+ */
+void Animation::stop() {
+	this->shouldAdvance = false;
 }
 
 /* ------------------------------------------------------------------------------
