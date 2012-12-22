@@ -141,26 +141,38 @@ bool Tile::isConveyor() const {
 
 
 Tile* Tile::up() const{
-	uint x = this->x + 0;
-	uint y = this->y - 1;
+	int x = this->x + 0;
+	int y = this->y - 1;
+	if (y < 0) {
+		y = GRID_HEIGHT-1;
+	}
 	return this->level->getTile(x, y);
 }
 
 Tile* Tile::down() const{
-	uint x = this->x + 0;
-	uint y = this->y + 1;
+	int x = this->x + 0;
+	int y = this->y + 1;
+	if (y >= GRID_HEIGHT) {
+		y = 0;
+	}
 	return this->level->getTile(x, y);
 }
 
 Tile* Tile::left() const{
-	uint x = this->x - 1;
-	uint y = this->y + 0;
+	int x = this->x - 1;
+	int y = this->y + 0;
+	if (x < 0) {
+		x = GRID_WIDTH-1;
+	}
 	return this->level->getTile(x, y);
 }
 
 Tile* Tile::right() const{
-	uint x = this->x + 1;
-	uint y = this->y + 0;
+	int x = this->x + 1;
+	int y = this->y + 0;
+	if (x >= GRID_WIDTH) {
+		x = 0;
+	}
 	return this->level->getTile(x, y);
 }
 

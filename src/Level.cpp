@@ -151,62 +151,30 @@ void Level::movePlayer(Direction d) {
 		exitGame();
 	}
 
-	int newPlayerX = this->tileHasPlayer->getX();
-	int newPlayerY = this->tileHasPlayer->getY();
-
+	Tile* newTile;
 	if (d == DIRECTION_UP) {
-		newPlayerY--;
+		newTile = this->tileHasPlayer->up();
 	}
 
 	if (d == DIRECTION_DOWN) {
-		newPlayerY++;
+		newTile = this->tileHasPlayer->down();
 	}
 
 	if (d == DIRECTION_LEFT) {
-		newPlayerX--;
+		newTile = this->tileHasPlayer->left();
 	}
 
 	if (d == DIRECTION_RIGHT) {
-		newPlayerX++;
+		newTile = this->tileHasPlayer->right();
 	}
 
-	// Boundary wrap-around conditions.
-	bool wrapAround = false;
-	if (newPlayerX < 0) {
-		newPlayerX = GRID_WIDTH-1;
-		wrapAround = true;
-	}
-
-	if (newPlayerY < 0) {
-		newPlayerY = GRID_HEIGHT-1;
-		wrapAround = true;
-	}
-
-	if (newPlayerX >= GRID_WIDTH) {
-		newPlayerX = 0;
-		wrapAround = true;
-	}
-
-	if (newPlayerY >= GRID_HEIGHT) {
-		newPlayerY = 0;
-		wrapAround = true;
-	}
-
-	Tile* newTile = this->getTile(newPlayerX, newPlayerY);
 	if (newTile != NULL && !newTile->isWall()) {
 		Tile::AddChangedTile(this->tileHasPlayer);
 
 		// New tile has the player.
-		this->tileHasPlayer = this->getTile(newPlayerX, newPlayerY);
+		this->tileHasPlayer = newTile;
 
 		// New location from movement to non-wall tile.
-		Tile::AddChangedTile(this->tileHasPlayer);
-	}
-
-	// Stop referencing newPlayerX and newPlayerY.
-
-	if (wrapAround) {
-		// New location from wrapping around.
 		Tile::AddChangedTile(this->tileHasPlayer);
 	}
 
