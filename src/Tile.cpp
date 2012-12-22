@@ -130,6 +130,68 @@ bool Tile::isWall() const {
 }
 
 /* ------------------------------------------------------------------------------
+ * isConveyor - Return true if the Tile is a conveyor tile.
+ */
+bool Tile::isConveyor() const {
+	return (    this->getType() == TILETYPE_CONVEY_UP
+	         || this->getType() == TILETYPE_CONVEY_DOWN
+	         || this->getType() == TILETYPE_CONVEY_RIGHT
+	         || this->getType() == TILETYPE_CONVEY_LEFT);
+}
+
+
+Tile* Tile::up() const{
+	uint x = this->x + 0;
+	uint y = this->y - 1;
+	return this->level->getTile(x, y);
+}
+
+Tile* Tile::down() const{
+	uint x = this->x + 0;
+	uint y = this->y + 1;
+	return this->level->getTile(x, y);
+}
+
+Tile* Tile::left() const{
+	uint x = this->x - 1;
+	uint y = this->y + 0;
+	return this->level->getTile(x, y);
+}
+
+Tile* Tile::right() const{
+	uint x = this->x + 1;
+	uint y = this->y + 0;
+	return this->level->getTile(x, y);
+}
+
+/* ------------------------------------------------------------------------------
+ * getConveyorDirection - Return the direction the conveyor is pointing
+ * towards.
+ */
+Direction Tile::getConveyorDirection() const {
+	if (this->getType() == TILETYPE_CONVEY_UP) {
+		return DIRECTION_UP;
+
+	} else if (this->getType() == TILETYPE_CONVEY_DOWN) {
+		return DIRECTION_DOWN;
+
+	} else if (this->getType() == TILETYPE_CONVEY_RIGHT) {
+		return DIRECTION_RIGHT;
+
+	} else if (this->getType() == TILETYPE_CONVEY_LEFT) {
+		return DIRECTION_LEFT;
+
+	}
+
+	std::cout << "Non-conveyor tile queried for direction." << std::endl;
+	exitGame();
+
+	// Should never execute.
+	return DIRECTION_UP;
+}
+
+
+/* ------------------------------------------------------------------------------
  * hasPlayer - Determine whether this tile has the player.
  */
 bool Tile::hasPlayer() const {
@@ -198,5 +260,4 @@ void Tile::RedrawChangedTiles() {
 
 void Tile::AddChangedTile(Tile* tile) {
 	Tile::ChangedTiles.push_back(tile);
-	std::cout << Tile::ChangedTiles.size() << std::endl;
 }

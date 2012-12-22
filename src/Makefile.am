@@ -6,6 +6,8 @@ keyrunner_SOURCES =  \
 Animation.cpp        \
 Animation.h          \
 AnimationType.h      \
+Conveyor.cpp         \
+Conveyor.h           \
 Direction.h	         \
 InfoBar.cpp          \
 InfoBar.h            \

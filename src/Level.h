@@ -29,15 +29,13 @@ private:
 
 	bool playerHasKey;
 
-	int parseX;
-	int parseY;
+	uint parseX;
+	uint parseY;
 
 	Animation* keyAnim;
 	Animation* playerAnim;
 
 	Tile* getMatchingTeleporterTile(Tile*);
-
-	Tile* getTile(uint x, uint y) const;
 
 public:
 	Level();
@@ -52,6 +50,8 @@ public:
 
 	bool isComplete();
 	int toInt();
+
+	Tile* getTile(uint x, uint y) const;
 
 	static unsigned int GetTotal();
 

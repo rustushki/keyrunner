@@ -2,9 +2,12 @@
 #define TILE_H
 
 #include <vector>
-#include "TileType.h"
+#include "Animation.h"
 #include "AnimationType.h"
-class Animation;
+#include "Direction.h"
+#include "TileType.h"
+
+class Level;
 
 class Tile {
 
@@ -30,8 +33,16 @@ public:
 	bool isTeleporter() const;
 	bool isDoor() const;
 	bool isWall() const;
+	bool isConveyor() const;
 	bool hasPlayer() const;
 	bool hasKey() const;
+
+	Tile* up() const;
+	Tile* down() const;
+	Tile* left() const;
+	Tile* right() const;
+
+	Direction getConveyorDirection() const;
 
 private:
 	TileType type;
