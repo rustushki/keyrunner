@@ -2,24 +2,24 @@ gamesdir = $(prefix)/games
 
 games_PROGRAMS = keyrunner
 
-keyrunner_SOURCES =  \
-Animation.cpp        \
-Animation.h          \
-AnimationType.h      \
-Conveyor.cpp         \
-Conveyor.h           \
-Direction.h	         \
-InfoBar.cpp          \
-InfoBar.h            \
-KeyRunner.cpp        \
-KeyRunner.h          \
-Level.cpp            \
-Level.h              \
-SpriteSheet.cpp      \
-SpriteSheet.h        \
-TileType.h           \
-Tile.cpp             \
-Tile.h               \
+keyrunner_SOURCES =   \
+Animation.cpp         \
+Animation.h           \
+AnimationType.h       \
+ConveyorAnimation.cpp \
+ConveyorAnimation.h   \
+Direction.h	          \
+InfoBar.cpp           \
+InfoBar.h             \
+KeyRunner.cpp         \
+KeyRunner.h           \
+Level.cpp             \
+Level.h               \
+SpriteSheet.cpp       \
+SpriteSheet.h         \
+TileType.h            \
+Tile.cpp              \
+Tile.h                \
 main.cpp
 
 
