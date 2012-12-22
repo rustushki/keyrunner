@@ -37,6 +37,8 @@ private:
 
 	Tile* getMatchingTeleporterTile(Tile*);
 
+	void buildConveyorAnimations();
+
 public:
 	Level();
 	void load(int level);

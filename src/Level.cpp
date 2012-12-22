@@ -1,4 +1,5 @@
 #include "Animation.h"
+#include "ConveyorAnimation.h"
 #include "Level.h"
 #include "TileType.h"
 #include <sstream>
@@ -36,6 +37,112 @@ void Level::load(int level) {
 	}
 
 	fclose(fp);
+	
+	this->buildConveyorAnimations();
+}
+
+void Level::buildConveyorAnimations() {
+
+	for (int x = 0; x < GRID_WIDTH; x++) {
+
+		for (int y = 0; y < GRID_HEIGHT; y++) {
+			Tile* tile = this->getTile(x, y);
+
+			if (tile->isConveyor()) {
+
+				if (!ConveyorAnimation::TileInConveyor(tile)) {
+
+					// This Tile must be part of a Conveyor.  Find the start of
+					// the Conveyor.
+
+					Tile* q = tile;
+					Tile* p = q;
+
+					Direction conveyDir = q->getConveyorDirection();
+					Direction oppDir;
+
+					// Determine the opposite direction of this belt.
+					if (conveyDir == DIRECTION_UP) {
+						oppDir = DIRECTION_DOWN;
+					} else if (conveyDir == DIRECTION_DOWN) {
+						oppDir = DIRECTION_UP;
+					} else if (conveyDir == DIRECTION_LEFT) {
+						oppDir = DIRECTION_RIGHT;
+					} else if (conveyDir == DIRECTION_RIGHT) {
+						oppDir = DIRECTION_LEFT;
+					}
+
+
+					// A circular conveyor is one which stretches from one
+					// border to the other, causing it it wrap-around.  We need
+					// to check for this behavior so that we can prevent
+					// infinite looping here.
+					bool circular = false;
+
+					// Go backwards along the belt until you hit a non-conveyor
+					// tile, or a conveyor tile which is part of another
+					// conveyor, or we find that the current belt is circular.
+					while (    p->isConveyor()
+					        && p->getConveyorDirection() == q->getConveyorDirection()
+							&& !ConveyorAnimation::TileInConveyor(p)
+							&& !circular) {
+
+						if (oppDir == DIRECTION_UP) {
+							p = p->up();
+						} else if (oppDir == DIRECTION_DOWN) {
+							p = p->down();
+						} else if (oppDir == DIRECTION_RIGHT) {
+							p = p->right();
+						} else if (oppDir == DIRECTION_LEFT) {
+							p = p->right();
+						}
+
+						if (p == q) {
+							circular = true;
+						}
+
+					}
+
+					Tile* start = p;
+					std::vector<Tile*> conveyorTiles;
+
+					// Now follow the conveyor from its start until a
+					// non-conveyor tile, or a conveyor tile which is part of
+					// another conveyor or if the belt is found to be circular,
+					// the start tile.
+					while (    p->isConveyor()
+					        && p->getConveyorDirection() == q->getConveyorDirection()
+							&& !ConveyorAnimation::TileInConveyor(p)) {
+
+						if (conveyDir == DIRECTION_UP) {
+							p = p->up();
+						} else if (conveyDir == DIRECTION_DOWN) {
+							p = p->down();
+						} else if (conveyDir == DIRECTION_RIGHT) {
+							p = p->right();
+						} else if (conveyDir == DIRECTION_LEFT) {
+							p = p->right();
+						}
+
+						if (circular) {
+							if (p == start) {
+								break;
+							}
+						}
+
+						conveyorTiles.push_back(p);
+
+					}
+
+					ConveyorAnimation* ca = new ConveyorAnimation(conveyorTiles);
+
+				}
+
+			}
+		}
+
+	}
+	
 }
 
 Tile* Level::getTile(uint x, uint y) const {

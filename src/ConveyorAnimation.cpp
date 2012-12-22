@@ -7,6 +7,8 @@ std::vector<ConveyorAnimation*> ConveyorAnimation::Conveyors;
 
 ConveyorAnimation::ConveyorAnimation(std::vector<Tile*> conveyorTiles) {
 	this->conveyorTiles = conveyorTiles;
+
+	ConveyorAnimation::Conveyors.push_back(this);
 }
 
 ConveyorAnimation::~ConveyorAnimation(){ }
