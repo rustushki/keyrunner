@@ -166,7 +166,7 @@ uint Animation::GetSPS(AnimationType at) {
 		case ANIMATION_TYPE_CONVEY_UP:
 		case ANIMATION_TYPE_CONVEY_LEFT:
 		case ANIMATION_TYPE_CONVEY_RIGHT:
-			sps = 7;
+			sps = 14;
 			break;
 
 		default:
