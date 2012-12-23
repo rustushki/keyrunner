@@ -58,6 +58,12 @@ void Level::buildConveyorAnimations() {
 					Tile* q = tile;
 					Tile* p = q;
 
+					if (ConveyorAnimation::TileInConveyor(p)) {
+						continue;
+					}
+
+					//std::cout << "Found Tile: " << q->getX() << "," << q->getY() << std::endl;
+
 					Direction conveyDir = q->getConveyorDirection();
 					Direction oppDir;
 
@@ -72,6 +78,8 @@ void Level::buildConveyorAnimations() {
 						oppDir = DIRECTION_LEFT;
 					}
 
+					//std::cout << "\tOppDir: " << oppDir << std::endl;
+
 
 					// A circular conveyor is one which stretches from one
 					// border to the other, causing it it wrap-around.  We need
@@ -82,10 +90,13 @@ void Level::buildConveyorAnimations() {
 					// Go backwards along the belt until you hit a non-conveyor
 					// tile, or a conveyor tile which is part of another
 					// conveyor, or we find that the current belt is circular.
+					Tile* prev = p;
 					while (    p->isConveyor()
-					        && p->getConveyorDirection() == q->getConveyorDirection()
+					        && p->getConveyorDirection() == conveyDir
 							&& !ConveyorAnimation::TileInConveyor(p)
 							&& !circular) {
+
+						prev = p;
 
 						if (oppDir == DIRECTION_UP) {
 							p = p->up();
@@ -94,7 +105,7 @@ void Level::buildConveyorAnimations() {
 						} else if (oppDir == DIRECTION_RIGHT) {
 							p = p->right();
 						} else if (oppDir == DIRECTION_LEFT) {
-							p = p->right();
+							p = p->left();
 						}
 
 						if (p == q) {
@@ -103,16 +114,27 @@ void Level::buildConveyorAnimations() {
 
 					}
 
-					Tile* start = p;
+					Tile* start = p = prev;
 					std::vector<Tile*> conveyorTiles;
 
+					//std::cout << "\tStart " << start->getX() << "," << start->getY() << std::endl;
+					//std::cout << "\t" << p->isConveyor() << std::endl;
+					//std::cout << "\t" << p->getConveyorDirection() << "=" << conveyDir << std::endl;
+					//std::cout << "\t" << ConveyorAnimation::TileInConveyor(p) << std::endl;
+
+					int tileNum = 0;
 					// Now follow the conveyor from its start until a
 					// non-conveyor tile, or a conveyor tile which is part of
 					// another conveyor or if the belt is found to be circular,
 					// the start tile.
 					while (    p->isConveyor()
-					        && p->getConveyorDirection() == q->getConveyorDirection()
+					        && p->getConveyorDirection() == conveyDir
 							&& !ConveyorAnimation::TileInConveyor(p)) {
+
+						conveyorTiles.push_back(p);
+
+						tileNum++;
+						//std::cout << "\ttile #" << tileNum << " " << p->getX() << "," << p->getY() << std::endl;
 
 						if (conveyDir == DIRECTION_UP) {
 							p = p->up();
@@ -121,7 +143,7 @@ void Level::buildConveyorAnimations() {
 						} else if (conveyDir == DIRECTION_RIGHT) {
 							p = p->right();
 						} else if (conveyDir == DIRECTION_LEFT) {
-							p = p->right();
+							p = p->left();
 						}
 
 						if (circular) {
@@ -129,8 +151,6 @@ void Level::buildConveyorAnimations() {
 								break;
 							}
 						}
-
-						conveyorTiles.push_back(p);
 
 					}
 

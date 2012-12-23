@@ -18,6 +18,8 @@ public:
 	void play();
 	void stop();
 
+	uint getCurrentStill() const;
+
 private:
 	Animation(AnimationType at);
 	static uint              GetSPS      (AnimationType at); 
@@ -28,7 +30,7 @@ private:
 	uint sps;
 	bool firstBlit;
 	std::vector<uint> frameList;
-	uint currentFrame;
+	uint currentStill;
 	AnimationType type;
 	uint x;
 	uint y;

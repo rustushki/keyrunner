@@ -21,6 +21,8 @@
 
 #define VERSION 2
 
+typedef unsigned int uint;
+
 class Level;
 class Animation;
 

@@ -1,4 +1,5 @@
 #include "Animation.h"
+#include "ConveyorAnimation.h"
 #include "KeyRunner.h"
 #include "InfoBar.h"
 #include "Level.h"
@@ -15,7 +16,8 @@ SDL_mutex* levelLock;
 Animation* KeyAnim;
 Animation* PlayerAnim;
 
-unsigned int levelNum;
+uint levelNum;
+uint frame;
 
 
 int getWidth() {
@@ -90,6 +92,8 @@ int updateDisplay(void* unused) {
 
 	int delay = 1000/fps;
 	while(state != QUIT) {
+
+		ConveyorAnimation::StartConveyors();
 
 		Tile::AnimateTiles();
 		Tile::RedrawChangedTiles();
