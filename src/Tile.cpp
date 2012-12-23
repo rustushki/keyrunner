@@ -221,6 +221,80 @@ bool Tile::hasKey() const {
 	return (this->level->hasKey(x, y));
 }
 
+/* ------------------------------------------------------------------------------
+ * getNextConveyorTile - Return the 'drop off' spot of this tile if its a
+ * conveyor tile.  The strategy here is relatively simple:
+ *    Check each tile clock wise inclusive from the current tile:
+ *        1. If the tile is a conveyor, return that tile.
+ * 
+ *        2. If the tile is not wall or conveyor, make that tile the backup in
+ *        case no conveyor is found. (second place)
+ * 
+ *        3. If there is no suitable second place, return the current tile in
+ *        the conveyor belt sequence.
+ */
+Tile* Tile::getNextConveyorTile() const {
+	if (!this->isConveyor()) {
+		std::cout << "Trying to get next conveyor tile from non conveyor tile." << std::endl;
+		exitGame();
+	}
+
+	Direction dir = this->getConveyorDirection();
+	Direction origDir = dir;
+
+	Tile* tryTile = NULL;
+	Tile* secondPlace = NULL;
+	Tile* thirdPlace = (Tile*)this;
+
+
+	while (true) {
+
+		if (dir == DIRECTION_UP) {
+			tryTile = this->up();
+		} else if (dir == DIRECTION_DOWN) {
+			tryTile = this->down();
+		} else if (dir == DIRECTION_RIGHT) {
+			tryTile = this->right();
+		} else if (dir == DIRECTION_LEFT) {
+			tryTile = this->left();
+		}
+
+		if (tryTile->isConveyor()) {
+			return tryTile;
+		} else if (!tryTile->isWall() && secondPlace == NULL) {
+			secondPlace = tryTile;
+		} else {
+
+			if (dir == DIRECTION_UP) {
+				dir = DIRECTION_RIGHT;
+			} else if (dir == DIRECTION_RIGHT) {
+				dir = DIRECTION_DOWN;
+			} else if (dir == DIRECTION_DOWN) {
+				dir = DIRECTION_LEFT;
+			} else if (dir == DIRECTION_LEFT) {
+				dir = DIRECTION_UP;
+			}
+
+			if (dir == DIRECTION_COUNT) {
+				dir = DIRECTION_UP;
+			}
+
+			if (dir == origDir) {
+				break;
+			}
+		}
+
+	}
+
+	if (secondPlace != NULL) {
+		return secondPlace;
+	}
+
+	return thirdPlace;
+
+
+}
+
 uint Tile::getX() const {
 	return this->x;
 }
