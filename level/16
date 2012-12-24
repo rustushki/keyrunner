@@ -1,0 +1,32 @@
+k00000000000000000000000p
+0111111111111111111111110
+01wwwwwwwwwwwwwwwwwwwww10
+01wtttttttttttttttttttw10
+01wtuuuuuuuuuuuuuuuuutw10
+01wtu111111111111111utw10
+01wtu122222222222221utw10
+01wtu022222222222220utw10
+01wtu022222222222220utw10
+01wtu122222222222221utw10
+01wtu111111111111111utw10
+01wtuuuuuuuuuuuuuuuuutw10
+01wtttttttttttttttttttw10
+01wwwwwwwwwwwwwwwwwwwww10
+1111111111111111111111110 
+2100000000000000000000000
+
+0 = empty tile
+1 = wall
+2 = lock
+
+t = teleporter red
+u = teleporter green
+w = teleporter blue
+
+p = player
+k = key
+
+< = conveyor belt left
+> = conveyor belt right
+^ = conveyor belt up
+v = conveyor belt down
