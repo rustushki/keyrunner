@@ -1,4 +1,5 @@
 #include "Animation.h"
+#include "Direction.h"
 #include "Level.h"
 #include "KeyRunner.h"
 #include "InfoBar.h"
@@ -35,7 +36,8 @@ int main(int argc, char** argv) {
 
 	// Wait for an Event.
 	SDL_Event event;
-	while (SDL_WaitEvent(&event)) {
+	while (state != QUIT) {
+		SDL_WaitEvent(&event);
 
 		// Keydown.
 		if (event.type == SDL_KEYDOWN) {
@@ -47,15 +49,20 @@ int main(int argc, char** argv) {
 				exitGame();
 
 			} else if (event.key.keysym.sym == SDLK_DOWN) {
-				level.movePlayer(DIRECTION_DOWN);
+				moveDirection(DIRECTION_DOWN);
+
 			} else if (event.key.keysym.sym == SDLK_UP) {
-				level.movePlayer(DIRECTION_UP);
+				moveDirection(DIRECTION_UP);
+
 			} else if (event.key.keysym.sym == SDLK_LEFT) {
-				level.movePlayer(DIRECTION_LEFT);
+				moveDirection(DIRECTION_LEFT);
+
 			} else if (event.key.keysym.sym == SDLK_RIGHT) {
-				level.movePlayer(DIRECTION_RIGHT);
+				moveDirection(DIRECTION_RIGHT);
+
 			}
 
+		} else if (event.type == SDL_KEYUP) {
 
 		// Handle Quit Event.
 		} else if (event.type == SDL_QUIT) {
@@ -64,10 +71,6 @@ int main(int argc, char** argv) {
 		}
 
 
-		if (level.isComplete()) {
-			SDL_mutexV(levelLock);
-			SDL_CondSignal(levelCond);
-		}
 	}
 
 	SDL_WaitThread(ulThread, NULL);

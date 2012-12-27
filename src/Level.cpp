@@ -271,7 +271,13 @@ bool Level::hasKey(int x, int y) {
 	return (this->tileHasKey == this->getTile(x, y));
 }
 
-void Level::movePlayer(Direction d) {
+/* ------------------------------------------------------------------------------
+ * movePlayer - Move the player in the provided direction by one tile.  Handle
+ * walls, teleporters, keys and other gameplay elements.
+ */
+bool Level::movePlayer(Direction d) {
+
+	bool pauseMovement = false;
 	
 	if (d > DIRECTION_COUNT) {
 		std::cout << "Invalid direction." << std::endl;
@@ -303,18 +309,28 @@ void Level::movePlayer(Direction d) {
 
 		// New location from movement to non-wall tile.
 		Tile::AddChangedTile(this->tileHasPlayer);
+
+	// Do not move player if the new tile is a wall.  Do not continue
+	// evaluating criteria either, such as teleporters and wraparound.  They do
+	// not apply since the player has attempt to walk into a wall.
+	} else if (newTile->isWall()) {
+
+		pauseMovement = true;
+		return pauseMovement;
+		
 	}
 
 	// Handle Teleporter Tiles.
 	if (this->tileHasPlayer->isTeleporter()) {
 
-		std::vector<int> newPos;
 		Tile* matching = this->getMatchingTeleporterTile(this->tileHasPlayer);
 
 		this->tileHasPlayer = matching;
 
 		// Redraw new location. 
 		Tile::AddChangedTile(this->tileHasPlayer);
+
+		pauseMovement = true;
 	}
 
 	if (this->hasKey(this->tileHasPlayer->getX(), this->tileHasPlayer->getY())) {
@@ -322,6 +338,13 @@ void Level::movePlayer(Direction d) {
 		this->playerHasKey = true;
 	}
 
+	if (this->isComplete()) {
+		SDL_mutexV(levelLock);
+		SDL_CondSignal(levelCond);
+		pauseMovement = true;
+	}
+
+	return pauseMovement;
 }
 
 /* ------------------------------------------------------------------------------

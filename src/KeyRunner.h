@@ -21,6 +21,8 @@
 
 #define VERSION 2
 
+#include "Direction.h"
+
 typedef unsigned int uint;
 
 class Level;
@@ -54,6 +56,7 @@ extern bool blitting;
 extern Animation* KeyAnim;
 extern Animation* PlayerAnim;
 
+void moveDirection(Direction d);
 int getWidth();
 int getHeight();
 void exitGame();

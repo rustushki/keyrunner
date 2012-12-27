@@ -84,6 +84,143 @@ int clockTick(void* unused) {
 }
 
 /* ------------------------------------------------------------------------------
+ * moveDirection - Move the player in the provided direction and pay close
+ * attention to keyboard input while doing so.  This must run in the same
+ * thread that initted SDL.
+ *
+ */
+void moveDirection(Direction d) {
+
+	// Get the most recent keystate.
+	Uint8* keyState = SDL_GetKeyState(NULL);
+
+	// How long to wait in MS before assuming the user wishes to 'auto move'
+	Uint16 holdDelayMs = 200;
+
+	// How frequently to check to see if the user is holding down an arrow button.
+	Uint16 holdDelayPollCheck = 10;
+
+	// Count of poll attempts to check to see if the user is holding an arrow. 
+	Uint16 holdDelayPollTries = holdDelayMs/holdDelayPollCheck;
+
+	// Number of atomic moves per second.  Each 'move' causes the player to
+	// traverse one tile.
+	Uint16 movesPerSecond = 10;
+
+	// The amount of delay between tile moves.
+	Uint16 autoMoveDelay = 1000/movesPerSecond;
+
+	// Based on the provided direction, infer which key the player must be
+	// pressing.
+	int sdlKey = 0;
+	if (d == DIRECTION_DOWN) {
+		sdlKey = SDLK_DOWN;
+	} else if (d == DIRECTION_UP) {
+		sdlKey = SDLK_UP;
+	} else if (d == DIRECTION_LEFT) {
+		sdlKey = SDLK_LEFT;
+	} else if (d == DIRECTION_RIGHT) {
+		sdlKey = SDLK_RIGHT;
+	}
+
+	// Move the player in a given direction.  If break out of this movement
+	// loop if movePlayer returns true.  That implies that movement has been
+	// interrupted.
+	if (level.movePlayer(d)) {
+		return;
+	}
+
+	// Continue moving the player as long as they are holding down an arrow
+	// key.
+	while (true) {
+
+		// Check for holdDelayMs milliseconds to see if the user wishes to
+		// continue moving automatically while they hold down a key.
+		int x = 0;
+		bool noHold = false;
+		while (++x < holdDelayPollTries) {
+			SDL_PumpEvents();
+			keyState = SDL_GetKeyState(NULL);
+			if (!keyState[sdlKey]) {
+				noHold = true;
+				break;
+			}
+			SDL_Delay(holdDelayPollCheck);
+		}
+
+		// If the user is holding down the key for the provided direction ...
+		if (!noHold) {
+
+			// Update the state of the keys,
+			SDL_PumpEvents();
+			keyState = SDL_GetKeyState(NULL);
+
+			// While the user is still holding down the key for the provided direction...
+			while (keyState[sdlKey]) {
+
+				// Update the state of the keys
+				SDL_PumpEvents();
+				keyState = SDL_GetKeyState(NULL);
+
+				// This series of conditionals will allow the player to change
+				// which key they are pressing without the holdDelayMs wait.
+
+				if (keyState[SDLK_DOWN] && sdlKey != SDLK_DOWN) {
+					d = DIRECTION_DOWN;
+					sdlKey = SDLK_DOWN;
+					break;
+				}
+
+				if (keyState[SDLK_UP] && sdlKey != SDLK_UP) {
+					d = DIRECTION_UP;
+					sdlKey = SDLK_UP;
+					break;
+				}
+
+				if (keyState[SDLK_LEFT] && sdlKey != SDLK_LEFT) {
+					d = DIRECTION_LEFT;
+					sdlKey = SDLK_LEFT;
+					break;
+				}
+
+				if (keyState[SDLK_RIGHT] && sdlKey != SDLK_RIGHT) {
+					d = DIRECTION_RIGHT;
+					sdlKey = SDLK_RIGHT;
+					break;
+				}
+
+				// Move the player.  Exit this movement loop if the player
+				// movement is interrupted (i.e. movePlayer returns true)
+				if (level.movePlayer(d)) {
+					return;
+				}
+
+				// Wait autoMoveDelay MS before allowing another tile move.
+				// This regulates player speed.
+				SDL_Delay(autoMoveDelay);
+			}
+
+			// The player is no longer holding down the key for the provided
+			// direction.  They have also not attempted to change directions.
+			// Exit the loop.
+			return;
+
+		} else {
+			
+			// The player has chosen not to hold down the key for the provided
+			// direction.  Exit the player movement loop.
+			return;
+
+		}
+
+		// If we're here in execution, that probably means that the player has
+		// changed directions during a hold.
+
+	}
+}
+
+
+/* ------------------------------------------------------------------------------
  * updateDisplay - Thread.  Flip the screen 25 times per second.  Update any
  * and all animations.
  */

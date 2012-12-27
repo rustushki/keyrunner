@@ -48,7 +48,7 @@ public:
 	bool hasPlayer(int x, int y);
 	bool isWall(int x, int y);
 
-	void movePlayer(Direction d);
+	bool movePlayer(Direction d);
 
 	bool isComplete();
 	int toInt();
