@@ -7,6 +7,8 @@
 
 Level::Level() {
 	this->playerHasKey = false;
+	this->tileHasPlayer = NULL;
+	this->tileHasKey = NULL;
 }
 
 void Level::load(int level) {
@@ -134,15 +136,15 @@ bool Level::parseLine(std::string line) {
  *
  * k  x,y   // Location of key
  * p  x,y   // Location of player
- * c1 s     // Speed of Conveyor 1
- * c2 n     // Speed of Conveyor 2
  *
- * Conveyors may be identified in their order from the top left of the screen.
- * For example, the first conveyor from the top left is c1.
+ * TODO:
+ *     c1 s     // Speed of Conveyor 1
+ *     c2 n     // Speed of Conveyor 2
+ *     Conveyors may be identified in their order from the top left of the
+ *     screen.  For example, the first conveyor from the top left is c1.
  *
  * Expected Value Types (may use whitespace):
  *
- *  15        // integer
  *  x,y       // pair of integers
  *  x, y      // pair of integers
  *  x	,   y // still a pair of integers
@@ -177,11 +179,19 @@ void Level::parseVar(std::string line) {
 		// Level wants to tell us where the player should be placed.
 		if (b == 'p') {
 			lookPlayerCoord = true;
+			if (this->tileHasPlayer != NULL) {
+				std::cout << "More than 1 Player location specified in Level file." << std::endl;
+				exitGame();
+			}
 			continue;
 
 		// Level wants to tell us where the key should be placed.
 		} else if (b == 'k') {
 			lookKeyCoord = true;
+			if (this->tileHasKey != NULL) {
+				std::cout << "More than 1 key location specified in Level file." << std::endl;
+				exitGame();
+			}
 			continue;
 
 		// We're parsing a coordinate pair for either the key or the player.
