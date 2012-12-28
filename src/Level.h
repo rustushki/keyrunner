@@ -26,6 +26,7 @@ private:
 	Tile* tileHasKey;
 
 	bool parseLine(std::string line);
+	void parseVar(std::string line);
 
 	bool playerHasKey;
 

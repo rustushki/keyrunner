@@ -29,11 +29,25 @@ void Level::load(int level) {
 	this->parseX = 0;
 	this->parseY = 0;
 
+	// 0 - parse grid lines
+	// 1 - parse variables
+	int parseState = 0;
+
 	while (!feof(fp)) {
 		if (fgets(line, sizeof(line), fp) == NULL) {
 			break;
 		}
-		this->parseLine(std::string(line));
+
+		if (parseState == 0) {
+			if (!this->parseLine(std::string(line))) {
+				parseState = 1;
+			}
+		}
+		
+		if (parseState == 1) {
+			this->parseVar(std::string(line));
+		}
+
 	}
 
 	fclose(fp);
@@ -72,15 +86,7 @@ bool Level::parseLine(std::string line) {
 		}
 
 		TileType tt;
-		if (b == 'k') {
-			tileHasKey = true;
-			tt = TILETYPE_EMPTY;
-
-		} else if (b == 'p') {
-			tileHasPlayer = true;
-			tt = TILETYPE_EMPTY;
-
-		} else if (b == 't') {
+		if (b == 't') {
 			tt = TILETYPE_TELEPORTER_RED;
 
 		} else if (b == 'u') {
@@ -121,6 +127,133 @@ bool Level::parseLine(std::string line) {
 	}
 
 	return true;
+}
+
+/* ------------------------------------------------------------------------------
+ * parseVar - Parse variable definitions in level files.
+ *
+ * k  x,y   // Location of key
+ * p  x,y   // Location of player
+ * c1 s     // Speed of Conveyor 1
+ * c2 n     // Speed of Conveyor 2
+ *
+ * Conveyors may be identified in their order from the top left of the screen.
+ * For example, the first conveyor from the top left is c1.
+ *
+ * Expected Value Types (may use whitespace):
+ *
+ *  15        // integer
+ *  x,y       // pair of integers
+ *  x, y      // pair of integers
+ *  x	,   y // still a pair of integers
+ *
+ * Errors:
+ *   1. Nonexistent conveyor
+ *   2. More than 1 key
+ *   3. More than 1 player
+ *   4. Illegal value type
+ */
+void Level::parseVar(std::string line) {
+
+	// Some flags to tell the parser what to look for.
+	bool lookPlayerCoord = false;
+	bool lookKeyCoord    = false;
+
+	// Iterate over each char in the line.
+	for (unsigned int n = 0; n < line.length(); n++) {
+
+		char b = line[n];
+
+		// Ignore whitespace in level files.
+		if (b == '\t' || b == '\n' || b == '\r' || b == ' ') {
+			continue;
+		}
+
+		// Everything after comment char is ignored.
+		if (b == ';') {
+			break;
+		}
+
+		// Level wants to tell us where the player should be placed.
+		if (b == 'p') {
+			lookPlayerCoord = true;
+			continue;
+
+		// Level wants to tell us where the key should be placed.
+		} else if (b == 'k') {
+			lookKeyCoord = true;
+			continue;
+
+		// We're parsing a coordinate pair for either the key or the player.
+		} else if (lookPlayerCoord || lookKeyCoord) {
+
+			// Initialize the pair values.
+			int x = -1;
+			int y = -1;
+
+			// We'll read each numeric character into the stream.
+			std::stringstream s;
+
+			// Continue until the end of the line.
+			while (n < line.length()) {
+
+				// If a comma is encountered, expect that we now have the X
+				// value.
+				if (b == ',') {
+					
+					// Convert the collected data into an integer and flush the
+					// stream.
+					x = atoi(s.str().c_str());
+					s.str("");
+
+				// If EOL is encountered, expect that we now have the Y value.
+				} else if (n == line.length()-1) {
+
+					// Convert stringstream contents to int and break out of
+					// this coordinate parser.
+					y = atoi(s.str().c_str());
+					break;
+
+				} else if (b == '\t' || b == '\n' || b == '\r' || b == ' ') {
+					// next char
+
+				// Unexpected character encountered.
+				} else if (!isdigit(b)) {
+					std::cout << "Illegal value in expected pair in level file" << std::endl;
+
+				// X value has not yet been read.  Read in the next character.
+				} else if (x == -1) {
+					s << b;
+
+				// Y value has not yet been read.  Read in the next character.
+				} else if (y == -1) {
+					s << b;
+
+				// Otherwise the level file is badly formatted.
+				} else {
+					std::cout << "Coordinate parser in bad state." << std::endl;
+					std::cout << "Check Level File Format." << std::endl;
+					exitGame();
+				}
+
+				b = line[++n];
+			}
+
+			Tile* tile = this->getTile(x-1, y-1);
+			if (lookKeyCoord) {
+				this->tileHasKey = tile;
+			} else if (lookPlayerCoord) {
+				this->tileHasPlayer = tile;
+			}
+
+			lookKeyCoord    = false;
+			lookPlayerCoord = false;
+		} else {
+			std::cout << "Illegal value in level file: '" << b << "'" << std::endl;
+			exitGame();
+		}
+
+	}
 }
 
 void Level::buildConveyorAnimations() {
