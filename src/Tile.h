@@ -44,6 +44,8 @@ public:
 	Tile* left() const;
 	Tile* right() const;
 
+	Tile* getTileInDirection(Direction d) const;
+
 	Direction getConveyorDirection() const;
 
 private:

@@ -260,15 +260,7 @@ Tile* Tile::getNextConveyorTile() const {
 
 	while (true) {
 
-		if (dir == DIRECTION_UP) {
-			tryTile = this->up();
-		} else if (dir == DIRECTION_DOWN) {
-			tryTile = this->down();
-		} else if (dir == DIRECTION_RIGHT) {
-			tryTile = this->right();
-		} else if (dir == DIRECTION_LEFT) {
-			tryTile = this->left();
-		}
+		tryTile = this->getTileInDirection(dir);
 
 		if (!tryTile->isWall() && !tryTile->isConveyor() && secondPlace == NULL) {
 			secondPlace = tryTile;
@@ -281,16 +273,7 @@ Tile* Tile::getNextConveyorTile() const {
 			if (dir != oppDir) {
 				Direction dir = tryTile->getConveyorDirection();
 
-				Tile* check;
-				if (dir == DIRECTION_UP) {
-					check = tryTile->up();
-				} else if (dir == DIRECTION_DOWN) {
-					check = tryTile->down();
-				} else if (dir == DIRECTION_RIGHT) {
-					check = tryTile->right();
-				} else if (dir == DIRECTION_LEFT) {
-					check = tryTile->left();
-				}
+				Tile* check = tryTile->getTileInDirection(dir);
 
 				if (check != this) {
 					return tryTile;
@@ -325,6 +308,24 @@ Tile* Tile::getNextConveyorTile() const {
 	return thirdPlace;
 
 
+}
+
+/* ------------------------------------------------------------------------------
+ * getTileInDirection - Given a direction, return the tile to that direction
+ * from this tile..
+ */
+Tile* Tile::getTileInDirection(Direction dir) const {
+	if (dir == DIRECTION_UP) {
+		return this->up();
+	} else if (dir == DIRECTION_DOWN) {
+		return this->down();
+	} else if (dir == DIRECTION_RIGHT) {
+		return this->right();
+	} else if (dir == DIRECTION_LEFT) {
+		return this->left();
+	}
+
+	return NULL;
 }
 
 uint Tile::getX() const {
