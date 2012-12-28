@@ -279,7 +279,22 @@ Tile* Tile::getNextConveyorTile() const {
 		} else if (tryTile->isConveyor()) {
 
 			if (dir != oppDir) {
-				return tryTile;
+				Direction dir = tryTile->getConveyorDirection();
+
+				Tile* check;
+				if (dir == DIRECTION_UP) {
+					check = tryTile->up();
+				} else if (dir == DIRECTION_DOWN) {
+					check = tryTile->down();
+				} else if (dir == DIRECTION_RIGHT) {
+					check = tryTile->right();
+				} else if (dir == DIRECTION_LEFT) {
+					check = tryTile->left();
+				}
+
+				if (check != this) {
+					return tryTile;
+				}
 			}
 		}
 
