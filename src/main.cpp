@@ -21,8 +21,10 @@ int main(int argc, char** argv) {
 	screenLock = SDL_CreateMutex();
 	levelLock = SDL_CreateMutex();
 	levelCond = SDL_CreateCond();
+	levelLoadLock = SDL_CreateMutex();
+	levelLoadCond = SDL_CreateCond();
 
-	timeClock = 10000;
+	timeClock = 5000;
 
 	initScreen();
 
@@ -33,6 +35,7 @@ int main(int argc, char** argv) {
 	SDL_Thread *ctThread = SDL_CreateThread(clockTick, NULL);
 	SDL_Thread *udThread = SDL_CreateThread(updateDisplay, NULL);
 	SDL_Thread *ulThread = SDL_CreateThread(updateLevel, NULL);
+	SDL_Thread *cyThread = SDL_CreateThread(convey, NULL);
 
 	// Wait for an Event.
 	SDL_Event event;
@@ -73,6 +76,7 @@ int main(int argc, char** argv) {
 
 	}
 
+	SDL_WaitThread(cyThread, NULL);
 	SDL_WaitThread(ulThread, NULL);
 	SDL_WaitThread(udThread, NULL);
 	SDL_WaitThread(ctThread, NULL);

@@ -49,6 +49,8 @@ public:
 	bool isWall(int x, int y);
 
 	bool movePlayer(Direction d);
+	bool movePlayerToTile(Tile*);
+	Tile* getPlayerTile() const;
 
 	bool isComplete();
 	int toInt();

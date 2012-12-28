@@ -39,6 +39,10 @@ void Level::load(int level) {
 	fclose(fp);
 	
 	this->buildConveyorAnimations();
+
+	// Signal that it's OK to observe level tiles now.
+	SDL_mutexV(levelLoadLock);
+	SDL_CondSignal(levelLoadCond);
 }
 
 void Level::buildConveyorAnimations() {
@@ -277,8 +281,6 @@ bool Level::hasKey(int x, int y) {
  */
 bool Level::movePlayer(Direction d) {
 
-	bool pauseMovement = false;
-	
 	if (d > DIRECTION_COUNT) {
 		std::cout << "Invalid direction." << std::endl;
 		exitGame();
@@ -301,50 +303,70 @@ bool Level::movePlayer(Direction d) {
 		newTile = this->tileHasPlayer->right();
 	}
 
-	if (newTile != NULL && !newTile->isWall()) {
-		Tile::AddChangedTile(this->tileHasPlayer);
+	return this->movePlayerToTile(newTile);
+}
 
-		// New tile has the player.
-		this->tileHasPlayer = newTile;
+/* ------------------------------------------------------------------------------
+ * movePlayerToTile - Given a tile, move a player to that tile.  Refuse to move
+ * a player to a wall tile.  If the tile has the key, the player will take it.
+ * If the tile is a lock/door and the player has the key then end the level.
+ * If the tile is a teleporter, then actually move the player to the matching
+ * tile. 
+ *
+ * Return true if the player movement is to be interrupted.  It will do so if
+ * the provided tile is a wall or a teleporter.
+ */
+bool Level::movePlayerToTile(Tile* newTile) {
+	if (newTile == NULL) {
 
-		// New location from movement to non-wall tile.
-		Tile::AddChangedTile(this->tileHasPlayer);
-
+		return true;
+	}
+		
 	// Do not move player if the new tile is a wall.  Do not continue
 	// evaluating criteria either, such as teleporters and wraparound.  They do
 	// not apply since the player has attempt to walk into a wall.
-	} else if (newTile->isWall()) {
-
-		pauseMovement = true;
-		return pauseMovement;
-		
+	if (newTile->isWall()) {
+		return true;
 	}
 
-	// Handle Teleporter Tiles.
-	if (this->tileHasPlayer->isTeleporter()) {
+	// Move the player to the tile.
+	Tile::AddChangedTile(this->tileHasPlayer);
+	this->tileHasPlayer = newTile;
+	Tile::AddChangedTile(this->tileHasPlayer);
 
-		Tile* matching = this->getMatchingTeleporterTile(this->tileHasPlayer);
-
-		this->tileHasPlayer = matching;
-
-		// Redraw new location. 
-		Tile::AddChangedTile(this->tileHasPlayer);
-
-		pauseMovement = true;
-	}
-
+	// Give the player the key if the tile has the key.
 	if (this->hasKey(this->tileHasPlayer->getX(), this->tileHasPlayer->getY())) {
 		this->tileHasKey = NULL;
 		this->playerHasKey = true;
 	}
 
+	// Handle Teleporter Tiles.
+	if (this->tileHasPlayer->isTeleporter()) {
+		Tile* matching = this->getMatchingTeleporterTile(this->tileHasPlayer);
+		this->tileHasPlayer = matching;
+		Tile::AddChangedTile(this->tileHasPlayer);
+		return true;
+	}
+
+	// If the level is complete signal the level loader to load a new level.
 	if (this->isComplete()) {
 		SDL_mutexV(levelLock);
 		SDL_CondSignal(levelCond);
-		pauseMovement = true;
+
+		// Don't think this matters, but interrupt movement if the level is
+		// over.
+		return true;
 	}
 
-	return pauseMovement;
+	// Normal case, movement is not interrupted.
+	return false;
+}
+
+/* ------------------------------------------------------------------------------
+ * getPlayerTile - Return the current tile of the player.
+ */
+Tile* Level::getPlayerTile() const {
+	return this->tileHasPlayer;
 }
 
 /* ------------------------------------------------------------------------------

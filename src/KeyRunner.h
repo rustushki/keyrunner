@@ -46,6 +46,8 @@ extern SDL_mutex* screenLock;
 
 extern SDL_cond* levelCond;
 extern SDL_mutex* levelLock;
+extern SDL_cond* levelLoadCond;
+extern SDL_mutex* levelLoadLock;
 
 extern State state;
 extern unsigned int levelNum;
@@ -64,5 +66,6 @@ void initScreen();
 int clockTick(void* unused);
 int updateDisplay(void* unused);
 int updateLevel(void* unused);
+int convey(void* unused);
 
 #endif//KEYRUNNER_H

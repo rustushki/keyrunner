@@ -12,6 +12,8 @@ SDL_mutex* screenLock;
 
 SDL_cond* levelCond;
 SDL_mutex* levelLock;
+SDL_cond* levelLoadCond;
+SDL_mutex* levelLoadLock;
 
 Animation* KeyAnim;
 Animation* PlayerAnim;
@@ -219,6 +221,42 @@ void moveDirection(Direction d) {
 	}
 }
 
+
+/* ------------------------------------------------------------------------------
+ * convey - Thread. Every 100 ms, check to see if the player is on a conveyor
+ * tile.  If so, move them to the next conveyor tile on the belt.
+ */
+int convey(void* unused) {
+
+	// Don't attempt to convey if the level is being loaded.
+	SDL_mutexP(levelLoadLock);
+	SDL_CondWait(levelLoadCond, levelLoadLock);
+
+	// Convey only while the game has not yet been quit.
+	while(state != QUIT) {
+
+		// Get the current tile of the player.
+		Tile* playerTile = level.getPlayerTile();
+
+		// If the tile in a conveyor tile,
+		if (playerTile->isConveyor()) {
+
+			// Convey the player to the next tile.
+			Tile* newTile = playerTile->getNextConveyorTile();
+			level.movePlayerToTile(newTile);
+
+		}
+
+		// Indicate that it's OK to load a new level.
+		SDL_mutexV(levelLoadLock);
+		SDL_CondSignal(levelLoadCond);
+
+		// Delay 100 ms before conveying the player again..
+		SDL_Delay(100);
+	}
+
+	return 0;
+}
 
 /* ------------------------------------------------------------------------------
  * updateDisplay - Thread.  Flip the screen 25 times per second.  Update any

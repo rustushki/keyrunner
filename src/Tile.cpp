@@ -242,6 +242,17 @@ Tile* Tile::getNextConveyorTile() const {
 	Direction dir = this->getConveyorDirection();
 	Direction origDir = dir;
 
+	Direction oppDir;
+	if (origDir == DIRECTION_UP) {
+		oppDir = DIRECTION_DOWN;
+	} else if (origDir == DIRECTION_DOWN) {
+		oppDir = DIRECTION_UP;
+	} else if (origDir == DIRECTION_RIGHT) {
+		oppDir = DIRECTION_LEFT;
+	} else if (origDir == DIRECTION_LEFT) {
+		oppDir = DIRECTION_RIGHT;
+	}
+
 	Tile* tryTile = NULL;
 	Tile* secondPlace = NULL;
 	Tile* thirdPlace = (Tile*)this;
@@ -259,29 +270,35 @@ Tile* Tile::getNextConveyorTile() const {
 			tryTile = this->left();
 		}
 
-		if (tryTile->isConveyor()) {
-			return tryTile;
-		} else if (!tryTile->isWall() && secondPlace == NULL) {
+		if (!tryTile->isWall() && !tryTile->isConveyor() && secondPlace == NULL) {
 			secondPlace = tryTile;
-		} else {
 
-			if (dir == DIRECTION_UP) {
-				dir = DIRECTION_RIGHT;
-			} else if (dir == DIRECTION_RIGHT) {
-				dir = DIRECTION_DOWN;
-			} else if (dir == DIRECTION_DOWN) {
-				dir = DIRECTION_LEFT;
-			} else if (dir == DIRECTION_LEFT) {
-				dir = DIRECTION_UP;
-			}
+		// Prefer adjacent conveyor belt tiles.  Explicitly do not place the
+		// player on a conveyor belt tile in the exact opposite direction of
+		// current travel.
+		} else if (tryTile->isConveyor()) {
 
-			if (dir == DIRECTION_COUNT) {
-				dir = DIRECTION_UP;
+			if (dir != oppDir) {
+				return tryTile;
 			}
+		}
 
-			if (dir == origDir) {
-				break;
-			}
+		if (dir == DIRECTION_UP) {
+			dir = DIRECTION_RIGHT;
+		} else if (dir == DIRECTION_RIGHT) {
+			dir = DIRECTION_DOWN;
+		} else if (dir == DIRECTION_DOWN) {
+			dir = DIRECTION_LEFT;
+		} else if (dir == DIRECTION_LEFT) {
+			dir = DIRECTION_UP;
+		}
+
+		if (dir == DIRECTION_COUNT) {
+			dir = DIRECTION_UP;
+		}
+
+		if (dir == origDir) {
+			break;
 		}
 
 	}
