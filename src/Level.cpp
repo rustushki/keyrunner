@@ -33,7 +33,7 @@ void Level::load(int level) {
 		if (fgets(line, sizeof(line), fp) == NULL) {
 			break;
 		}
-		parseLine(std::string(line));
+		this->parseLine(std::string(line));
 	}
 
 	fclose(fp);
@@ -43,6 +43,84 @@ void Level::load(int level) {
 	// Signal that it's OK to observe level tiles now.
 	SDL_mutexV(levelLoadLock);
 	SDL_CondSignal(levelLoadCond);
+}
+
+bool Level::parseLine(std::string line) {
+
+	for (unsigned int n = 0; n < line.length(); n++) {
+
+		char b = line[n];
+		bool tileHasPlayer = false;
+		bool tileHasKey    = false;
+
+		// Ignore whitespace in level files.
+		if (b == '\t' || b == '\n' || b == '\r' || b == ' ') {
+			continue;
+		}
+
+		if (b == ';') {
+			break;
+		}
+
+		if (parseX == GRID_WIDTH) {
+			parseX = 0;
+			parseY++;
+		}
+		
+		if (parseY >= GRID_HEIGHT) {
+			return false;
+		}
+
+		TileType tt;
+		if (b == 'k') {
+			tileHasKey = true;
+			tt = TILETYPE_EMPTY;
+
+		} else if (b == 'p') {
+			tileHasPlayer = true;
+			tt = TILETYPE_EMPTY;
+
+		} else if (b == 't') {
+			tt = TILETYPE_TELEPORTER_RED;
+
+		} else if (b == 'u') {
+			tt = TILETYPE_TELEPORTER_GREEN;
+
+		} else if (b == 'w') {
+			tt = TILETYPE_TELEPORTER_BLUE;
+
+		} else if (b == '^') {
+			tt = TILETYPE_CONVEY_UP;
+
+		} else if (b == 'v') {
+			tt = TILETYPE_CONVEY_DOWN;
+
+		} else if (b == '<') {
+			tt = TILETYPE_CONVEY_LEFT;
+
+		} else if (b == '>') {
+			tt = TILETYPE_CONVEY_RIGHT;
+
+		} else {
+			tt = (TileType)(b - 0x30);
+		}
+
+		Tile* tile = new Tile(tt, parseX, parseY, this);
+
+
+		if (tileHasPlayer) {
+			this->tileHasPlayer = tile;
+		}
+
+		if (tileHasKey) {
+			this->tileHasKey = tile;
+		}
+
+		this->tile[parseY][parseX] = tile;
+		parseX++;
+	}
+
+	return true;
 }
 
 void Level::buildConveyorAnimations() {
@@ -174,80 +252,6 @@ Tile* Level::getTile(uint x, uint y) const {
 		return NULL;
 	}
 	return this->tile[y][x];
-}
-
-bool Level::parseLine(std::string line) {
-
-	for (unsigned int n = 0; n < line.length(); n++) {
-
-		char b = line[n];
-		bool tileHasPlayer = false;
-		bool tileHasKey    = false;
-
-		// Ignore whitespace in level files.
-		if (b == '\t' || b == '\n' || b == '\r' || b == ' ') {
-			continue;
-		}
-
-		if (parseX == GRID_WIDTH) {
-			parseX = 0;
-			parseY++;
-		}
-		
-		if (parseY >= GRID_HEIGHT) {
-			return false;
-		}
-
-		TileType tt;
-		if (b == 'k') {
-			tileHasKey = true;
-			tt = TILETYPE_EMPTY;
-
-		} else if (b == 'p') {
-			tileHasPlayer = true;
-			tt = TILETYPE_EMPTY;
-
-		} else if (b == 't') {
-			tt = TILETYPE_TELEPORTER_RED;
-
-		} else if (b == 'u') {
-			tt = TILETYPE_TELEPORTER_GREEN;
-
-		} else if (b == 'w') {
-			tt = TILETYPE_TELEPORTER_BLUE;
-
-		} else if (b == '^') {
-			tt = TILETYPE_CONVEY_UP;
-
-		} else if (b == 'v') {
-			tt = TILETYPE_CONVEY_DOWN;
-
-		} else if (b == '<') {
-			tt = TILETYPE_CONVEY_LEFT;
-
-		} else if (b == '>') {
-			tt = TILETYPE_CONVEY_RIGHT;
-
-		} else {
-			tt = (TileType)(b - 0x30);
-		}
-
-		Tile* tile = new Tile(tt, parseX, parseY, this);
-
-
-		if (tileHasPlayer) {
-			this->tileHasPlayer = tile;
-		}
-
-		if (tileHasKey) {
-			this->tileHasKey = tile;
-		}
-
-		this->tile[parseY][parseX] = tile;
-		parseX++;
-	}
-
-	return true;
 }
 
 void Level::draw() {
