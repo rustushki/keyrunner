@@ -56,9 +56,6 @@ void Level::load(int level) {
 	
 	this->buildConveyorAnimations();
 
-	// Signal that it's OK to observe level tiles now.
-	SDL_mutexV(levelLoadLock);
-	SDL_CondSignal(levelLoadCond);
 }
 
 bool Level::parseLine(std::string line) {

@@ -228,12 +228,12 @@ void moveDirection(Direction d) {
  */
 int convey(void* unused) {
 
-	// Don't attempt to convey if the level is being loaded.
-	SDL_mutexP(levelLoadLock);
-	SDL_CondWait(levelLoadCond, levelLoadLock);
-
 	// Convey only while the game has not yet been quit.
 	while(state != QUIT) {
+
+		// Don't attempt to convey if the level is being loaded.
+		SDL_mutexP(levelLoadLock);
+
 
 		// Get the current tile of the player.
 		Tile* playerTile = level.getPlayerTile();
@@ -249,7 +249,6 @@ int convey(void* unused) {
 
 		// Indicate that it's OK to load a new level.
 		SDL_mutexV(levelLoadLock);
-		SDL_CondSignal(levelLoadCond);
 
 		// Delay 100 ms before conveying the player again..
 		SDL_Delay(100);
@@ -297,7 +296,13 @@ int updateLevel(void* unused) {
 
 		level = Level();
 
+		SDL_mutexP(levelLoadLock);
+
 		level.load(levelNum);
+
+		// Signal that it's OK to observe level tiles now.
+		SDL_mutexV(levelLoadLock);
+
 		level.draw();
 
 		SDL_LockMutex(levelLock);
