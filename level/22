@@ -1,0 +1,40 @@
+111111111                
+1u<<<<<t1                
+111111111                
+          1              
+1111     1 1 1 1 1  1    
+1wt1     11  1 1 11 1    
+1111     1 1 111 1 11    
+                         
+1111 111111111111111     
+1w 1 1u>>>>>>>>>>>d1     
+1111 111111111111111     
+                         
+                         
+                         
+                         
+                         
+
+p 3,10
+k 2,2
+
+; How to Set Player and Key Locations:
+; p x,y
+; k x,y
+;
+; Tile Types:
+; 
+; 0 = empty tile
+; 1 = wall
+; 2 = lock
+; 
+; t = teleporter red
+; u = teleporter green
+; w = teleporter blue
+; 
+; 
+; < = conveyor belt left
+; > = conveyor belt right
+; ^ = conveyor belt up
+; v = conveyor belt down
+ 
