@@ -13,6 +13,7 @@ public:
 
 	static bool TileInConveyor(Tile* tile);
 	static bool StartConveyors();
+	static void ClearConveyors();
 
 	bool startAnimation();
 

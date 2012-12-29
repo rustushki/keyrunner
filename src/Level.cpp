@@ -265,6 +265,8 @@ void Level::parseVar(std::string line) {
 
 void Level::buildConveyorAnimations() {
 
+	ConveyorAnimation::ClearConveyors();
+
 	for (int x = 0; x < GRID_WIDTH; x++) {
 
 		for (int y = 0; y < GRID_HEIGHT; y++) {

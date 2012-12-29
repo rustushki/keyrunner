@@ -95,3 +95,7 @@ bool ConveyorAnimation::StartConveyors() {
 
 	return allStarted;
 }
+
+void ConveyorAnimation::ClearConveyors() {
+	ConveyorAnimation::Conveyors.clear();
+}
