@@ -48,6 +48,8 @@ extern SDL_cond* levelCond;
 extern SDL_mutex* levelLock;
 extern SDL_cond* levelLoadCond;
 extern SDL_mutex* levelLoadLock;
+extern SDL_cond* initialLevelLoadCond;
+extern SDL_mutex* initialLevelLoadLock;
 
 extern State state;
 extern unsigned int levelNum;

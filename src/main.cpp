@@ -18,11 +18,13 @@ int main(int argc, char** argv) {
 
 	state = PLAY;
 
-	screenLock = SDL_CreateMutex();
-	levelLock = SDL_CreateMutex();
-	levelCond = SDL_CreateCond();
-	levelLoadLock = SDL_CreateMutex();
-	levelLoadCond = SDL_CreateCond();
+	screenLock           = SDL_CreateMutex();
+	levelLock            = SDL_CreateMutex();
+	levelCond            = SDL_CreateCond();
+	levelLoadLock        = SDL_CreateMutex();
+	levelLoadCond        = SDL_CreateCond();
+	initialLevelLoadLock = SDL_CreateMutex();
+	initialLevelLoadCond = SDL_CreateCond();
 
 	timeClock = 5000;
 
