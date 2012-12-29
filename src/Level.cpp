@@ -66,8 +66,8 @@ bool Level::parseLine(std::string line) {
 		bool tileHasPlayer = false;
 		bool tileHasKey    = false;
 
-		// Ignore whitespace in level files.
-		if (b == '\t' || b == '\n' || b == '\r' || b == ' ') {
+		// Ignore these whitespace chars in level files when parsing tiles.
+		if (b == '\t' || b == '\n' || b == '\r') {
 			continue;
 		}
 
@@ -106,8 +106,19 @@ bool Level::parseLine(std::string line) {
 		} else if (b == '>') {
 			tt = TILETYPE_CONVEY_RIGHT;
 
+		} else if (b == ' ') {
+			tt = TILETYPE_EMPTY;
+
+		} else if (b == 'd') {
+			tt = TILETYPE_DOOR;
+
+		} else if (b == '1') {
+			tt = TILETYPE_WALL;
+
 		} else {
-			tt = (TileType)(b - 0x30);
+			std::cout << "Invalid tiletype in level file: " << b << std::endl;
+			std::cout << "x,y = " << parseX << "," << parseY << std::endl;
+			exitGame();
 		}
 
 		Tile* tile = new Tile(tt, parseX, parseY, this);

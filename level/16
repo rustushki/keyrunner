@@ -1,19 +1,19 @@
-0000000000000000000000000
-0111111111111111111111110
-01wwwwwwwwwwwwwwwwwwwww10
-01wtttttttttttttttttttw10
-01wtuuuuuuuuuuuuuuuuutw10
-01wtu111111111111111utw10
-01wtu122222222222221utw10
-01wtu022222222222220utw10
-01wtu022222222222220utw10
-01wtu122222222222221utw10
-01wtu111111111111111utw10
-01wtuuuuuuuuuuuuuuuuutw10
-01wtttttttttttttttttttw10
-01wwwwwwwwwwwwwwwwwwwww10
-1111111111111111111111110 
-2100000000000000000000000
+                         
+ 11111111111111111111111 
+ 1wwwwwwwwwwwwwwwwwwwww1 
+ 1wtttttttttttttttttttw1 
+ 1wtuuuuuuuuuuuuuuuuutw1 
+ 1wtu111111111111111utw1 
+ 1wtu1ddddddddddddd1utw1 
+ 1wtu ddddddddddddd utw1 
+ 1wtu ddddddddddddd utw1 
+ 1wtu1ddddddddddddd1utw1 
+ 1wtu111111111111111utw1 
+ 1wtuuuuuuuuuuuuuuuuutw1 
+ 1wtttttttttttttttttttw1 
+ 1wwwwwwwwwwwwwwwwwwwww1 
+111111111111111111111111 
+d1                       
 
 k 1,1
 p 25,1 

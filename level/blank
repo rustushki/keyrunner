@@ -1,36 +1,43 @@
-0000000000000000000000000
-0000000000000000000000000
-0000000000000000000000000
-0000000000000000000000000
-0000000000000000000000000
-0000000000000000000000000
-0000000000000000000000000
-0000000000000000000000000
-0000000000000000000000000
-0000000000000000000000000
-0000000000000000000000000
-0000000000000000000000000
-0000000000000000000000000
-0000000000000000000000000
-0000000000000000000000000 
-0000000000000000000000000
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         
+                         
 
-; How to Set Player and Key Locations:
-; p x,y
-; k x,y
-;
+; The above 25x16 character block defines the level. Replace the spaces with
+; letters and numbers to design a level.
+
 ; Tile Types:
 ; 
-; 0 = empty tile
+;   = empty tile (space)
 ; 1 = wall
-; 2 = lock
+; d = door
 ; 
 ; t = teleporter red
 ; u = teleporter green
 ; w = teleporter blue
 ; 
-; 
 ; < = conveyor belt left
 ; > = conveyor belt right
 ; ^ = conveyor belt up
 ; v = conveyor belt down
+
+
+; Important!  Be sure to set player and key locations:
+;
+; p x,y
+; k x,y
+;
+; Just replace x and y with the coordinates of the tiles where the player or
+; key will be located.
