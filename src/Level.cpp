@@ -426,6 +426,8 @@ bool Level::hasKey(int x, int y) {
  * walls, teleporters, keys and other gameplay elements.
  */
 bool Level::movePlayer(Direction d) {
+	
+	SDL_mutexP(levelLoadLock);
 
 	if (d > DIRECTION_COUNT) {
 		std::cout << "Invalid direction." << std::endl;
@@ -449,7 +451,10 @@ bool Level::movePlayer(Direction d) {
 		newTile = this->tileHasPlayer->right();
 	}
 
-	return this->movePlayerToTile(newTile);
+	bool interruptMovement = this->movePlayerToTile(newTile);
+	SDL_mutexV(levelLoadLock);
+
+	return interruptMovement;
 }
 
 /* ------------------------------------------------------------------------------

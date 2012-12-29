@@ -24,6 +24,7 @@ public:
 	static void ClearAnimatedTiles();
 	static void RedrawChangedTiles();
 	static void AddChangedTile(Tile* tile);
+	static void ClearChangedTiles();
 
 	TileType getType() const;
 

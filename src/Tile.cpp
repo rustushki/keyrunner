@@ -377,6 +377,13 @@ void Tile::RedrawChangedTiles() {
 
 }
 
+/* ------------------------------------------------------------------------------
+ * ClearChangedTiles - Remove all tiles from the changed tile array.
+ */
+void Tile::ClearChangedTiles() {
+	Tile::ChangedTiles.clear();
+}
+
 void Tile::AddChangedTile(Tile* tile) {
 	Tile::ChangedTiles.push_back(tile);
 }

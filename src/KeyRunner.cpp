@@ -272,10 +272,11 @@ int updateDisplay(void* unused) {
 	int delay = 1000/fps;
 	while(state != QUIT) {
 
+		SDL_mutexP(levelLoadLock);
 		ConveyorAnimation::StartConveyors();
-
 		Tile::AnimateTiles();
 		Tile::RedrawChangedTiles();
+		SDL_mutexV(levelLoadLock);
 
 		SDL_mutexP(screenLock);
 
@@ -299,9 +300,11 @@ int updateLevel(void* unused) {
 			timeClock += 10000;
 		}
 
-		level = Level();
-
 		SDL_mutexP(levelLoadLock);
+
+		Tile::ClearChangedTiles();
+
+		level = Level();
 
 		level.load(levelNum);
 
