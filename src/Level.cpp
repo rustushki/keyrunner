@@ -84,7 +84,7 @@ bool Level::parseLine(std::string line) {
 			return false;
 		}
 
-		TileType tt;
+		TileType tt = TILETYPE_EMPTY;
 		if (b == 't') {
 			tt = TILETYPE_TELEPORTER_RED;
 
@@ -300,7 +300,10 @@ void Level::buildConveyorAnimations() {
 					//std::cout << "Found Tile: " << q->getX() << "," << q->getY() << std::endl;
 
 					Direction conveyDir = q->getConveyorDirection();
-					Direction oppDir;
+
+					// Initialize oppDir to something invalid to pacify
+					// compiler warnings.
+					Direction oppDir = DIRECTION_COUNT;
 
 					// Determine the opposite direction of this belt.
 					if (conveyDir == DIRECTION_UP) {
@@ -389,7 +392,9 @@ void Level::buildConveyorAnimations() {
 
 					}
 
-					ConveyorAnimation* ca = new ConveyorAnimation(conveyorTiles);
+					// Creating a ConveyorAnimation causes it to be added to
+					// the ConveyorAnimation array.
+					new ConveyorAnimation(conveyorTiles);
 
 				}
 
@@ -445,7 +450,7 @@ bool Level::movePlayer(Direction d) {
 		exitGame();
 	}
 
-	Tile* newTile;
+	Tile* newTile = NULL;
 	if (d == DIRECTION_UP) {
 		newTile = this->tileHasPlayer->up();
 	}
@@ -550,8 +555,8 @@ Tile* Level::getMatchingTeleporterTile(Tile* t) {
 
 		// Search for the matching tile.
 		bool found = false;
-		for (int x = 0; x < GRID_WIDTH; x++) {
-			for (int y = 0; y < GRID_HEIGHT; y++) {
+		for (Uint16 x = 0; x < GRID_WIDTH; x++) {
+			for (Uint16 y = 0; y < GRID_HEIGHT; y++) {
 
 				if (x != t->getX() || y != t->getY()) {
 

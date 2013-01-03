@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
 	initialLevelLoadLock = SDL_CreateMutex();
 	initialLevelLoadCond = SDL_CreateCond();
 
-	timeClock = 5000;
+	timeClock = 50000;
 
 	initScreen();
 

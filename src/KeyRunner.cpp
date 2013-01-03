@@ -297,7 +297,7 @@ int updateLevel(void* unused) {
 	while (levelNum <= Level::GetTotal() && state != QUIT) {
 
 		if (!firstLevelPlayed) {
-			timeClock += 10000;
+			timeClock += 6000;
 		}
 
 		SDL_mutexP(levelLoadLock);

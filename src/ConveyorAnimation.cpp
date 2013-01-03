@@ -52,7 +52,7 @@ bool ConveyorAnimation::startAnimation() {
 }
 
 bool ConveyorAnimation::hasTile(Tile* tile) const {
-	for (int x = 0; x < this->conveyorTiles.size(); x++) {
+	for (Uint16 x = 0; x < this->conveyorTiles.size(); x++) {
 		if (tile == this->conveyorTiles[x]) {
 			return true;
 		}
@@ -67,7 +67,7 @@ bool ConveyorAnimation::hasTile(Tile* tile) const {
  */
 bool ConveyorAnimation::TileInConveyor(Tile* tile) {
 
-	for (int c = 0; c < ConveyorAnimation::Conveyors.size(); c++) {
+	for (Uint16 c = 0; c < ConveyorAnimation::Conveyors.size(); c++) {
 		ConveyorAnimation* conveyor = ConveyorAnimation::Conveyors[c];
 		if (conveyor->hasTile(tile)) {
 			
@@ -86,7 +86,7 @@ bool ConveyorAnimation::TileInConveyor(Tile* tile) {
  */
 bool ConveyorAnimation::StartConveyors() {
 	bool allStarted = true;
-	for (int x = 0; x < ConveyorAnimation::Conveyors.size(); x++) {
+	for (Uint16 x = 0; x < ConveyorAnimation::Conveyors.size(); x++) {
 		ConveyorAnimation* ca = ConveyorAnimation::Conveyors[x];
 		bool started = ca->startAnimation();
 

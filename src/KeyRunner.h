@@ -19,7 +19,7 @@
 #define IMGPATH _ROOT_ "/img/"
 #endif
 
-#define VERSION 2
+#define VERSION 3
 
 #include "Direction.h"
 

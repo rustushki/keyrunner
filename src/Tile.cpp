@@ -104,6 +104,8 @@ AnimationType Tile::TileTypeToAnimType(TileType tt) {
 	std::cout << "Logic error detected." << std::endl;
 	exitGame();
 	
+	// Should certainly never arrive here.
+	return ANIMATION_TYPE_EMPTY;
 }
 
 TileType Tile::getType() const {
@@ -242,7 +244,9 @@ Tile* Tile::getNextConveyorTile() const {
 	Direction dir = this->getConveyorDirection();
 	Direction origDir = dir;
 
-	Direction oppDir;
+	// Initialize oppDir to pacify compiler.
+	Direction oppDir = DIRECTION_COUNT;
+
 	if (origDir == DIRECTION_UP) {
 		oppDir = DIRECTION_DOWN;
 	} else if (origDir == DIRECTION_DOWN) {
