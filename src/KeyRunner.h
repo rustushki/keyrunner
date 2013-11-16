@@ -10,13 +10,13 @@
 #endif
 
 #if _WIN32
-#define FONTPATH "\\windows\\fonts\\verdana.ttf"
+#define FONTPATH  _ROOT_ "\\font\\teleindicadores.ttf"
 #define LEVELPATH _ROOT_ "\\level\\"
-#define IMGPATH _ROOT_ "\\img\\"
+#define IMGPATH   _ROOT_ "\\img\\"
 #elif linux
-#define FONTPATH "/usr/share/fonts/truetype/msttcorefonts/verdana.ttf"
+#define FONTPATH  _ROOT_ "/font/teleindicadores.ttf"
 #define LEVELPATH _ROOT_ "/level/"
-#define IMGPATH _ROOT_ "/img/"
+#define IMGPATH   _ROOT_ "/img/"
 #endif
 
 #define VERSION 3
