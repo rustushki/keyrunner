@@ -33,39 +33,39 @@ int getHeight() {
 }
 
 void exitGame() {
-	SDL_Event quitEvent;
-	quitEvent.type = SDL_QUIT;
-	SDL_PushEvent(&quitEvent);
-
-	exit(1);
+	state = QUIT;
 }
 
 /* ------------------------------------------------------------------------------
- * initScreen - Initialize the screen to 640x480x16. Exit game on failure.
+ * initScreen - Initialize the screen to 640x480x16.  Initialize the font
+ * system.  Set the window caption.  Upon any failure, return false.
  */
-void initScreen() {
+bool init() {
 	if (SDL_Init(SDL_INIT_VIDEO) > 0) {
 		std::cout << "Couldn't initialize SDL: "<< SDL_GetError() << std::endl;
-		exitGame();
+		return false;
 	}
-
-	atexit(SDL_Quit);
 
 	screen = SDL_SetVideoMode(getWidth(), getHeight(), 16, SDL_SWSURFACE | SDL_DOUBLEBUF);
 	if (screen == NULL) {
 		std::cout << "Couldn't set video mode: "<< SDL_GetError() << std::endl;
-		exitGame();
+		return false;
     }
 
 
 	// Initialize SDL_ttf
 	if (TTF_Init() == -1) {
 		std::cout << "Error initializing SDL_ttf: " << TTF_GetError() << std::endl;
+		return false;
 	}
 
+	atexit(SDL_Quit);
+
+	screen = SDL_SetVideoMode(getWidth(), getHeight(), 16, SDL_SWSURFACE | SDL_DOUBLEBUF);
 	std::stringstream ss;
 	ss << "Key Runner r" << VERSION;
 	SDL_WM_SetCaption(ss.str().c_str(), "");
+	return true;
 }
 
 int clockTick(void* unused) {
@@ -79,8 +79,6 @@ int clockTick(void* unused) {
 		timeClock -= step;
 		ib->draw();
 	}
-
-	state = QUIT;
 
 	SDL_CondSignal(levelCond);
 	exitGame();
@@ -329,8 +327,6 @@ int updateLevel(void* unused) {
 
 	}
 
-	state = QUIT;
 	exitGame();
-
 	return 0;
 }

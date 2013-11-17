@@ -64,7 +64,7 @@ void moveDirection(Direction d);
 int getWidth();
 int getHeight();
 void exitGame();
-void initScreen();
+bool init();
 int clockTick(void* unused);
 int updateDisplay(void* unused);
 int updateLevel(void* unused);

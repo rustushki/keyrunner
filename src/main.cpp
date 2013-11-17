@@ -28,62 +28,60 @@ int main(int argc, char** argv) {
 
 	timeClock = 50000;
 
-	initScreen();
+	if (init()) {
+		// There's not a good place for these yet.  Putting them here for now.
+		KeyAnim    = Animation::AnimationFactory(ANIMATION_TYPE_KEY);
+		PlayerAnim = Animation::AnimationFactory(ANIMATION_TYPE_PUMPKIN);
 
-	// There's not a good place for these yet.  Putting them here for now.
-	KeyAnim    = Animation::AnimationFactory(ANIMATION_TYPE_KEY);
-	PlayerAnim = Animation::AnimationFactory(ANIMATION_TYPE_PUMPKIN);
+		SDL_Thread *ctThread = SDL_CreateThread(clockTick, NULL);
+		SDL_Thread *udThread = SDL_CreateThread(updateDisplay, NULL);
+		SDL_Thread *ulThread = SDL_CreateThread(updateLevel, NULL);
+		SDL_Thread *cyThread = SDL_CreateThread(convey, NULL);
 
-	SDL_Thread *ctThread = SDL_CreateThread(clockTick, NULL);
-	SDL_Thread *udThread = SDL_CreateThread(updateDisplay, NULL);
-	SDL_Thread *ulThread = SDL_CreateThread(updateLevel, NULL);
-	SDL_Thread *cyThread = SDL_CreateThread(convey, NULL);
+		// Wait for an Event.
+		SDL_Event event;
+		while (state != QUIT) {
+			SDL_WaitEvent(&event);
 
-	// Wait for an Event.
-	SDL_Event event;
-	while (state != QUIT) {
-		SDL_WaitEvent(&event);
+			// Keydown.
+			if (event.type == SDL_KEYDOWN) {
 
-		// Keydown.
-		if (event.type == SDL_KEYDOWN) {
+				// User Presses Q
+				if (event.key.keysym.sym == SDLK_q) {
+					exitGame();
+					break;
 
-			// User Presses Q
-			if (event.key.keysym.sym == SDLK_q) {
-				
-				// Quit Game.
+				} else if (event.key.keysym.sym == SDLK_DOWN) {
+					moveDirection(DIRECTION_DOWN);
+
+				} else if (event.key.keysym.sym == SDLK_UP) {
+					moveDirection(DIRECTION_UP);
+
+				} else if (event.key.keysym.sym == SDLK_LEFT) {
+					moveDirection(DIRECTION_LEFT);
+
+				} else if (event.key.keysym.sym == SDLK_RIGHT) {
+					moveDirection(DIRECTION_RIGHT);
+
+				}
+
+			} else if (event.type == SDL_KEYUP) {
+
+			// Handle Quit Event.
+			} else if (event.type == SDL_QUIT) {
 				exitGame();
-
-			} else if (event.key.keysym.sym == SDLK_DOWN) {
-				moveDirection(DIRECTION_DOWN);
-
-			} else if (event.key.keysym.sym == SDLK_UP) {
-				moveDirection(DIRECTION_UP);
-
-			} else if (event.key.keysym.sym == SDLK_LEFT) {
-				moveDirection(DIRECTION_LEFT);
-
-			} else if (event.key.keysym.sym == SDLK_RIGHT) {
-				moveDirection(DIRECTION_RIGHT);
+				break;
 
 			}
 
-		} else if (event.type == SDL_KEYUP) {
 
-		// Handle Quit Event.
-		} else if (event.type == SDL_QUIT) {
-
-			exitGame();
 		}
 
-
+		SDL_WaitThread(cyThread, NULL);
+		SDL_WaitThread(ulThread, NULL);
+		SDL_WaitThread(udThread, NULL);
+		SDL_WaitThread(ctThread, NULL);
 	}
-
-	SDL_WaitThread(cyThread, NULL);
-	SDL_WaitThread(ulThread, NULL);
-	SDL_WaitThread(udThread, NULL);
-	SDL_WaitThread(ctThread, NULL);
-
-	exitGame();
 
 	return 0;
 }
