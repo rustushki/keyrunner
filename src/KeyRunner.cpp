@@ -33,6 +33,9 @@ int getHeight() {
 }
 
 void exitGame() {
+	SDL_Event quitEvent;
+	quitEvent.type = SDL_QUIT;
+	SDL_PushEvent(&quitEvent);
 	state = QUIT;
 }
 
