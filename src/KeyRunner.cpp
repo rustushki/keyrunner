@@ -14,7 +14,6 @@ SDL_cond* levelCond;
 SDL_mutex* levelLock;
 SDL_cond* levelLoadCond;
 SDL_mutex* levelLoadLock;
-SDL_cond* initialLevelLoadCond;
 SDL_mutex* initialLevelLoadLock;
 
 Animation* KeyAnim;
@@ -232,7 +231,6 @@ void moveDirection(Direction d) {
 int convey(void* unused) {
 
 	SDL_mutexP(initialLevelLoadLock);
-	SDL_CondWait(initialLevelLoadCond, initialLevelLoadLock);
 
 	// Convey only while the game has not yet been quit.
 	while(state != QUIT) {
@@ -315,7 +313,6 @@ int updateLevel(void* unused) {
 		// Unrelated to the previous unlock, Signal every thread waiting on a
 		// level to load initially that a level has been loaded.
 		SDL_mutexV(initialLevelLoadLock);
-		SDL_CondSignal(initialLevelLoadCond);
 
 		level.draw();
 
