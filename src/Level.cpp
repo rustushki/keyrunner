@@ -437,8 +437,6 @@ bool Level::hasKey(int x, int y) {
  */
 bool Level::movePlayer(Direction d) {
 	
-	SDL_LockMutex(levelLoadLock);
-
 	if (d > DIRECTION_COUNT) {
 		std::cout << "Invalid direction." << std::endl;
 		exitGame();
@@ -462,7 +460,6 @@ bool Level::movePlayer(Direction d) {
 	}
 
 	bool interruptMovement = this->movePlayerToTile(newTile);
-	SDL_UnlockMutex(levelLoadLock);
 
 	return interruptMovement;
 }

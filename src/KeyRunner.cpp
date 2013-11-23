@@ -134,7 +134,10 @@ void moveDirection(Direction d) {
 	// Move the player in a given direction.  If break out of this movement
 	// loop if movePlayer returns true.  That implies that movement has been
 	// interrupted.
-	if (level.movePlayer(d)) {
+	SDL_LockMutex(levelLoadLock);
+	bool interrupt = level.movePlayer(d);
+	SDL_UnlockMutex(levelLoadLock);
+	if (interrupt) {
 		return;
 	}
 
@@ -199,9 +202,13 @@ void moveDirection(Direction d) {
 
 				// Move the player.  Exit this movement loop if the player
 				// movement is interrupted (i.e. movePlayer returns true)
-				if (level.movePlayer(d)) {
+				SDL_LockMutex(levelLoadLock);
+				bool interrupt = level.movePlayer(d);
+				SDL_UnlockMutex(levelLoadLock);
+				if (interrupt) {
 					return;
 				}
+
 
 				// Wait autoMoveDelay MS before allowing another tile move.
 				// This regulates player speed.
