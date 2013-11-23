@@ -313,7 +313,10 @@ int updateLevel(void* unused) {
 		// level to load initially that a level has been loaded.
 		SDL_UnlockMutex(initialLevelLoadLock);
 
+		// Draw the level, locking and unlocking the screen.
+		SDL_LockMutex(screenLock);
 		level.draw();
+		SDL_UnlockMutex(screenLock);
 
 		SDL_LockMutex(levelLock);
 		SDL_CondWait(levelCond, levelLock);

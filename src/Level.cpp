@@ -414,18 +414,12 @@ Tile* Level::getTile(uint x, uint y) const {
 
 void Level::draw() {
 
-	SDL_LockMutex(screenLock);
-
 	// Blit all Tiles.
 	for (int x = 0; x < GRID_WIDTH; x++) {
-
 		for (int y = 0; y < GRID_HEIGHT; y++) {
 			this->getTile(x, y)->draw();
-
 		}
 	}
-
-	SDL_UnlockMutex(screenLock);
 
 }
 
