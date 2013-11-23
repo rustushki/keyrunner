@@ -292,12 +292,7 @@ int updateDisplay(void* unused) {
 
 int updateLevel(void* unused) {
 
-	bool firstLevelPlayed = true;
 	while (levelNum <= Level::GetTotal() && state != QUIT) {
-
-		if (!firstLevelPlayed) {
-			timeClock += 6000;
-		}
 
 		SDL_LockMutex(levelLoadLock);
 
@@ -323,7 +318,7 @@ int updateLevel(void* unused) {
 
 		Tile::ClearAnimatedTiles();
 
-		firstLevelPlayed = false;
+		timeClock += 6000;
 
 	}
 
