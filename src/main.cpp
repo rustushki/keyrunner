@@ -64,6 +64,13 @@ int main(int argc, char** argv) {
 
 				}
 
+				// If the prior movement causes the level to be complete,
+				// signal that the new level may be loaded.
+				if (level.isComplete()){
+					SDL_UnlockMutex(levelLock);
+					SDL_CondSignal(levelCond);
+				}
+
 			} else if (event.type == SDL_KEYUP) {
 
 			// Handle Quit Event.

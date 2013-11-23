@@ -515,13 +515,8 @@ bool Level::movePlayerToTile(Tile* newTile) {
 		return true;
 	}
 
-	// If the level is complete signal the level loader to load a new level.
+	// Interrupt movement if the level is over due to prior movement.
 	if (this->isComplete()) {
-		SDL_UnlockMutex(levelLock);
-		SDL_CondSignal(levelCond);
-
-		// Don't think this matters, but interrupt movement if the level is
-		// over.
 		return true;
 	}
 
