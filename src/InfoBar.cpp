@@ -19,7 +19,7 @@ InfoBar::InfoBar() {
  */
 void InfoBar::draw() const {
 
-	SDL_mutexP(screenLock);
+	SDL_LockMutex(screenLock);
 
 	// Build the black bar at the bottom.
 	SDL_Rect r;
@@ -33,7 +33,7 @@ void InfoBar::draw() const {
 	this->drawLevel();
 	this->drawTimer();
 
-	SDL_mutexV(screenLock);
+	SDL_UnlockMutex(screenLock);
 
 }
 

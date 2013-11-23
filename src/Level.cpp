@@ -414,7 +414,7 @@ Tile* Level::getTile(uint x, uint y) const {
 
 void Level::draw() {
 
-	SDL_mutexP(screenLock);
+	SDL_LockMutex(screenLock);
 
 	// Blit all Tiles.
 	for (int x = 0; x < GRID_WIDTH; x++) {
@@ -425,7 +425,7 @@ void Level::draw() {
 		}
 	}
 
-	SDL_mutexV(screenLock);
+	SDL_UnlockMutex(screenLock);
 
 }
 
@@ -443,7 +443,7 @@ bool Level::hasKey(int x, int y) {
  */
 bool Level::movePlayer(Direction d) {
 	
-	SDL_mutexP(levelLoadLock);
+	SDL_LockMutex(levelLoadLock);
 
 	if (d > DIRECTION_COUNT) {
 		std::cout << "Invalid direction." << std::endl;
@@ -468,7 +468,7 @@ bool Level::movePlayer(Direction d) {
 	}
 
 	bool interruptMovement = this->movePlayerToTile(newTile);
-	SDL_mutexV(levelLoadLock);
+	SDL_UnlockMutex(levelLoadLock);
 
 	return interruptMovement;
 }
@@ -517,7 +517,7 @@ bool Level::movePlayerToTile(Tile* newTile) {
 
 	// If the level is complete signal the level loader to load a new level.
 	if (this->isComplete()) {
-		SDL_mutexV(levelLock);
+		SDL_UnlockMutex(levelLock);
 		SDL_CondSignal(levelCond);
 
 		// Don't think this matters, but interrupt movement if the level is

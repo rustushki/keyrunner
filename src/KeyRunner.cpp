@@ -230,13 +230,13 @@ void moveDirection(Direction d) {
  */
 int convey(void* unused) {
 
-	SDL_mutexP(initialLevelLoadLock);
+	SDL_LockMutex(initialLevelLoadLock);
 
 	// Convey only while the game has not yet been quit.
 	while(state != QUIT) {
 
 		// Don't attempt to convey if the level is being loaded.
-		SDL_mutexP(levelLoadLock);
+		SDL_LockMutex(levelLoadLock);
 
 
 		// Get the current tile of the player.
@@ -252,7 +252,7 @@ int convey(void* unused) {
 		}
 
 		// Indicate that it's OK to load a new level.
-		SDL_mutexV(levelLoadLock);
+		SDL_UnlockMutex(levelLoadLock);
 
 		// Delay 100 ms before conveying the player again..
 		SDL_Delay(100);
@@ -271,17 +271,17 @@ int updateDisplay(void* unused) {
 	int delay = 1000/fps;
 	while(state != QUIT) {
 
-		SDL_mutexP(levelLoadLock);
+		SDL_LockMutex(levelLoadLock);
 		ConveyorAnimation::StartConveyors();
 		Tile::AnimateTiles();
 		Tile::RedrawChangedTiles();
-		SDL_mutexV(levelLoadLock);
+		SDL_UnlockMutex(levelLoadLock);
 
-		SDL_mutexP(screenLock);
+		SDL_LockMutex(screenLock);
 
 		SDL_Flip(screen);
 
-		SDL_mutexV(screenLock);
+		SDL_UnlockMutex(screenLock);
 
 		SDL_Delay(delay);
 	}
@@ -299,7 +299,7 @@ int updateLevel(void* unused) {
 			timeClock += 6000;
 		}
 
-		SDL_mutexP(levelLoadLock);
+		SDL_LockMutex(levelLoadLock);
 
 		Tile::ClearChangedTiles();
 
@@ -308,11 +308,11 @@ int updateLevel(void* unused) {
 		level.load(levelNum);
 
 		// Signal that it's OK to observe level tiles now.
-		SDL_mutexV(levelLoadLock);
+		SDL_UnlockMutex(levelLoadLock);
 
 		// Unrelated to the previous unlock, Signal every thread waiting on a
 		// level to load initially that a level has been loaded.
-		SDL_mutexV(initialLevelLoadLock);
+		SDL_UnlockMutex(initialLevelLoadLock);
 
 		level.draw();
 
