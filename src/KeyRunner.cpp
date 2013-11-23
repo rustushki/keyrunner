@@ -79,7 +79,11 @@ int clockTick(void* unused) {
 	while (timeClock > 0 && state == PLAY) {
 		SDL_Delay(step);
 		timeClock -= step;
+
+		// Draw the InfoBar, locking and unlocking the screen.
+		SDL_LockMutex(screenLock);
 		ib->draw();
+		SDL_UnlockMutex(screenLock);
 	}
 
 	SDL_CondSignal(levelCond);
