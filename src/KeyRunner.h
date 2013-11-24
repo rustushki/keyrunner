@@ -4,6 +4,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <iostream>
+#include <stdint.h>
 
 #ifndef _ROOT_
 #define _ROOT_ "."
@@ -22,8 +23,6 @@
 #define VERSION 3
 
 #include "Direction.h"
-
-typedef unsigned int uint;
 
 class Level;
 class Animation;
@@ -52,7 +51,7 @@ extern SDL_cond* initialLevelLoadCond;
 extern SDL_mutex* initialLevelLoadLock;
 
 extern State state;
-extern unsigned int levelNum;
+extern uint16_t levelNum;
 
 extern bool flipping;
 extern bool blitting;

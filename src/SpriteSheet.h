@@ -3,21 +3,19 @@
 #include <string>
 #include <SDL/SDL.h>
 
-typedef unsigned int uint;
-
 class SpriteSheet {
 
 public:
-	SpriteSheet(std::string filename, uint width, uint height);
-	void blitFrame(uint x, uint y, SDL_Rect& where) const; 
+	SpriteSheet(std::string filename, uint16_t width, uint16_t height);
+	void blitFrame(uint16_t x, uint16_t y, SDL_Rect& where) const; 
 
-	uint getWidth();
-	uint getHeight();
+	uint16_t getWidth();
+	uint16_t getHeight();
 
 private:
 	SDL_Surface* sheet;
-	uint height;
-	uint width;
+	uint16_t height;
+	uint16_t width;
 
 };
 

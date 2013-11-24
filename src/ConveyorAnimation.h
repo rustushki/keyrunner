@@ -1,10 +1,10 @@
 #ifndef CONVEYOR_H
 #define CONVEYOR_H
 
+#include <stdint.h>
 #include <vector>
-class Tile;
 
-typedef unsigned int uint;
+class Tile;
 
 class ConveyorAnimation {
 public:
@@ -22,7 +22,7 @@ private:
 	std::vector<Tile*> conveyorTiles;
 	bool hasTile(Tile*) const;
 
-	uint nextTileToStart;
+	uint16_t nextTileToStart;
 
 	static std::vector<ConveyorAnimation*> Conveyors;
 };

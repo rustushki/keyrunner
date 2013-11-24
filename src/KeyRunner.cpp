@@ -20,8 +20,8 @@ SDL_mutex* initialLevelLoadLock;
 Animation* KeyAnim;
 Animation* PlayerAnim;
 
-uint levelNum;
-uint frame;
+uint16_t levelNum;
+uint16_t frame;
 
 
 int getWidth() {

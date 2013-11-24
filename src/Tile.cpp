@@ -10,7 +10,7 @@ std::vector<Tile*> Tile::AnimatedTiles;
 std::vector<Tile*> Tile::ChangedTiles;
 
 
-Tile::Tile(TileType type, uint x, uint y, Level* level) {
+Tile::Tile(TileType type, uint16_t x, uint16_t y, Level* level) {
 	AnimationType at = Tile::TileTypeToAnimType(type);
 	this->anim = Animation::AnimationFactory(at);
 	
@@ -49,7 +49,7 @@ void Tile::ClearAnimatedTiles() {
  * and advance each one.
  */
 void Tile::AnimateTiles() {
-	for (uint x = 0; x < Tile::AnimatedTiles.size(); x++) {
+	for (uint16_t x = 0; x < Tile::AnimatedTiles.size(); x++) {
 		Tile* tile = Tile::AnimatedTiles[x];
 		if (tile->getAnimation()->advance()) {
 			Tile::AddChangedTile(tile);
@@ -209,8 +209,8 @@ Direction Tile::getConveyorDirection() const {
  * hasPlayer - Determine whether this tile has the player.
  */
 bool Tile::hasPlayer() const {
-	uint x = this->getX();
-	uint y = this->getY();
+	uint16_t x = this->getX();
+	uint16_t y = this->getY();
 	return (this->level->hasPlayer(x, y));
 }
 
@@ -218,8 +218,8 @@ bool Tile::hasPlayer() const {
  * hasKey - Determine whether this tile has the key.
  */
 bool Tile::hasKey() const {
-	uint x = this->getX();
-	uint y = this->getY();
+	uint16_t x = this->getX();
+	uint16_t y = this->getY();
 	return (this->level->hasKey(x, y));
 }
 
@@ -332,21 +332,21 @@ Tile* Tile::getTileInDirection(Direction dir) const {
 	return NULL;
 }
 
-uint Tile::getX() const {
+uint16_t Tile::getX() const {
 	return this->x;
 }
 
-uint Tile::getY() const {
+uint16_t Tile::getY() const {
 	return this->y;
 }
 
 void Tile::draw() {
 	
-	const uint tileSize = 25;
+	const uint16_t tileSize = 25;
 
 	// Determine the coordinate to draw the tile animation..
-	uint xp = this->x*tileSize;
-	uint yp = this->y*tileSize;
+	uint16_t xp = this->x*tileSize;
+	uint16_t yp = this->y*tileSize;
 
 	this->getAnimation()->move(xp, yp);
 	this->getAnimation()->blit();

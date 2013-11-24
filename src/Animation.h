@@ -5,39 +5,37 @@
 #include "AnimationType.h"
 #include "SpriteSheet.h"
 
-typedef unsigned int uint;
-
 class Animation {
 
 public:
 	static Animation* AnimationFactory(AnimationType at);
 	bool advance();
 	void blit();
-	void move(uint x, uint y);
+	void move(uint16_t x, uint16_t y);
 	bool isAnimating() const;
 	void play();
 	void stop();
 
-	uint getCurrentStill() const;
+	uint16_t getCurrentStill() const;
 
 private:
 	Animation(AnimationType at);
-	static uint              GetSPS      (AnimationType at); 
+	static uint16_t              GetSPS      (AnimationType at); 
 	static std::string       GetSpriteSFN(AnimationType at); 
-	static std::vector<uint> GetFrameSize(AnimationType at); 
-	static std::vector<uint> GetFrameList(AnimationType at);
+	static std::vector<uint16_t> GetFrameSize(AnimationType at); 
+	static std::vector<uint16_t> GetFrameList(AnimationType at);
 	SpriteSheet* sheet;
-	uint sps;
+	uint16_t sps;
 	bool firstBlit;
-	std::vector<uint> frameList;
-	uint currentStill;
+	std::vector<uint16_t> frameList;
+	uint16_t currentStill;
 	AnimationType type;
-	uint x;
-	uint y;
+	uint16_t x;
+	uint16_t y;
 	bool shouldAdvance;
 
-	uint framesPerStill;
-	uint advanceCount;
+	uint16_t framesPerStill;
+	uint16_t advanceCount;
 
 };
 

@@ -30,8 +30,8 @@ private:
 
 	bool playerHasKey;
 
-	uint parseX;
-	uint parseY;
+	uint16_t parseX;
+	uint16_t parseY;
 
 	Animation* keyAnim;
 	Animation* playerAnim;
@@ -56,9 +56,9 @@ public:
 	bool isComplete();
 	int toInt();
 
-	Tile* getTile(uint x, uint y) const;
+	Tile* getTile(uint16_t x, uint16_t y) const;
 
-	static unsigned int GetTotal();
+	static uint16_t GetTotal();
 
 };
 

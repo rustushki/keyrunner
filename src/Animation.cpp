@@ -16,9 +16,9 @@ Animation::Animation(AnimationType at) {
 	std::string filename = Animation::GetSpriteSFN(at);
 
 	// Determine the height and width of this animation.
-	std::vector<uint> frameSize = Animation::GetFrameSize(at);
-	uint width  = frameSize[0];
-	uint height = frameSize[1];
+	std::vector<uint16_t> frameSize = Animation::GetFrameSize(at);
+	uint16_t width  = frameSize[0];
+	uint16_t height = frameSize[1];
 
 	// Build the SpriteSheet.
 	SpriteSheet* ss = new SpriteSheet(filename, width, height);
@@ -85,7 +85,7 @@ bool Animation::advance() {
 	return advanced;
 }
 
-uint Animation::getCurrentStill() const {
+uint16_t Animation::getCurrentStill() const {
 	return this->currentStill;
 }
 
@@ -96,10 +96,10 @@ void Animation::blit() {
 
 	// Look into the frame list to determine the logical coordinates of the
 	// frame in the spritesheet.
-	uint frameXc = this->currentStill*2 + 0;
-	uint frameYc = this->currentStill*2 + 1;
-	uint frameX  = this->frameList[frameXc];
-	uint frameY  = this->frameList[frameYc];
+	uint16_t frameXc = this->currentStill*2 + 0;
+	uint16_t frameYc = this->currentStill*2 + 1;
+	uint16_t frameX  = this->frameList[frameXc];
+	uint16_t frameY  = this->frameList[frameYc];
 
 	SDL_Rect r;
 	r.x = this->x;
@@ -115,7 +115,7 @@ void Animation::blit() {
 /* ------------------------------------------------------------------------------
  * move - Move the blitting location of this Animation elsewhere.
  */
-void Animation::move(uint x, uint y) {
+void Animation::move(uint16_t x, uint16_t y) {
 	this->x = x;
 	this->y = y;
 }
@@ -146,8 +146,8 @@ void Animation::stop() {
  * may go away in the future as objects are introduced for on screen elements.
  * Such objects might need to adjust and regulate sps.
  */
-uint Animation::GetSPS(AnimationType at) {
-	uint sps = 0;
+uint16_t Animation::GetSPS(AnimationType at) {
+	uint16_t sps = 0;
 
 	switch (at) {
 
@@ -251,8 +251,8 @@ std::string Animation::GetSpriteSFN(AnimationType at) {
  * which denote the list of frames within a SpriteSheet for that kind of
  * animation.
  */
-std::vector<uint> Animation::GetFrameList(AnimationType at) {
-	std::vector<uint> frameList;
+std::vector<uint16_t> Animation::GetFrameList(AnimationType at) {
+	std::vector<uint16_t> frameList;
 
 	switch (at) {
 
@@ -310,8 +310,8 @@ std::vector<uint> Animation::GetFrameList(AnimationType at) {
  * GetFrameSize - Given an AnimationType, return the frame size of the
  * SpriteSheet associated with that Animation.
  */
-std::vector<uint> Animation::GetFrameSize(AnimationType at) {
-	std::vector<uint> frameSize;
+std::vector<uint16_t> Animation::GetFrameSize(AnimationType at) {
+	std::vector<uint16_t> frameSize;
 
 	switch (at) {
 

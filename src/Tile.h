@@ -12,7 +12,7 @@ class Level;
 class Tile {
 
 public:
-	Tile(TileType type, uint x, uint y, Level*);
+	Tile(TileType type, uint16_t x, uint16_t y, Level*);
 	~Tile();
 
 	void draw();
@@ -28,8 +28,8 @@ public:
 
 	TileType getType() const;
 
-	uint getX() const;
-	uint getY() const;
+	uint16_t getX() const;
+	uint16_t getY() const;
 
 	bool isTeleporter() const;
 	bool isDoor() const;
@@ -58,8 +58,8 @@ private:
 	static std::vector<Tile*> ChangedTiles;
 	static std::vector<Tile*> AnimatedTiles;
 
-	uint x;
-	uint y;
+	uint16_t x;
+	uint16_t y;
 
 };
 

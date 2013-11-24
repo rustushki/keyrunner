@@ -60,7 +60,7 @@ void Level::load(int level) {
 
 bool Level::parseLine(std::string line) {
 
-	for (unsigned int n = 0; n < line.length(); n++) {
+	for (uint16_t n = 0; n < line.length(); n++) {
 
 		char b = line[n];
 		bool tileHasPlayer = false;
@@ -170,7 +170,7 @@ void Level::parseVar(std::string line) {
 	bool lookKeyCoord    = false;
 
 	// Iterate over each char in the line.
-	for (unsigned int n = 0; n < line.length(); n++) {
+	for (uint16_t n = 0; n < line.length(); n++) {
 
 		char b = line[n];
 
@@ -405,7 +405,7 @@ void Level::buildConveyorAnimations() {
 	
 }
 
-Tile* Level::getTile(uint x, uint y) const {
+Tile* Level::getTile(uint16_t x, uint16_t y) const {
 	if (y >= GRID_HEIGHT || x >= GRID_WIDTH) {
 		return NULL;
 	}
@@ -574,7 +574,7 @@ int Level::toInt() {
 	return this->level;
 }
 
-unsigned int Level::GetTotal() {
+uint16_t Level::GetTotal() {
 
 	static int levelCount = -1;
 
