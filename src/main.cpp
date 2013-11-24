@@ -1,8 +1,6 @@
 #include "Animation.h"
-#include "Direction.h"
 #include "Level.h"
 #include "KeyRunner.h"
-#include "InfoBar.h"
 
 Level level;
 State state;
@@ -38,51 +36,7 @@ int main(int argc, char** argv) {
 		SDL_Thread *ulThread = SDL_CreateThread(updateLevel, NULL);
 		SDL_Thread *cyThread = SDL_CreateThread(convey, NULL);
 
-		// Wait for an Event.
-		SDL_Event event;
-		while (state != QUIT) {
-			SDL_WaitEvent(&event);
-
-			// Keydown.
-			if (event.type == SDL_KEYDOWN) {
-
-				// User Presses Q
-				if (event.key.keysym.sym == SDLK_q) {
-					exitGame();
-					break;
-
-				} else if (event.key.keysym.sym == SDLK_DOWN) {
-					moveDirection(DIRECTION_DOWN);
-
-				} else if (event.key.keysym.sym == SDLK_UP) {
-					moveDirection(DIRECTION_UP);
-
-				} else if (event.key.keysym.sym == SDLK_LEFT) {
-					moveDirection(DIRECTION_LEFT);
-
-				} else if (event.key.keysym.sym == SDLK_RIGHT) {
-					moveDirection(DIRECTION_RIGHT);
-
-				}
-
-				// If the prior movement causes the level to be complete,
-				// signal that the new level may be loaded.
-				if (level.isComplete()){
-					SDL_UnlockMutex(levelLock);
-					SDL_CondSignal(levelCond);
-				}
-
-			} else if (event.type == SDL_KEYUP) {
-
-			// Handle Quit Event.
-			} else if (event.type == SDL_QUIT) {
-				exitGame();
-				break;
-
-			}
-
-
-		}
+		handleEvents();
 
 		SDL_WaitThread(cyThread, NULL);
 		SDL_WaitThread(ulThread, NULL);

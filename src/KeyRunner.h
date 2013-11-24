@@ -69,5 +69,6 @@ int clockTick(void* unused);
 int updateDisplay(void* unused);
 int updateLevel(void* unused);
 int convey(void* unused);
+void handleEvents();
 
 #endif//KEYRUNNER_H

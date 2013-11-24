@@ -342,3 +342,51 @@ int updateLevel(void* unused) {
 	exitGame();
 	return 0;
 }
+
+void handleEvents() {
+	// Wait for an Event.
+	SDL_Event event;
+	while (state != QUIT) {
+		SDL_WaitEvent(&event);
+
+		// Keydown.
+		if (event.type == SDL_KEYDOWN) {
+
+			// User Presses Q
+			if (event.key.keysym.sym == SDLK_q) {
+				exitGame();
+				break;
+
+			} else if (event.key.keysym.sym == SDLK_DOWN) {
+				moveDirection(DIRECTION_DOWN);
+
+			} else if (event.key.keysym.sym == SDLK_UP) {
+				moveDirection(DIRECTION_UP);
+
+			} else if (event.key.keysym.sym == SDLK_LEFT) {
+				moveDirection(DIRECTION_LEFT);
+
+			} else if (event.key.keysym.sym == SDLK_RIGHT) {
+				moveDirection(DIRECTION_RIGHT);
+
+			}
+
+			// If the prior movement causes the level to be complete,
+			// signal that the new level may be loaded.
+			if (level.isComplete()){
+				SDL_UnlockMutex(levelLock);
+				SDL_CondSignal(levelCond);
+			}
+
+		} else if (event.type == SDL_KEYUP) {
+
+			// Handle Quit Event.
+		} else if (event.type == SDL_QUIT) {
+			exitGame();
+			break;
+
+		}
+
+
+	}
+}
