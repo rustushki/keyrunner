@@ -1,10 +1,11 @@
+#include <sstream>
+#include <SDL/SDL_ttf.h>
+
 #include "Animation.h"
 #include "ConveyorAnimation.h"
 #include "KeyRunner.h"
 #include "InfoBar.h"
 #include "Level.h"
-#include <sstream>
-#include <SDL/SDL_ttf.h>
 
 // Items yet to be absorbed into KeyRunner static class.
 SDL_Surface *screen;
