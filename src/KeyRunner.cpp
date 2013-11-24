@@ -300,7 +300,12 @@ int KeyRunner::convey(void* unused) {
 
 			// Convey the player to the next tile.
 			Tile* newTile = playerTile->getNextConveyorTile();
-			level.movePlayerToTile(newTile);
+			if (level.movePlayerToTile(newTile)) {
+				if (level.isComplete()){
+					SDL_UnlockMutex(levelLock);
+					SDL_CondSignal(levelCond);
+				}
+			}
 
 		}
 
