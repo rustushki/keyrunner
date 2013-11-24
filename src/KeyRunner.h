@@ -41,36 +41,40 @@ extern SDL_Surface *screen;
 extern Level level;
 extern int timeClock;
 
-extern SDL_mutex* screenLock;
-
-extern SDL_cond* levelCond;
-extern SDL_mutex* levelLock;
-extern SDL_cond* levelLoadCond;
-extern SDL_mutex* levelLoadLock;
-extern SDL_cond* initialLevelLoadCond;
-extern SDL_mutex* initialLevelLoadLock;
-
 extern State state;
-extern uint16_t levelNum;
 
 extern Animation* KeyAnim;
 extern Animation* PlayerAnim;
 
-void moveDirection(Direction d);
 int getWidth();
 int getHeight();
 void exitGame();
-int clockTick(void* unused);
-int updateDisplay(void* unused);
-int updateLevel(void* unused);
-int convey(void* unused);
-void handleEvents();
 
 class KeyRunner {
 public:
-	void play(uint16_t startLevel);
+	static void play(uint16_t startLevel);
+
 private:
-	bool init();
+	// Thread functions.
+	static int clockTick(void* unused);
+	static int updateDisplay(void* unused);
+	static int updateLevel(void* unused);
+	static int convey(void* unused);
+
+	// Helpers
+	static bool init();
+	static void moveDirection(Direction d);
+	static void handleEvents();
+
+	static uint16_t levelNum;
+	static SDL_mutex* screenLock;
+	static SDL_cond* levelCond;
+	static SDL_mutex* levelLock;
+	static SDL_cond* levelLoadCond;
+	static SDL_mutex* levelLoadLock;
+	static SDL_cond* initialLevelLoadCond;
+	static SDL_mutex* initialLevelLoadLock;
+
 };
 
 #endif//KEYRUNNER_H

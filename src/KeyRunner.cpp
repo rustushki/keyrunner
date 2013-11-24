@@ -8,19 +8,19 @@
 
 SDL_Surface *screen;
 int timeClock;
-SDL_mutex* screenLock;
 
-SDL_cond* levelCond;
-SDL_mutex* levelLock;
-SDL_cond* levelLoadCond;
-SDL_mutex* levelLoadLock;
-SDL_cond* initialLevelLoadCond;
-SDL_mutex* initialLevelLoadLock;
+SDL_mutex* KeyRunner::screenLock;
+SDL_cond*  KeyRunner::levelCond;
+SDL_mutex* KeyRunner::levelLock;
+SDL_cond*  KeyRunner::levelLoadCond;
+SDL_mutex* KeyRunner::levelLoadLock;
+SDL_cond*  KeyRunner::initialLevelLoadCond;
+SDL_mutex* KeyRunner::initialLevelLoadLock;
+uint16_t   KeyRunner::levelNum;
 
 Animation* KeyAnim;
 Animation* PlayerAnim;
 
-uint16_t levelNum;
 uint16_t frame;
 
 void KeyRunner::play(uint16_t startLevel) {
@@ -34,6 +34,7 @@ void KeyRunner::play(uint16_t startLevel) {
 	initialLevelLoadLock = SDL_CreateMutex();
 	initialLevelLoadCond = SDL_CreateCond();
 
+	levelNum = startLevel;
 	timeClock = 50000;
 
 	if (init()) {
@@ -41,10 +42,10 @@ void KeyRunner::play(uint16_t startLevel) {
 		KeyAnim    = Animation::AnimationFactory(ANIMATION_TYPE_KEY);
 		PlayerAnim = Animation::AnimationFactory(ANIMATION_TYPE_PUMPKIN);
 
-		SDL_Thread *ctThread = SDL_CreateThread(clockTick, NULL);
-		SDL_Thread *udThread = SDL_CreateThread(updateDisplay, NULL);
-		SDL_Thread *ulThread = SDL_CreateThread(updateLevel, NULL);
-		SDL_Thread *cyThread = SDL_CreateThread(convey, NULL);
+		SDL_Thread *ctThread = SDL_CreateThread(&clockTick, NULL);
+		SDL_Thread *udThread = SDL_CreateThread(&updateDisplay, NULL);
+		SDL_Thread *ulThread = SDL_CreateThread(&updateLevel, NULL);
+		SDL_Thread *cyThread = SDL_CreateThread(&convey, NULL);
 
 		handleEvents();
 
@@ -105,7 +106,7 @@ bool KeyRunner::init() {
 	return true;
 }
 
-int clockTick(void* unused) {
+int KeyRunner::clockTick(void* unused) {
 
 	InfoBar* ib = InfoBar::GetInstance();
 
@@ -132,7 +133,7 @@ int clockTick(void* unused) {
  * thread that initted SDL.
  *
  */
-void moveDirection(Direction d) {
+void KeyRunner::moveDirection(Direction d) {
 
 	// Get the most recent keystate.
 	Uint8* keyState = SDL_GetKeyState(NULL);
@@ -274,7 +275,7 @@ void moveDirection(Direction d) {
  * convey - Thread. Every 100 ms, check to see if the player is on a conveyor
  * tile.  If so, move them to the next conveyor tile on the belt.
  */
-int convey(void* unused) {
+int KeyRunner::convey(void* unused) {
 
 	SDL_LockMutex(initialLevelLoadLock);
 	SDL_CondWait(initialLevelLoadCond, initialLevelLoadLock);
@@ -312,7 +313,7 @@ int convey(void* unused) {
  * updateDisplay - Thread.  Flip the screen 25 times per second.  Update any
  * and all animations.
  */
-int updateDisplay(void* unused) {
+int KeyRunner::updateDisplay(void* unused) {
 	int fps = 25;
 
 	int delay = 1000/fps;
@@ -337,7 +338,7 @@ int updateDisplay(void* unused) {
 	return 0;
 }
 
-int updateLevel(void* unused) {
+int KeyRunner::updateLevel(void* unused) {
 
 	while (levelNum <= Level::GetTotal() && state != QUIT) {
 
@@ -377,7 +378,7 @@ int updateLevel(void* unused) {
 	return 0;
 }
 
-void handleEvents() {
+void KeyRunner::handleEvents() {
 	// Wait for an Event.
 	SDL_Event event;
 	while (state != QUIT) {
