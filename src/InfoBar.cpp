@@ -11,26 +11,61 @@ InfoBar* InfoBar::GetInstance() {
 }
 
 InfoBar::InfoBar() {
+	ibSrf = SDL_CreateRGBSurface(0, getWidth(), getHeight()
+		, 32, 0, 0, 0, 0);
+}
 
+InfoBar::~InfoBar() {
+	SDL_FreeSurface(ibSrf);
 }
 
 /* ------------------------------------------------------------------------------
- * draw - Draws the information bar onto the screen at the bottom.
+ * getSurface - Returns a surface containing the graphical representation of
+ * the InfoBar.  Returned memory should not be deallocated by caller.
  */
-void InfoBar::draw(uint16_t level) const {
+SDL_Surface* InfoBar::getSurface(uint16_t level) const {
 
 	// Build the black bar at the bottom.
 	SDL_Rect r;
 	r.x = 0;
-	r.y = KeyRunner::getHeight() - this->getHeight();
-	r.w = KeyRunner::getWidth();
-	r.h = this->getHeight();
-	SDL_FillRect(screen, &r, 0x000000);
+	r.y = 0;
+	r.w = getWidth();
+	r.h = getHeight();
+	SDL_FillRect(ibSrf, &r, 0x000000);
 
 	// As they say.
 	this->drawLevel(level);
 	this->drawTimer();
 
+	return ibSrf;
+}
+
+/* ------------------------------------------------------------------------------
+ * getWidth() - Return the width of the InfoBar.
+ */
+int InfoBar::getWidth() const {
+	return KeyRunner::getWidth();
+}
+
+/* ------------------------------------------------------------------------------
+ * getHeight() - Return the height of the InfoBar.
+ */
+int InfoBar::getHeight() const {
+	return 40;
+}
+
+/* ------------------------------------------------------------------------------
+ * getX() - Return the X of the info bar relative to the whole screen.
+ */
+int InfoBar::getX() const {
+	return 0;
+}
+
+/* ------------------------------------------------------------------------------
+ * getY() - Return the Y of the info bar relative to the whole screen.
+ */
+int InfoBar::getY() const {
+	return KeyRunner::getHeight() - getHeight();
 }
 
 /* ------------------------------------------------------------------------------
@@ -75,13 +110,14 @@ void InfoBar::drawText(std::string s, Position position) const {
 	
 	// Otherwise,
 	} else {
+		const uint16_t marginTop = 5;
 
 		// Create a destination rectangle based on the created text surface and
 		// the position parameter.
 		SDL_Rect r;
 		r.w = text_surface->w;
 		r.h = text_surface->h;
-		r.y = KeyRunner::getHeight() - text_surface->h;
+		r.y = marginTop;
 
 		if (position == BOTTOM_LEFT) {
 			r.x = 0;
@@ -95,7 +131,7 @@ void InfoBar::drawText(std::string s, Position position) const {
 		}
 
 		// Blit the text to the screen.
-		SDL_BlitSurface(text_surface, NULL, screen, &r);
+		SDL_BlitSurface(text_surface, NULL, ibSrf, &r);
 	}
 
 }
@@ -130,10 +166,6 @@ void InfoBar::drawTimer() const {
 
 	// Draw it to th screen.
 	drawText(timer, BOTTOM_RIGHT);
-}
-
-int InfoBar::getHeight() const {
-	return 40;
 }
 
 /* ------------------------------------------------------------------------------

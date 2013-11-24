@@ -122,14 +122,37 @@ int KeyRunner::clockTick(void* unused) {
 		timeClock -= step;
 
 		// Draw the InfoBar, locking and unlocking the screen.
-		SDL_LockMutex(screenLock);
-		ib->draw(level.toInt());
-		SDL_UnlockMutex(screenLock);
+		SDL_Surface* ibSrf = ib->getSurface(level.toInt());
+		draw(ibSrf, ib->getX(), ib->getY());
 	}
 
 	SDL_CondSignal(levelCond);
 	exitGame();
 	return 0;
+}
+
+/* ------------------------------------------------------------------------------
+ * draw() - Given an SDL_Surface*, draw it to the screen at a given coordinate
+ * pair.  This should be the only way to draw to the screen.  It is considered
+ * thread safe.
+ */
+void KeyRunner::draw(SDL_Surface* surf, int x, int y) {
+	SDL_LockMutex(screenLock);
+	SDL_Rect srcRect;
+	srcRect.x = 0;
+	srcRect.y = 0;
+	srcRect.w = surf->w;
+	srcRect.h = surf->h;
+
+	SDL_Rect dstRect;
+	dstRect.x = x;
+	dstRect.y = y;
+	dstRect.w = surf->w;
+	dstRect.h = surf->h;
+
+	SDL_BlitSurface(surf, &srcRect, screen, &dstRect);
+
+	SDL_UnlockMutex(screenLock);
 }
 
 /* ------------------------------------------------------------------------------

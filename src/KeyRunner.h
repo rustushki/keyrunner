@@ -51,6 +51,7 @@ private:
 	static bool init();
 	static void moveDirection(Direction d);
 	static void handleEvents();
+	static void draw(SDL_Surface* surf, int x, int y);
 
 	static uint16_t levelNum;
 	static SDL_mutex* screenLock;

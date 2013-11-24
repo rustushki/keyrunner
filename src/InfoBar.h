@@ -16,9 +16,13 @@ class InfoBar {
 
 public:
 	static InfoBar* GetInstance();
+	~InfoBar();
 
-	void draw(uint16_t level) const;
+	SDL_Surface* getSurface(uint16_t level) const;
 	int getHeight() const;
+	int getWidth() const;
+	int getX() const;
+	int getY() const;
 
 private:
 	InfoBar();
@@ -29,6 +33,8 @@ private:
 	void drawTimer() const;
 
 	static InfoBar* instance;
+
+	SDL_Surface* ibSrf;
 
 };
 
