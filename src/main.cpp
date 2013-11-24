@@ -24,6 +24,7 @@ int main(int argc, char** argv) {
 	levelLoadLock        = SDL_CreateMutex();
 	levelLoadCond        = SDL_CreateCond();
 	initialLevelLoadLock = SDL_CreateMutex();
+	initialLevelLoadCond = SDL_CreateCond();
 
 	timeClock = 50000;
 
