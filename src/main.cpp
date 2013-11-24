@@ -1,9 +1,6 @@
 #include "Level.h"
 #include "KeyRunner.h"
 
-Level level;
-State state;
-
 int main(int argc, char** argv) {
 
 	// Simple Support for Starting on a Different Level.

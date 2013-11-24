@@ -172,7 +172,7 @@ uint16_t Animation::GetSPS(AnimationType at) {
 		default:
 			std::cout << "Could not determine sps." << std::endl;
 			std::cout << "Invalid Animation Type." << std::endl;
-			exitGame();
+			KeyRunner::exitGame();
 			break;
 
 	}
@@ -232,7 +232,7 @@ std::string Animation::GetSpriteSFN(AnimationType at) {
 		default:
 			std::cout << "Could not determine sprite sheet." << std::endl;
 			std::cout << "Invalid Animation Type:" << at << std::endl;
-			exitGame();
+			KeyRunner::exitGame();
 			break;
 
 	}
@@ -298,7 +298,7 @@ std::vector<uint16_t> Animation::GetFrameList(AnimationType at) {
 		default:
 			std::cout << "Could not determine frame list." << std::endl;
 			std::cout << "Invalid Animation Type." << std::endl;
-			exitGame();
+			KeyRunner::exitGame();
 			break;
 
 	}
@@ -334,7 +334,7 @@ std::vector<uint16_t> Animation::GetFrameSize(AnimationType at) {
 		default:
 			std::cout << "Could not determine frame size." << std::endl;
 			std::cout << "Invalid Animation Type." << std::endl;
-			exitGame();
+			KeyRunner::exitGame();
 			break;
 
 	}

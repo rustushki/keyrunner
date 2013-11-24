@@ -17,7 +17,7 @@ class InfoBar {
 public:
 	static InfoBar* GetInstance();
 
-	void draw() const;
+	void draw(uint16_t level) const;
 	int getHeight() const;
 
 private:
@@ -25,7 +25,7 @@ private:
 
 	TTF_Font* getFont() const;
 	void drawText(std::string s, Position position) const;
-	void drawLevel() const;
+	void drawLevel(uint16_t level) const;
 	void drawTimer() const;
 
 	static InfoBar* instance;

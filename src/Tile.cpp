@@ -96,13 +96,13 @@ AnimationType Tile::TileTypeToAnimType(TileType tt) {
 		default:
 			std::cout << "Could not determine AnimationType." << std::endl;
 			std::cout << "Invalid TileType." << std::endl;
-			exitGame();
+			KeyRunner::exitGame();
 			break;
 	}
 
 	// Should not arrive here.
 	std::cout << "Logic error detected." << std::endl;
-	exitGame();
+	KeyRunner::exitGame();
 	
 	// Should certainly never arrive here.
 	return ANIMATION_TYPE_EMPTY;
@@ -198,7 +198,7 @@ Direction Tile::getConveyorDirection() const {
 	}
 
 	std::cout << "Non-conveyor tile queried for direction." << std::endl;
-	exitGame();
+	KeyRunner::exitGame();
 
 	// Should never execute.
 	return DIRECTION_UP;
@@ -238,7 +238,7 @@ bool Tile::hasKey() const {
 Tile* Tile::getNextConveyorTile() const {
 	if (!this->isConveyor()) {
 		std::cout << "Trying to get next conveyor tile from non conveyor tile." << std::endl;
-		exitGame();
+		KeyRunner::exitGame();
 	}
 
 	Direction dir = this->getConveyorDirection();

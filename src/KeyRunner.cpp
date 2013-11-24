@@ -6,8 +6,10 @@
 #include <sstream>
 #include <SDL/SDL_ttf.h>
 
+// Items yet to be absorbed into KeyRunner static class.
 SDL_Surface *screen;
-int timeClock;
+Animation* KeyAnim;
+Animation* PlayerAnim;
 
 SDL_mutex* KeyRunner::screenLock;
 SDL_cond*  KeyRunner::levelCond;
@@ -17,11 +19,9 @@ SDL_mutex* KeyRunner::levelLoadLock;
 SDL_cond*  KeyRunner::initialLevelLoadCond;
 SDL_mutex* KeyRunner::initialLevelLoadLock;
 uint16_t   KeyRunner::levelNum;
-
-Animation* KeyAnim;
-Animation* PlayerAnim;
-
-uint16_t frame;
+State      KeyRunner::state;
+int        KeyRunner::timeClock;
+Level      KeyRunner::level;
 
 void KeyRunner::play(uint16_t startLevel) {
 	state = PLAY;
@@ -59,15 +59,19 @@ void KeyRunner::play(uint16_t startLevel) {
 	}
 }
 
-int getWidth() {
+int KeyRunner::getTimeClock() {
+	return timeClock;
+}
+
+int KeyRunner::getWidth() {
 	return GRID_WIDTH*25;
 }
 
-int getHeight() {
+int KeyRunner::getHeight() {
 	return GRID_HEIGHT*25 + InfoBar::GetInstance()->getHeight();
 }
 
-void exitGame() {
+void KeyRunner::exitGame() {
 	SDL_Event quitEvent;
 	quitEvent.type = SDL_QUIT;
 	SDL_PushEvent(&quitEvent);
@@ -118,7 +122,7 @@ int KeyRunner::clockTick(void* unused) {
 
 		// Draw the InfoBar, locking and unlocking the screen.
 		SDL_LockMutex(screenLock);
-		ib->draw();
+		ib->draw(level.toInt());
 		SDL_UnlockMutex(screenLock);
 	}
 
@@ -421,7 +425,5 @@ void KeyRunner::handleEvents() {
 			break;
 
 		}
-
-
 	}
 }

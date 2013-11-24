@@ -118,7 +118,7 @@ bool Level::parseLine(std::string line) {
 		} else {
 			std::cout << "Invalid tiletype in level file: " << b << std::endl;
 			std::cout << "x,y = " << parseX << "," << parseY << std::endl;
-			exitGame();
+			KeyRunner::exitGame();
 		}
 
 		Tile* tile = new Tile(tt, parseX, parseY, this);
@@ -189,7 +189,7 @@ void Level::parseVar(std::string line) {
 			lookPlayerCoord = true;
 			if (this->tileHasPlayer != NULL) {
 				std::cout << "More than 1 Player location specified in Level file." << std::endl;
-				exitGame();
+				KeyRunner::exitGame();
 			}
 			continue;
 
@@ -198,7 +198,7 @@ void Level::parseVar(std::string line) {
 			lookKeyCoord = true;
 			if (this->tileHasKey != NULL) {
 				std::cout << "More than 1 key location specified in Level file." << std::endl;
-				exitGame();
+				KeyRunner::exitGame();
 			}
 			continue;
 
@@ -251,7 +251,7 @@ void Level::parseVar(std::string line) {
 				} else {
 					std::cout << "Coordinate parser in bad state." << std::endl;
 					std::cout << "Check Level File Format." << std::endl;
-					exitGame();
+					KeyRunner::exitGame();
 				}
 
 				b = line[++n];
@@ -268,7 +268,7 @@ void Level::parseVar(std::string line) {
 			lookPlayerCoord = false;
 		} else {
 			std::cout << "Illegal value in level file: '" << b << "'" << std::endl;
-			exitGame();
+			KeyRunner::exitGame();
 		}
 
 	}
@@ -439,7 +439,7 @@ bool Level::movePlayer(Direction d) {
 	
 	if (d > DIRECTION_COUNT) {
 		std::cout << "Invalid direction." << std::endl;
-		exitGame();
+		KeyRunner::exitGame();
 	}
 
 	Tile* newTile = NULL;

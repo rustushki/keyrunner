@@ -17,18 +17,18 @@ InfoBar::InfoBar() {
 /* ------------------------------------------------------------------------------
  * draw - Draws the information bar onto the screen at the bottom.
  */
-void InfoBar::draw() const {
+void InfoBar::draw(uint16_t level) const {
 
 	// Build the black bar at the bottom.
 	SDL_Rect r;
 	r.x = 0;
-	r.y = ::getHeight() - this->getHeight();
-	r.w = getWidth();
+	r.y = KeyRunner::getHeight() - this->getHeight();
+	r.w = KeyRunner::getWidth();
 	r.h = this->getHeight();
 	SDL_FillRect(screen, &r, 0x000000);
 
 	// As they say.
-	this->drawLevel();
+	this->drawLevel(level);
 	this->drawTimer();
 
 }
@@ -36,14 +36,13 @@ void InfoBar::draw() const {
 /* ------------------------------------------------------------------------------
  * drawLevel - draws the level at the bottom left of the screen.
  */
-void InfoBar::drawLevel() const {
+void InfoBar::drawLevel(uint16_t level) const {
 
 	// Covert the level into a string.
-	int lev = level.toInt();
 	std::string levelStr = "";
-	while (lev >= 1) {
-		levelStr.insert(levelStr.begin(), (char)((lev % 10) + 0x30));
-		lev /= 10;
+	while (level >= 1) {
+		levelStr.insert(levelStr.begin(), (char)((level % 10) + 0x30));
+		level /= 10;
 	}
 
 	// Prepend "Level: " onto the string.
@@ -82,17 +81,17 @@ void InfoBar::drawText(std::string s, Position position) const {
 		SDL_Rect r;
 		r.w = text_surface->w;
 		r.h = text_surface->h;
-		r.y = ::getHeight() - text_surface->h;
+		r.y = KeyRunner::getHeight() - text_surface->h;
 
 		if (position == BOTTOM_LEFT) {
 			r.x = 0;
 		} else if (position == BOTTOM_RIGHT) {
-			r.x = getWidth() - text_surface->w;
+			r.x = KeyRunner::getWidth() - text_surface->w;
 		} else if (position == BOTTOM_CENTER) {
-			r.x = (getWidth() - text_surface->w)/2;
+			r.x = (KeyRunner::getWidth() - text_surface->w)/2;
 		} else if (position == MIDDLE_CENTER) {
-			r.x = (getWidth() - text_surface->w)/2;
-			r.y = (::getHeight() - text_surface->h)/2;
+			r.x = (KeyRunner::getWidth() - text_surface->w)/2;
+			r.y = (KeyRunner::getHeight() - text_surface->h)/2;
 		}
 
 		// Blit the text to the screen.
@@ -108,7 +107,7 @@ void InfoBar::drawTimer() const {
 
 	// Convert the timeout into a string.
 	std::string timer = "";
-	float time = (float)timeClock/1000;
+	float time = (float)KeyRunner::getTimeClock()/1000;
 
 	if (time >= 1) {
 		while (time >= 1) {
@@ -123,7 +122,7 @@ void InfoBar::drawTimer() const {
 	timer += ".";
 
 	// Get the tenths place.
-	int decimal = (timeClock % 1000) / 100;
+	int decimal = (KeyRunner::getTimeClock() % 1000) / 100;
 	timer += (char)decimal + 0x30;
 
 	// Format the Timer String for Display

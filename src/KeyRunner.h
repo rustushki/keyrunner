@@ -23,36 +23,22 @@
 #define VERSION 3
 
 #include "Direction.h"
+#include "State.h"
 
 class Level;
 class Animation;
 
-// Game State.
-enum State {
-	  PLAY     // User is playing.
-	, QUIT     // User has indicated he wants to quit.
-	, START    // Build the next level.
-	, LOSE     // User has lost.  Display lose animation.
-	, RESTART  // Start over at level 1, reset score, etc..
-	, WIN      // User has won the game.
-};
-
 extern SDL_Surface *screen;
-extern Level level;
-extern int timeClock;
-
-extern State state;
-
 extern Animation* KeyAnim;
 extern Animation* PlayerAnim;
-
-int getWidth();
-int getHeight();
-void exitGame();
 
 class KeyRunner {
 public:
 	static void play(uint16_t startLevel);
+	static void exitGame();
+	static int getTimeClock();
+	static int getWidth();
+	static int getHeight();
 
 private:
 	// Thread functions.
@@ -74,6 +60,9 @@ private:
 	static SDL_mutex* levelLoadLock;
 	static SDL_cond* initialLevelLoadCond;
 	static SDL_mutex* initialLevelLoadLock;
+	static State state;
+	static int timeClock;
+	static Level level;
 
 };
 
