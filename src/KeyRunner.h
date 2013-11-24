@@ -67,4 +67,9 @@ int updateLevel(void* unused);
 int convey(void* unused);
 void handleEvents();
 
+class KeyRunner {
+public:
+	void play(uint16_t startLevel);
+};
+
 #endif//KEYRUNNER_H
