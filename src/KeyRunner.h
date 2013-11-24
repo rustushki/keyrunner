@@ -53,9 +53,6 @@ extern SDL_mutex* initialLevelLoadLock;
 extern State state;
 extern uint16_t levelNum;
 
-extern bool flipping;
-extern bool blitting;
-
 extern Animation* KeyAnim;
 extern Animation* PlayerAnim;
 
