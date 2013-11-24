@@ -52,8 +52,10 @@ void KeyRunner::play(uint16_t startLevel) {
 		SDL_WaitThread(ulThread, NULL);
 		SDL_WaitThread(udThread, NULL);
 		SDL_WaitThread(ctThread, NULL);
+	} else {
+		// TODO: What to do if we fail to initialize?
+		// Need a system for handling failures.
 	}
-
 }
 
 int getWidth() {
@@ -72,10 +74,10 @@ void exitGame() {
 }
 
 /* ------------------------------------------------------------------------------
- * initScreen - Initialize the screen to 640x480x16.  Initialize the font
- * system.  Set the window caption.  Upon any failure, return false.
+ * init - Initialize the screen to 640x480x16.  Initialize the font system.
+ * Set the window caption.  Upon any failure, return false.
  */
-bool init() {
+bool KeyRunner::init() {
 	if (SDL_Init(SDL_INIT_VIDEO) > 0) {
 		std::cout << "Couldn't initialize SDL: "<< SDL_GetError() << std::endl;
 		return false;

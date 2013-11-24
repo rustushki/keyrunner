@@ -60,7 +60,6 @@ void moveDirection(Direction d);
 int getWidth();
 int getHeight();
 void exitGame();
-bool init();
 int clockTick(void* unused);
 int updateDisplay(void* unused);
 int updateLevel(void* unused);
@@ -70,6 +69,8 @@ void handleEvents();
 class KeyRunner {
 public:
 	void play(uint16_t startLevel);
+private:
+	bool init();
 };
 
 #endif//KEYRUNNER_H
