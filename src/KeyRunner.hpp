@@ -1,5 +1,5 @@
-#ifndef KEYRUNNER_H
-#define KEYRUNNER_H
+#ifndef KEYRUNNER_HPP
+#define KEYRUNNER_HPP
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
@@ -22,8 +22,8 @@
 
 #define VERSION 3
 
-#include "Direction.h"
-#include "State.h"
+#include "Direction.hpp"
+#include "State.hpp"
 
 class Level;
 class Animation;
@@ -69,4 +69,4 @@ private:
 
 };
 
-#endif//KEYRUNNER_H
+#endif//KEYRUNNER_HPP

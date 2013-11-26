@@ -1,7 +1,7 @@
 #include <iostream>
-#include "ConveyorAnimation.h"
-#include "KeyRunner.h"
-#include "Tile.h"
+#include "ConveyorAnimation.hpp"
+#include "KeyRunner.hpp"
+#include "Tile.hpp"
 
 std::vector<ConveyorAnimation*> ConveyorAnimation::Conveyors;
 

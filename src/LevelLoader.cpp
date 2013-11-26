@@ -1,7 +1,7 @@
 #include <sstream>
 
-#include "KeyRunner.h"
-#include "LevelLoader.h"
+#include "KeyRunner.hpp"
+#include "LevelLoader.hpp"
 
 Level* LevelLoader::Load(int levelNum) {
 

@@ -1,5 +1,5 @@
-#include "Level.h"
-#include "KeyRunner.h"
+#include "Level.hpp"
+#include "KeyRunner.hpp"
 
 int main(int argc, char** argv) {
 

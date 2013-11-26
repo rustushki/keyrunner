@@ -1,10 +1,10 @@
 #include <cstdio>
 
-#include "Animation.h"
-#include "ConveyorAnimation.h"
-#include "KeyRunner.h"
-#include "Level.h"
-#include "TileType.h"
+#include "Animation.hpp"
+#include "ConveyorAnimation.hpp"
+#include "KeyRunner.hpp"
+#include "Level.hpp"
+#include "TileType.hpp"
 
 Level::Level(int levelNum) {
 	level = levelNum;

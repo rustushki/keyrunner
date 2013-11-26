@@ -1,5 +1,5 @@
-#ifndef CONVEYOR_H
-#define CONVEYOR_H
+#ifndef CONVEYOR_HPP
+#define CONVEYOR_HPP
 
 #include <stdint.h>
 #include <vector>
@@ -27,4 +27,4 @@ private:
 	static std::vector<ConveyorAnimation*> Conveyors;
 };
 
-#endif//CONVEYOR
+#endif//CONVEYOR_HPP

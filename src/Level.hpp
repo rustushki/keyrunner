@@ -1,12 +1,13 @@
-#ifndef LEVEL_H
-#define LEVEL_H
+#ifndef LEVEL_HPP
+#define LEVEL_HPP
 
-#include "TileType.h"
-#include "AnimationType.h"
-#include "Direction.h"
-#include "Tile.h"
 #include <string>
 #include <vector>
+
+#include "TileType.hpp"
+#include "AnimationType.hpp"
+#include "Direction.hpp"
+#include "Tile.hpp"
 
 class Animation;
 
@@ -54,4 +55,4 @@ public:
 
 };
 
-#endif//LEVEL_H
+#endif//LEVEL_HPP

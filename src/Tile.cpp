@@ -1,10 +1,10 @@
 #include <iostream>
-#include "Animation.h"
-#include "AnimationType.h"
-#include "KeyRunner.h"
-#include "Level.h"
-#include "TileType.h"
-#include "Tile.h"
+#include "Animation.hpp"
+#include "AnimationType.hpp"
+#include "KeyRunner.hpp"
+#include "Level.hpp"
+#include "TileType.hpp"
+#include "Tile.hpp"
 
 std::vector<Tile*> Tile::AnimatedTiles;
 std::vector<Tile*> Tile::ChangedTiles;

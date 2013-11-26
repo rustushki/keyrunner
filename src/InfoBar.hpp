@@ -1,8 +1,8 @@
-#ifndef INFOBAR_H
-#define INFOBAR_H
+#ifndef INFOBAR_HPP
+#define INFOBAR_HPP
 #include <SDL/SDL_ttf.h>
-#include "KeyRunner.h"
-#include "Level.h"
+#include "KeyRunner.hpp"
+#include "Level.hpp"
 
 // Position indicates where text should be drawn on the screen.
 enum Position {
@@ -38,4 +38,4 @@ private:
 
 };
 
-#endif//INFOBAR_H
+#endif//INFOBAR_HPP

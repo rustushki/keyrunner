@@ -1,5 +1,5 @@
-#ifndef TILETYPE_H
-#define TILETYPE_H
+#ifndef TILETYPE_HPP
+#define TILETYPE_HPP
 
 enum TileType {
 	  TILETYPE_EMPTY
@@ -15,4 +15,4 @@ enum TileType {
 	, TILETYPE_COUNT
 };
 
-#endif//TILETYPE_H
+#endif//TILETYPE_HPP

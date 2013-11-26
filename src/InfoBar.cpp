@@ -1,4 +1,4 @@
-#include "InfoBar.h"
+#include "InfoBar.hpp"
 
 InfoBar* InfoBar::instance = 0;
 

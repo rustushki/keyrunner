@@ -1,5 +1,5 @@
-#ifndef ANIMATIONTYPE_H
-#define ANIMATIONTYPE_H
+#ifndef ANIMATIONTYPE_HPP
+#define ANIMATIONTYPE_HPP
 
 enum AnimationType {
 	  ANIMATION_TYPE_EMPTY
@@ -17,4 +17,4 @@ enum AnimationType {
 	, ANIMATION_TYPE_COUNT
 };
 
-#endif//ANIMATIONTYPE_H
+#endif//ANIMATIONTYPE_HPP

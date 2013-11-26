@@ -1,5 +1,5 @@
-#ifndef SPRITESHEET_H
-#define SPRITESHEET_H
+#ifndef SPRITESHEET_HPP
+#define SPRITESHEET_HPP
 #include <string>
 #include <SDL/SDL.h>
 
@@ -19,4 +19,4 @@ private:
 
 };
 
-#endif//SPRITESHEET_H
+#endif//SPRITESHEET_HPP

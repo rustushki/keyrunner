@@ -1,5 +1,5 @@
-#ifndef DIRECTION_H
-#define DIRECTION_H
+#ifndef DIRECTION_HPP
+#define DIRECTION_HPP
 
 enum Direction {
 	  DIRECTION_UP
@@ -9,4 +9,4 @@ enum Direction {
 	, DIRECTION_COUNT
 };
 
-#endif//DIRECTION_H
+#endif//DIRECTION_HPP

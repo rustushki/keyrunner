@@ -1,6 +1,7 @@
 #include <SDL/SDL_image.h>
-#include "KeyRunner.h"
-#include "SpriteSheet.h"
+
+#include "KeyRunner.hpp"
+#include "SpriteSheet.hpp"
 
 /* ------------------------------------------------------------------------------
  * SpriteSheet - Given a filename, a frame height and frame width, load a

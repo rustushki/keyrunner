@@ -1,7 +1,7 @@
 #include <iostream>
 #include <sstream>
-#include "Animation.h"
-#include "KeyRunner.h"
+#include "Animation.hpp"
+#include "KeyRunner.hpp"
 
 #define FL(x,y) frameList.push_back(x);frameList.push_back(y);
 

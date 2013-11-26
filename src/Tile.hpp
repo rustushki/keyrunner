@@ -1,11 +1,11 @@
-#ifndef TILE_H
-#define TILE_H
+#ifndef TILE_HPP
+#define TILE_HPP
 
 #include <vector>
-#include "Animation.h"
-#include "AnimationType.h"
-#include "Direction.h"
-#include "TileType.h"
+#include "Animation.hpp"
+#include "AnimationType.hpp"
+#include "Direction.hpp"
+#include "TileType.hpp"
 
 class Level;
 
@@ -63,4 +63,4 @@ private:
 
 };
 
-#endif//TILE_H
+#endif//TILE_HPP

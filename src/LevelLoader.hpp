@@ -1,7 +1,7 @@
-#ifndef LEVELLOADER_H
-#define LEVELLOADER_H
+#ifndef LEVELLOADER_HPP
+#define LEVELLOADER_HPP
 
-#include "Level.h"
+#include "Level.hpp"
 
 class LevelLoader {
 
@@ -14,4 +14,4 @@ private:
 	static void ParseVar(Level* level, std::string line);
 };
 
-#endif//LEVELLOADER_H
+#endif//LEVELLOADER_HPP

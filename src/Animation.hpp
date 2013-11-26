@@ -1,9 +1,9 @@
-#ifndef ANIMATION_H
-#define ANIMATION_H
+#ifndef ANIMATION_HPP
+#define ANIMATION_HPP
 
 #include <vector>
-#include "AnimationType.h"
-#include "SpriteSheet.h"
+#include "AnimationType.hpp"
+#include "SpriteSheet.hpp"
 
 class Animation {
 
@@ -39,4 +39,4 @@ private:
 
 };
 
-#endif//ANIMATION_H
+#endif//ANIMATION_HPP

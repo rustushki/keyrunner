@@ -1,5 +1,5 @@
-#ifndef STATE_H
-#define STATE_H
+#ifndef STATE_HPP
+#define STATE_HPP
 
 // Game State.
 enum State {
@@ -11,4 +11,4 @@ enum State {
 	, WIN      // User has won the game.
 };
 
-#endif//STATE_H
+#endif//STATE_HPP

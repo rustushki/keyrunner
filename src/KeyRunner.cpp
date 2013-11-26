@@ -1,12 +1,12 @@
 #include <sstream>
 #include <SDL/SDL_ttf.h>
 
-#include "Animation.h"
-#include "ConveyorAnimation.h"
-#include "KeyRunner.h"
-#include "InfoBar.h"
-#include "Level.h"
-#include "LevelLoader.h"
+#include "Animation.hpp"
+#include "ConveyorAnimation.hpp"
+#include "KeyRunner.hpp"
+#include "InfoBar.hpp"
+#include "Level.hpp"
+#include "LevelLoader.hpp"
 
 // Items yet to be absorbed into KeyRunner static class.
 Animation* KeyAnim;
