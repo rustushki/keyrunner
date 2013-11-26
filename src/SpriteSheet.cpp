@@ -42,6 +42,6 @@ void SpriteSheet::blitFrame(uint16_t frameX, uint16_t frameY, SDL_Rect& where) c
 	srcRect.y = frameY * this->height;
 
 	// Blit the given frame of the sheet to the screen.
-	SDL_BlitSurface(this->sheet, &srcRect, screen, &where);
+	KeyRunner::draw(this->sheet, srcRect, where);
 
 }

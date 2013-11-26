@@ -28,7 +28,6 @@
 class Level;
 class Animation;
 
-extern SDL_Surface *screen;
 extern Animation* KeyAnim;
 extern Animation* PlayerAnim;
 
@@ -39,6 +38,9 @@ public:
 	static int getTimeClock();
 	static int getWidth();
 	static int getHeight();
+
+	static void draw(SDL_Surface* surf, int x, int y);
+	static void draw(SDL_Surface* sSurf, SDL_Rect& sRect, SDL_Rect& dRect);
 
 private:
 	// Thread functions.
@@ -51,19 +53,19 @@ private:
 	static bool init();
 	static void moveDirection(Direction d);
 	static void handleEvents();
-	static void draw(SDL_Surface* surf, int x, int y);
 
-	static uint16_t levelNum;
-	static SDL_mutex* screenLock;
-	static SDL_cond* levelCond;
-	static SDL_mutex* levelLock;
-	static SDL_cond* levelLoadCond;
-	static SDL_mutex* levelLoadLock;
-	static SDL_cond* initialLevelLoadCond;
-	static SDL_mutex* initialLevelLoadLock;
-	static State state;
-	static int timeClock;
-	static Level* level;
+	static SDL_Surface *screen;
+	static uint16_t    levelNum;
+	static SDL_mutex*  screenLock;
+	static SDL_cond*   levelCond;
+	static SDL_mutex*  levelLock;
+	static SDL_cond*   levelLoadCond;
+	static SDL_mutex*  levelLoadLock;
+	static SDL_cond*   initialLevelLoadCond;
+	static SDL_mutex*  initialLevelLoadLock;
+	static State       state;
+	static int         timeClock;
+	static Level*      level;
 
 };
 

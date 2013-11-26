@@ -9,21 +9,21 @@
 #include "LevelLoader.h"
 
 // Items yet to be absorbed into KeyRunner static class.
-SDL_Surface *screen;
 Animation* KeyAnim;
 Animation* PlayerAnim;
 
-SDL_mutex* KeyRunner::screenLock;
-SDL_cond*  KeyRunner::levelCond;
-SDL_mutex* KeyRunner::levelLock;
-SDL_cond*  KeyRunner::levelLoadCond;
-SDL_mutex* KeyRunner::levelLoadLock;
-SDL_cond*  KeyRunner::initialLevelLoadCond;
-SDL_mutex* KeyRunner::initialLevelLoadLock;
-uint16_t   KeyRunner::levelNum;
-State      KeyRunner::state;
-int        KeyRunner::timeClock;
-Level*     KeyRunner::level;
+SDL_Surface* KeyRunner::screen;
+SDL_mutex*   KeyRunner::screenLock;
+SDL_cond*    KeyRunner::levelCond;
+SDL_mutex*   KeyRunner::levelLock;
+SDL_cond*    KeyRunner::levelLoadCond;
+SDL_mutex*   KeyRunner::levelLoadLock;
+SDL_cond*    KeyRunner::initialLevelLoadCond;
+SDL_mutex*   KeyRunner::initialLevelLoadLock;
+uint16_t     KeyRunner::levelNum;
+State        KeyRunner::state;
+int          KeyRunner::timeClock;
+Level*       KeyRunner::level;
 
 void KeyRunner::play(uint16_t startLevel) {
 	state = PLAY;
@@ -138,11 +138,10 @@ int KeyRunner::clockTick(void* unused) {
 
 /* ------------------------------------------------------------------------------
  * draw() - Given an SDL_Surface*, draw it to the screen at a given coordinate
- * pair.  This should be the only way to draw to the screen.  It is considered
+ * pair.  The draw() methods are the only way to update the screen and are
  * thread safe.
  */
 void KeyRunner::draw(SDL_Surface* surf, int x, int y) {
-	SDL_LockMutex(screenLock);
 	SDL_Rect srcRect;
 	srcRect.x = 0;
 	srcRect.y = 0;
@@ -155,8 +154,19 @@ void KeyRunner::draw(SDL_Surface* surf, int x, int y) {
 	dstRect.w = surf->w;
 	dstRect.h = surf->h;
 
+	SDL_LockMutex(screenLock);
 	SDL_BlitSurface(surf, &srcRect, screen, &dstRect);
+	SDL_UnlockMutex(screenLock);
+}
 
+/* ------------------------------------------------------------------------------
+ * draw() - Given an SDL_Surface* and an SDL_Rect& within that surface, draw
+ * the contents of that rect onto the screen.  The draw() methods are the only
+ * way to update the screen and are thread safe.
+ */
+void KeyRunner::draw(SDL_Surface* sSurf, SDL_Rect& sRect, SDL_Rect& dRect) {
+	SDL_LockMutex(screenLock);
+	SDL_BlitSurface(sSurf, &sRect, screen, &dRect);
 	SDL_UnlockMutex(screenLock);
 }
 
