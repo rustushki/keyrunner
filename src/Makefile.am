@@ -15,6 +15,8 @@ KeyRunner.cpp         \
 KeyRunner.h           \
 Level.cpp             \
 Level.h               \
+LevelLoader.h         \
+LevelLoader.cpp       \
 SpriteSheet.cpp       \
 SpriteSheet.h         \
 TileType.h            \

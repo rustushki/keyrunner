@@ -6,6 +6,7 @@
 #include "KeyRunner.h"
 #include "InfoBar.h"
 #include "Level.h"
+#include "LevelLoader.h"
 
 // Items yet to be absorbed into KeyRunner static class.
 SDL_Surface *screen;
@@ -22,7 +23,7 @@ SDL_mutex* KeyRunner::initialLevelLoadLock;
 uint16_t   KeyRunner::levelNum;
 State      KeyRunner::state;
 int        KeyRunner::timeClock;
-Level      KeyRunner::level;
+Level*     KeyRunner::level;
 
 void KeyRunner::play(uint16_t startLevel) {
 	state = PLAY;
@@ -43,17 +44,21 @@ void KeyRunner::play(uint16_t startLevel) {
 		KeyAnim    = Animation::AnimationFactory(ANIMATION_TYPE_KEY);
 		PlayerAnim = Animation::AnimationFactory(ANIMATION_TYPE_PUMPKIN);
 
+		SDL_Thread *ulThread = SDL_CreateThread(&updateLevel, NULL);
+
+		SDL_LockMutex(initialLevelLoadLock);
+		SDL_CondWait(initialLevelLoadCond, initialLevelLoadLock);
+
 		SDL_Thread *ctThread = SDL_CreateThread(&clockTick, NULL);
 		SDL_Thread *udThread = SDL_CreateThread(&updateDisplay, NULL);
-		SDL_Thread *ulThread = SDL_CreateThread(&updateLevel, NULL);
 		SDL_Thread *cyThread = SDL_CreateThread(&convey, NULL);
 
 		handleEvents();
 
 		SDL_WaitThread(cyThread, NULL);
-		SDL_WaitThread(ulThread, NULL);
 		SDL_WaitThread(udThread, NULL);
 		SDL_WaitThread(ctThread, NULL);
+		SDL_WaitThread(ulThread, NULL);
 	} else {
 		// TODO: What to do if we fail to initialize?
 		// Need a system for handling failures.
@@ -122,7 +127,7 @@ int KeyRunner::clockTick(void* unused) {
 		timeClock -= step;
 
 		// Draw the InfoBar, locking and unlocking the screen.
-		SDL_Surface* ibSrf = ib->getSurface(level.toInt());
+		SDL_Surface* ibSrf = ib->getSurface(level->toInt());
 		draw(ibSrf, ib->getX(), ib->getY());
 	}
 
@@ -199,7 +204,7 @@ void KeyRunner::moveDirection(Direction d) {
 	// loop if movePlayer returns true.  That implies that movement has been
 	// interrupted.
 	SDL_LockMutex(levelLoadLock);
-	bool interrupt = level.movePlayer(d);
+	bool interrupt = level->movePlayer(d);
 	SDL_UnlockMutex(levelLoadLock);
 	if (interrupt) {
 		return;
@@ -267,7 +272,7 @@ void KeyRunner::moveDirection(Direction d) {
 				// Move the player.  Exit this movement loop if the player
 				// movement is interrupted (i.e. movePlayer returns true)
 				SDL_LockMutex(levelLoadLock);
-				bool interrupt = level.movePlayer(d);
+				bool interrupt = level->movePlayer(d);
 				SDL_UnlockMutex(levelLoadLock);
 				if (interrupt) {
 					return;
@@ -305,9 +310,6 @@ void KeyRunner::moveDirection(Direction d) {
  */
 int KeyRunner::convey(void* unused) {
 
-	SDL_LockMutex(initialLevelLoadLock);
-	SDL_CondWait(initialLevelLoadCond, initialLevelLoadLock);
-
 	// Convey only while the game has not yet been quit.
 	while(state != QUIT) {
 
@@ -316,15 +318,15 @@ int KeyRunner::convey(void* unused) {
 
 
 		// Get the current tile of the player.
-		Tile* playerTile = level.getPlayerTile();
+		Tile* playerTile = level->getPlayerTile();
 
 		// If the tile in a conveyor tile,
 		if (playerTile->isConveyor()) {
 
 			// Convey the player to the next tile.
 			Tile* newTile = playerTile->getNextConveyorTile();
-			if (level.movePlayerToTile(newTile)) {
-				if (level.isComplete()){
+			if (level->movePlayerToTile(newTile)) {
+				if (level->isComplete()){
 					SDL_UnlockMutex(levelLock);
 					SDL_CondSignal(levelCond);
 				}
@@ -373,33 +375,31 @@ int KeyRunner::updateDisplay(void* unused) {
 
 int KeyRunner::updateLevel(void* unused) {
 
-	while (levelNum <= Level::GetTotal() && state != QUIT) {
+	while (levelNum <= LevelLoader::GetTotal() && state != QUIT) {
 
 		SDL_LockMutex(levelLoadLock);
 
 		Tile::ClearChangedTiles();
 
-		level = Level();
-
-		level.load(levelNum);
+		level = LevelLoader::Load(levelNum);
 
 		// Signal that it's OK to observe level tiles now.
 		SDL_UnlockMutex(levelLoadLock);
 
 		// Unrelated to the previous unlock, Signal every thread waiting on a
 		// level to load initially that a level has been loaded.
-		SDL_UnlockMutex(initialLevelLoadLock);
 		SDL_CondSignal(initialLevelLoadCond);
 
 		// Draw the level, locking and unlocking the screen.
 		SDL_LockMutex(screenLock);
-		level.draw();
+		level->draw();
 		SDL_UnlockMutex(screenLock);
 
 		SDL_LockMutex(levelLock);
 		SDL_CondWait(levelCond, levelLock);
 
 		levelNum++;
+		delete level;
 
 		Tile::ClearAnimatedTiles();
 
@@ -441,7 +441,7 @@ void KeyRunner::handleEvents() {
 
 			// If the prior movement causes the level to be complete,
 			// signal that the new level may be loaded.
-			if (level.isComplete()){
+			if (level->isComplete()){
 				SDL_UnlockMutex(levelLock);
 				SDL_CondSignal(levelCond);
 			}

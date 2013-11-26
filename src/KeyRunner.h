@@ -63,7 +63,7 @@ private:
 	static SDL_mutex* initialLevelLoadLock;
 	static State state;
 	static int timeClock;
-	static Level level;
+	static Level* level;
 
 };
 

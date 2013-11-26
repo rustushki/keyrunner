@@ -1,7 +1,6 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-#include "KeyRunner.h"
 #include "TileType.h"
 #include "AnimationType.h"
 #include "Direction.h"
@@ -17,6 +16,7 @@ class Animation;
 class Level {
 
 private:
+	Level(int levelNum);
 
 	Tile* tile[GRID_HEIGHT][GRID_WIDTH];
 
@@ -25,13 +25,7 @@ private:
 	Tile* tileHasPlayer;
 	Tile* tileHasKey;
 
-	bool parseLine(std::string line);
-	void parseVar(std::string line);
-
 	bool playerHasKey;
-
-	uint16_t parseX;
-	uint16_t parseY;
 
 	Animation* keyAnim;
 	Animation* playerAnim;
@@ -41,8 +35,6 @@ private:
 	void buildConveyorAnimations();
 
 public:
-	Level();
-	void load(int level);
 	void draw();
 
 	bool hasKey(int x, int y);
@@ -58,7 +50,7 @@ public:
 
 	Tile* getTile(uint16_t x, uint16_t y) const;
 
-	static uint16_t GetTotal();
+	friend class LevelLoader;
 
 };
 
