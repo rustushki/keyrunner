@@ -25,8 +25,9 @@
 #include "Direction.hpp"
 #include "State.hpp"
 
-class Level;
 class Animation;
+class GridLayer;
+class Level;
 
 extern Animation* KeyAnim;
 extern Animation* PlayerAnim;
@@ -51,6 +52,7 @@ private:
 
 	// Helpers
 	static bool init();
+	static void createLayers();
 	static void moveDirection(Direction d);
 	static void handleEvents();
 
@@ -66,7 +68,6 @@ private:
 	static State       state;
 	static int         timeClock;
 	static Level*      level;
-
 };
 
 #endif//KEYRUNNER_HPP

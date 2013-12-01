@@ -2,6 +2,7 @@
 
 #include "Animation.hpp"
 #include "ConveyorAnimation.hpp"
+#include "GridLayer.hpp"
 #include "KeyRunner.hpp"
 #include "Level.hpp"
 #include "TileType.hpp"
@@ -226,10 +227,12 @@ bool Level::movePlayerToTile(Tile* newTile) {
 		return true;
 	}
 
+	GridLayer* gl = GridLayer::GetInstance();
+
 	// Move the player to the tile.
-	Tile::AddChangedTile(this->tileHasPlayer);
+	gl->addChangedTile(this->tileHasPlayer);
 	this->tileHasPlayer = newTile;
-	Tile::AddChangedTile(this->tileHasPlayer);
+	gl->addChangedTile(this->tileHasPlayer);
 
 	// Give the player the key if the tile has the key.
 	if (this->hasKey(this->tileHasPlayer->getX(), this->tileHasPlayer->getY())) {
@@ -241,7 +244,7 @@ bool Level::movePlayerToTile(Tile* newTile) {
 	if (this->tileHasPlayer->isTeleporter()) {
 		Tile* matching = this->getMatchingTeleporterTile(this->tileHasPlayer);
 		this->tileHasPlayer = matching;
-		Tile::AddChangedTile(this->tileHasPlayer);
+		gl->addChangedTile(this->tileHasPlayer);
 		return true;
 	}
 

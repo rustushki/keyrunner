@@ -19,12 +19,6 @@ public:
 
 	Animation* getAnimation() const;
 	static AnimationType TileTypeToAnimType(TileType tt);
-	static void PushAnimatedTile(Tile* tile);
-	static void AnimateTiles();
-	static void ClearAnimatedTiles();
-	static void RedrawChangedTiles();
-	static void AddChangedTile(Tile* tile);
-	static void ClearChangedTiles();
 
 	TileType getType() const;
 
@@ -54,9 +48,6 @@ private:
 	AnimationType animType;
 	Animation* anim;
 	Level* level;
-
-	static std::vector<Tile*> ChangedTiles;
-	static std::vector<Tile*> AnimatedTiles;
 
 	uint16_t x;
 	uint16_t y;

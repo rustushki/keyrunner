@@ -4,6 +4,7 @@
 #include "Animation.hpp"
 #include "ConveyorAnimation.hpp"
 #include "KeyRunner.hpp"
+#include "GridLayer.hpp"
 #include "InfoBar.hpp"
 #include "Level.hpp"
 #include "LevelLoader.hpp"
@@ -86,7 +87,8 @@ void KeyRunner::exitGame() {
 
 /* ------------------------------------------------------------------------------
  * init - Initialize the screen to 640x480x16.  Initialize the font system.
- * Set the window caption.  Upon any failure, return false.
+ * Set the window caption.  Initialize all layer objects.  Upon any failure,
+ * return false.
  */
 bool KeyRunner::init() {
 	if (SDL_Init(SDL_INIT_VIDEO) > 0) {
@@ -113,7 +115,14 @@ bool KeyRunner::init() {
 	std::stringstream ss;
 	ss << "Key Runner r" << VERSION;
 	SDL_WM_SetCaption(ss.str().c_str(), "");
+
+	createLayers();
+
 	return true;
+}
+
+void KeyRunner::createLayers() {
+	GridLayer::GetInstance();
 }
 
 int KeyRunner::clockTick(void* unused) {
@@ -360,14 +369,16 @@ int KeyRunner::convey(void* unused) {
  */
 int KeyRunner::updateDisplay(void* unused) {
 	int fps = 25;
-
 	int delay = 1000/fps;
+
+	GridLayer* gl = GridLayer::GetInstance();
+
 	while(state != QUIT) {
 
 		SDL_LockMutex(levelLoadLock);
 		ConveyorAnimation::StartConveyors();
-		Tile::AnimateTiles();
-		Tile::RedrawChangedTiles();
+		gl->animateTiles();
+		gl->redrawChangedTiles();
 		SDL_UnlockMutex(levelLoadLock);
 
 		SDL_LockMutex(screenLock);
@@ -389,7 +400,8 @@ int KeyRunner::updateLevel(void* unused) {
 
 		SDL_LockMutex(levelLoadLock);
 
-		Tile::ClearChangedTiles();
+		GridLayer* gl = GridLayer::GetInstance();
+		gl->clearChangedTiles();
 
 		level = LevelLoader::Load(levelNum);
 
@@ -411,7 +423,7 @@ int KeyRunner::updateLevel(void* unused) {
 		levelNum++;
 		delete level;
 
-		Tile::ClearAnimatedTiles();
+		gl->clearAnimatedTiles();
 
 		timeClock += 6000;
 

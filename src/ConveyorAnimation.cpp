@@ -1,5 +1,6 @@
 #include <iostream>
 #include "ConveyorAnimation.hpp"
+#include "GridLayer.hpp"
 #include "KeyRunner.hpp"
 #include "Tile.hpp"
 
@@ -25,13 +26,15 @@ bool ConveyorAnimation::startAnimation() {
 		return true;
 	}
 
+	GridLayer* gl = GridLayer::GetInstance();
+
 	Tile* currentTile = NULL;
 	if (this->nextTileToStart == 0) {
 
 		// Always start the first tile in the belt.
 		currentTile = this->conveyorTiles[0];
 		currentTile->getAnimation()->play();
-		Tile::PushAnimatedTile(currentTile);
+		gl->pushAnimatedTile(currentTile);
 		this->nextTileToStart++;
 
 	} else {
@@ -41,7 +44,7 @@ bool ConveyorAnimation::startAnimation() {
 
 			Tile* tile = this->conveyorTiles[this->nextTileToStart];
 			this->conveyorTiles[this->nextTileToStart]->getAnimation()->play();
-			Tile::PushAnimatedTile(tile);
+			gl->pushAnimatedTile(tile);
 
 			this->nextTileToStart++;
 		}

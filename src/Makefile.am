@@ -11,6 +11,8 @@ ConveyorAnimation.h   \
 Direction.h	          \
 InfoBar.cpp           \
 InfoBar.h             \
+GridLayer.cpp         \
+GridLayer.h           \
 KeyRunner.cpp         \
 KeyRunner.h           \
 Level.cpp             \
