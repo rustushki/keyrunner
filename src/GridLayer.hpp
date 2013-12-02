@@ -2,7 +2,6 @@
 #define GLIDLAYER_HPP
 
 #include <vector>
-#include "Layer.hpp"
 
 class Tile;
 
