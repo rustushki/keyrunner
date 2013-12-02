@@ -89,12 +89,12 @@ void InfoBar::drawLevel(uint16_t level) const {
 
 /* ------------------------------------------------------------------------------
  * drawText - Draws a string to a given position.  The positions where it may
- * be drawn are simplified to the those described in the Position enum.  See it
- * for details.  Uses SDL_ttf to create a surface containing text provided by
- * the given string.  It then blits this surface to the screen at the given
+ * be drawn are simplified to the those described in the InfoBarPos enum.  See
+ * it for details.  Uses SDL_ttf to create a surface containing text provided
+ * by the given string.  It then blits this surface to the screen at the given
  * position.  Color is assumed gray for now.
  */
-void InfoBar::drawText(std::string s, Position position) const {
+void InfoBar::drawText(std::string s, InfoBarPos position) const {
 
 	// Gray
 	SDL_Color color = {0xAA, 0xAA, 0xAA};

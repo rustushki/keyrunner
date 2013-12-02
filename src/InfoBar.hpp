@@ -1,16 +1,9 @@
 #ifndef INFOBAR_HPP
 #define INFOBAR_HPP
 #include <SDL/SDL_ttf.h>
+#include "InfoBarPos.hpp"
 #include "KeyRunner.hpp"
 #include "Level.hpp"
-
-// Position indicates where text should be drawn on the screen.
-enum Position {
-	  BOTTOM_LEFT
-	, BOTTOM_RIGHT
-	, BOTTOM_CENTER
-	, MIDDLE_CENTER
-};
 
 class InfoBar {
 
@@ -28,7 +21,7 @@ private:
 	InfoBar();
 
 	TTF_Font* getFont() const;
-	void drawText(std::string s, Position position) const;
+	void drawText(std::string s, InfoBarPos position) const;
 	void drawLevel(uint16_t level) const;
 	void drawTimer() const;
 
