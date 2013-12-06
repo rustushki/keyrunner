@@ -3,9 +3,11 @@
 
 #include <vector>
 
+#include "Layer.hpp"
+
 class Tile;
 
-class GridLayer {
+class GridLayer : public Layer {
 
 public:
 
@@ -17,6 +19,8 @@ public:
 	void redrawChangedTiles();
 	void clearChangedTiles();
 	void addChangedTile(Tile* tile);
+
+	void draw(SDL_Surface* dst);
 
 private:
 

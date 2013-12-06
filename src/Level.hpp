@@ -36,7 +36,7 @@ private:
 	void buildConveyorAnimations();
 
 public:
-	void draw();
+	void refreshTiles();
 
 	bool hasKey(int x, int y);
 	bool hasPlayer(int x, int y);

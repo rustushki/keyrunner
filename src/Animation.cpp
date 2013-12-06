@@ -92,7 +92,7 @@ uint16_t Animation::getCurrentStill() const {
 /* ------------------------------------------------------------------------------
  * blit - Draw the current frame of the animation onto the screen.
  */
-void Animation::blit() {
+void Animation::blit(SDL_Surface* srf) {
 
 	// Look into the frame list to determine the logical coordinates of the
 	// frame in the spritesheet.
@@ -107,8 +107,7 @@ void Animation::blit() {
 	r.w = this->sheet->getWidth();
 	r.h = this->sheet->getHeight();
 
-	this->sheet->blitFrame(frameX, frameY, r); 
-
+	this->sheet->blitFrame(frameX, frameY, srf, r); 
 
 }
 

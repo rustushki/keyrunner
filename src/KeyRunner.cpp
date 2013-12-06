@@ -169,17 +169,6 @@ void KeyRunner::draw(SDL_Surface* surf, int x, int y) {
 }
 
 /* ------------------------------------------------------------------------------
- * draw() - Given an SDL_Surface* and an SDL_Rect& within that surface, draw
- * the contents of that rect onto the screen.  The draw() methods are the only
- * way to update the screen and are thread safe.
- */
-void KeyRunner::draw(SDL_Surface* sSurf, SDL_Rect& sRect, SDL_Rect& dRect) {
-	SDL_LockMutex(screenLock);
-	SDL_BlitSurface(sSurf, &sRect, screen, &dRect);
-	SDL_UnlockMutex(screenLock);
-}
-
-/* ------------------------------------------------------------------------------
  * moveDirection - Move the player in the provided direction and pay close
  * attention to keyboard input while doing so.  This must run in the same
  * thread that initted SDL.
@@ -375,13 +364,14 @@ int KeyRunner::updateDisplay(void* unused) {
 
 	while(state != QUIT) {
 
+
+		SDL_LockMutex(screenLock);
+
 		SDL_LockMutex(levelLoadLock);
 		ConveyorAnimation::StartConveyors();
 		gl->animateTiles();
-		gl->redrawChangedTiles();
+		gl->draw(screen);
 		SDL_UnlockMutex(levelLoadLock);
-
-		SDL_LockMutex(screenLock);
 
 		SDL_Flip(screen);
 
@@ -412,10 +402,8 @@ int KeyRunner::updateLevel(void* unused) {
 		// level to load initially that a level has been loaded.
 		SDL_CondSignal(initialLevelLoadCond);
 
-		// Draw the level, locking and unlocking the screen.
-		SDL_LockMutex(screenLock);
-		level->draw();
-		SDL_UnlockMutex(screenLock);
+		// Mark all tiles as needing to be redrawn.
+		level->refreshTiles();
 
 		SDL_LockMutex(levelLock);
 		SDL_CondWait(levelCond, levelLock);

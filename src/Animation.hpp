@@ -10,7 +10,7 @@ class Animation {
 public:
 	static Animation* AnimationFactory(AnimationType at);
 	bool advance();
-	void blit();
+	void blit(SDL_Surface* srf);
 	void move(uint16_t x, uint16_t y);
 	bool isAnimating() const;
 	void play();

@@ -41,7 +41,6 @@ public:
 	static int getHeight();
 
 	static void draw(SDL_Surface* surf, int x, int y);
-	static void draw(SDL_Surface* sSurf, SDL_Rect& sRect, SDL_Rect& dRect);
 
 private:
 	// Thread functions.

@@ -152,12 +152,12 @@ Tile* Level::getTile(uint16_t x, uint16_t y) const {
 	return this->tile[y][x];
 }
 
-void Level::draw() {
+void Level::refreshTiles() {
 
 	// Blit all Tiles.
 	for (int x = 0; x < GRID_WIDTH; x++) {
 		for (int y = 0; y < GRID_HEIGHT; y++) {
-			this->getTile(x, y)->draw();
+			GridLayer::GetInstance()->addChangedTile(getTile(x, y));
 		}
 	}
 

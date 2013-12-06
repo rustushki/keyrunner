@@ -15,7 +15,7 @@ public:
 	Tile(TileType type, uint16_t x, uint16_t y, Level*);
 	~Tile();
 
-	void draw();
+	void draw(SDL_Surface* dst);
 
 	Animation* getAnimation() const;
 	static AnimationType TileTypeToAnimType(TileType tt);

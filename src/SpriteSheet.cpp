@@ -33,7 +33,7 @@ uint16_t SpriteSheet::getHeight() {
  * it to the provided SDL_Rect on the screen.  Blocks until the screen is
  * unlocked.
  */
-void SpriteSheet::blitFrame(uint16_t frameX, uint16_t frameY, SDL_Rect& where) const {
+void SpriteSheet::blitFrame(uint16_t frameX, uint16_t frameY, SDL_Surface* dst, SDL_Rect& where) const {
 
 	// Source Rect
 	SDL_Rect srcRect;
@@ -43,6 +43,6 @@ void SpriteSheet::blitFrame(uint16_t frameX, uint16_t frameY, SDL_Rect& where) c
 	srcRect.y = frameY * this->height;
 
 	// Blit the given frame of the sheet to the screen.
-	KeyRunner::draw(this->sheet, srcRect, where);
+	SDL_BlitSurface(sheet, &srcRect, dst, &where);
 
 }

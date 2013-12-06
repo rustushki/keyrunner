@@ -7,7 +7,7 @@ class SpriteSheet {
 
 public:
 	SpriteSheet(std::string filename, uint16_t width, uint16_t height);
-	void blitFrame(uint16_t x, uint16_t y, SDL_Rect& where) const; 
+	void blitFrame(uint16_t x, uint16_t y, SDL_Surface* dst, SDL_Rect& where) const; 
 
 	uint16_t getWidth();
 	uint16_t getHeight();

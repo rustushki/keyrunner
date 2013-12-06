@@ -308,7 +308,7 @@ uint16_t Tile::getY() const {
 	return this->y;
 }
 
-void Tile::draw() {
+void Tile::draw(SDL_Surface* dst) {
 	
 	const uint16_t tileSize = 25;
 
@@ -317,18 +317,18 @@ void Tile::draw() {
 	uint16_t yp = this->y*tileSize;
 
 	this->getAnimation()->move(xp, yp);
-	this->getAnimation()->blit();
+	this->getAnimation()->blit(dst);
 
 	// Redraw the Key.
 	if (this->hasKey()) {
 		KeyAnim->move(xp, yp);
-		KeyAnim->blit();
+		KeyAnim->blit(dst);
 	}
 	
 	// Redraw the Player.
 	if (this->hasPlayer()) {
 		PlayerAnim->move(xp, yp);
-		PlayerAnim->blit();
+		PlayerAnim->blit(dst);
 	}
 
 }
