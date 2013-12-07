@@ -11,25 +11,25 @@ class GridLayer : public Layer {
 
 public:
 
-	static GridLayer* GetInstance();
+    static GridLayer* GetInstance();
 
-	void pushAnimatedTile(Tile* tile); 
-	void clearAnimatedTiles();
-	void animateTiles();
-	void redrawChangedTiles();
-	void clearChangedTiles();
-	void addChangedTile(Tile* tile);
+    void pushAnimatedTile(Tile* tile);
+    void clearAnimatedTiles();
+    void animateTiles();
+    void redrawChangedTiles();
+    void clearChangedTiles();
+    void addChangedTile(Tile* tile);
 
-	void draw(SDL_Surface* dst);
+    void draw(SDL_Surface* dst);
 
 private:
 
-	static GridLayer* instance;
+    static GridLayer* instance;
 
-	GridLayer();
+    GridLayer();
 
-	std::vector<Tile*> changedTiles;
-	std::vector<Tile*> animatedTiles;
+    std::vector<Tile*> changedTiles;
+    std::vector<Tile*> animatedTiles;
 
 };
 

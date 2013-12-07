@@ -34,39 +34,39 @@ extern Animation* PlayerAnim;
 
 class KeyRunner {
 public:
-	static void play(uint16_t startLevel);
-	static void exitGame();
-	static int getTimeClock();
-	static int getWidth();
-	static int getHeight();
+    static void play(uint16_t startLevel);
+    static void exitGame();
+    static int getTimeClock();
+    static int getWidth();
+    static int getHeight();
 
-	static void draw(SDL_Surface* surf, int x, int y);
+    static void draw(SDL_Surface* surf, int x, int y);
 
 private:
-	// Thread functions.
-	static int clockTick(void* unused);
-	static int updateDisplay(void* unused);
-	static int updateLevel(void* unused);
-	static int convey(void* unused);
+    // Thread functions.
+    static int clockTick(void* unused);
+    static int updateDisplay(void* unused);
+    static int updateLevel(void* unused);
+    static int convey(void* unused);
 
-	// Helpers
-	static bool init();
-	static void createLayers();
-	static void moveDirection(Direction d);
-	static void handleEvents();
+    // Helpers
+    static bool init();
+    static void createLayers();
+    static void moveDirection(Direction d);
+    static void handleEvents();
 
-	static SDL_Surface *screen;
-	static uint16_t    levelNum;
-	static SDL_mutex*  screenLock;
-	static SDL_cond*   levelCond;
-	static SDL_mutex*  levelLock;
-	static SDL_cond*   levelLoadCond;
-	static SDL_mutex*  levelLoadLock;
-	static SDL_cond*   initialLevelLoadCond;
-	static SDL_mutex*  initialLevelLoadLock;
-	static State       state;
-	static int         timeClock;
-	static Level*      level;
+    static SDL_Surface *screen;
+    static uint16_t    levelNum;
+    static SDL_mutex*  screenLock;
+    static SDL_cond*   levelCond;
+    static SDL_mutex*  levelLock;
+    static SDL_cond*   levelLoadCond;
+    static SDL_mutex*  levelLoadLock;
+    static SDL_cond*   initialLevelLoadCond;
+    static SDL_mutex*  initialLevelLoadLock;
+    static State       state;
+    static int         timeClock;
+    static Level*      level;
 };
 
 #endif//KEYRUNNER_HPP

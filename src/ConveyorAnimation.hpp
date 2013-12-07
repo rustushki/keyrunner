@@ -8,23 +8,23 @@ class Tile;
 
 class ConveyorAnimation {
 public:
-	ConveyorAnimation(std::vector<Tile*>);
-	~ConveyorAnimation();
+    ConveyorAnimation(std::vector<Tile*>);
+    ~ConveyorAnimation();
 
-	static bool TileInConveyor(Tile* tile);
-	static bool StartConveyors();
-	static void ClearConveyors();
+    static bool TileInConveyor(Tile* tile);
+    static bool StartConveyors();
+    static void ClearConveyors();
 
-	bool startAnimation();
+    bool startAnimation();
 
 private:
-	
-	std::vector<Tile*> conveyorTiles;
-	bool hasTile(Tile*) const;
 
-	uint16_t nextTileToStart;
+    std::vector<Tile*> conveyorTiles;
+    bool hasTile(Tile*) const;
 
-	static std::vector<ConveyorAnimation*> Conveyors;
+    uint16_t nextTileToStart;
+
+    static std::vector<ConveyorAnimation*> Conveyors;
 };
 
 #endif//CONVEYOR_HPP

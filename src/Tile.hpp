@@ -12,45 +12,45 @@ class Level;
 class Tile {
 
 public:
-	Tile(TileType type, uint16_t x, uint16_t y, Level*);
-	~Tile();
+    Tile(TileType type, uint16_t x, uint16_t y, Level*);
+    ~Tile();
 
-	void draw(SDL_Surface* dst);
+    void draw(SDL_Surface* dst);
 
-	Animation* getAnimation() const;
-	static AnimationType TileTypeToAnimType(TileType tt);
+    Animation* getAnimation() const;
+    static AnimationType TileTypeToAnimType(TileType tt);
 
-	TileType getType() const;
+    TileType getType() const;
 
-	uint16_t getX() const;
-	uint16_t getY() const;
+    uint16_t getX() const;
+    uint16_t getY() const;
 
-	bool isTeleporter() const;
-	bool isDoor() const;
-	bool isWall() const;
-	bool isConveyor() const;
-	bool hasPlayer() const;
-	bool hasKey() const;
+    bool isTeleporter() const;
+    bool isDoor() const;
+    bool isWall() const;
+    bool isConveyor() const;
+    bool hasPlayer() const;
+    bool hasKey() const;
 
-	Tile* getNextConveyorTile() const;
+    Tile* getNextConveyorTile() const;
 
-	Tile* up() const;
-	Tile* down() const;
-	Tile* left() const;
-	Tile* right() const;
+    Tile* up() const;
+    Tile* down() const;
+    Tile* left() const;
+    Tile* right() const;
 
-	Tile* getTileInDirection(Direction d) const;
+    Tile* getTileInDirection(Direction d) const;
 
-	Direction getConveyorDirection() const;
+    Direction getConveyorDirection() const;
 
 private:
-	TileType type;
-	AnimationType animType;
-	Animation* anim;
-	Level* level;
+    TileType type;
+    AnimationType animType;
+    Animation* anim;
+    Level* level;
 
-	uint16_t x;
-	uint16_t y;
+    uint16_t x;
+    uint16_t y;
 
 };
 

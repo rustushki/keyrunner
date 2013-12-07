@@ -6,7 +6,7 @@
 class Layer {
 
 public:
-	virtual void draw(SDL_Surface* dst) = 0;
+    virtual void draw(SDL_Surface* dst) = 0;
 
 };
 

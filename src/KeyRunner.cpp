@@ -27,62 +27,62 @@ int          KeyRunner::timeClock;
 Level*       KeyRunner::level;
 
 void KeyRunner::play(uint16_t startLevel) {
-	state = PLAY;
+    state = PLAY;
 
-	screenLock           = SDL_CreateMutex();
-	levelLock            = SDL_CreateMutex();
-	levelCond            = SDL_CreateCond();
-	levelLoadLock        = SDL_CreateMutex();
-	levelLoadCond        = SDL_CreateCond();
-	initialLevelLoadLock = SDL_CreateMutex();
-	initialLevelLoadCond = SDL_CreateCond();
+    screenLock           = SDL_CreateMutex();
+    levelLock            = SDL_CreateMutex();
+    levelCond            = SDL_CreateCond();
+    levelLoadLock        = SDL_CreateMutex();
+    levelLoadCond        = SDL_CreateCond();
+    initialLevelLoadLock = SDL_CreateMutex();
+    initialLevelLoadCond = SDL_CreateCond();
 
-	levelNum = startLevel;
-	timeClock = 50000;
+    levelNum = startLevel;
+    timeClock = 50000;
 
-	if (init()) {
-		// There's not a good place for these yet.  Putting them here for now.
-		KeyAnim    = Animation::AnimationFactory(ANIMATION_TYPE_KEY);
-		PlayerAnim = Animation::AnimationFactory(ANIMATION_TYPE_PUMPKIN);
+    if (init()) {
+        // There's not a good place for these yet.  Putting them here for now.
+        KeyAnim    = Animation::AnimationFactory(ANIMATION_TYPE_KEY);
+        PlayerAnim = Animation::AnimationFactory(ANIMATION_TYPE_PUMPKIN);
 
-		SDL_Thread *ulThread = SDL_CreateThread(&updateLevel, NULL);
+        SDL_Thread *ulThread = SDL_CreateThread(&updateLevel, NULL);
 
-		SDL_LockMutex(initialLevelLoadLock);
-		SDL_CondWait(initialLevelLoadCond, initialLevelLoadLock);
+        SDL_LockMutex(initialLevelLoadLock);
+        SDL_CondWait(initialLevelLoadCond, initialLevelLoadLock);
 
-		SDL_Thread *ctThread = SDL_CreateThread(&clockTick, NULL);
-		SDL_Thread *udThread = SDL_CreateThread(&updateDisplay, NULL);
-		SDL_Thread *cyThread = SDL_CreateThread(&convey, NULL);
+        SDL_Thread *ctThread = SDL_CreateThread(&clockTick, NULL);
+        SDL_Thread *udThread = SDL_CreateThread(&updateDisplay, NULL);
+        SDL_Thread *cyThread = SDL_CreateThread(&convey, NULL);
 
-		handleEvents();
+        handleEvents();
 
-		SDL_WaitThread(cyThread, NULL);
-		SDL_WaitThread(udThread, NULL);
-		SDL_WaitThread(ctThread, NULL);
-		SDL_WaitThread(ulThread, NULL);
-	} else {
-		// TODO: What to do if we fail to initialize?
-		// Need a system for handling failures.
-	}
+        SDL_WaitThread(cyThread, NULL);
+        SDL_WaitThread(udThread, NULL);
+        SDL_WaitThread(ctThread, NULL);
+        SDL_WaitThread(ulThread, NULL);
+    } else {
+        // TODO: What to do if we fail to initialize?
+        // Need a system for handling failures.
+    }
 }
 
 int KeyRunner::getTimeClock() {
-	return timeClock;
+    return timeClock;
 }
 
 int KeyRunner::getWidth() {
-	return GRID_WIDTH*25;
+    return GRID_WIDTH*25;
 }
 
 int KeyRunner::getHeight() {
-	return GRID_HEIGHT*25 + InfoBar::GetInstance()->getHeight();
+    return GRID_HEIGHT*25 + InfoBar::GetInstance()->getHeight();
 }
 
 void KeyRunner::exitGame() {
-	SDL_Event quitEvent;
-	quitEvent.type = SDL_QUIT;
-	SDL_PushEvent(&quitEvent);
-	state = QUIT;
+    SDL_Event quitEvent;
+    quitEvent.type = SDL_QUIT;
+    SDL_PushEvent(&quitEvent);
+    state = QUIT;
 }
 
 /* ------------------------------------------------------------------------------
@@ -91,58 +91,58 @@ void KeyRunner::exitGame() {
  * return false.
  */
 bool KeyRunner::init() {
-	if (SDL_Init(SDL_INIT_VIDEO) > 0) {
-		std::cout << "Couldn't initialize SDL: "<< SDL_GetError() << std::endl;
-		return false;
-	}
+    if (SDL_Init(SDL_INIT_VIDEO) > 0) {
+        std::cout << "Couldn't initialize SDL: "<< SDL_GetError() << std::endl;
+        return false;
+    }
 
-	screen = SDL_SetVideoMode(getWidth(), getHeight(), 16, SDL_SWSURFACE | SDL_DOUBLEBUF);
-	if (screen == NULL) {
-		std::cout << "Couldn't set video mode: "<< SDL_GetError() << std::endl;
-		return false;
+    screen = SDL_SetVideoMode(getWidth(), getHeight(), 16, SDL_SWSURFACE | SDL_DOUBLEBUF);
+    if (screen == NULL) {
+        std::cout << "Couldn't set video mode: "<< SDL_GetError() << std::endl;
+        return false;
     }
 
 
-	// Initialize SDL_ttf
-	if (TTF_Init() == -1) {
-		std::cout << "Error initializing SDL_ttf: " << TTF_GetError() << std::endl;
-		return false;
-	}
+    // Initialize SDL_ttf
+    if (TTF_Init() == -1) {
+        std::cout << "Error initializing SDL_ttf: " << TTF_GetError() << std::endl;
+        return false;
+    }
 
-	atexit(SDL_Quit);
+    atexit(SDL_Quit);
 
-	screen = SDL_SetVideoMode(getWidth(), getHeight(), 16, SDL_SWSURFACE | SDL_DOUBLEBUF);
-	std::stringstream ss;
-	ss << "Key Runner r" << VERSION;
-	SDL_WM_SetCaption(ss.str().c_str(), "");
+    screen = SDL_SetVideoMode(getWidth(), getHeight(), 16, SDL_SWSURFACE | SDL_DOUBLEBUF);
+    std::stringstream ss;
+    ss << "Key Runner r" << VERSION;
+    SDL_WM_SetCaption(ss.str().c_str(), "");
 
-	createLayers();
+    createLayers();
 
-	return true;
+    return true;
 }
 
 void KeyRunner::createLayers() {
-	GridLayer::GetInstance();
+    GridLayer::GetInstance();
 }
 
 int KeyRunner::clockTick(void* unused) {
 
-	InfoBar* ib = InfoBar::GetInstance();
+    InfoBar* ib = InfoBar::GetInstance();
 
-	int step = 100;
+    int step = 100;
 
-	while (timeClock > 0 && state == PLAY) {
-		SDL_Delay(step);
-		timeClock -= step;
+    while (timeClock > 0 && state == PLAY) {
+        SDL_Delay(step);
+        timeClock -= step;
 
-		// Draw the InfoBar, locking and unlocking the screen.
-		SDL_Surface* ibSrf = ib->getSurface(level->toInt());
-		draw(ibSrf, ib->getX(), ib->getY());
-	}
+        // Draw the InfoBar, locking and unlocking the screen.
+        SDL_Surface* ibSrf = ib->getSurface(level->toInt());
+        draw(ibSrf, ib->getX(), ib->getY());
+    }
 
-	SDL_CondSignal(levelCond);
-	exitGame();
-	return 0;
+    SDL_CondSignal(levelCond);
+    exitGame();
+    return 0;
 }
 
 /* ------------------------------------------------------------------------------
@@ -151,21 +151,21 @@ int KeyRunner::clockTick(void* unused) {
  * thread safe.
  */
 void KeyRunner::draw(SDL_Surface* surf, int x, int y) {
-	SDL_Rect srcRect;
-	srcRect.x = 0;
-	srcRect.y = 0;
-	srcRect.w = surf->w;
-	srcRect.h = surf->h;
+    SDL_Rect srcRect;
+    srcRect.x = 0;
+    srcRect.y = 0;
+    srcRect.w = surf->w;
+    srcRect.h = surf->h;
 
-	SDL_Rect dstRect;
-	dstRect.x = x;
-	dstRect.y = y;
-	dstRect.w = surf->w;
-	dstRect.h = surf->h;
+    SDL_Rect dstRect;
+    dstRect.x = x;
+    dstRect.y = y;
+    dstRect.w = surf->w;
+    dstRect.h = surf->h;
 
-	SDL_LockMutex(screenLock);
-	SDL_BlitSurface(surf, &srcRect, screen, &dstRect);
-	SDL_UnlockMutex(screenLock);
+    SDL_LockMutex(screenLock);
+    SDL_BlitSurface(surf, &srcRect, screen, &dstRect);
+    SDL_UnlockMutex(screenLock);
 }
 
 /* ------------------------------------------------------------------------------
@@ -176,139 +176,139 @@ void KeyRunner::draw(SDL_Surface* surf, int x, int y) {
  */
 void KeyRunner::moveDirection(Direction d) {
 
-	// Get the most recent keystate.
-	Uint8* keyState = SDL_GetKeyState(NULL);
+    // Get the most recent keystate.
+    Uint8* keyState = SDL_GetKeyState(NULL);
 
-	// How long to wait in MS before assuming the user wishes to 'auto move'
-	Uint16 holdDelayMs = 200;
+    // How long to wait in MS before assuming the user wishes to 'auto move'
+    Uint16 holdDelayMs = 200;
 
-	// How frequently to check to see if the user is holding down an arrow button.
-	Uint16 holdDelayPollCheck = 10;
+    // How frequently to check to see if the user is holding down an arrow button.
+    Uint16 holdDelayPollCheck = 10;
 
-	// Count of poll attempts to check to see if the user is holding an arrow. 
-	Uint16 holdDelayPollTries = holdDelayMs/holdDelayPollCheck;
+    // Count of poll attempts to check to see if the user is holding an arrow.
+    Uint16 holdDelayPollTries = holdDelayMs/holdDelayPollCheck;
 
-	// Number of atomic moves per second.  Each 'move' causes the player to
-	// traverse one tile.
-	Uint16 movesPerSecond = 10;
+    // Number of atomic moves per second.  Each 'move' causes the player to
+    // traverse one tile.
+    Uint16 movesPerSecond = 10;
 
-	// The amount of delay between tile moves.
-	Uint16 autoMoveDelay = 1000/movesPerSecond;
+    // The amount of delay between tile moves.
+    Uint16 autoMoveDelay = 1000/movesPerSecond;
 
-	// Based on the provided direction, infer which key the player must be
-	// pressing.
-	int sdlKey = 0;
-	if (d == DIRECTION_DOWN) {
-		sdlKey = SDLK_DOWN;
-	} else if (d == DIRECTION_UP) {
-		sdlKey = SDLK_UP;
-	} else if (d == DIRECTION_LEFT) {
-		sdlKey = SDLK_LEFT;
-	} else if (d == DIRECTION_RIGHT) {
-		sdlKey = SDLK_RIGHT;
-	}
+    // Based on the provided direction, infer which key the player must be
+    // pressing.
+    int sdlKey = 0;
+    if (d == DIRECTION_DOWN) {
+        sdlKey = SDLK_DOWN;
+    } else if (d == DIRECTION_UP) {
+        sdlKey = SDLK_UP;
+    } else if (d == DIRECTION_LEFT) {
+        sdlKey = SDLK_LEFT;
+    } else if (d == DIRECTION_RIGHT) {
+        sdlKey = SDLK_RIGHT;
+    }
 
-	// Move the player in a given direction.  If break out of this movement
-	// loop if movePlayer returns true.  That implies that movement has been
-	// interrupted.
-	SDL_LockMutex(levelLoadLock);
-	bool interrupt = level->movePlayer(d);
-	SDL_UnlockMutex(levelLoadLock);
-	if (interrupt) {
-		return;
-	}
+    // Move the player in a given direction.  If break out of this movement
+    // loop if movePlayer returns true.  That implies that movement has been
+    // interrupted.
+    SDL_LockMutex(levelLoadLock);
+    bool interrupt = level->movePlayer(d);
+    SDL_UnlockMutex(levelLoadLock);
+    if (interrupt) {
+        return;
+    }
 
-	// Continue moving the player as long as they are holding down an arrow
-	// key.
-	while (true) {
+    // Continue moving the player as long as they are holding down an arrow
+    // key.
+    while (true) {
 
-		// Check for holdDelayMs milliseconds to see if the user wishes to
-		// continue moving automatically while they hold down a key.
-		int x = 0;
-		bool noHold = false;
-		while (++x < holdDelayPollTries) {
-			SDL_PumpEvents();
-			keyState = SDL_GetKeyState(NULL);
-			if (!keyState[sdlKey]) {
-				noHold = true;
-				break;
-			}
-			SDL_Delay(holdDelayPollCheck);
-		}
+        // Check for holdDelayMs milliseconds to see if the user wishes to
+        // continue moving automatically while they hold down a key.
+        int x = 0;
+        bool noHold = false;
+        while (++x < holdDelayPollTries) {
+            SDL_PumpEvents();
+            keyState = SDL_GetKeyState(NULL);
+            if (!keyState[sdlKey]) {
+                noHold = true;
+                break;
+            }
+            SDL_Delay(holdDelayPollCheck);
+        }
 
-		// If the user is holding down the key for the provided direction ...
-		if (!noHold) {
+        // If the user is holding down the key for the provided direction ...
+        if (!noHold) {
 
-			// Update the state of the keys,
-			SDL_PumpEvents();
-			keyState = SDL_GetKeyState(NULL);
+            // Update the state of the keys,
+            SDL_PumpEvents();
+            keyState = SDL_GetKeyState(NULL);
 
-			// While the user is still holding down the key for the provided direction...
-			while (keyState[sdlKey]) {
+            // While the user is still holding down the key for the provided direction...
+            while (keyState[sdlKey]) {
 
-				// Update the state of the keys
-				SDL_PumpEvents();
-				keyState = SDL_GetKeyState(NULL);
+                // Update the state of the keys
+                SDL_PumpEvents();
+                keyState = SDL_GetKeyState(NULL);
 
-				// This series of conditionals will allow the player to change
-				// which key they are pressing without the holdDelayMs wait.
+                // This series of conditionals will allow the player to change
+                // which key they are pressing without the holdDelayMs wait.
 
-				if (keyState[SDLK_DOWN] && sdlKey != SDLK_DOWN) {
-					d = DIRECTION_DOWN;
-					sdlKey = SDLK_DOWN;
-					break;
-				}
+                if (keyState[SDLK_DOWN] && sdlKey != SDLK_DOWN) {
+                    d = DIRECTION_DOWN;
+                    sdlKey = SDLK_DOWN;
+                    break;
+                }
 
-				if (keyState[SDLK_UP] && sdlKey != SDLK_UP) {
-					d = DIRECTION_UP;
-					sdlKey = SDLK_UP;
-					break;
-				}
+                if (keyState[SDLK_UP] && sdlKey != SDLK_UP) {
+                    d = DIRECTION_UP;
+                    sdlKey = SDLK_UP;
+                    break;
+                }
 
-				if (keyState[SDLK_LEFT] && sdlKey != SDLK_LEFT) {
-					d = DIRECTION_LEFT;
-					sdlKey = SDLK_LEFT;
-					break;
-				}
+                if (keyState[SDLK_LEFT] && sdlKey != SDLK_LEFT) {
+                    d = DIRECTION_LEFT;
+                    sdlKey = SDLK_LEFT;
+                    break;
+                }
 
-				if (keyState[SDLK_RIGHT] && sdlKey != SDLK_RIGHT) {
-					d = DIRECTION_RIGHT;
-					sdlKey = SDLK_RIGHT;
-					break;
-				}
+                if (keyState[SDLK_RIGHT] && sdlKey != SDLK_RIGHT) {
+                    d = DIRECTION_RIGHT;
+                    sdlKey = SDLK_RIGHT;
+                    break;
+                }
 
-				// Move the player.  Exit this movement loop if the player
-				// movement is interrupted (i.e. movePlayer returns true)
-				SDL_LockMutex(levelLoadLock);
-				bool interrupt = level->movePlayer(d);
-				SDL_UnlockMutex(levelLoadLock);
-				if (interrupt) {
-					return;
-				}
+                // Move the player.  Exit this movement loop if the player
+                // movement is interrupted (i.e. movePlayer returns true)
+                SDL_LockMutex(levelLoadLock);
+                bool interrupt = level->movePlayer(d);
+                SDL_UnlockMutex(levelLoadLock);
+                if (interrupt) {
+                    return;
+                }
 
 
-				// Wait autoMoveDelay MS before allowing another tile move.
-				// This regulates player speed.
-				SDL_Delay(autoMoveDelay);
-			}
+                // Wait autoMoveDelay MS before allowing another tile move.
+                // This regulates player speed.
+                SDL_Delay(autoMoveDelay);
+            }
 
-			// The player is no longer holding down the key for the provided
-			// direction.  They have also not attempted to change directions.
-			// Exit the loop.
-			return;
+            // The player is no longer holding down the key for the provided
+            // direction.  They have also not attempted to change directions.
+            // Exit the loop.
+            return;
 
-		} else {
-			
-			// The player has chosen not to hold down the key for the provided
-			// direction.  Exit the player movement loop.
-			return;
+        } else {
 
-		}
+            // The player has chosen not to hold down the key for the provided
+            // direction.  Exit the player movement loop.
+            return;
 
-		// If we're here in execution, that probably means that the player has
-		// changed directions during a hold.
+        }
 
-	}
+        // If we're here in execution, that probably means that the player has
+        // changed directions during a hold.
+
+    }
 }
 
 
@@ -318,38 +318,38 @@ void KeyRunner::moveDirection(Direction d) {
  */
 int KeyRunner::convey(void* unused) {
 
-	// Convey only while the game has not yet been quit.
-	while(state != QUIT) {
+    // Convey only while the game has not yet been quit.
+    while(state != QUIT) {
 
-		// Don't attempt to convey if the level is being loaded.
-		SDL_LockMutex(levelLoadLock);
+        // Don't attempt to convey if the level is being loaded.
+        SDL_LockMutex(levelLoadLock);
 
 
-		// Get the current tile of the player.
-		Tile* playerTile = level->getPlayerTile();
+        // Get the current tile of the player.
+        Tile* playerTile = level->getPlayerTile();
 
-		// If the tile in a conveyor tile,
-		if (playerTile->isConveyor()) {
+        // If the tile in a conveyor tile,
+        if (playerTile->isConveyor()) {
 
-			// Convey the player to the next tile.
-			Tile* newTile = playerTile->getNextConveyorTile();
-			if (level->movePlayerToTile(newTile)) {
-				if (level->isComplete()){
-					SDL_UnlockMutex(levelLock);
-					SDL_CondSignal(levelCond);
-				}
-			}
+            // Convey the player to the next tile.
+            Tile* newTile = playerTile->getNextConveyorTile();
+            if (level->movePlayerToTile(newTile)) {
+                if (level->isComplete()){
+                    SDL_UnlockMutex(levelLock);
+                    SDL_CondSignal(levelCond);
+                }
+            }
 
-		}
+        }
 
-		// Indicate that it's OK to load a new level.
-		SDL_UnlockMutex(levelLoadLock);
+        // Indicate that it's OK to load a new level.
+        SDL_UnlockMutex(levelLoadLock);
 
-		// Delay 100 ms before conveying the player again..
-		SDL_Delay(100);
-	}
+        // Delay 100 ms before conveying the player again..
+        SDL_Delay(100);
+    }
 
-	return 0;
+    return 0;
 }
 
 /* ------------------------------------------------------------------------------
@@ -357,112 +357,112 @@ int KeyRunner::convey(void* unused) {
  * and all animations.
  */
 int KeyRunner::updateDisplay(void* unused) {
-	int fps = 25;
-	int delay = 1000/fps;
+    int fps = 25;
+    int delay = 1000/fps;
 
-	GridLayer* gl = GridLayer::GetInstance();
+    GridLayer* gl = GridLayer::GetInstance();
 
-	while(state != QUIT) {
+    while(state != QUIT) {
 
 
-		SDL_LockMutex(screenLock);
+        SDL_LockMutex(screenLock);
 
-		SDL_LockMutex(levelLoadLock);
-		ConveyorAnimation::StartConveyors();
-		gl->animateTiles();
-		gl->draw(screen);
-		SDL_UnlockMutex(levelLoadLock);
+        SDL_LockMutex(levelLoadLock);
+        ConveyorAnimation::StartConveyors();
+        gl->animateTiles();
+        gl->draw(screen);
+        SDL_UnlockMutex(levelLoadLock);
 
-		SDL_Flip(screen);
+        SDL_Flip(screen);
 
-		SDL_UnlockMutex(screenLock);
+        SDL_UnlockMutex(screenLock);
 
-		SDL_Delay(delay);
-	}
+        SDL_Delay(delay);
+    }
 
-	exitGame();
-	return 0;
+    exitGame();
+    return 0;
 }
 
 int KeyRunner::updateLevel(void* unused) {
 
-	while (levelNum <= LevelLoader::GetTotal() && state != QUIT) {
+    while (levelNum <= LevelLoader::GetTotal() && state != QUIT) {
 
-		SDL_LockMutex(levelLoadLock);
+        SDL_LockMutex(levelLoadLock);
 
-		GridLayer* gl = GridLayer::GetInstance();
-		gl->clearChangedTiles();
+        GridLayer* gl = GridLayer::GetInstance();
+        gl->clearChangedTiles();
 
-		level = LevelLoader::Load(levelNum);
+        level = LevelLoader::Load(levelNum);
 
-		// Signal that it's OK to observe level tiles now.
-		SDL_UnlockMutex(levelLoadLock);
+        // Signal that it's OK to observe level tiles now.
+        SDL_UnlockMutex(levelLoadLock);
 
-		// Unrelated to the previous unlock, Signal every thread waiting on a
-		// level to load initially that a level has been loaded.
-		SDL_CondSignal(initialLevelLoadCond);
+        // Unrelated to the previous unlock, Signal every thread waiting on a
+        // level to load initially that a level has been loaded.
+        SDL_CondSignal(initialLevelLoadCond);
 
-		// Mark all tiles as needing to be redrawn.
-		level->refreshTiles();
+        // Mark all tiles as needing to be redrawn.
+        level->refreshTiles();
 
-		SDL_LockMutex(levelLock);
-		SDL_CondWait(levelCond, levelLock);
+        SDL_LockMutex(levelLock);
+        SDL_CondWait(levelCond, levelLock);
 
-		levelNum++;
-		delete level;
+        levelNum++;
+        delete level;
 
-		gl->clearAnimatedTiles();
+        gl->clearAnimatedTiles();
 
-		timeClock += 6000;
+        timeClock += 6000;
 
-	}
+    }
 
-	exitGame();
-	return 0;
+    exitGame();
+    return 0;
 }
 
 void KeyRunner::handleEvents() {
-	// Wait for an Event.
-	SDL_Event event;
-	while (state != QUIT) {
-		SDL_WaitEvent(&event);
+    // Wait for an Event.
+    SDL_Event event;
+    while (state != QUIT) {
+        SDL_WaitEvent(&event);
 
-		// Keydown.
-		if (event.type == SDL_KEYDOWN) {
+        // Keydown.
+        if (event.type == SDL_KEYDOWN) {
 
-			// User Presses Q
-			if (event.key.keysym.sym == SDLK_q) {
-				exitGame();
-				break;
+            // User Presses Q
+            if (event.key.keysym.sym == SDLK_q) {
+                exitGame();
+                break;
 
-			} else if (event.key.keysym.sym == SDLK_DOWN) {
-				moveDirection(DIRECTION_DOWN);
+            } else if (event.key.keysym.sym == SDLK_DOWN) {
+                moveDirection(DIRECTION_DOWN);
 
-			} else if (event.key.keysym.sym == SDLK_UP) {
-				moveDirection(DIRECTION_UP);
+            } else if (event.key.keysym.sym == SDLK_UP) {
+                moveDirection(DIRECTION_UP);
 
-			} else if (event.key.keysym.sym == SDLK_LEFT) {
-				moveDirection(DIRECTION_LEFT);
+            } else if (event.key.keysym.sym == SDLK_LEFT) {
+                moveDirection(DIRECTION_LEFT);
 
-			} else if (event.key.keysym.sym == SDLK_RIGHT) {
-				moveDirection(DIRECTION_RIGHT);
+            } else if (event.key.keysym.sym == SDLK_RIGHT) {
+                moveDirection(DIRECTION_RIGHT);
 
-			}
+            }
 
-			// If the prior movement causes the level to be complete,
-			// signal that the new level may be loaded.
-			if (level->isComplete()){
-				SDL_UnlockMutex(levelLock);
-				SDL_CondSignal(levelCond);
-			}
+            // If the prior movement causes the level to be complete,
+            // signal that the new level may be loaded.
+            if (level->isComplete()){
+                SDL_UnlockMutex(levelLock);
+                SDL_CondSignal(levelCond);
+            }
 
-		} else if (event.type == SDL_KEYUP) {
+        } else if (event.type == SDL_KEYUP) {
 
-			// Handle Quit Event.
-		} else if (event.type == SDL_QUIT) {
-			exitGame();
-			break;
+            // Handle Quit Event.
+        } else if (event.type == SDL_QUIT) {
+            exitGame();
+            break;
 
-		}
-	}
+        }
+    }
 }

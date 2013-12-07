@@ -7,11 +7,11 @@
 std::vector<ConveyorAnimation*> ConveyorAnimation::Conveyors;
 
 ConveyorAnimation::ConveyorAnimation(std::vector<Tile*> conveyorTiles) {
-	this->conveyorTiles = conveyorTiles;
+    this->conveyorTiles = conveyorTiles;
 
-	ConveyorAnimation::Conveyors.push_back(this);
+    ConveyorAnimation::Conveyors.push_back(this);
 
-	this->nextTileToStart = 0;
+    this->nextTileToStart = 0;
 }
 
 ConveyorAnimation::~ConveyorAnimation(){ }
@@ -22,46 +22,46 @@ ConveyorAnimation::~ConveyorAnimation(){ }
  * results, call this method each time a new screen frame is blitted.
  */
 bool ConveyorAnimation::startAnimation() {
-	if (this->nextTileToStart >= this->conveyorTiles.size()) {
-		return true;
-	}
+    if (this->nextTileToStart >= this->conveyorTiles.size()) {
+        return true;
+    }
 
-	GridLayer* gl = GridLayer::GetInstance();
+    GridLayer* gl = GridLayer::GetInstance();
 
-	Tile* currentTile = NULL;
-	if (this->nextTileToStart == 0) {
+    Tile* currentTile = NULL;
+    if (this->nextTileToStart == 0) {
 
-		// Always start the first tile in the belt.
-		currentTile = this->conveyorTiles[0];
-		currentTile->getAnimation()->play();
-		gl->pushAnimatedTile(currentTile);
-		this->nextTileToStart++;
+        // Always start the first tile in the belt.
+        currentTile = this->conveyorTiles[0];
+        currentTile->getAnimation()->play();
+        gl->pushAnimatedTile(currentTile);
+        this->nextTileToStart++;
 
-	} else {
-		currentTile = this->conveyorTiles[this->nextTileToStart-1];
+    } else {
+        currentTile = this->conveyorTiles[this->nextTileToStart-1];
 
-		if ((currentTile->getAnimation()->getCurrentStill()+1) % 8 == 0) {
+        if ((currentTile->getAnimation()->getCurrentStill()+1) % 8 == 0) {
 
-			Tile* tile = this->conveyorTiles[this->nextTileToStart];
-			this->conveyorTiles[this->nextTileToStart]->getAnimation()->play();
-			gl->pushAnimatedTile(tile);
+            Tile* tile = this->conveyorTiles[this->nextTileToStart];
+            this->conveyorTiles[this->nextTileToStart]->getAnimation()->play();
+            gl->pushAnimatedTile(tile);
 
-			this->nextTileToStart++;
-		}
-	}
+            this->nextTileToStart++;
+        }
+    }
 
-	return (this->nextTileToStart >= this->conveyorTiles.size());
+    return (this->nextTileToStart >= this->conveyorTiles.size());
 
 }
 
 bool ConveyorAnimation::hasTile(Tile* tile) const {
-	for (Uint16 x = 0; x < this->conveyorTiles.size(); x++) {
-		if (tile == this->conveyorTiles[x]) {
-			return true;
-		}
-	}
+    for (Uint16 x = 0; x < this->conveyorTiles.size(); x++) {
+        if (tile == this->conveyorTiles[x]) {
+            return true;
+        }
+    }
 
-	return false;
+    return false;
 }
 
 /* ------------------------------------------------------------------------------
@@ -70,16 +70,16 @@ bool ConveyorAnimation::hasTile(Tile* tile) const {
  */
 bool ConveyorAnimation::TileInConveyor(Tile* tile) {
 
-	for (Uint16 c = 0; c < ConveyorAnimation::Conveyors.size(); c++) {
-		ConveyorAnimation* conveyor = ConveyorAnimation::Conveyors[c];
-		if (conveyor->hasTile(tile)) {
-			
-			return true;
+    for (Uint16 c = 0; c < ConveyorAnimation::Conveyors.size(); c++) {
+        ConveyorAnimation* conveyor = ConveyorAnimation::Conveyors[c];
+        if (conveyor->hasTile(tile)) {
 
-		}
-	}
+            return true;
 
-	return false;
+        }
+    }
+
+    return false;
 }
 
 /* ------------------------------------------------------------------------------
@@ -88,17 +88,17 @@ bool ConveyorAnimation::TileInConveyor(Tile* tile) {
  * blit until it returns true.
  */
 bool ConveyorAnimation::StartConveyors() {
-	bool allStarted = true;
-	for (Uint16 x = 0; x < ConveyorAnimation::Conveyors.size(); x++) {
-		ConveyorAnimation* ca = ConveyorAnimation::Conveyors[x];
-		bool started = ca->startAnimation();
+    bool allStarted = true;
+    for (Uint16 x = 0; x < ConveyorAnimation::Conveyors.size(); x++) {
+        ConveyorAnimation* ca = ConveyorAnimation::Conveyors[x];
+        bool started = ca->startAnimation();
 
-		allStarted &= started;
-	}
+        allStarted &= started;
+    }
 
-	return allStarted;
+    return allStarted;
 }
 
 void ConveyorAnimation::ClearConveyors() {
-	ConveyorAnimation::Conveyors.clear();
+    ConveyorAnimation::Conveyors.clear();
 }

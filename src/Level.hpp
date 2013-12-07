@@ -17,41 +17,41 @@ class Animation;
 class Level {
 
 private:
-	Level(int levelNum);
+    Level(int levelNum);
 
-	Tile* tile[GRID_HEIGHT][GRID_WIDTH];
+    Tile* tile[GRID_HEIGHT][GRID_WIDTH];
 
-	int level;
+    int level;
 
-	Tile* tileHasPlayer;
-	Tile* tileHasKey;
+    Tile* tileHasPlayer;
+    Tile* tileHasKey;
 
-	bool playerHasKey;
+    bool playerHasKey;
 
-	Animation* keyAnim;
-	Animation* playerAnim;
+    Animation* keyAnim;
+    Animation* playerAnim;
 
-	Tile* getMatchingTeleporterTile(Tile*);
+    Tile* getMatchingTeleporterTile(Tile*);
 
-	void buildConveyorAnimations();
+    void buildConveyorAnimations();
 
 public:
-	void refreshTiles();
+    void refreshTiles();
 
-	bool hasKey(int x, int y);
-	bool hasPlayer(int x, int y);
-	bool isWall(int x, int y);
+    bool hasKey(int x, int y);
+    bool hasPlayer(int x, int y);
+    bool isWall(int x, int y);
 
-	bool movePlayer(Direction d);
-	bool movePlayerToTile(Tile*);
-	Tile* getPlayerTile() const;
+    bool movePlayer(Direction d);
+    bool movePlayerToTile(Tile*);
+    Tile* getPlayerTile() const;
 
-	bool isComplete();
-	int toInt();
+    bool isComplete();
+    int toInt();
 
-	Tile* getTile(uint16_t x, uint16_t y) const;
+    Tile* getTile(uint16_t x, uint16_t y) const;
 
-	friend class LevelLoader;
+    friend class LevelLoader;
 
 };
 
