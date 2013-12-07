@@ -5,7 +5,7 @@
 #include "ConveyorAnimation.hpp"
 #include "KeyRunner.hpp"
 #include "GridLayer.hpp"
-#include "InfoBar.hpp"
+#include "InfoBarLayer.hpp"
 #include "Level.hpp"
 #include "LevelLoader.hpp"
 
@@ -75,7 +75,15 @@ int KeyRunner::getWidth() {
 }
 
 int KeyRunner::getHeight() {
-    return GRID_HEIGHT*25 + InfoBar::GetInstance()->getHeight();
+    return GRID_HEIGHT*25 + InfoBarLayer::GetInstance()->getHeight();
+}
+
+uint16_t KeyRunner::getLevelNum() {
+    SDL_LockMutex(levelLoadLock);
+    uint16_t levelNum = level->toInt();
+    SDL_UnlockMutex(levelLoadLock);
+
+    return levelNum;
 }
 
 void KeyRunner::exitGame() {
@@ -126,18 +134,11 @@ void KeyRunner::createLayers() {
 }
 
 int KeyRunner::clockTick(void* unused) {
-
-    InfoBar* ib = InfoBar::GetInstance();
-
     int step = 100;
 
     while (timeClock > 0 && state == PLAY) {
         SDL_Delay(step);
         timeClock -= step;
-
-        // Draw the InfoBar, locking and unlocking the screen.
-        SDL_Surface* ibSrf = ib->getSurface(level->toInt());
-        draw(ibSrf, ib->getX(), ib->getY());
     }
 
     SDL_CondSignal(levelCond);
@@ -361,6 +362,7 @@ int KeyRunner::updateDisplay(void* unused) {
     int delay = 1000/fps;
 
     GridLayer* gl = GridLayer::GetInstance();
+    InfoBarLayer* ib = InfoBarLayer::GetInstance();
 
     while(state != QUIT) {
 
@@ -368,9 +370,15 @@ int KeyRunner::updateDisplay(void* unused) {
         SDL_LockMutex(screenLock);
 
         SDL_LockMutex(levelLoadLock);
+
+        // Update the GridLayer
         ConveyorAnimation::StartConveyors();
         gl->animateTiles();
+
+        // Draw each of the Layers onto the screen.  Last appears on top.
         gl->draw(screen);
+        ib->draw(screen);
+
         SDL_UnlockMutex(levelLoadLock);
 
         SDL_Flip(screen);

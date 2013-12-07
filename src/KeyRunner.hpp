@@ -39,6 +39,7 @@ public:
     static int getTimeClock();
     static int getWidth();
     static int getHeight();
+    static uint16_t getLevelNum();
 
     static void draw(SDL_Surface* surf, int x, int y);
 

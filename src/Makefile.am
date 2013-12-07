@@ -9,8 +9,8 @@ AnimationType.h       \
 ConveyorAnimation.cpp \
 ConveyorAnimation.h   \
 Direction.h	          \
-InfoBar.cpp           \
-InfoBar.h             \
+InfoBarLayer.cpp      \
+InfoBarLayer.h        \
 GridLayer.cpp         \
 GridLayer.h           \
 KeyRunner.cpp         \

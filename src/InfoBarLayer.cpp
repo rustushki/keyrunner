@@ -1,77 +1,73 @@
-#include "InfoBar.hpp"
+#include "InfoBarLayer.hpp"
 
-InfoBar* InfoBar::instance = 0;
+InfoBarLayer* InfoBarLayer::instance = 0;
 
-InfoBar* InfoBar::GetInstance() {
-    if (InfoBar::instance == 0) {
-        InfoBar::instance = new InfoBar();
+InfoBarLayer* InfoBarLayer::GetInstance() {
+    if (InfoBarLayer::instance == 0) {
+        InfoBarLayer::instance = new InfoBarLayer();
     }
 
-    return InfoBar::instance;
+    return InfoBarLayer::instance;
 }
 
-InfoBar::InfoBar() {
-    ibSrf = SDL_CreateRGBSurface(0, getWidth(), getHeight()
-            , 32, 0, 0, 0, 0);
+InfoBarLayer::InfoBarLayer() {
 }
 
-InfoBar::~InfoBar() {
-    SDL_FreeSurface(ibSrf);
+InfoBarLayer::~InfoBarLayer() {
 }
 
 /* ------------------------------------------------------------------------------
- * getSurface - Returns a surface containing the graphical representation of
- * the InfoBar.  Returned memory should not be deallocated by caller.
+ * draw - Draws the InfoBarLayer to the screen.  This includes the level and a
+ * timeclock.
  */
-SDL_Surface* InfoBar::getSurface(uint16_t level) const {
+void InfoBarLayer::draw(SDL_Surface* dst) {
 
     // Build the black bar at the bottom.
     SDL_Rect r;
-    r.x = 0;
-    r.y = 0;
+    r.x = getX();
+    r.y = getY();
     r.w = getWidth();
     r.h = getHeight();
-    SDL_FillRect(ibSrf, &r, 0x000000);
+    SDL_FillRect(dst, &r, 0x000000);
 
     // As they say.
-    this->drawLevel(level);
-    this->drawTimer();
+    this->drawLevel(dst, KeyRunner::getLevelNum());
+    this->drawTimer(dst);
 
-    return ibSrf;
 }
 
 /* ------------------------------------------------------------------------------
- * getWidth() - Return the width of the InfoBar.
+ * getWidth() - Return the width of the InfoBarLayer.
  */
-int InfoBar::getWidth() const {
+int InfoBarLayer::getWidth() const {
     return KeyRunner::getWidth();
 }
 
 /* ------------------------------------------------------------------------------
- * getHeight() - Return the height of the InfoBar.
+ * getHeight() - Return the height of the InfoBarLayer.
  */
-int InfoBar::getHeight() const {
+int InfoBarLayer::getHeight() const {
     return 40;
 }
 
 /* ------------------------------------------------------------------------------
  * getX() - Return the X of the info bar relative to the whole screen.
  */
-int InfoBar::getX() const {
+int InfoBarLayer::getX() const {
     return 0;
 }
 
 /* ------------------------------------------------------------------------------
  * getY() - Return the Y of the info bar relative to the whole screen.
  */
-int InfoBar::getY() const {
+int InfoBarLayer::getY() const {
     return KeyRunner::getHeight() - getHeight();
 }
 
 /* ------------------------------------------------------------------------------
  * drawLevel - draws the level at the bottom left of the screen.
  */
-void InfoBar::drawLevel(uint16_t level) const {
+void InfoBarLayer::drawLevel(SDL_Surface* dst, uint16_t level) const {
 
     // Covert the level into a string.
     std::string levelStr = "";
@@ -84,7 +80,7 @@ void InfoBar::drawLevel(uint16_t level) const {
     levelStr = "Level: " + levelStr;
 
     // Draw the text to the screen.
-    drawText(levelStr, BOTTOM_LEFT);
+    drawText(dst, levelStr, BOTTOM_LEFT);
 }
 
 /* ------------------------------------------------------------------------------
@@ -94,7 +90,7 @@ void InfoBar::drawLevel(uint16_t level) const {
  * by the given string.  It then blits this surface to the screen at the given
  * position.  Color is assumed gray for now.
  */
-void InfoBar::drawText(std::string s, InfoBarPos position) const {
+void InfoBarLayer::drawText(SDL_Surface* dst, std::string s, InfoBarPos position) const {
 
     // Gray
     SDL_Color color = {0xAA, 0xAA, 0xAA};
@@ -117,7 +113,7 @@ void InfoBar::drawText(std::string s, InfoBarPos position) const {
         SDL_Rect r;
         r.w = text_surface->w;
         r.h = text_surface->h;
-        r.y = marginTop;
+        r.y = getY() + marginTop;
 
         if (position == BOTTOM_LEFT) {
             r.x = 0;
@@ -131,7 +127,7 @@ void InfoBar::drawText(std::string s, InfoBarPos position) const {
         }
 
         // Blit the text to the screen.
-        SDL_BlitSurface(text_surface, NULL, ibSrf, &r);
+        SDL_BlitSurface(text_surface, NULL, dst, &r);
     }
 
 }
@@ -139,7 +135,7 @@ void InfoBar::drawText(std::string s, InfoBarPos position) const {
 /* ------------------------------------------------------------------------------
  * drawTimer - draws the timer at the bottom right of the screen.
  */
-void InfoBar::drawTimer() const {
+void InfoBarLayer::drawTimer(SDL_Surface* dst) const {
 
     // Convert the timeout into a string.
     std::string timer = "";
@@ -165,7 +161,7 @@ void InfoBar::drawTimer() const {
     timer = "Time: " + timer + " s";
 
     // Draw it to th screen.
-    drawText(timer, BOTTOM_RIGHT);
+    drawText(dst, timer, BOTTOM_RIGHT);
 }
 
 /* ------------------------------------------------------------------------------
@@ -173,7 +169,7 @@ void InfoBar::drawTimer() const {
  * statically within to eliminate a global and also prevent re-loading the same
  * font.
  */
-TTF_Font* InfoBar::getFont() const {
+TTF_Font* InfoBarLayer::getFont() const {
     // Store loaded font here.
     static TTF_Font* font = NULL;
 
