@@ -36,7 +36,7 @@ private:
     void buildConveyorAnimations();
 
 public:
-    void refreshTiles();
+    void refreshTiles() const;
 
     bool hasKey(int x, int y);
     bool hasPlayer(int x, int y);
@@ -46,8 +46,8 @@ public:
     bool movePlayerToTile(Tile*);
     Tile* getPlayerTile() const;
 
-    bool isComplete();
-    int toInt();
+    bool isComplete() const;
+    int toInt() const;
 
     Tile* getTile(uint16_t x, uint16_t y) const;
 

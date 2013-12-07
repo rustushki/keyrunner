@@ -45,7 +45,6 @@ public:
 
 private:
     TileType type;
-    AnimationType animType;
     Animation* anim;
     Level* level;
 

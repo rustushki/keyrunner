@@ -17,15 +17,15 @@ SpriteSheet::SpriteSheet(std::string filename, uint16_t width, uint16_t height) 
 /* ------------------------------------------------------------------------------
  * getWidth - Return the width of the frame size.
  */
-uint16_t SpriteSheet::getWidth() {
-    return this->width;
+uint16_t SpriteSheet::getWidth() const {
+    return width;
 }
 
 /* ------------------------------------------------------------------------------
  * getHeight - Return the height of the frame size.
  */
-uint16_t SpriteSheet::getHeight() {
-    return this->height;
+uint16_t SpriteSheet::getHeight() const {
+    return height;
 }
 
 /* ------------------------------------------------------------------------------
@@ -37,10 +37,10 @@ void SpriteSheet::blitFrame(uint16_t frameX, uint16_t frameY, SDL_Surface* dst, 
 
     // Source Rect
     SDL_Rect srcRect;
-    srcRect.w = this->width;
-    srcRect.h = this->height;
-    srcRect.x = frameX * this->width;
-    srcRect.y = frameY * this->height;
+    srcRect.w = width;
+    srcRect.h = height;
+    srcRect.x = frameX * width;
+    srcRect.y = frameY * height;
 
     // Blit the given frame of the sheet to the screen.
     SDL_BlitSurface(sheet, &srcRect, dst, &where);

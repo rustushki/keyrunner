@@ -152,7 +152,7 @@ Tile* Level::getTile(uint16_t x, uint16_t y) const {
     return this->tile[y][x];
 }
 
-void Level::refreshTiles() {
+void Level::refreshTiles() const {
 
     // Blit all Tiles.
     for (int x = 0; x < GRID_WIDTH; x++) {
@@ -308,10 +308,10 @@ Tile* Level::getMatchingTeleporterTile(Tile* t) {
 
 }
 
-bool Level::isComplete() {
+bool Level::isComplete() const {
     return (this->playerHasKey && this->tileHasPlayer->isDoor());
 }
 
-int Level::toInt() {
+int Level::toInt() const {
     return this->level;
 }

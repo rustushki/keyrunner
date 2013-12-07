@@ -227,7 +227,7 @@ Tile* Tile::getNextConveyorTile() const {
 
     Tile* tryTile = NULL;
     Tile* secondPlace = NULL;
-    Tile* thirdPlace = (Tile*)this;
+    Tile* thirdPlace = const_cast<Tile*>(this);
 
 
     while (true) {

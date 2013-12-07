@@ -35,9 +35,8 @@ Animation::Animation(AnimationType at) {
     this->type          = at;
     this->shouldAdvance = false;
 
-    int fps = 25;
-
     if (this->sps != 0) {
+        int fps = 25;
         this->framesPerStill = fps/this->sps;
     }
 
