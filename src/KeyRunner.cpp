@@ -71,11 +71,11 @@ int KeyRunner::getTimeClock() {
 }
 
 int KeyRunner::getWidth() {
-    return GRID_WIDTH*25;
+    return GridLayer::GetInstance()->getRect().w;
 }
 
 int KeyRunner::getHeight() {
-    return GRID_HEIGHT*25 + InfoBarLayer::GetInstance()->getHeight();
+    return GridLayer::GetInstance()->getRect().h + InfoBarLayer::GetInstance()->getRect().h;
 }
 
 uint16_t KeyRunner::getLevelNum() {

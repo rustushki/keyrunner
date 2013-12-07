@@ -13,10 +13,7 @@ public:
     ~InfoBarLayer();
 
     virtual void draw(SDL_Surface* screen);
-    int getHeight() const;
-    int getWidth() const;
-    int getX() const;
-    int getY() const;
+    virtual SDL_Rect getRect() const;
 
 private:
     InfoBarLayer();
@@ -27,8 +24,6 @@ private:
     void drawTimer(SDL_Surface* dst) const;
 
     static InfoBarLayer* instance;
-
-    SDL_Surface* ibSrf;
 
 };
 

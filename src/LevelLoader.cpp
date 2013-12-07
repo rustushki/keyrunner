@@ -66,12 +66,12 @@ bool LevelLoader::ParseLine(Level* level, int& parseX, int& parseY, std::string 
             break;
         }
 
-        if (parseX == GRID_WIDTH) {
+        if (parseX == GridLayer::GRID_WIDTH) {
             parseX = 0;
             parseY++;
         }
 
-        if (parseY >= GRID_HEIGHT) {
+        if (parseY >= GridLayer::GRID_HEIGHT) {
             return false;
         }
 

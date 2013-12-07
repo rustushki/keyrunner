@@ -8,6 +8,8 @@ class Layer {
 public:
     virtual void draw(SDL_Surface* dst) = 0;
 
+    virtual SDL_Rect getRect() const = 0;
+
 };
 
 #endif//LAYER_HPP

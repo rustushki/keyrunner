@@ -18,9 +18,9 @@ void Level::buildConveyorAnimations() {
 
     ConveyorAnimation::ClearConveyors();
 
-    for (int x = 0; x < GRID_WIDTH; x++) {
+    for (int x = 0; x < GridLayer::GRID_WIDTH; x++) {
 
-        for (int y = 0; y < GRID_HEIGHT; y++) {
+        for (int y = 0; y < GridLayer::GRID_HEIGHT; y++) {
             Tile* tile = this->getTile(x, y);
 
             if (tile->isConveyor()) {
@@ -146,7 +146,7 @@ void Level::buildConveyorAnimations() {
 }
 
 Tile* Level::getTile(uint16_t x, uint16_t y) const {
-    if (y >= GRID_HEIGHT || x >= GRID_WIDTH) {
+    if (y >= GridLayer::GRID_HEIGHT || x >= GridLayer::GRID_WIDTH) {
         return NULL;
     }
     return this->tile[y][x];
@@ -155,8 +155,8 @@ Tile* Level::getTile(uint16_t x, uint16_t y) const {
 void Level::refreshTiles() const {
 
     // Blit all Tiles.
-    for (int x = 0; x < GRID_WIDTH; x++) {
-        for (int y = 0; y < GRID_HEIGHT; y++) {
+    for (int x = 0; x < GridLayer::GRID_WIDTH; x++) {
+        for (int y = 0; y < GridLayer::GRID_HEIGHT; y++) {
             GridLayer::GetInstance()->addChangedTile(getTile(x, y));
         }
     }
@@ -283,8 +283,8 @@ Tile* Level::getMatchingTeleporterTile(Tile* t) {
 
         // Search for the matching tile.
         bool found = false;
-        for (Uint16 x = 0; x < GRID_WIDTH; x++) {
-            for (Uint16 y = 0; y < GRID_HEIGHT; y++) {
+        for (Uint16 x = 0; x < GridLayer::GRID_WIDTH; x++) {
+            for (Uint16 y = 0; y < GridLayer::GRID_HEIGHT; y++) {
 
                 if (x != t->getX() || y != t->getY()) {
 

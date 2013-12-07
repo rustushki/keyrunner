@@ -114,7 +114,7 @@ Tile* Tile::up() const{
     int x = this->x + 0;
     int y = this->y - 1;
     if (y < 0) {
-        y = GRID_HEIGHT-1;
+        y = GridLayer::GRID_HEIGHT-1;
     }
     return this->level->getTile(x, y);
 }
@@ -122,7 +122,7 @@ Tile* Tile::up() const{
 Tile* Tile::down() const{
     int x = this->x + 0;
     int y = this->y + 1;
-    if (y >= GRID_HEIGHT) {
+    if (y >= GridLayer::GRID_HEIGHT) {
         y = 0;
     }
     return this->level->getTile(x, y);
@@ -132,7 +132,7 @@ Tile* Tile::left() const{
     int x = this->x - 1;
     int y = this->y + 0;
     if (x < 0) {
-        x = GRID_WIDTH-1;
+        x = GridLayer::GRID_WIDTH-1;
     }
     return this->level->getTile(x, y);
 }
@@ -140,7 +140,7 @@ Tile* Tile::left() const{
 Tile* Tile::right() const{
     int x = this->x + 1;
     int y = this->y + 0;
-    if (x >= GRID_WIDTH) {
+    if (x >= GridLayer::GRID_WIDTH) {
         x = 0;
     }
     return this->level->getTile(x, y);

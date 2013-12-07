@@ -23,11 +23,7 @@ InfoBarLayer::~InfoBarLayer() {
 void InfoBarLayer::draw(SDL_Surface* dst) {
 
     // Build the black bar at the bottom.
-    SDL_Rect r;
-    r.x = getX();
-    r.y = getY();
-    r.w = getWidth();
-    r.h = getHeight();
+    SDL_Rect r = getRect();
     SDL_FillRect(dst, &r, 0x000000);
 
     // As they say.
@@ -37,31 +33,16 @@ void InfoBarLayer::draw(SDL_Surface* dst) {
 }
 
 /* ------------------------------------------------------------------------------
- * getWidth() - Return the width of the InfoBarLayer.
+ * getRect - Get the region of the screen upon which this Layer will be drawn.
+ * For InfoBarLayer, it will be at the bottom, vertically below the GridLayer.
  */
-int InfoBarLayer::getWidth() const {
-    return KeyRunner::getWidth();
-}
-
-/* ------------------------------------------------------------------------------
- * getHeight() - Return the height of the InfoBarLayer.
- */
-int InfoBarLayer::getHeight() const {
-    return 40;
-}
-
-/* ------------------------------------------------------------------------------
- * getX() - Return the X of the info bar relative to the whole screen.
- */
-int InfoBarLayer::getX() const {
-    return 0;
-}
-
-/* ------------------------------------------------------------------------------
- * getY() - Return the Y of the info bar relative to the whole screen.
- */
-int InfoBarLayer::getY() const {
-    return KeyRunner::getHeight() - getHeight();
+SDL_Rect InfoBarLayer::getRect() const {
+    SDL_Rect r;
+    r.x = 0;
+    r.y = GridLayer::GetInstance()->getRect().h;
+    r.h = 40;
+    r.w = KeyRunner::getWidth();
+    return r;
 }
 
 /* ------------------------------------------------------------------------------
@@ -113,10 +94,10 @@ void InfoBarLayer::drawText(SDL_Surface* dst, std::string s, InfoBarPos position
         SDL_Rect r;
         r.w = text_surface->w;
         r.h = text_surface->h;
-        r.y = getY() + marginTop;
+        r.y = getRect().y + marginTop;
 
         if (position == BOTTOM_LEFT) {
-            r.x = 0;
+            r.x = getRect().x;
         } else if (position == BOTTOM_RIGHT) {
             r.x = KeyRunner::getWidth() - text_surface->w;
         } else if (position == BOTTOM_CENTER) {

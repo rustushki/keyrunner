@@ -13,6 +13,9 @@ public:
 
     static GridLayer* GetInstance();
 
+    static const uint16_t GRID_HEIGHT = 16;
+    static const uint16_t GRID_WIDTH  = 25;
+
     void pushAnimatedTile(Tile* tile);
     void clearAnimatedTiles();
     void animateTiles();
@@ -20,7 +23,8 @@ public:
     void clearChangedTiles();
     void addChangedTile(Tile* tile);
 
-    void draw(SDL_Surface* dst);
+    virtual void draw(SDL_Surface* dst);
+    virtual SDL_Rect getRect() const;
 
 private:
 

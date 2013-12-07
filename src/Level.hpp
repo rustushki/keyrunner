@@ -4,22 +4,20 @@
 #include <string>
 #include <vector>
 
-#include "TileType.hpp"
 #include "AnimationType.hpp"
 #include "Direction.hpp"
+#include "GridLayer.hpp"
+#include "TileType.hpp"
 #include "Tile.hpp"
 
 class Animation;
-
-#define GRID_HEIGHT 16
-#define GRID_WIDTH 25
 
 class Level {
 
 private:
     Level(int levelNum);
 
-    Tile* tile[GRID_HEIGHT][GRID_WIDTH];
+    Tile* tile[GridLayer::GRID_HEIGHT][GridLayer::GRID_WIDTH];
 
     int level;
 
