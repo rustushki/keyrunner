@@ -5,9 +5,9 @@
 #include "ConveyorAnimation.hpp"
 #include "KeyRunner.hpp"
 #include "GridLayer.hpp"
-#include "InfoBarLayer.hpp"
 #include "Level.hpp"
 #include "LevelLoader.hpp"
+#include "RootLayer.hpp"
 
 // Items yet to be absorbed into KeyRunner static class.
 Animation* KeyAnim;
@@ -70,14 +70,6 @@ int KeyRunner::getTimeClock() {
     return timeClock;
 }
 
-int KeyRunner::getWidth() {
-    return GridLayer::GetInstance()->getRect().w;
-}
-
-int KeyRunner::getHeight() {
-    return GridLayer::GetInstance()->getRect().h + InfoBarLayer::GetInstance()->getRect().h;
-}
-
 uint16_t KeyRunner::getLevelNum() {
     SDL_LockMutex(levelLoadLock);
     uint16_t levelNum = level->toInt();
@@ -104,7 +96,8 @@ bool KeyRunner::init() {
         return false;
     }
 
-    screen = SDL_SetVideoMode(getWidth(), getHeight(), 16, SDL_SWSURFACE | SDL_DOUBLEBUF);
+    SDL_Rect rlr = RootLayer::GetInstance()->getRect();
+    screen = SDL_SetVideoMode(rlr.w, rlr.h, 16, SDL_SWSURFACE | SDL_DOUBLEBUF);
     if (screen == NULL) {
         std::cout << "Couldn't set video mode: "<< SDL_GetError() << std::endl;
         return false;
@@ -119,18 +112,12 @@ bool KeyRunner::init() {
 
     atexit(SDL_Quit);
 
-    screen = SDL_SetVideoMode(getWidth(), getHeight(), 16, SDL_SWSURFACE | SDL_DOUBLEBUF);
     std::stringstream ss;
     ss << "Key Runner r" << VERSION;
     SDL_WM_SetCaption(ss.str().c_str(), "");
 
-    createLayers();
 
     return true;
-}
-
-void KeyRunner::createLayers() {
-    GridLayer::GetInstance();
 }
 
 int KeyRunner::clockTick(void* unused) {
@@ -144,29 +131,6 @@ int KeyRunner::clockTick(void* unused) {
     SDL_CondSignal(levelCond);
     exitGame();
     return 0;
-}
-
-/* ------------------------------------------------------------------------------
- * draw() - Given an SDL_Surface*, draw it to the screen at a given coordinate
- * pair.  The draw() methods are the only way to update the screen and are
- * thread safe.
- */
-void KeyRunner::draw(SDL_Surface* surf, int x, int y) {
-    SDL_Rect srcRect;
-    srcRect.x = 0;
-    srcRect.y = 0;
-    srcRect.w = surf->w;
-    srcRect.h = surf->h;
-
-    SDL_Rect dstRect;
-    dstRect.x = x;
-    dstRect.y = y;
-    dstRect.w = surf->w;
-    dstRect.h = surf->h;
-
-    SDL_LockMutex(screenLock);
-    SDL_BlitSurface(surf, &srcRect, screen, &dstRect);
-    SDL_UnlockMutex(screenLock);
 }
 
 /* ------------------------------------------------------------------------------
@@ -361,24 +325,16 @@ int KeyRunner::updateDisplay(void* unused) {
     int fps = 25;
     int delay = 1000/fps;
 
-    GridLayer* gl = GridLayer::GetInstance();
-    InfoBarLayer* ib = InfoBarLayer::GetInstance();
+    RootLayer* rl = RootLayer::GetInstance();
 
     while(state != QUIT) {
-
-
         SDL_LockMutex(screenLock);
 
         SDL_LockMutex(levelLoadLock);
 
-        // Update each of the Layers' internal data structures, preparing them
-        // to be drawn.
-        gl->update();
-        ib->update();
-
-        // Draw each of the Layers onto the screen.  Last appears on top.
-        gl->draw(screen);
-        ib->draw(screen);
+        // Update and Draw the RootLayer (and all nested layers beneath).
+        rl->update();
+        rl->draw(screen);
 
         SDL_UnlockMutex(levelLoadLock);
 

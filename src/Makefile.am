@@ -8,8 +8,10 @@ ConveyorAnimation.cpp \
 InfoBarLayer.cpp      \
 GridLayer.cpp         \
 KeyRunner.cpp         \
+Layer.cpp             \
 Level.cpp             \
 LevelLoader.cpp       \
+RootLayer.cpp         \
 SpriteSheet.cpp       \
 Tile.cpp              \
 main.cpp

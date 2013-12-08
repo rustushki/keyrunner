@@ -1,4 +1,5 @@
 #include "InfoBarLayer.hpp"
+#include "RootLayer.hpp"
 
 InfoBarLayer* InfoBarLayer::instance = 0;
 
@@ -41,7 +42,7 @@ SDL_Rect InfoBarLayer::getRect() const {
     r.x = 0;
     r.y = GridLayer::GetInstance()->getRect().h;
     r.h = 40;
-    r.w = KeyRunner::getWidth();
+    r.w = GridLayer::GetInstance()->getRect().w;
     return r;
 }
 
@@ -104,15 +105,17 @@ void InfoBarLayer::drawText(SDL_Surface* dst, std::string s, InfoBarPos position
         r.h = text_surface->h;
         r.y = getRect().y + marginTop;
 
+        SDL_Rect rlr = RootLayer::GetInstance()->getRect();
+
         if (position == BOTTOM_LEFT) {
             r.x = getRect().x;
         } else if (position == BOTTOM_RIGHT) {
-            r.x = KeyRunner::getWidth() - text_surface->w;
+            r.x = rlr.w - text_surface->w;
         } else if (position == BOTTOM_CENTER) {
-            r.x = (KeyRunner::getWidth() - text_surface->w)/2;
+            r.x = (rlr.w - text_surface->w)/2;
         } else if (position == MIDDLE_CENTER) {
-            r.x = (KeyRunner::getWidth() - text_surface->w)/2;
-            r.y = (KeyRunner::getHeight() - text_surface->h)/2;
+            r.x = (rlr.w - text_surface->w)/2;
+            r.y = (rlr.h - text_surface->h)/2;
         }
 
         // Blit the text to the screen.

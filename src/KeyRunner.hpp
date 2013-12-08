@@ -37,11 +37,7 @@ public:
     static void play(uint16_t startLevel);
     static void exitGame();
     static int getTimeClock();
-    static int getWidth();
-    static int getHeight();
     static uint16_t getLevelNum();
-
-    static void draw(SDL_Surface* surf, int x, int y);
 
 private:
     // Thread functions.
@@ -52,7 +48,6 @@ private:
 
     // Helpers
     static bool init();
-    static void createLayers();
     static void moveDirection(Direction d);
     static void handleEvents();
 
