@@ -1,15 +1,17 @@
-#include "Level.hpp"
 #include "KeyRunner.hpp"
+#include "Options.hpp"
 
 int main(int argc, char** argv) {
 
-    // Simple Support for Starting on a Different Level.
-    int levelNum = 1;
-    if (argc > 1) {
-        levelNum = atoi(argv[1]);
-    }
+    Options::parse(argc, argv);
 
-    KeyRunner::play(levelNum);
+    State startState = Options::getInitialState();
+    if (startState == PLAY) {
+        KeyRunner::play();
+
+    } else if (startState == EDIT) {
+        // Do something else.
+    }
 
     return 0;
 }

@@ -7,6 +7,7 @@
 #include "GridLayer.hpp"
 #include "Level.hpp"
 #include "LevelLoader.hpp"
+#include "Options.hpp"
 #include "RootLayer.hpp"
 
 // Items yet to be absorbed into KeyRunner static class.
@@ -26,7 +27,7 @@ State        KeyRunner::state;
 int          KeyRunner::timeClock;
 Level*       KeyRunner::level;
 
-void KeyRunner::play(uint16_t startLevel) {
+void KeyRunner::play() {
     state = PLAY;
 
     screenLock           = SDL_CreateMutex();
@@ -37,7 +38,7 @@ void KeyRunner::play(uint16_t startLevel) {
     initialLevelLoadLock = SDL_CreateMutex();
     initialLevelLoadCond = SDL_CreateCond();
 
-    levelNum = startLevel;
+    levelNum = Options::getStartingLevel();
     timeClock = 50000;
 
     if (init()) {

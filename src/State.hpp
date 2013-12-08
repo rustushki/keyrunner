@@ -9,6 +9,7 @@ enum State {
     , LOSE     // User has lost.  Display lose animation.
     , RESTART  // Start over at level 1, reset score, etc..
     , WIN      // User has won the game.
+    , EDIT     // User wants to edit levels
 };
 
 #endif//STATE_HPP

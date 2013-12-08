@@ -1,0 +1,24 @@
+#ifndef OPTIONS_HPP
+#define OPTIONS_HPP
+
+class Options {
+public:
+    // Parsers
+    static void parse(int argc, char** argv);
+
+    // Outputters
+    static void showHelp();
+    static void showVersion();
+
+    // Accessors
+    static uint16_t getStartingLevel();
+    static State getInitialState();
+
+private:
+
+    static uint16_t startingLevelNum;
+    static State initialState;
+
+};
+
+#endif//OPTIONS_HPP

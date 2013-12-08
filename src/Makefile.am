@@ -11,6 +11,7 @@ KeyRunner.cpp         \
 Layer.cpp             \
 Level.cpp             \
 LevelLoader.cpp       \
+Options.cpp           \
 RootLayer.cpp         \
 SpriteSheet.cpp       \
 Tile.cpp              \

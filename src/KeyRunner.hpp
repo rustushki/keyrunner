@@ -33,7 +33,7 @@ extern Animation* PlayerAnim;
 
 class KeyRunner {
 public:
-    static void play(uint16_t startLevel);
+    static void play();
     static void exitGame();
     static int getTimeClock();
     static uint16_t getLevelNum();
