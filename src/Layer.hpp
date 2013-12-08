@@ -10,6 +10,8 @@ public:
 
     virtual SDL_Rect getRect() const = 0;
 
+    virtual void update() = 0;
+
 };
 
 #endif//LAYER_HPP

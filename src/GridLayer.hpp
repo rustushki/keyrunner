@@ -25,6 +25,7 @@ public:
 
     virtual void draw(SDL_Surface* dst);
     virtual SDL_Rect getRect() const;
+    virtual void update();
 
 private:
 

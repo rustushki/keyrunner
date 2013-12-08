@@ -1,5 +1,6 @@
 #include "GridLayer.hpp"
 #include "Tile.hpp"
+#include "ConveyorAnimation.hpp"
 
 GridLayer* GridLayer::instance = NULL;
 
@@ -68,6 +69,18 @@ SDL_Rect GridLayer::getRect() const {
     r.w = GRID_WIDTH * 25;
     r.h = GRID_HEIGHT * 25;
     return r;
+}
+
+/* ------------------------------------------------------------------------------
+ * update - Update any data in the GridLayer which affects the pending display
+ * of the GridLayer.
+ */
+void GridLayer::update() {
+    // Start any remaining conveyor tiles.
+    ConveyorAnimation::StartConveyors();
+
+    // Advance any animated tiles.
+    animateTiles();
 }
 
 /* ------------------------------------------------------------------------------

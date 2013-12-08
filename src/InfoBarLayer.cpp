@@ -46,6 +46,14 @@ SDL_Rect InfoBarLayer::getRect() const {
 }
 
 /* ------------------------------------------------------------------------------
+ * update - Update any data required for the display of the InfoBarLayer.
+ * Currently, no updates are required; this may change in the future.
+ */
+void InfoBarLayer::update() {
+    // Nothing required.
+}
+
+/* ------------------------------------------------------------------------------
  * drawLevel - draws the level at the bottom left of the screen.
  */
 void InfoBarLayer::drawLevel(SDL_Surface* dst, uint16_t level) const {

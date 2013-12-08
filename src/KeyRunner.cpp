@@ -371,9 +371,10 @@ int KeyRunner::updateDisplay(void* unused) {
 
         SDL_LockMutex(levelLoadLock);
 
-        // Update the GridLayer
-        ConveyorAnimation::StartConveyors();
-        gl->animateTiles();
+        // Update each of the Layers' internal data structures, preparing them
+        // to be drawn.
+        gl->update();
+        ib->update();
 
         // Draw each of the Layers onto the screen.  Last appears on top.
         gl->draw(screen);
