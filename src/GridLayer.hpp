@@ -19,7 +19,6 @@ public:
     void pushAnimatedTile(Tile* tile);
     void clearAnimatedTiles();
     void animateTiles();
-    void redrawChangedTiles();
     void clearChangedTiles();
     void addChangedTile(Tile* tile);
 
