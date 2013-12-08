@@ -4,26 +4,14 @@ games_PROGRAMS = keyrunner
 
 keyrunner_SOURCES =   \
 Animation.cpp         \
-Animation.h           \
-AnimationType.h       \
 ConveyorAnimation.cpp \
-ConveyorAnimation.h   \
-Direction.h	          \
 InfoBarLayer.cpp      \
-InfoBarLayer.h        \
 GridLayer.cpp         \
-GridLayer.h           \
 KeyRunner.cpp         \
-KeyRunner.h           \
 Level.cpp             \
-Level.h               \
-LevelLoader.h         \
 LevelLoader.cpp       \
 SpriteSheet.cpp       \
-SpriteSheet.h         \
-TileType.h            \
 Tile.cpp              \
-Tile.h                \
 main.cpp
 
 
