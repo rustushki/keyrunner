@@ -26,7 +26,6 @@
 #include "State.hpp"
 
 class Animation;
-class GridLayer;
 class Level;
 
 extern Animation* KeyAnim;
