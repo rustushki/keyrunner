@@ -14,6 +14,10 @@ void Options::parse(int argc, char** argv) {
         // Handle Starting Level Option
         if        (    strcmp(argv[1], "--level") == 0
                     || strcmp(argv[1], "-l") == 0) {
+            if (argc < 3) {
+                std::cout << "You must provide a level number." << std::endl;
+                exit(0);
+            }
             startingLevelNum = atoi(argv[2]);
 
         // Handle Help Flags.
@@ -60,5 +64,5 @@ uint16_t Options::getStartingLevel() {
 }
 
 State Options::getInitialState() {
-    return EDIT;
+    return initialState;
 }
