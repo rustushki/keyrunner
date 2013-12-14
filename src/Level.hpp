@@ -17,6 +17,8 @@ class Level {
 private:
     Level(int levelNum);
 
+    void init();
+
     Tile* tile[GridLayer::GRID_HEIGHT][GridLayer::GRID_WIDTH];
 
     int level;
@@ -34,6 +36,8 @@ private:
     void buildConveyorAnimations();
 
 public:
+    ~Level();
+
     void refreshTiles() const;
 
     bool hasKey(int x, int y);

@@ -4,7 +4,6 @@
 #include "Animation.hpp"
 #include "ConveyorAnimation.hpp"
 #include "KeyRunner.hpp"
-#include "GridLayer.hpp"
 #include "Level.hpp"
 #include "LevelLoader.hpp"
 #include "Options.hpp"
@@ -356,9 +355,6 @@ int KeyRunner::updateLevel(void* unused) {
 
         SDL_LockMutex(levelLoadLock);
 
-        GridLayer* gl = GridLayer::GetInstance();
-        gl->clearChangedTiles();
-
         level = LevelLoader::Load(levelNum);
 
         // Signal that it's OK to observe level tiles now.
@@ -376,8 +372,6 @@ int KeyRunner::updateLevel(void* unused) {
 
         levelNum++;
         delete level;
-
-        gl->clearAnimatedTiles();
 
         timeClock += 6000;
 

@@ -12,6 +12,17 @@ Level::Level(int levelNum) {
     playerHasKey = false;
     tileHasPlayer = NULL;
     tileHasKey = NULL;
+
+}
+
+Level::~Level() {
+    GridLayer::GetInstance()->clearChangedTiles();
+}
+
+void Level::init() {
+    GridLayer::GetInstance()->clearAnimatedTiles();
+
+    buildConveyorAnimations();
 }
 
 void Level::buildConveyorAnimations() {

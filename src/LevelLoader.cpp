@@ -44,7 +44,7 @@ Level* LevelLoader::Load(int levelNum) {
 
     fclose(fp);
 
-    level->buildConveyorAnimations();
+    level->init();
 
     return level;
 }
