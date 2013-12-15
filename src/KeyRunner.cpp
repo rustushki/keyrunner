@@ -7,6 +7,8 @@
 #include "Level.hpp"
 #include "LevelLoader.hpp"
 #include "Options.hpp"
+#include "EditRootLayer.hpp"
+#include "PlayRootLayer.hpp"
 #include "RootLayer.hpp"
 
 // Items yet to be absorbed into KeyRunner static class.
@@ -25,6 +27,7 @@ uint16_t     KeyRunner::levelNum;
 State        KeyRunner::state;
 int          KeyRunner::timeClock;
 Level*       KeyRunner::level;
+RootLayer*   KeyRunner::rootLayer;
 
 void KeyRunner::play() {
     state = PLAY;
@@ -117,6 +120,10 @@ uint16_t KeyRunner::getLevelNum() {
     return levelNum;
 }
 
+RootLayer* KeyRunner::getRootLayer() {
+    return rootLayer;
+}
+
 void KeyRunner::exitGame() {
     SDL_Event quitEvent;
     quitEvent.type = SDL_QUIT;
@@ -135,7 +142,13 @@ bool KeyRunner::init() {
         return false;
     }
 
-    SDL_Rect rlr = RootLayer::GetInstance()->getRect();
+    if (state == EDIT) {
+        rootLayer = EditRootLayer::GetInstance();
+    } else {
+        rootLayer = PlayRootLayer::GetInstance();
+    }
+
+    SDL_Rect rlr = rootLayer->getRect();
     screen = SDL_SetVideoMode(rlr.w, rlr.h, 16, SDL_SWSURFACE | SDL_DOUBLEBUF);
     if (screen == NULL) {
         std::cout << "Couldn't set video mode: "<< SDL_GetError() << std::endl;
@@ -364,16 +377,14 @@ int KeyRunner::updateDisplay(void* unused) {
     int fps = 25;
     int delay = 1000/fps;
 
-    RootLayer* rl = RootLayer::GetInstance();
-
     while(state != QUIT) {
         SDL_LockMutex(screenLock);
 
         SDL_LockMutex(levelLoadLock);
 
         // Update and Draw the RootLayer (and all nested layers beneath).
-        rl->update();
-        rl->draw(screen);
+        rootLayer->update();
+        rootLayer->draw(screen);
 
         SDL_UnlockMutex(levelLoadLock);
 

@@ -5,6 +5,8 @@ games_PROGRAMS = keyrunner
 keyrunner_SOURCES =   \
 Animation.cpp         \
 ConveyorAnimation.cpp \
+EditInfoBarLayer.cpp  \
+EditRootLayer.cpp     \
 InfoBarLayer.cpp      \
 GridLayer.cpp         \
 KeyRunner.cpp         \
@@ -12,6 +14,8 @@ Layer.cpp             \
 Level.cpp             \
 LevelLoader.cpp       \
 Options.cpp           \
+PlayInfoBarLayer.cpp  \
+PlayRootLayer.cpp     \
 RootLayer.cpp         \
 SpriteSheet.cpp       \
 Tile.cpp              \

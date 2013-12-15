@@ -1,20 +1,7 @@
 #include "InfoBarLayer.hpp"
 #include "RootLayer.hpp"
 
-InfoBarLayer* InfoBarLayer::instance = 0;
-
-InfoBarLayer* InfoBarLayer::GetInstance() {
-    if (InfoBarLayer::instance == 0) {
-        InfoBarLayer::instance = new InfoBarLayer();
-    }
-
-    return InfoBarLayer::instance;
-}
-
 InfoBarLayer::InfoBarLayer() {
-}
-
-InfoBarLayer::~InfoBarLayer() {
 }
 
 /* ------------------------------------------------------------------------------
@@ -105,7 +92,7 @@ void InfoBarLayer::drawText(SDL_Surface* dst, std::string s, InfoBarPos position
         r.h = text_surface->h;
         r.y = getRect().y + marginTop;
 
-        SDL_Rect rlr = RootLayer::GetInstance()->getRect();
+        SDL_Rect rlr = KeyRunner::getRootLayer()->getRect();
 
         if (position == BOTTOM_LEFT) {
             r.x = getRect().x;

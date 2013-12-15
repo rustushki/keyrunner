@@ -27,6 +27,7 @@
 
 class Animation;
 class Level;
+class RootLayer;
 
 extern Animation* KeyAnim;
 extern Animation* PlayerAnim;
@@ -38,6 +39,7 @@ public:
     static void exitGame();
     static int getTimeClock();
     static uint16_t getLevelNum();
+    static RootLayer* getRootLayer();
 
 private:
     // Thread functions.
@@ -63,6 +65,7 @@ private:
     static State       state;
     static int         timeClock;
     static Level*      level;
+    static RootLayer*  rootLayer;
 };
 
 #endif//KEYRUNNER_HPP

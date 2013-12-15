@@ -1,5 +1,5 @@
-#ifndef INFOBAR_HPP
-#define INFOBAR_HPP
+#ifndef INFOBARLAYER_HPP
+#define INFOBARLAYER_HPP
 #include <SDL/SDL_ttf.h>
 #include "InfoBarPos.hpp"
 #include "KeyRunner.hpp"
@@ -9,23 +9,19 @@
 class InfoBarLayer : public Layer {
 
 public:
-    static InfoBarLayer* GetInstance();
-    ~InfoBarLayer();
-
     virtual void draw(SDL_Surface* screen);
     virtual SDL_Rect getRect() const;
     virtual void update();
 
-private:
-    InfoBarLayer();
-
+protected:
     TTF_Font* getFont() const;
     void drawText(SDL_Surface* dst, std::string s, InfoBarPos position) const;
     void drawLevel(SDL_Surface* dst, uint16_t level) const;
     void drawTimer(SDL_Surface* dst) const;
 
-    static InfoBarLayer* instance;
+protected:
+    InfoBarLayer();
 
 };
 
-#endif//INFOBAR_HPP
+#endif//INFOBARLAYER_HPP

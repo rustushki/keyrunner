@@ -2,21 +2,14 @@
 
 #include "GridLayer.hpp"
 #include "InfoBarLayer.hpp"
+#include "PlayInfoBarLayer.hpp"
+#include "EditInfoBarLayer.hpp"
 #include "RootLayer.hpp"
 
-RootLayer* RootLayer::instance = 0;
-
-RootLayer::RootLayer() {
+RootLayer::RootLayer(InfoBarLayer* ibl) {
+    this->ibl = ibl;
     addLayer(GridLayer::GetInstance());
-    addLayer(InfoBarLayer::GetInstance());
-}
-
-RootLayer* RootLayer::GetInstance() {
-    if (instance == 0) {
-        instance = new RootLayer();
-    }
-
-    return instance;
+    addLayer(ibl);
 }
 
 void RootLayer::draw(SDL_Surface* dst) {
@@ -25,7 +18,7 @@ void RootLayer::draw(SDL_Surface* dst) {
 
 SDL_Rect RootLayer::getRect() const {
     SDL_Rect glr = GridLayer::GetInstance()->getRect();
-    SDL_Rect iblr = InfoBarLayer::GetInstance()->getRect();
+    SDL_Rect iblr = ibl->getRect();
 
     SDL_Rect r;
     r.x = 0;

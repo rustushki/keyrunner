@@ -1,10 +1,10 @@
 #ifndef ROOTLAYER_HPP
 #define ROOTLAYER_HPP
 
-class RootLayer : Layer {
-public:
+class InfoBarLayer;
 
-    static RootLayer* GetInstance();
+class RootLayer : public Layer {
+public:
 
     virtual void draw(SDL_Surface* dst);
 
@@ -12,11 +12,12 @@ public:
 
     virtual void update();
 
+protected:
+    RootLayer(InfoBarLayer* ibl);
+
 private:
 
-    static RootLayer* instance;
-
-    RootLayer();
+    InfoBarLayer* ibl;
 
 };
 
