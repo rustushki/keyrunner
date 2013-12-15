@@ -10,26 +10,39 @@ uint16_t Options::startingLevelNum = 1;
 State Options::initialState = PLAY;
 
 void Options::parse(int argc, char** argv) {
-    if (argc > 1) {
+    bool isLevelNotSet = true;
+
+    for (int argx = 1; argx < argc; argx++) {
         // Handle Starting Level Option
-        if        (    strcmp(argv[1], "--level") == 0
-                    || strcmp(argv[1], "-l") == 0) {
-            if (argc < 3) {
+        if        (    strcmp(argv[argx], "--level") == 0
+                    || strcmp(argv[argx], "-l") == 0) {
+            if (argx + 1 >= argc || !isPositiveInt(argv[argx + 1])) {
                 std::cout << "You must provide a level number." << std::endl;
                 exit(0);
             }
-            startingLevelNum = atoi(argv[2]);
+            startingLevelNum = atoi(argv[++argx]);
+            isLevelNotSet = false;
 
         // Handle Help Flags.
-        } else if (    strcmp(argv[1], "--help") == 0
-                    || strcmp(argv[1], "-h") == 0) {
+        } else if (    strcmp(argv[argx], "--help") == 0
+                    || strcmp(argv[argx], "-h") == 0) {
             showHelp();
 
         // Handle Version Flags.
-        } else if (    strcmp(argv[1], "--version") == 0
-                    || strcmp(argv[1], "-v") == 0 ) {
+        } else if (    strcmp(argv[argx], "--version") == 0
+                    || strcmp(argv[argx], "-v") == 0 ) {
             showVersion();
+
+        // Initial Mode will be the Editor.
+        } else if (    strcmp(argv[argx], "--editor") == 0
+                    || strcmp(argv[argx], "-e") == 0 ) {
+            initialState = EDIT;
         }
+    }
+
+    if (initialState == EDIT && isLevelNotSet) {
+        std::cout << "You must provide a level number to edit." << std::endl;
+        exit(0);
     }
 
 }
@@ -44,8 +57,10 @@ void Options::showHelp() {
     std::cout << "Start Game Normally:" << std::endl;
     std::cout << "   keyrunner" << std::endl;
     std::cout << "" << std::endl;
-    std::cout << "Start in Editor Mode:" << std::endl;
+    std::cout << "Start in Editor Mode (editing a brand new level):" << std::endl;
     std::cout << "   keyrunner --editor" << std::endl;
+    std::cout << "Start in Editor Mode (editing level 27):" << std::endl;
+    std::cout << "   keyrunner --editor --level 27" << std::endl;
     std::cout << "" << std::endl;
     std::cout << "Start at a Specific Level:" << std::endl;
     std::cout << "   keyrunner --level 27" << std::endl;
@@ -65,4 +80,19 @@ uint16_t Options::getStartingLevel() {
 
 State Options::getInitialState() {
     return initialState;
+}
+
+/* ------------------------------------------------------------------------------
+ * isPositiveInt - Return boolean indicating whether a string is a positive
+ * integer or not.
+ */
+bool Options::isPositiveInt(char* str) {
+    bool passes = true;
+    for (int x = 0; str[x] != 0; x++) {
+        if (!std::isdigit(str[x])) {
+            passes = false;
+            break;
+        }
+    }
+    return passes;
 }

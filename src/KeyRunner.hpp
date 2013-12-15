@@ -34,6 +34,7 @@ extern Animation* PlayerAnim;
 class KeyRunner {
 public:
     static void play();
+    static void edit();
     static void exitGame();
     static int getTimeClock();
     static uint16_t getLevelNum();

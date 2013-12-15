@@ -18,6 +18,7 @@ private:
 
     static uint16_t startingLevelNum;
     static State initialState;
+    static bool isPositiveInt(char* str);
 
 };
 

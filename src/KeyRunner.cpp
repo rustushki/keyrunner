@@ -66,6 +66,45 @@ void KeyRunner::play() {
     }
 }
 
+void KeyRunner::edit() {
+    state = EDIT;
+
+    screenLock           = SDL_CreateMutex();
+    levelLoadLock        = SDL_CreateMutex();
+    levelLoadCond        = SDL_CreateCond();
+    initialLevelLoadLock = SDL_CreateMutex();
+    initialLevelLoadCond = SDL_CreateCond();
+
+    levelNum = Options::getStartingLevel();
+
+    if (init()) {
+        // There's not a good place for these yet.  Putting them here for now.
+        KeyAnim    = Animation::AnimationFactory(ANIMATION_TYPE_KEY);
+        PlayerAnim = Animation::AnimationFactory(ANIMATION_TYPE_PUMPKIN);
+
+        SDL_LockMutex(levelLoadLock);
+
+        level = LevelLoader::Load(levelNum);
+
+        // Signal that it's OK to observe level tiles now.
+        SDL_UnlockMutex(levelLoadLock);
+
+        // Mark all tiles as needing to be redrawn.
+        level->refreshTiles();
+
+        SDL_Thread *udThread = SDL_CreateThread(&updateDisplay, NULL);
+        SDL_Thread *cyThread = SDL_CreateThread(&convey, NULL);
+
+        handleEvents();
+
+        SDL_WaitThread(cyThread, NULL);
+        SDL_WaitThread(udThread, NULL);
+    } else {
+        // TODO: What to do if we fail to initialize?
+        // Need a system for handling failures.
+    }
+}
+
 int KeyRunner::getTimeClock() {
     return timeClock;
 }
