@@ -5,6 +5,7 @@
 #include "KeyRunner.hpp"
 #include "Options.hpp"
 #include "State.hpp"
+#include "LevelLoader.hpp"
 
 uint16_t Options::startingLevelNum = 1;
 State Options::initialState = PLAY;
@@ -16,11 +17,20 @@ void Options::parse(int argc, char** argv) {
         // Handle Starting Level Option
         if        (    strcmp(argv[argx], "--level") == 0
                     || strcmp(argv[argx], "-l") == 0) {
+            // Confirm that a level number has been provided.
             if (argx + 1 >= argc || !isPositiveInt(argv[argx + 1])) {
                 std::cout << "You must provide a level number." << std::endl;
                 exit(0);
             }
+
+            // Confirm that the provided level is within range and is thus
+            // valid.
             startingLevelNum = atoi(argv[++argx]);
+            if (startingLevelNum < 1 || startingLevelNum > LevelLoader::GetTotal()) {
+                std::cout << "Invalid level." << std::endl;
+                exit(0);
+            }
+
             isLevelNotSet = false;
 
         // Handle Help Flags.
