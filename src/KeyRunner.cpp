@@ -96,11 +96,9 @@ void KeyRunner::edit() {
         level->refreshTiles();
 
         SDL_Thread *udThread = SDL_CreateThread(&updateDisplay, NULL);
-        SDL_Thread *cyThread = SDL_CreateThread(&convey, NULL);
 
         handleEvents();
 
-        SDL_WaitThread(cyThread, NULL);
         SDL_WaitThread(udThread, NULL);
     } else {
         // TODO: What to do if we fail to initialize?
