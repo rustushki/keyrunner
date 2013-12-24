@@ -47,6 +47,9 @@ void Options::parse(int argc, char** argv) {
         } else if (    strcmp(argv[argx], "--editor") == 0
                     || strcmp(argv[argx], "-e") == 0 ) {
             initialState = EDIT;
+        } else {
+            std::cout << "Unrecognized option: " << argv[argx] << std::endl;
+            exit(0);
         }
     }
 
