@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
+#include <sstream>
 
 #include "KeyRunner.hpp"
 #include "Options.hpp"
@@ -19,16 +20,14 @@ void Options::parse(int argc, char** argv) {
                     || strcmp(argv[argx], "-l") == 0) {
             // Confirm that a level number has been provided.
             if (argx + 1 >= argc || !isPositiveInt(argv[argx + 1])) {
-                std::cout << "You must provide a level number." << std::endl;
-                exit(0);
+                die("You must provide a level number.");
             }
 
             // Confirm that the provided level is within range and is thus
             // valid.
             startingLevelNum = atoi(argv[++argx]);
             if (startingLevelNum < 1 || startingLevelNum > LevelLoader::GetTotal()) {
-                std::cout << "Invalid level." << std::endl;
-                exit(0);
+                die("Invalid level.");
             }
 
             isLevelNotSet = false;
@@ -48,43 +47,44 @@ void Options::parse(int argc, char** argv) {
                     || strcmp(argv[argx], "-e") == 0 ) {
             initialState = EDIT;
         } else {
-            std::cout << "Unrecognized option: " << argv[argx] << std::endl;
-            exit(0);
+            die("Unrecognized option: " + std::string(argv[argx]));
         }
     }
 
     if (initialState == EDIT && isLevelNotSet) {
-        std::cout << "You must provide a level number to edit." << std::endl;
-        exit(0);
+        die("You must provide a level number to edit.");
     }
 
 }
 
 void Options::showHelp() {
-    std::cout << "usage: keyrunner [-v|--version] [-h|--help]" << std::endl;
-    std::cout << "                 [-l|--level] [-e|--editor]" << std::endl;
-    std::cout << "                 [<args>]" << std::endl;
-    std::cout << "" << std::endl;
-    std::cout << "Hints:" << std::endl;
-    std::cout << "" << std::endl;
-    std::cout << "Start Game Normally:" << std::endl;
-    std::cout << "   keyrunner" << std::endl;
-    std::cout << "" << std::endl;
-    std::cout << "Start in Editor Mode (editing a brand new level):" << std::endl;
-    std::cout << "   keyrunner --editor" << std::endl;
-    std::cout << "Start in Editor Mode (editing level 27):" << std::endl;
-    std::cout << "   keyrunner --editor --level 27" << std::endl;
-    std::cout << "" << std::endl;
-    std::cout << "Start at a Specific Level:" << std::endl;
-    std::cout << "   keyrunner --level 27" << std::endl;
-    std::cout << "" << std::endl;
-    std::cout << "Enjoy!" << std::endl;
+    std::stringstream ss;
+    ss << "usage: keyrunner [-v|--version] [-h|--help]" << std::endl;
+    ss << "                 [-l|--level] [-e|--editor]" << std::endl;
+    ss << "                 [<args>]" << std::endl;
+    ss << "" << std::endl;
+    ss << "Hints:" << std::endl;
+    ss << "" << std::endl;
+    ss << "Start Game Normally:" << std::endl;
+    ss << "   keyrunner" << std::endl;
+    ss << "" << std::endl;
+    ss << "Start in Editor Mode (editing a brand new level):" << std::endl;
+    ss << "   keyrunner --editor" << std::endl;
+    ss << "Start in Editor Mode (editing level 27):" << std::endl;
+    ss << "   keyrunner --editor --level 27" << std::endl;
+    ss << "" << std::endl;
+    ss << "Start at a Specific Level:" << std::endl;
+    ss << "   keyrunner --level 27" << std::endl;
+    ss << "" << std::endl;
+    ss << "Enjoy!" << std::endl;
+    die(ss.str());
     exit(0);
 }
 
 void Options::showVersion() {
-    std::cout << "keyrunner version " << VERSION << std::endl;
-    exit(0);
+    std::stringstream ss;
+    ss << "keyrunner version " << VERSION;
+    die(ss.str());
 }
 
 uint16_t Options::getStartingLevel() {
@@ -108,4 +108,12 @@ bool Options::isPositiveInt(char* str) {
         }
     }
     return passes;
+}
+
+/* ------------------------------------------------------------------------------
+ * die - Exit the program with a message.
+ */
+void Options::die(std::string msg) {
+    std::cout << msg << std::endl;
+    exit(0);
 }
