@@ -11,7 +11,7 @@ EditInfoBarLayer* EditInfoBarLayer::GetInstance() {
 }
 
 EditInfoBarLayer::EditInfoBarLayer() {
-    bl = new ButtonLayer("Tile");
+    bl = new ButtonLayer("Tile", 0x333333);
     addLayer(bl);
 }
 
