@@ -14,12 +14,6 @@ public:
     virtual void update();
 
 protected:
-    TTF_Font* getFont() const;
-    void drawText(SDL_Surface* dst, std::string s, InfoBarPos position) const;
-    void drawLevel(SDL_Surface* dst, uint16_t level) const;
-    void drawTimer(SDL_Surface* dst) const;
-
-protected:
     InfoBarLayer();
 
 };

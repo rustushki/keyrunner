@@ -2,6 +2,7 @@
 #define EDITINFOBARLAYER_HPP
 #include <SDL/SDL.h>
 
+#include "ButtonLayer.hpp"
 #include "InfoBarLayer.hpp"
 
 class EditInfoBarLayer : public InfoBarLayer {
@@ -14,6 +15,8 @@ private:
     EditInfoBarLayer();
 
     static EditInfoBarLayer* instance;
+
+    ButtonLayer* bl;
 };
 
 #endif//EDITINFOBARLAYER_HPP

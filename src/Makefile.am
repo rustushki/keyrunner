@@ -4,6 +4,7 @@ games_PROGRAMS = keyrunner
 
 keyrunner_SOURCES =   \
 Animation.cpp         \
+ButtonLayer.cpp       \
 ConveyorAnimation.cpp \
 EditInfoBarLayer.cpp  \
 EditRootLayer.cpp     \
