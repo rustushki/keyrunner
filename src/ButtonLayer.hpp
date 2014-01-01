@@ -20,7 +20,8 @@ public:
 
 private:
     void drawText(SDL_Surface* dst, std::string s) const;
-    TTF_Font* getFont() const;
+    TTF_Font* getFont(uint8_t size) const;
+    SDL_Surface* sizeText(std::string text) const;
 
     std::string buttonText;
 
