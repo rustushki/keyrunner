@@ -49,17 +49,18 @@ void ButtonLayer::drawText(SDL_Surface* dst, std::string s) const {
 
     // Otherwise,
     } else {
-        // Blit the text to the screen.
-        SDL_Rect r = getRect();
-
         // Get the background color in the same pixel format as the destination
         // surface.  Fill a rectangle to that color.
+        SDL_Rect r = getRect();
         uint8_t rC = (bgColor & 0xFF0000) >> 16;
         uint8_t gC = (bgColor & 0x00FF00) >>  8;
         uint8_t bC = (bgColor & 0x0000FF) >>  0;
         uint32_t pprBgColor = SDL_MapRGB(dst->format, rC, gC, bC);
         SDL_FillRect(dst, &r, pprBgColor);
 
+        // Center the text within the button, obeying the margin.
+        r.x += horzMargin / 2;
+        r.y += vertMargin / 2;
         SDL_BlitSurface(textSrf, NULL, dst, &r);
     }
 
