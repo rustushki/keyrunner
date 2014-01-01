@@ -1,18 +1,23 @@
 #include "ButtonLayer.hpp"
 #include "GridLayer.hpp"
 
-ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor) {
-    buttonText = text;
+ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor, uint16_t width, uint16_t height) {
     setBackgroundColor(bgColor);
-    horzMargin = 20;
-    vertMargin = 20;
+    buttonText   = text;
+    horzMargin   = 20;
+    vertMargin   = 20;
+    this->height = height;
+    this->width  = width;
 }
 
-ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor, uint8_t marginHorz, uint8_t marginVert) {
-    buttonText = text;
+ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor, uint16_t width, uint16_t height,
+    uint8_t marginHorz, uint8_t marginVert) {
     setBackgroundColor(bgColor);
-    horzMargin = marginHorz;
-    vertMargin = marginVert;
+    buttonText   = text;
+    horzMargin   = marginHorz;
+    vertMargin   = marginVert;
+    this->height = height;
+    this->width  = width;
 }
 
 void ButtonLayer::draw(SDL_Surface* dst) {
@@ -23,8 +28,8 @@ SDL_Rect ButtonLayer::getRect() const {
     SDL_Rect r;
     r.x = 0;
     r.y = GridLayer::GetInstance()->getRect().h;
-    r.w = 100;
-    r.h = 100;
+    r.w = width;
+    r.h = height;
     return r;
 }
 
@@ -98,6 +103,14 @@ void ButtonLayer::setBackgroundColor(uint32_t color) {
  * Return that text surface.
  */
 SDL_Surface* ButtonLayer::sizeText(std::string text) const {
+    // Don't resize the text if it's already been sized once.
+    // TODO: if setHeight() and/or setWidth() are ever implemented, be sure to
+    // come back here and force the resizing of the text.
+    static SDL_Surface* textSrf = NULL;
+    if (textSrf != NULL) {
+        return textSrf;
+    }
+
     // Lo, Hi and Mid variables for the binary search.
     uint8_t lo = 1;
     uint8_t hi = 255;
@@ -151,7 +164,7 @@ SDL_Surface* ButtonLayer::sizeText(std::string text) const {
     // Render and return the text surface which fits in the ButtonLayer.
     TTF_Font* fnt = getFont(mi);
     SDL_Color color = {0xAA, 0xAA, 0xAA};
-    SDL_Surface* textSrf = TTF_RenderText_Blended(fnt, text.c_str(), color);
+    textSrf = TTF_RenderText_Blended(fnt, text.c_str(), color);
     TTF_CloseFont(fnt);
     return textSrf;
 }
