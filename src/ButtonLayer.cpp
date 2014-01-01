@@ -28,10 +28,6 @@ ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor, uint32_t
     textSrf = NULL;
 }
 
-void ButtonLayer::draw(SDL_Surface* dst) {
-    drawText(dst);
-}
-
 SDL_Rect ButtonLayer::getRect() const {
     SDL_Rect r;
     r.x = 0;
@@ -55,15 +51,9 @@ void ButtonLayer::update() {
  *
  * TODO: mention the text color.
  */
-void ButtonLayer::drawText(SDL_Surface* dst) const {
+void ButtonLayer::draw(SDL_Surface* dst) {
     // If the surface is not created successfully.
-    if (textSrf == NULL) {
-        std::cout << buttonText << std::endl;
-        std::cout << "Error drawing text: " << TTF_GetError() << std::endl;
-        exit(2);
-
-    // Otherwise,
-    } else {
+    if (textSrf != NULL) {
         // Get the background color in the same pixel format as the destination
         // surface.  Fill a rectangle to that color.
         SDL_Rect r = getRect();
@@ -130,7 +120,7 @@ void ButtonLayer::setText(std::string text) {
  */
 SDL_Surface* ButtonLayer::sizeText(std::string text) const {
     // Don't resize the text if it's already been sized once.
-    static SDL_Surface* textSrf = NULL;
+    SDL_Surface* textSrf = NULL;
     if (textSrf != NULL) {
         return textSrf;
     }
@@ -193,5 +183,14 @@ SDL_Surface* ButtonLayer::sizeText(std::string text) const {
     SDL_Color color = {rC, gC, bC};
     textSrf = TTF_RenderText_Blended(fnt, text.c_str(), color);
     TTF_CloseFont(fnt);
+
+    // Confirm that the text surface was created.  If not something is horribly
+    // wrong, so die.
+    if (textSrf == NULL) {
+        std::cout << text << std::endl;
+        std::cout << "Error drawing text: " << TTF_GetError() << std::endl;
+        exit(2);
+    }
+
     return textSrf;
 }
