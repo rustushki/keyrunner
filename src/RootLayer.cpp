@@ -27,7 +27,3 @@ SDL_Rect RootLayer::getRect() const {
     r.h = glr.h + iblr.h;
     return r;
 }
-
-void RootLayer::update() {
-    Layer::update();
-}

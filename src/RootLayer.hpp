@@ -10,8 +10,6 @@ public:
 
     virtual SDL_Rect getRect() const;
 
-    virtual void update();
-
 protected:
     RootLayer(InfoBarLayer* ibl);
 

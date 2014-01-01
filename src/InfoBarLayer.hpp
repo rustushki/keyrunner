@@ -11,7 +11,6 @@ class InfoBarLayer : public Layer {
 public:
     virtual void draw(SDL_Surface* screen);
     virtual SDL_Rect getRect() const;
-    virtual void update();
 
 protected:
     InfoBarLayer();

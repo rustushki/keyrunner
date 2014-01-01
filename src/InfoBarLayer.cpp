@@ -29,11 +29,3 @@ SDL_Rect InfoBarLayer::getRect() const {
     r.w = GridLayer::GetInstance()->getRect().w;
     return r;
 }
-
-/* ------------------------------------------------------------------------------
- * update - Update any data required for the display of the InfoBarLayer.
- * Currently, no updates are required; this may change in the future.
- */
-void InfoBarLayer::update() {
-    // Nothing required.
-}
