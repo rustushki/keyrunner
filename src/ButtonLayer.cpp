@@ -4,6 +4,15 @@
 ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor) {
     buttonText = text;
     setBackgroundColor(bgColor);
+    horzMargin = 20;
+    vertMargin = 20;
+}
+
+ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor, uint8_t marginHorz, uint8_t marginVert) {
+    buttonText = text;
+    setBackgroundColor(bgColor);
+    horzMargin = marginHorz;
+    vertMargin = marginVert;
 }
 
 void ButtonLayer::draw(SDL_Surface* dst) {
@@ -14,8 +23,8 @@ SDL_Rect ButtonLayer::getRect() const {
     SDL_Rect r;
     r.x = 0;
     r.y = GridLayer::GetInstance()->getRect().h;
-    r.w = 50;
-    r.h = 30;
+    r.w = 100;
+    r.h = 100;
     return r;
 }
 
@@ -101,18 +110,21 @@ SDL_Surface* ButtonLayer::sizeText(std::string text) const {
     int w = 0;
     int h = 1;
 
+    int fillH = r.w - horzMargin;
+    int fillV = r.h - vertMargin;
+
     // Calculate the largest font size which will fit the ButtonLayer surface
     // height-wise.
-    while (lo < hi && h != r.h) {
+    while (lo < hi && h != fillV) {
         mi = ((hi - lo) / 2) + lo;
 
         TTF_Font* fnt = getFont(mi);
         TTF_SizeText(fnt, text.c_str(), &w, &h);
         TTF_CloseFont(fnt);
 
-        if (h > r.h) {
+        if (h > fillV) {
             hi = mi - 1;
-        } else if (h < r.h) {
+        } else if (h < fillV) {
             lo = mi + 1;
         }
     }
@@ -121,16 +133,16 @@ SDL_Surface* ButtonLayer::sizeText(std::string text) const {
     // width-wise.
     lo = 1;
     hi = mi;
-    while (lo < hi && w != r.w) {
+    while (lo < hi && w != fillH) {
         mi = ((hi - lo) / 2) + lo;
 
         TTF_Font* fnt = getFont(mi);
         TTF_SizeText(fnt, text.c_str(), &w, &h);
         TTF_CloseFont(fnt);
 
-        if (w > r.w) {
+        if (w > fillH) {
             hi = mi - 1;
-        } else if (w < r.w) {
+        } else if (w < fillH) {
             lo = mi + 1;
         }
     }

@@ -11,6 +11,7 @@
 class ButtonLayer : public Layer {
 public:
     ButtonLayer(std::string text, uint32_t bgColor);
+    ButtonLayer(std::string text, uint32_t bgColor, uint8_t marginHorz, uint8_t marginVert);
 
     virtual void draw(SDL_Surface* dst);
     virtual SDL_Rect getRect() const;
@@ -26,6 +27,8 @@ private:
     std::string buttonText;
 
     uint32_t bgColor;
+    uint8_t horzMargin;
+    uint8_t vertMargin;
 };
 
 #endif//BUTTONLAYER_HPP
