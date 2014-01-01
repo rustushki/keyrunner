@@ -97,9 +97,6 @@ void ButtonLayer::setBackgroundColor(uint32_t color) {
  * Return that text surface.
  */
 SDL_Surface* ButtonLayer::sizeText(std::string text) const {
-    // Rectangle representing the size of the ButtonLayer.
-    SDL_Rect r = getRect();
-
     // Lo, Hi and Mid variables for the binary search.
     uint8_t lo = 1;
     uint8_t hi = 255;
@@ -110,6 +107,9 @@ SDL_Surface* ButtonLayer::sizeText(std::string text) const {
     int w = 0;
     int h = 1;
 
+    // Determine the region of the button to fill with text based on the margin
+    // and button height/width.
+    SDL_Rect r = getRect();
     int fillH = r.w - horzMargin;
     int fillV = r.h - vertMargin;
 
