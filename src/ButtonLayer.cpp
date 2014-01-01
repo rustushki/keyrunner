@@ -1,27 +1,35 @@
 #include "ButtonLayer.hpp"
 #include "GridLayer.hpp"
 
-ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor, uint16_t width, uint16_t height) {
+ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor, uint32_t
+        textColor, uint16_t width, uint16_t height) {
     setBackgroundColor(bgColor);
+    setTextColor(textColor);
     buttonText   = text;
     horzMargin   = 20;
     vertMargin   = 20;
     this->height = height;
     this->width  = width;
+    textDirty = true;
+    textSrf = NULL;
 }
 
-ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor, uint16_t width, uint16_t height,
-    uint8_t marginHorz, uint8_t marginVert) {
+ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor, uint32_t
+        textColor, uint16_t width, uint16_t height, uint8_t marginHorz, uint8_t
+        marginVert) {
     setBackgroundColor(bgColor);
+    setTextColor(textColor);
     buttonText   = text;
     horzMargin   = marginHorz;
     vertMargin   = marginVert;
     this->height = height;
     this->width  = width;
+    textDirty = true;
+    textSrf = NULL;
 }
 
 void ButtonLayer::draw(SDL_Surface* dst) {
-    drawText(dst, buttonText);
+    drawText(dst);
 }
 
 SDL_Rect ButtonLayer::getRect() const {
@@ -34,6 +42,11 @@ SDL_Rect ButtonLayer::getRect() const {
 }
 
 void ButtonLayer::update() {
+    if (textDirty) {
+        // Build the text surface containing the given string.
+        textSrf = sizeText(buttonText);
+        textDirty = false;
+    }
 }
 
 /* ------------------------------------------------------------------------------
@@ -42,14 +55,11 @@ void ButtonLayer::update() {
  *
  * TODO: mention the text color.
  */
-void ButtonLayer::drawText(SDL_Surface* dst, std::string s) const {
-    // Build the text surface containing the given string.
-    SDL_Surface* textSrf = sizeText(s);
-
+void ButtonLayer::drawText(SDL_Surface* dst) const {
     // If the surface is not created successfully.
     if (textSrf == NULL) {
-        std::cout << s.c_str() << std::endl;
-        std::cout << "Error creating text: " << TTF_GetError() << std::endl;
+        std::cout << buttonText << std::endl;
+        std::cout << "Error drawing text: " << TTF_GetError() << std::endl;
         exit(2);
 
     // Otherwise,
@@ -96,16 +106,22 @@ void ButtonLayer::setBackgroundColor(uint32_t color) {
     bgColor = color;
 }
 
+void ButtonLayer::setTextColor(uint32_t color) {
+    textDirty = true;
+    textColor = color;
+}
+
 /* ------------------------------------------------------------------------------
  * Perform binary searches to build a text surface which will fit into the
  * ButtonLayer horizontally and vertically.
  *
  * Return that text surface.
+ *
+ * Maintenance note: If implementing a mutator which affects text appearance,
+ * be sure to set textDirty = true.
  */
 SDL_Surface* ButtonLayer::sizeText(std::string text) const {
     // Don't resize the text if it's already been sized once.
-    // TODO: if setHeight() and/or setWidth() are ever implemented, be sure to
-    // come back here and force the resizing of the text.
     static SDL_Surface* textSrf = NULL;
     if (textSrf != NULL) {
         return textSrf;
@@ -163,7 +179,10 @@ SDL_Surface* ButtonLayer::sizeText(std::string text) const {
 
     // Render and return the text surface which fits in the ButtonLayer.
     TTF_Font* fnt = getFont(mi);
-    SDL_Color color = {0xAA, 0xAA, 0xAA};
+    uint8_t rC = (textColor & 0xFF0000) >> 16;
+    uint8_t gC = (textColor & 0x00FF00) >>  8;
+    uint8_t bC = (textColor & 0x0000FF) >>  0;
+    SDL_Color color = {rC, gC, bC};
     textSrf = TTF_RenderText_Blended(fnt, text.c_str(), color);
     TTF_CloseFont(fnt);
     return textSrf;
