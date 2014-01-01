@@ -21,6 +21,7 @@ public:
 
     void setBackgroundColor(uint32_t color);
     void setTextColor(uint32_t color);
+    void setText(std::string text);
 
 private:
     void drawText(SDL_Surface* dst) const;

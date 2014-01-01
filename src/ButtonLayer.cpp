@@ -112,6 +112,14 @@ void ButtonLayer::setTextColor(uint32_t color) {
 }
 
 /* ------------------------------------------------------------------------------
+ * setText - Change the text on the button to the value of the provided string.
+ */
+void ButtonLayer::setText(std::string text) {
+    textDirty = true;
+    buttonText = text;
+}
+
+/* ------------------------------------------------------------------------------
  * Perform binary searches to build a text surface which will fit into the
  * ButtonLayer horizontally and vertically.
  *
