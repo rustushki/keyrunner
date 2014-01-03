@@ -110,6 +110,22 @@ void ButtonLayer::setText(std::string text) {
 }
 
 /* ------------------------------------------------------------------------------
+ * setHeight - Change the height of the button to the provided height.
+ */
+void ButtonLayer::setHeight(uint16_t newHeight) {
+    textDirty = true;
+    height = newHeight;
+}
+
+/* ------------------------------------------------------------------------------
+ * setWidth - Change the width of the button to the provided width.
+ */
+void ButtonLayer::setWidth(uint16_t newWidth) {
+    textDirty = true;
+    width = newWidth;
+}
+
+/* ------------------------------------------------------------------------------
  * Perform binary searches to build a text surface which will fit into the
  * ButtonLayer horizontally and vertically.
  *
