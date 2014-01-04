@@ -30,8 +30,8 @@ ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor, uint32_t
 
 SDL_Rect ButtonLayer::getRect() const {
     SDL_Rect r;
-    r.x = 0;
-    r.y = GridLayer::GetInstance()->getRect().h;
+    r.x = x;
+    r.y = y;
     r.w = width;
     r.h = height;
     return r;
@@ -137,6 +137,16 @@ void ButtonLayer::setHeight(uint16_t newHeight) {
 void ButtonLayer::setWidth(uint16_t newWidth) {
     textDirty = true;
     width = newWidth;
+}
+
+void ButtonLayer::setX(uint16_t pX) {
+    textDirty = true;
+    x = pX;
+}
+
+void ButtonLayer::setY(uint16_t pY) {
+    textDirty = true;
+    y = pY;
 }
 
 /* ------------------------------------------------------------------------------

@@ -24,6 +24,8 @@ public:
     void setText(std::string text);
     void setHeight(uint16_t height);
     void setWidth(uint16_t newWidth);
+    void setX(uint16_t pX);
+    void setY(uint16_t pY);
 
 private:
     TTF_Font* getFont(uint8_t size) const;
@@ -35,6 +37,8 @@ private:
     uint32_t textColor;
     uint8_t horzMargin;
     uint8_t vertMargin;
+    uint16_t x;
+    uint16_t y;
     uint16_t height;
     uint16_t width;
     bool textDirty;
