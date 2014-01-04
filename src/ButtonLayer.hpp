@@ -26,7 +26,6 @@ public:
     void setWidth(uint16_t newWidth);
 
 private:
-    void drawText(SDL_Surface* dst) const;
     TTF_Font* getFont(uint8_t size) const;
     SDL_Surface* sizeText(std::string text) const;
 
