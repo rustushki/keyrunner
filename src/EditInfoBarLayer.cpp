@@ -11,12 +11,25 @@ EditInfoBarLayer* EditInfoBarLayer::GetInstance() {
 }
 
 EditInfoBarLayer::EditInfoBarLayer() {
-    bl = new ButtonLayer("Tile", 0x333333, 0xFF0000, 50, 30);
-    bl->setX(10);
-    bl->setY(GridLayer::GetInstance()->getRect().h);
-    addLayer(bl);
+    const uint16_t exitBlWidth  = 50;
+    const uint16_t exitBlHeight = 30;
+    const uint8_t margin = 4;
+
+    // Build the Exit Button.
+    exitBl = new ButtonLayer(
+          "Exit"
+        , 0x333333
+        , 0xFF0000
+        , exitBlWidth
+        , exitBlHeight
+    );
+    exitBl->setX(GridLayer::GetInstance()->getRect().w - exitBlWidth - margin);
+    exitBl->setY(GridLayer::GetInstance()->getRect().h + margin);
+
+    // Add the Exit Button to the EditInfoBarLayer.
+    addLayer(exitBl);
 }
 
 EditInfoBarLayer::~EditInfoBarLayer() {
-    delete bl;
+    delete exitBl;
 }

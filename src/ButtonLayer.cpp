@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include "ButtonLayer.hpp"
 #include "GridLayer.hpp"
 
@@ -78,8 +80,8 @@ void ButtonLayer::draw(SDL_Surface* dst) {
 
         // Draw the text centered within the button, obeying the margin.
         SDL_Rect btRect = getRect();
-        btRect.x += horzMargin / 2;
-        btRect.y += vertMargin / 2;
+        btRect.x += round((btRect.w - textSrf->w) / 2.0) + shadeWidth;
+        btRect.y += round((btRect.h - textSrf->h) / 2.0) + shadeWidth;
         SDL_BlitSurface(textSrf, NULL, dst, &btRect);
     }
 
