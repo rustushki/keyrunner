@@ -46,27 +46,41 @@ void ButtonLayer::update() {
 }
 
 /* ------------------------------------------------------------------------------
- * drawText - Given a surface and a string draw text to that surface, filling
- * the available space inside the button to proportion.
- *
- * TODO: mention the text color.
+ * draw - Given a surface, draw a button onto the surface.
  */
 void ButtonLayer::draw(SDL_Surface* dst) {
     // If the surface is not created successfully.
     if (textSrf != NULL) {
-        // Get the background color in the same pixel format as the destination
-        // surface.  Fill a rectangle to that color.
-        SDL_Rect r = getRect();
+        // Width of the button shading.  Anything other than 1 looks ugly.
+        const uint8_t shadeWidth = 1;
+
+        // Map Background Color
         uint8_t rC = (bgColor & 0xFF0000) >> 16;
         uint8_t gC = (bgColor & 0x00FF00) >>  8;
         uint8_t bC = (bgColor & 0x0000FF) >>  0;
         uint32_t pprBgColor = SDL_MapRGB(dst->format, rC, gC, bC);
-        SDL_FillRect(dst, &r, pprBgColor);
 
-        // Center the text within the button, obeying the margin.
-        r.x += horzMargin / 2;
-        r.y += vertMargin / 2;
-        SDL_BlitSurface(textSrf, NULL, dst, &r);
+        // Draw the Upper Shade Light Gray.
+        uint32_t pprUShColor = SDL_MapRGB(dst->format, 0xAA, 0xAA, 0xAA);
+        SDL_Rect fillRect = getRect();
+        SDL_FillRect(dst, &fillRect, pprUShColor);
+
+        // Draw the Lower Shade Dark Gray
+        uint32_t pprLShColor = SDL_MapRGB(dst->format, 0x44, 0x44, 0x44);
+        fillRect.x += shadeWidth;
+        fillRect.y += shadeWidth;
+        SDL_FillRect(dst, &fillRect, pprLShColor);
+
+        // Draw the Background.
+        fillRect.h -= shadeWidth;
+        fillRect.w -= shadeWidth;
+        SDL_FillRect(dst, &fillRect, pprBgColor);
+
+        // Draw the text centered within the button, obeying the margin.
+        SDL_Rect btRect = getRect();
+        btRect.x += horzMargin / 2;
+        btRect.y += vertMargin / 2;
+        SDL_BlitSurface(textSrf, NULL, dst, &btRect);
     }
 
 }
