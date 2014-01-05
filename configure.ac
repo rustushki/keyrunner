@@ -1,9 +1,11 @@
 AC_INIT([keyrunner], [3], [russ.adams@gmail.com],
              [keyrunner], [http://killergame.net/keyrunner])
-AC_PREREQ([2.59])
+AC_PREREQ([2.69])
 AM_INIT_AUTOMAKE([1.10 -Wall no-define])
 AC_CONFIG_HEADERS([config.h])
+AC_LANG([C++])
 AC_PROG_CXX
+AX_CXX_COMPILE_STDCXX_11
 AC_CONFIG_FILES([Makefile level/Makefile img/Makefile src/Makefile font/Makefile])
 PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
 PKG_CHECK_MODULES([SDL_image], [SDL_image])
