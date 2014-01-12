@@ -1,6 +1,7 @@
 #ifndef BUTTONLAYER_HPP
 #define BUTTONLAYER_HPP
 
+#include <functional>
 #include <string>
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
@@ -26,6 +27,7 @@ public:
     void setWidth(uint16_t newWidth);
     void setX(uint16_t pX);
     void setY(uint16_t pY);
+    void setOnClick(std::function<void()> cb);
 
 private:
     TTF_Font* getFont(uint8_t size) const;
@@ -42,6 +44,8 @@ private:
     uint16_t height;
     uint16_t width;
     bool textDirty;
+
+    std::function<void()> onClickCb;
 
     SDL_Surface* textSrf;
 };

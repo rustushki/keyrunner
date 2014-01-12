@@ -236,3 +236,7 @@ SDL_Surface* ButtonLayer::sizeText(std::string text) const {
 
     return textSrf;
 }
+
+void ButtonLayer::setOnClick(std::function<void()> cb) {
+    onClickCb = cb;
+}

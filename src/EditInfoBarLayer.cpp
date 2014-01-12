@@ -1,3 +1,5 @@
+#include <functional>
+
 #include "EditInfoBarLayer.hpp"
 
 EditInfoBarLayer* EditInfoBarLayer::instance = 0;
@@ -25,6 +27,7 @@ EditInfoBarLayer::EditInfoBarLayer() {
     );
     exitBl->setX(GridLayer::GetInstance()->getRect().w - exitBlWidth - margin);
     exitBl->setY(GridLayer::GetInstance()->getRect().h + margin);
+    exitBl->setOnClick(std::bind(&EditInfoBarLayer::onExitClick, this));
 
     // Add the Exit Button to the EditInfoBarLayer.
     addLayer(exitBl);
@@ -33,3 +36,8 @@ EditInfoBarLayer::EditInfoBarLayer() {
 EditInfoBarLayer::~EditInfoBarLayer() {
     delete exitBl;
 }
+
+void EditInfoBarLayer::onExitClick() {
+    KeyRunner::exitGame();
+}
+
