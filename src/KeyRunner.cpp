@@ -503,6 +503,10 @@ void KeyRunner::editHandleEvents() {
             exitGame();
             break;
 
+        } else if (event.type == SDL_MOUSEBUTTONUP) {
+            if (event.button.button == SDL_BUTTON_LEFT) {
+                rootLayer->onClick(event.button.x, event.button.y);
+            }
         }
     }
 }

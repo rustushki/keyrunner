@@ -29,6 +29,8 @@ public:
     void setY(uint16_t pY);
     void setOnClick(std::function<void()> cb);
 
+    void onClick(uint16_t x, uint16_t y);
+
 private:
     TTF_Font* getFont(uint8_t size) const;
     SDL_Surface* sizeText(std::string text) const;
