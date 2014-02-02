@@ -17,8 +17,10 @@ private:
     static EditInfoBarLayer* instance;
 
     ButtonLayer* exitBl;
+    ButtonLayer* saveBl;
 
     void onExitClick();
+    void onSaveClick();
 };
 
 #endif//EDITINFOBARLAYER_HPP
