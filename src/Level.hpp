@@ -47,6 +47,7 @@ public:
     bool movePlayer(Direction d);
     bool movePlayerToTile(Tile*);
     Tile* getPlayerTile() const;
+    Tile* getKeyTile() const;
 
     bool isComplete() const;
     int toInt() const;

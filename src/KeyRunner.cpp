@@ -510,3 +510,7 @@ void KeyRunner::editHandleEvents() {
         }
     }
 }
+
+Level* KeyRunner::getCurrentLevel() {
+    return level;
+}

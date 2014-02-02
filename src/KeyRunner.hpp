@@ -40,6 +40,7 @@ public:
     static int getTimeClock();
     static uint16_t getLevelNum();
     static RootLayer* getRootLayer();
+    static Level* getCurrentLevel();
 
 private:
     // Thread functions.

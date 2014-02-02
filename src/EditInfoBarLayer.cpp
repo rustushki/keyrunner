@@ -1,6 +1,7 @@
 #include <functional>
 
 #include "EditInfoBarLayer.hpp"
+#include "LevelWriter.hpp"
 
 EditInfoBarLayer* EditInfoBarLayer::instance = 0;
 
@@ -58,6 +59,5 @@ void EditInfoBarLayer::onExitClick() {
 }
 
 void EditInfoBarLayer::onSaveClick() {
-    std::cout << "save not implemented" << std::endl;
+    LevelWriter::Write(KeyRunner::getCurrentLevel());
 }
-

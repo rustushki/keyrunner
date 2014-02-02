@@ -276,6 +276,13 @@ Tile* Level::getPlayerTile() const {
 }
 
 /* ------------------------------------------------------------------------------
+ * getKeyTile - Return the current tile of the player.
+ */
+Tile* Level::getKeyTile() const {
+    return this->tileHasKey;
+}
+
+/* ------------------------------------------------------------------------------
  * getMatchingTeleporterTile - Given a teleporter tile X and Y, return the
  * matching teleporter tile's X and Y.  Return as a vector int.
  */
