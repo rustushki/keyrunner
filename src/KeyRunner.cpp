@@ -57,7 +57,7 @@ void KeyRunner::play() {
         SDL_Thread *udThread = SDL_CreateThread(&updateDisplay, NULL);
         SDL_Thread *cyThread = SDL_CreateThread(&convey, NULL);
 
-        handleEvents();
+        playHandleEvents();
 
         SDL_WaitThread(cyThread, NULL);
         SDL_WaitThread(udThread, NULL);
@@ -97,7 +97,7 @@ void KeyRunner::edit() {
 
         SDL_Thread *udThread = SDL_CreateThread(&updateDisplay, NULL);
 
-        handleEvents();
+        editHandleEvents();
 
         SDL_WaitThread(udThread, NULL);
     } else {
@@ -429,7 +429,7 @@ int KeyRunner::updateLevel(void* unused) {
     return 0;
 }
 
-void KeyRunner::handleEvents() {
+void KeyRunner::playHandleEvents() {
     // Wait for an Event.
     SDL_Event event;
     while (state != QUIT) {
@@ -462,6 +462,38 @@ void KeyRunner::handleEvents() {
             if (level->isComplete()){
                 SDL_UnlockMutex(levelLock);
                 SDL_CondSignal(levelCond);
+            }
+
+        } else if (event.type == SDL_KEYUP) {
+
+            // Handle Quit Event.
+        } else if (event.type == SDL_QUIT) {
+            exitGame();
+            break;
+
+        }
+    }
+}
+
+void KeyRunner::editHandleEvents() {
+    // Wait for an Event.
+    SDL_Event event;
+    while (state != QUIT) {
+        SDL_WaitEvent(&event);
+
+        // Keydown.
+        if (event.type == SDL_KEYDOWN) {
+
+            // User Presses Q
+            if (event.key.keysym.sym == SDLK_q) {
+                exitGame();
+                break;
+
+            // TODO: Expecting to need these ...
+            } else if (event.key.keysym.sym == SDLK_DOWN) {
+            } else if (event.key.keysym.sym == SDLK_UP) {
+            } else if (event.key.keysym.sym == SDLK_LEFT) {
+            } else if (event.key.keysym.sym == SDLK_RIGHT) {
             }
 
         } else if (event.type == SDL_KEYUP) {

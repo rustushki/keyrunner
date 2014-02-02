@@ -51,7 +51,8 @@ private:
     // Helpers
     static bool init();
     static void moveDirection(Direction d);
-    static void handleEvents();
+    static void playHandleEvents();
+    static void editHandleEvents();
 
     static SDL_Surface *screen;
     static uint16_t    levelNum;
