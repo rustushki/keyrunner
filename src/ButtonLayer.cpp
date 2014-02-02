@@ -14,7 +14,6 @@ ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor, uint32_t
     this->width  = width;
     textDirty = true;
     textSrf = NULL;
-    onClickCb = NULL;
 }
 
 ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor, uint32_t
@@ -29,7 +28,6 @@ ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor, uint32_t
     this->width  = width;
     textDirty = true;
     textSrf = NULL;
-    onClickCb = NULL;
 }
 
 SDL_Rect ButtonLayer::getRect() const {
@@ -237,14 +235,4 @@ SDL_Surface* ButtonLayer::sizeText(std::string text) const {
     }
 
     return textSrf;
-}
-
-void ButtonLayer::setOnClick(std::function<void()> cb) {
-    onClickCb = cb;
-}
-
-void ButtonLayer::onClick(uint16_t x, uint16_t y) {
-    if (onClickCb != NULL) {
-        onClickCb();
-    }
 }
