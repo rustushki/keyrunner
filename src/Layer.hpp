@@ -25,9 +25,9 @@ protected:
 
     void addLayer(Layer* subLayer);
 
+private:
     bool contains(uint16_t x, uint16_t y);
 
-private:
     std::vector<Layer*> subLayers;
 
     std::function<void()> onClickCb;
