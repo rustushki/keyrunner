@@ -8,11 +8,9 @@
 
 bool LevelWriter::Write(Level* level) {
     // Build path to Level File.
-    std::string levelFile = "/home/russa/";
     std::stringstream ss;
-    ss << level->toInt();
-    ss << ".bin";
-    levelFile += ss.str();
+    ss << "./" << level->toInt() << ".bin";
+    std::string levelFile = ss.str();
 
     FILE* fp = fopen(levelFile.c_str(), "wb");
 
