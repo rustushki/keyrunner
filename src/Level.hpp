@@ -55,6 +55,7 @@ public:
     Tile* getTile(uint16_t x, uint16_t y) const;
 
     friend class LevelLoader;
+    friend class LevelReader;
 
 };
 

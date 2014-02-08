@@ -28,7 +28,10 @@ bool LevelWriter::Write(Level* level) {
     std::vector<Tile*> devTiles;
     for (int x = 0; x < w; x++) {
         for (int y = 0; y < h; y++) {
-            devTiles.push_back(level->getTile(x, y));
+            Tile* tile = level->getTile(x, y);
+            if (tile->getType() != tt) {
+                devTiles.push_back(tile);
+            }
         }
     }
 

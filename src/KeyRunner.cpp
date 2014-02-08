@@ -6,6 +6,7 @@
 #include "KeyRunner.hpp"
 #include "Level.hpp"
 #include "LevelLoader.hpp"
+#include "LevelReader.hpp"
 #include "Options.hpp"
 #include "EditRootLayer.hpp"
 #include "PlayRootLayer.hpp"
@@ -87,7 +88,8 @@ void KeyRunner::edit() {
 
         SDL_LockMutex(levelLoadLock);
 
-        level = LevelLoader::Load(levelNum);
+        level = LevelReader::Read(levelNum);
+        //level = LevelLoader::Load(levelNum);
 
         // Signal that it's OK to observe level tiles now.
         SDL_UnlockMutex(levelLoadLock);
@@ -403,7 +405,8 @@ int KeyRunner::updateLevel(void* unused) {
 
         SDL_LockMutex(levelLoadLock);
 
-        level = LevelLoader::Load(levelNum);
+        level = LevelReader::Read(levelNum);
+        //level = LevelLoader::Load(levelNum);
 
         // Signal that it's OK to observe level tiles now.
         SDL_UnlockMutex(levelLoadLock);

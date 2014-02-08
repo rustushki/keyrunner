@@ -14,6 +14,7 @@ KeyRunner.cpp         \
 Layer.cpp             \
 Level.cpp             \
 LevelLoader.cpp       \
+LevelReader.cpp       \
 LevelWriter.cpp       \
 Options.cpp           \
 PlayInfoBarLayer.cpp  \
