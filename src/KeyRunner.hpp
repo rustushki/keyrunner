@@ -11,14 +11,14 @@
 #endif
 
 #if _WIN32
-#define FONTPATH  _ROOT_ "\\font\\teleindicadores.ttf"
-#define LEVELPATH _ROOT_ "\\level\\"
-#define IMGPATH   _ROOT_ "\\img\\"
+#define PATHSEP "\\"
 #elif linux
-#define FONTPATH  _ROOT_ "/font/teleindicadores.ttf"
-#define LEVELPATH _ROOT_ "/level/"
-#define IMGPATH   _ROOT_ "/img/"
+#define PATHSEP "/"
 #endif
+
+#define FONTPATH  _ROOT_ PATHSEP "font" PATHSEP "teleindicadores.ttf"
+#define LEVELPATH _ROOT_ PATHSEP "level" PATHSEP
+#define IMGPATH   _ROOT_ PATHSEP "img" PATHSEP
 
 #define VERSION 3
 
