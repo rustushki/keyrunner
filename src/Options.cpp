@@ -6,7 +6,7 @@
 #include "KeyRunner.hpp"
 #include "Options.hpp"
 #include "State.hpp"
-#include "LevelLoader.hpp"
+#include "LevelManager.hpp"
 
 uint16_t Options::startingLevelNum = 1;
 State Options::initialState = PLAY;
@@ -26,7 +26,7 @@ void Options::parse(int argc, char** argv) {
             // Confirm that the provided level is within range and is thus
             // valid.
             startingLevelNum = atoi(argv[++argx]);
-            if (startingLevelNum < 1 || startingLevelNum > LevelLoader::GetTotal()) {
+            if (startingLevelNum < 1 || startingLevelNum > LevelManager::GetTotal()) {
                 die("Invalid level.");
             }
 

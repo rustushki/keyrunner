@@ -13,9 +13,7 @@ GridLayer.cpp         \
 KeyRunner.cpp         \
 Layer.cpp             \
 Level.cpp             \
-LevelLoader.cpp       \
-LevelReader.cpp       \
-LevelWriter.cpp       \
+LevelManager.cpp      \
 Options.cpp           \
 PlayInfoBarLayer.cpp  \
 PlayRootLayer.cpp     \

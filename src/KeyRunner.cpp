@@ -5,8 +5,7 @@
 #include "ConveyorAnimation.hpp"
 #include "KeyRunner.hpp"
 #include "Level.hpp"
-#include "LevelLoader.hpp"
-#include "LevelReader.hpp"
+#include "LevelManager.hpp"
 #include "Options.hpp"
 #include "EditRootLayer.hpp"
 #include "PlayRootLayer.hpp"
@@ -88,7 +87,7 @@ void KeyRunner::edit() {
 
         SDL_LockMutex(levelLoadLock);
 
-        level = LevelReader::Read(levelNum);
+        level = LevelManager::Read(levelNum);
 
         // Signal that it's OK to observe level tiles now.
         SDL_UnlockMutex(levelLoadLock);
@@ -400,11 +399,11 @@ int KeyRunner::updateDisplay(void* unused) {
 
 int KeyRunner::updateLevel(void* unused) {
 
-    while (levelNum <= LevelLoader::GetTotal() && state != QUIT) {
+    while (levelNum <= LevelManager::GetTotal() && state != QUIT) {
 
         SDL_LockMutex(levelLoadLock);
 
-        level = LevelReader::Read(levelNum);
+        level = LevelManager::Read(levelNum);
 
         // Signal that it's OK to observe level tiles now.
         SDL_UnlockMutex(levelLoadLock);
