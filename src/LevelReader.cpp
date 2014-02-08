@@ -6,9 +6,11 @@
 
 Level* LevelReader::Read(uint8_t levelNum) {
     // Build path to Level File.
+    std::string levelFile = LEVELPATH;
     std::stringstream ss;
-    ss << "./" << (int) levelNum << ".bin";
-    std::string levelFile = ss.str();
+    ss << (int)levelNum;
+    levelFile += ss.str();
+
 
     FILE* fp = fopen(levelFile.c_str(), "rb");
 

@@ -89,7 +89,6 @@ void KeyRunner::edit() {
         SDL_LockMutex(levelLoadLock);
 
         level = LevelReader::Read(levelNum);
-        //level = LevelLoader::Load(levelNum);
 
         // Signal that it's OK to observe level tiles now.
         SDL_UnlockMutex(levelLoadLock);
@@ -406,7 +405,6 @@ int KeyRunner::updateLevel(void* unused) {
         SDL_LockMutex(levelLoadLock);
 
         level = LevelReader::Read(levelNum);
-        //level = LevelLoader::Load(levelNum);
 
         // Signal that it's OK to observe level tiles now.
         SDL_UnlockMutex(levelLoadLock);
