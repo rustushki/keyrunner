@@ -8,6 +8,7 @@ public:
     static uint16_t GetTotal();
     static Level* Read(uint8_t levelNum);
     static bool Write(Level* level);
+    static Level* New(uint8_t levelNum);
 
 private:
     static std::string GetPath(uint8_t levelNum, bool inCwd);

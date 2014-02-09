@@ -209,6 +209,10 @@ Level* LevelManager::Read(uint8_t levelNum) {
 
 }
 
+Level* LevelManager::New(uint8_t levelNum) {
+    std::cout << "new level stub called" << std::endl;
+}
+
 /* ------------------------------------------------------------------------------
  * GetPath - build a path to the level file.  if inCwd, then assume the path is
  * in the current working directory.
