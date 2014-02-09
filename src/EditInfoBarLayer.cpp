@@ -48,6 +48,21 @@ EditInfoBarLayer::EditInfoBarLayer() {
 
     // Add the Save Button to the EditInfoBarLayer.
     addLayer(saveBl);
+
+    // Build the Default Tile Button.
+    tileBl = new ButtonLayer(
+          "Tile"
+        , 0x333333
+        , 0xFF0000
+        , blWidth
+        , blHeight
+    );
+    tileBl->setX(r.w - 3 * blWidth - 3 * margin);
+    tileBl->setY(r.h + margin);
+    tileBl->setOnClick(std::bind(&EditInfoBarLayer::onTileClick, this));
+
+    // Add the Save Button to the EditInfoBarLayer.
+    addLayer(tileBl);
 }
 
 EditInfoBarLayer::~EditInfoBarLayer() {
@@ -60,4 +75,8 @@ void EditInfoBarLayer::onExitClick() {
 
 void EditInfoBarLayer::onSaveClick() {
     LevelManager::Write(KeyRunner::getCurrentLevel());
+}
+
+void EditInfoBarLayer::onTileClick() {
+    std::cout << "onTileClick stub called" << std::endl;
 }

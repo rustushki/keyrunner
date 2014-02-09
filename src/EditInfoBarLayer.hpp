@@ -18,9 +18,11 @@ private:
 
     ButtonLayer* exitBl;
     ButtonLayer* saveBl;
+    ButtonLayer* tileBl;
 
     void onExitClick();
     void onSaveClick();
+    void onTileClick();
 };
 
 #endif//EDITINFOBARLAYER_HPP
