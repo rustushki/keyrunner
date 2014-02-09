@@ -1,10 +1,17 @@
 #include <sstream>
-#include <vector>
 
 #include "KeyRunner.hpp"
 #include "Level.hpp"
 #include "LevelManager.hpp"
-#include "TileType.hpp"
+
+uint16_t LevelManager::w;
+uint16_t LevelManager::h;
+TileType LevelManager::defTT;
+std::vector<Tile*> LevelManager::deviations;
+uint16_t LevelManager::px;
+uint16_t LevelManager::py;
+uint16_t LevelManager::kx;
+uint16_t LevelManager::ky;
 
 uint16_t LevelManager::GetTotal() {
 
@@ -108,6 +115,8 @@ bool LevelManager::Write(Level* level) {
 }
 
 Level* LevelManager::Read(uint8_t levelNum) {
+    Reset();
+
     // Open the Level File.
     std::string levelFile = GetPath(levelNum, false);
     FILE* fp = fopen(levelFile.c_str(), "rb");
@@ -115,23 +124,19 @@ Level* LevelManager::Read(uint8_t levelNum) {
     // Read Width and Height and discard the result.
     // TODO: Currently the height and width are hard coded as GRID_HEIGHT and
     // GRID_WIDTH.
-    uint16_t w = 0;
-    uint16_t h = 0;
     fread(&w, sizeof(uint16_t), 1, fp);
     fread(&h, sizeof(uint16_t), 1, fp);
 
     // Read Default Tile Type
     uint8_t defTTint;
     fread(&defTTint, sizeof(uint8_t), 1, fp);
-    TileType defTT = (TileType) defTTint;
+    defTT = (TileType) defTTint;
 
     // Read Tile Deviation Count
     uint16_t devCount;
     fread(&devCount, sizeof(uint16_t), 1, fp);
 
     // Read Initial Char Location.
-    uint16_t px;
-    uint16_t py;
     fread(&px, sizeof(uint16_t), 1, fp);
     fread(&py, sizeof(uint16_t), 1, fp);
 
@@ -142,11 +147,6 @@ Level* LevelManager::Read(uint8_t levelNum) {
 
     // Build Level and initialize all Tiles to NULL.
     Level* level = new Level(levelNum);
-    for (int ty = h - 1; ty >= 0; ty--) {
-        for (int tx = w - 1; tx >= 0; tx--) {
-            level->tile[ty][tx] = NULL;
-        }
-    }
 
     // Read Each Default Tile Type Deviation & populate each matching tile slot
     // with the deviation.
@@ -162,57 +162,27 @@ Level* LevelManager::Read(uint8_t levelNum) {
         fread(&ttInt, sizeof(uint8_t), 1, fp);
         TileType tt = static_cast<TileType>(ttInt);
 
-        Tile* tile = new Tile(tt, x, y, level);
-        level->tile[tile->getY()][tile->getX()] = tile;
+        deviations.push_back(new Tile(tt, x, y, level));
     }
 
     // Read the Key Location.
     // TODO: Add support for more items.
-    uint16_t kx;
-    uint16_t ky;
     uint8_t it;
     fread(&kx, sizeof(uint16_t), 1, fp);
     fread(&ky, sizeof(uint16_t), 1, fp);
     fread(&it, sizeof(uint8_t), 1, fp);
-
-    // Populate the remaining tiles with the default tile.  Also, not which
-    // tiles have the key and the player.
-    for (int ty = h - 1; ty >= 0; ty--) {
-        for (int tx = w - 1; tx >= 0; tx--) {
-            if (level->tile[ty][tx] == NULL) {
-                // Build a Default Tile at the coordinate.
-                Tile* tile = new Tile(defTT, tx, ty, level);
-
-                // Add the tile to the level.
-                level->tile[ty][tx] = tile;
-            }
-
-            // TODO: support multiple keys.
-
-            // Does the current tile have the player?
-            if (tx == px && ty == py) {
-                level->tileHasPlayer = level->tile[ty][tx];
-            }
-
-            // Does the current tile have the key?
-            if (tx == kx && ty == ky) {
-                level->tileHasKey = level->tile[ty][tx];
-            }
-
-        }
-    }
-    level->init();
-
     fclose(fp);
 
-    return level;
+    Populate(level);
 
+
+    return level;
 }
 
 Level* LevelManager::New(uint8_t levelNum) {
-    std::cout << "new level stub called" << std::endl;
+    Reset();
     Level* level = new Level(levelNum);
-    level->init();
+    Populate(level);
     return level;
 }
 
@@ -230,4 +200,57 @@ std::string LevelManager::GetPath(uint8_t levelNum, bool inCwd) {
     std::stringstream ss;
     ss << prefix << (int) levelNum;
     return ss.str();
+}
+
+void LevelManager::Reset() {
+    w = GridLayer::GRID_WIDTH;
+    h = GridLayer::GRID_HEIGHT;
+    px = 0;
+    py = 0;
+    kx = w-1;
+    ky = h-1;
+    defTT = TileType::TILETYPE_EMPTY;
+    deviations.clear();
+}
+
+void LevelManager::Populate(Level* level) {
+    // Populate the remaining tiles with the default tile.  Also, not which
+    // tiles have the key and the player.
+    uint16_t curDevIdx = 0;
+    for (int tx = 0; tx < w; tx++) {
+        for (int ty = 0; ty < h; ty++) {
+            bool deviationMatch = false;
+            if (deviations.size() > 0 && curDevIdx < deviations.size()) {
+                Tile* curDev = deviations[curDevIdx];
+                if (curDev->getX() == tx && curDev->getY() == ty) {
+                    level->tile[ty][tx] = curDev;
+                    curDevIdx++;
+                    deviationMatch = true;
+                }
+            }
+
+            if (!deviationMatch) {
+                // Build a Default Tile at the coordinate.
+                Tile* tile = new Tile(defTT, tx, ty, level);
+
+                // Add the tile to the level.
+                level->tile[ty][tx] = tile;
+            }
+
+            // TODO: Support multiple items. (not just hard coded key and
+            // player)
+
+            // Does the current tile have the player?
+            if (tx == px && ty == py) {
+                level->tileHasPlayer = level->tile[ty][tx];
+            }
+
+            // Does the current tile have the key?
+            if (tx == kx && ty == ky) {
+                level->tileHasKey = level->tile[ty][tx];
+            }
+
+        }
+    }
+    level->init();
 }
