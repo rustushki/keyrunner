@@ -10,6 +10,7 @@
 
 uint16_t Options::startingLevelNum = 1;
 State Options::initialState = PLAY;
+bool Options::createNewLevel = false;
 
 void Options::parse(int argc, char** argv) {
     bool isLevelNotSet = true;
@@ -46,13 +47,19 @@ void Options::parse(int argc, char** argv) {
         } else if (    strcmp(argv[argx], "--editor") == 0
                     || strcmp(argv[argx], "-e") == 0 ) {
             initialState = EDIT;
+
+        // Initial Mode will be the Editor.
+        } else if (    strcmp(argv[argx], "--new") == 0
+                    || strcmp(argv[argx], "-n") == 0 ) {
+            createNewLevel = true;
+
         } else {
             die("Unrecognized option: " + std::string(argv[argx]));
         }
     }
 
-    if (initialState == EDIT && isLevelNotSet) {
-        die("You must provide a level number to edit.");
+    if (initialState == EDIT && isLevelNotSet && !createNewLevel) {
+        die("You must provide a level number to edit or specify -n.");
     }
 
 }
@@ -60,8 +67,8 @@ void Options::parse(int argc, char** argv) {
 void Options::showHelp() {
     std::stringstream ss;
     ss << "usage: keyrunner [-v|--version] [-h|--help]" << std::endl;
-    ss << "                 [-l|--level] [-e|--editor]" << std::endl;
-    ss << "                 [<args>]" << std::endl;
+    ss << "                 [-e|--editor] [-n|--new]" << std::endl;
+    ss << "                 [-l|--level <args>]" << std::endl;
     ss << "" << std::endl;
     ss << "Hints:" << std::endl;
     ss << "" << std::endl;
@@ -69,7 +76,8 @@ void Options::showHelp() {
     ss << "   keyrunner" << std::endl;
     ss << "" << std::endl;
     ss << "Start in Editor Mode (editing a brand new level):" << std::endl;
-    ss << "   keyrunner --editor" << std::endl;
+    ss << "   keyrunner --editor --new" << std::endl;
+    ss << "" << std::endl;
     ss << "Start in Editor Mode (editing level 27):" << std::endl;
     ss << "   keyrunner --editor --level 27" << std::endl;
     ss << "" << std::endl;
@@ -93,6 +101,10 @@ uint16_t Options::getStartingLevel() {
 
 State Options::getInitialState() {
     return initialState;
+}
+
+bool Options::getCreateNewLevel() {
+    return createNewLevel;
 }
 
 /* ------------------------------------------------------------------------------

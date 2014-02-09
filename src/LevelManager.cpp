@@ -211,6 +211,9 @@ Level* LevelManager::Read(uint8_t levelNum) {
 
 Level* LevelManager::New(uint8_t levelNum) {
     std::cout << "new level stub called" << std::endl;
+    Level* level = new Level(levelNum);
+    level->init();
+    return level;
 }
 
 /* ------------------------------------------------------------------------------

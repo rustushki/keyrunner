@@ -78,8 +78,6 @@ void KeyRunner::edit() {
     initialLevelLoadLock = SDL_CreateMutex();
     initialLevelLoadCond = SDL_CreateCond();
 
-    levelNum = Options::getStartingLevel();
-
     if (init()) {
         // There's not a good place for these yet.  Putting them here for now.
         KeyAnim    = Animation::AnimationFactory(ANIMATION_TYPE_KEY);
@@ -87,7 +85,16 @@ void KeyRunner::edit() {
 
         SDL_LockMutex(levelLoadLock);
 
-        level = LevelManager::Read(levelNum);
+        // Create New Level for Edit
+        if (Options::getCreateNewLevel()) {
+            levelNum = LevelManager::GetTotal() + 1;
+            level = LevelManager::New(levelNum);
+
+        // Load Existing Level for Edit
+        } else {
+            levelNum = Options::getStartingLevel();
+            level = LevelManager::Read(levelNum);
+        }
 
         // Signal that it's OK to observe level tiles now.
         SDL_UnlockMutex(levelLoadLock);
