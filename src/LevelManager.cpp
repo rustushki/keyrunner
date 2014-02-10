@@ -36,7 +36,7 @@ uint16_t LevelManager::GetTotal() {
                 hiLevel = miLevel - 1;
             }
         }
-        levelCount = miLevel;
+        levelCount = miLevel - 1;
     }
 
     return levelCount;
