@@ -2,6 +2,7 @@
 
 #include "EditInfoBarLayer.hpp"
 #include "LevelManager.hpp"
+#include "TileSelectorLayer.hpp"
 
 EditInfoBarLayer* EditInfoBarLayer::instance = 0;
 
@@ -78,5 +79,6 @@ void EditInfoBarLayer::onSaveClick() {
 }
 
 void EditInfoBarLayer::onTileClick() {
+    addLayer(new TileSelectorLayer());
     std::cout << "onTileClick stub called" << std::endl;
 }

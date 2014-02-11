@@ -8,8 +8,8 @@ ButtonLayer.cpp       \
 ConveyorAnimation.cpp \
 EditInfoBarLayer.cpp  \
 EditRootLayer.cpp     \
-InfoBarLayer.cpp      \
 GridLayer.cpp         \
+InfoBarLayer.cpp      \
 KeyRunner.cpp         \
 Layer.cpp             \
 Level.cpp             \
@@ -20,6 +20,7 @@ PlayRootLayer.cpp     \
 RootLayer.cpp         \
 SpriteSheet.cpp       \
 Tile.cpp              \
+TileSelectorLayer.cpp \
 main.cpp
 
 
