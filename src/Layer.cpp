@@ -35,12 +35,14 @@ void Layer::onClick(uint16_t x, uint16_t y) {
         onClickCb();
     }
 
-    // Iterate over child Layers and propagate the event if they contain the
-    // point.
-    std::vector<Layer*>::iterator itr;
-    for (itr = subLayers.begin(); itr < subLayers.end(); itr++) {
+    // Iterate over the sub layers backwards so that the uppermost stacked are
+    // evaluated first.  The first layer from the top which contains the point
+    // will propagate the onClick event.
+    std::vector<Layer*>::reverse_iterator itr;
+    for (itr = subLayers.rbegin(); itr < subLayers.rend(); itr++) {
         if ((*itr)->contains(x, y)) {
             (*itr)->onClick(x, y);
+            break;
         }
     }
 }
