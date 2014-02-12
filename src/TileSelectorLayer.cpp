@@ -9,9 +9,19 @@ TileSelectorLayer::TileSelectorLayer() {
  * selected.
  */
 void TileSelectorLayer::draw(SDL_Surface* dst) {
+    const uint8_t  borderWidth = 2;
+    const uint32_t borderColor = SDL_MapRGB(dst->format, 0xAA, 0xAA, 0xAA);
+    const uint32_t fillColor   = SDL_MapRGB(dst->format, 0x00, 0x00, 0x00);
+
     // Build the black bar at the bottom.
     SDL_Rect r = getRect();
-    SDL_FillRect(dst, &r, 0x00FF00);
+    SDL_FillRect(dst, &r, borderColor);
+
+    r.x += borderWidth;
+    r.y += borderWidth;
+    r.w -= 2 * borderWidth;
+    r.h -= 2 * borderWidth;
+    SDL_FillRect(dst, &r, fillColor);
 
     Layer::draw(dst);
 
@@ -23,7 +33,7 @@ void TileSelectorLayer::draw(SDL_Surface* dst) {
  * the InfoBarLayer.
  */
 SDL_Rect TileSelectorLayer::getRect() const {
-    const uint8_t margin = 5;
+    const uint8_t margin = 4;
 
     SDL_Rect r;
     r.x = margin;
