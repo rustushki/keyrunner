@@ -3,29 +3,9 @@
 #include "ButtonLayer.hpp"
 #include "GridLayer.hpp"
 
-ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor, uint32_t
-        textColor, uint16_t width, uint16_t height) {
-    setBackgroundColor(bgColor);
-    setTextColor(textColor);
-    buttonText   = text;
+ButtonLayer::ButtonLayer() {
     horzMargin   = 20;
     vertMargin   = 20;
-    this->height = height;
-    this->width  = width;
-    textDirty = true;
-    textSrf = NULL;
-}
-
-ButtonLayer::ButtonLayer(std::string text, uint32_t bgColor, uint32_t
-        textColor, uint16_t width, uint16_t height, uint8_t marginHorz, uint8_t
-        marginVert) {
-    setBackgroundColor(bgColor);
-    setTextColor(textColor);
-    buttonText   = text;
-    horzMargin   = marginHorz;
-    vertMargin   = marginVert;
-    this->height = height;
-    this->width  = width;
     textDirty = true;
     textSrf = NULL;
 }
@@ -149,6 +129,14 @@ void ButtonLayer::setX(uint16_t pX) {
 void ButtonLayer::setY(uint16_t pY) {
     textDirty = true;
     y = pY;
+}
+
+void ButtonLayer::setMarginHorz(uint8_t marginHorz) {
+    horzMargin = marginHorz;
+}
+
+void ButtonLayer::setMarginVert(uint16_t marginVert) {
+    vertMargin = marginVert;
 }
 
 /* ------------------------------------------------------------------------------

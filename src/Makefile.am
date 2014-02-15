@@ -2,25 +2,26 @@ gamesdir = $(prefix)/games
 
 games_PROGRAMS = keyrunner
 
-keyrunner_SOURCES =   \
-Animation.cpp         \
-ButtonLayer.cpp       \
-ConveyorAnimation.cpp \
-EditInfoBarLayer.cpp  \
-EditRootLayer.cpp     \
-GridLayer.cpp         \
-InfoBarLayer.cpp      \
-KeyRunner.cpp         \
-Layer.cpp             \
-Level.cpp             \
-LevelManager.cpp      \
-Options.cpp           \
-PlayInfoBarLayer.cpp  \
-PlayRootLayer.cpp     \
-RootLayer.cpp         \
-SpriteSheet.cpp       \
-Tile.cpp              \
-TileSelectorLayer.cpp \
+keyrunner_SOURCES =    \
+Animation.cpp          \
+ButtonLayer.cpp        \
+ButtonLayerBuilder.cpp \
+ConveyorAnimation.cpp  \
+EditInfoBarLayer.cpp   \
+EditRootLayer.cpp      \
+GridLayer.cpp          \
+InfoBarLayer.cpp       \
+KeyRunner.cpp          \
+Layer.cpp              \
+Level.cpp              \
+LevelManager.cpp       \
+Options.cpp            \
+PlayInfoBarLayer.cpp   \
+PlayRootLayer.cpp      \
+RootLayer.cpp          \
+SpriteSheet.cpp        \
+Tile.cpp               \
+TileSelectorLayer.cpp  \
 main.cpp
 
 

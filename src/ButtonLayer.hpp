@@ -10,11 +10,6 @@
 
 class ButtonLayer : public Layer {
 public:
-    ButtonLayer(std::string text, uint32_t bgColor, uint32_t textColor, uint16_t width,
-        uint16_t height);
-    ButtonLayer(std::string text, uint32_t bgColor, uint32_t textColor, uint16_t width,
-        uint16_t height, uint8_t marginHorz, uint8_t marginVert);
-
     virtual void draw(SDL_Surface* dst);
     virtual SDL_Rect getRect() const;
     virtual void update();
@@ -26,8 +21,12 @@ public:
     void setWidth(uint16_t newWidth);
     void setX(uint16_t pX);
     void setY(uint16_t pY);
+    void setMarginHorz(uint8_t marginHorz);
+    void setMarginVert(uint16_t marginVert);
 
 private:
+    ButtonLayer();
+
     TTF_Font* getFont(uint8_t size) const;
     SDL_Surface* sizeText(std::string text) const;
 
@@ -44,6 +43,8 @@ private:
     bool textDirty;
 
     SDL_Surface* textSrf;
+
+    friend class ButtonLayerBuilder;
 };
 
 #endif//BUTTONLAYER_HPP
