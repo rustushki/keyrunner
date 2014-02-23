@@ -1,6 +1,31 @@
+#include "ButtonLayer.hpp"
+#include "ButtonLayerBuilder.hpp"
 #include "TileSelectorLayer.hpp"
 
 TileSelectorLayer::TileSelectorLayer() {
+    ButtonLayerBuilder* blb = new ButtonLayerBuilder();
+
+    const uint16_t blWidth  = 50;
+    const uint16_t blHeight = 30;
+    const uint8_t margin = 4;
+
+    SDL_Rect r = GridLayer::GetInstance()->getRect();
+
+    // Build the Door Button.
+    ButtonLayer* bl = blb
+        ->setText("button")
+        ->setBgColor(0x333333)
+        ->setTextColor(0xFF0000)
+        ->setWidth(blWidth)
+        ->setHeight(blHeight)
+        ->setX(r.w - 3 * blWidth - 3 * margin)
+        ->setY(r.h + margin)
+        ->setIcon(ANIMATION_TYPE_DOOR)
+        ->build();
+
+    addLayer(bl);
+
+    delete blb;
 }
 
 /* ------------------------------------------------------------------------------

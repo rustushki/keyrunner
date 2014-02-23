@@ -1,6 +1,7 @@
 #ifndef BUTTONLAYERBUILDER_HPP
 #define BUTTONLAYERBUILDER_HPP
 
+#include "AnimationType.hpp"
 #include "KeyRunner.hpp"
 
 class ButtonLayer;
@@ -17,6 +18,7 @@ public:
     ButtonLayerBuilder* setY(uint16_t y);
     ButtonLayerBuilder* setMarginHorz(uint8_t marginHorz);
     ButtonLayerBuilder* setMarginVert(uint8_t marginVert);
+    ButtonLayerBuilder* setIcon(AnimationType at);
     ButtonLayer* build();
     void resetIfNull();
 

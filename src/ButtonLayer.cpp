@@ -1,5 +1,6 @@
 #include <math.h>
 
+#include "Animation.hpp"
 #include "ButtonLayer.hpp"
 #include "GridLayer.hpp"
 
@@ -8,6 +9,13 @@ ButtonLayer::ButtonLayer() {
     vertMargin   = 20;
     textDirty = true;
     textSrf = NULL;
+    icon = NULL;
+}
+
+ButtonLayer::~ButtonLayer() {
+    if (icon != NULL) {
+        delete icon;
+    }
 }
 
 SDL_Rect ButtonLayer::getRect() const {
@@ -63,6 +71,12 @@ void ButtonLayer::draw(SDL_Surface* dst) {
         btRect.x += round((btRect.w - textSrf->w) / 2.0) + shadeWidth;
         btRect.y += round((btRect.h - textSrf->h) / 2.0) + shadeWidth;
         SDL_BlitSurface(textSrf, NULL, dst, &btRect);
+
+        // Draw the Icon
+        if (icon != NULL) {
+            icon->move(fillRect.x, fillRect.y);
+            icon->blit(dst);
+        }
     }
 
 }
@@ -223,4 +237,8 @@ SDL_Surface* ButtonLayer::sizeText(std::string text) const {
     }
 
     return textSrf;
+}
+
+void ButtonLayer::setIcon(AnimationType at) {
+    icon = Animation::AnimationFactory(at);
 }

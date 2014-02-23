@@ -66,6 +66,12 @@ ButtonLayerBuilder* ButtonLayerBuilder::setMarginVert(uint8_t marginVert) {
     return this;
 }
 
+ButtonLayerBuilder* ButtonLayerBuilder::setIcon(AnimationType at) {
+    resetIfNull();
+    buttonLayer->setIcon(at);
+    return this;
+}
+
 ButtonLayer* ButtonLayerBuilder::build() {
     ButtonLayer* temp = buttonLayer;
     buttonLayer = NULL;
