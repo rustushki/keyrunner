@@ -103,8 +103,8 @@ void Animation::blit(SDL_Surface* srf) {
     SDL_Rect r;
     r.x = this->x;
     r.y = this->y;
-    r.w = this->sheet->getWidth();
-    r.h = this->sheet->getHeight();
+    r.w = getWidth();
+    r.h = getHeight();
 
     this->sheet->blitFrame(frameX, frameY, srf, r);
 
@@ -137,6 +137,14 @@ void Animation::play() {
  */
 void Animation::stop() {
     this->shouldAdvance = false;
+}
+
+uint16_t Animation::getWidth() const {
+    sheet->getWidth();
+}
+
+uint16_t Animation::getHeight() const {
+    sheet->getHeight();
 }
 
 /* ------------------------------------------------------------------------------

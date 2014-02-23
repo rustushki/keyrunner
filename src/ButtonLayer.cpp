@@ -71,11 +71,13 @@ void ButtonLayer::draw(SDL_Surface* dst) {
         btRect.x += round((btRect.w - textSrf->w) / 2.0) + shadeWidth;
         btRect.y += round((btRect.h - textSrf->h) / 2.0) + shadeWidth;
         SDL_BlitSurface(textSrf, NULL, dst, &btRect);
-    }
 
-    // Draw the Icon
-    if (icon != NULL) {
-        icon->move(fillRect.x, fillRect.y);
+    // OR,
+    // Draw the Icon, centered.
+    } else if (icon != NULL) {
+        uint16_t x = fillRect.x + (fillRect.w - icon->getWidth()) / 2;
+        uint16_t y = fillRect.y + (fillRect.h - icon->getHeight()) / 2;
+        icon->move(x, y);
         icon->blit(dst);
     }
 

@@ -15,6 +15,8 @@ public:
     bool isAnimating() const;
     void play();
     void stop();
+    uint16_t getWidth() const;
+    uint16_t getHeight() const;
 
     uint16_t getCurrentStill() const;
 
