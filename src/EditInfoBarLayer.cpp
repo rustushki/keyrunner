@@ -88,5 +88,4 @@ void EditInfoBarLayer::onSaveClick() {
 
 void EditInfoBarLayer::onTileClick() {
     addLayer(new TileSelectorLayer());
-    std::cout << "onTileClick stub called" << std::endl;
 }
