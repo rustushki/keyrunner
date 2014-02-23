@@ -13,7 +13,6 @@ TileSelectorLayer::TileSelectorLayer() {
 
     // Build the Door Button.
     ButtonLayer* bl = blb
-        ->setText("button")
         ->setBgColor(0x333333)
         ->setTextColor(0xFF0000)
         ->setWidth(blWidth)

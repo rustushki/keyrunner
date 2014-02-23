@@ -39,44 +39,44 @@ void ButtonLayer::update() {
  * draw - Given a surface, draw a button onto the surface.
  */
 void ButtonLayer::draw(SDL_Surface* dst) {
-    // If the surface is not created successfully.
+    // Width of the button shading.  Anything other than 1 looks ugly.
+    const uint8_t shadeWidth = 1;
+
+    // Map Background Color
+    uint8_t rC = (bgColor & 0xFF0000) >> 16;
+    uint8_t gC = (bgColor & 0x00FF00) >>  8;
+    uint8_t bC = (bgColor & 0x0000FF) >>  0;
+    uint32_t pprBgColor = SDL_MapRGB(dst->format, rC, gC, bC);
+
+    // Draw the Upper Shade Light Gray.
+    uint32_t pprUShColor = SDL_MapRGB(dst->format, 0xAA, 0xAA, 0xAA);
+    SDL_Rect fillRect = getRect();
+    SDL_FillRect(dst, &fillRect, pprUShColor);
+
+    // Draw the Lower Shade Dark Gray
+    uint32_t pprLShColor = SDL_MapRGB(dst->format, 0x44, 0x44, 0x44);
+    fillRect.x += shadeWidth;
+    fillRect.y += shadeWidth;
+    SDL_FillRect(dst, &fillRect, pprLShColor);
+
+    // Draw the Background.
+    fillRect.h -= shadeWidth;
+    fillRect.w -= shadeWidth;
+    SDL_FillRect(dst, &fillRect, pprBgColor);
+
+    // Draw the text centered within the button, obeying the margin.
+    // A NULL textSrf implies the text is a 0-length string.
     if (textSrf != NULL) {
-        // Width of the button shading.  Anything other than 1 looks ugly.
-        const uint8_t shadeWidth = 1;
-
-        // Map Background Color
-        uint8_t rC = (bgColor & 0xFF0000) >> 16;
-        uint8_t gC = (bgColor & 0x00FF00) >>  8;
-        uint8_t bC = (bgColor & 0x0000FF) >>  0;
-        uint32_t pprBgColor = SDL_MapRGB(dst->format, rC, gC, bC);
-
-        // Draw the Upper Shade Light Gray.
-        uint32_t pprUShColor = SDL_MapRGB(dst->format, 0xAA, 0xAA, 0xAA);
-        SDL_Rect fillRect = getRect();
-        SDL_FillRect(dst, &fillRect, pprUShColor);
-
-        // Draw the Lower Shade Dark Gray
-        uint32_t pprLShColor = SDL_MapRGB(dst->format, 0x44, 0x44, 0x44);
-        fillRect.x += shadeWidth;
-        fillRect.y += shadeWidth;
-        SDL_FillRect(dst, &fillRect, pprLShColor);
-
-        // Draw the Background.
-        fillRect.h -= shadeWidth;
-        fillRect.w -= shadeWidth;
-        SDL_FillRect(dst, &fillRect, pprBgColor);
-
-        // Draw the text centered within the button, obeying the margin.
         SDL_Rect btRect = getRect();
         btRect.x += round((btRect.w - textSrf->w) / 2.0) + shadeWidth;
         btRect.y += round((btRect.h - textSrf->h) / 2.0) + shadeWidth;
         SDL_BlitSurface(textSrf, NULL, dst, &btRect);
+    }
 
-        // Draw the Icon
-        if (icon != NULL) {
-            icon->move(fillRect.x, fillRect.y);
-            icon->blit(dst);
-        }
+    // Draw the Icon
+    if (icon != NULL) {
+        icon->move(fillRect.x, fillRect.y);
+        icon->blit(dst);
     }
 
 }
@@ -163,6 +163,10 @@ void ButtonLayer::setMarginVert(uint16_t marginVert) {
  * be sure to set textDirty = true.
  */
 SDL_Surface* ButtonLayer::sizeText(std::string text) const {
+    if (text.empty()) {
+        return NULL;
+    }
+
     // Don't resize the text if it's already been sized once.
     SDL_Surface* textSrf = NULL;
     if (textSrf != NULL) {
