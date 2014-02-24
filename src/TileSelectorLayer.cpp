@@ -5,24 +5,27 @@
 TileSelectorLayer::TileSelectorLayer() {
     ButtonLayerBuilder* blb = new ButtonLayerBuilder();
 
-    const uint16_t blWidth  = 50;
-    const uint16_t blHeight = 30;
+    const uint16_t blWidth  = 40;
+    const uint16_t blHeight = 27;
     const uint8_t margin = 4;
+    const uint8_t initOffset = 10;
 
-    SDL_Rect r = GridLayer::GetInstance()->getRect();
+    for (int ttIdx = 0; ttIdx < TILETYPE_COUNT; ttIdx++) {
+        AnimationType at = Tile::TileTypeToAnimType((TileType) ttIdx);
 
-    // Build the Door Button.
-    ButtonLayer* bl = blb
-        ->setBgColor(0x333333)
-        ->setTextColor(0xFF0000)
-        ->setWidth(blWidth)
-        ->setHeight(blHeight)
-        ->setX(r.w - 3 * blWidth - 3 * margin)
-        ->setY(r.h + margin)
-        ->setIcon(ANIMATION_TYPE_DOOR)
-        ->build();
+        // Build the Button for the TileType.
+        ButtonLayer* bl = blb
+            ->setBgColor(0x333333)
+            ->setTextColor(0xFF0000)
+            ->setWidth(blWidth)
+            ->setHeight(blHeight)
+            ->setX(initOffset + ttIdx * blWidth + ttIdx * margin)
+            ->setY(getRect().y + (getRect().h - blHeight)/2)
+            ->setIcon(at)
+            ->build();
 
-    addLayer(bl);
+        addLayer(bl);
+    }
 
     delete blb;
 }
