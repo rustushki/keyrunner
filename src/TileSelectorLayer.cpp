@@ -11,7 +11,8 @@ TileSelectorLayer::TileSelectorLayer() {
     const uint8_t initOffset = 10;
 
     for (int ttIdx = 0; ttIdx < TILETYPE_COUNT; ttIdx++) {
-        AnimationType at = Tile::TileTypeToAnimType((TileType) ttIdx);
+        TileType tt = (TileType) ttIdx;
+        AnimationType at = Tile::TileTypeToAnimType(tt);
 
         // Build the Button for the TileType.
         ButtonLayer* bl = blb
@@ -23,6 +24,8 @@ TileSelectorLayer::TileSelectorLayer() {
             ->setY(getRect().y + (getRect().h - blHeight)/2)
             ->setIcon(at)
             ->build();
+
+        bl->setOnClick(std::bind(&TileSelectorLayer::onTileTypeClick, this, tt));
 
         addLayer(bl);
     }
@@ -70,3 +73,10 @@ SDL_Rect TileSelectorLayer::getRect() const {
     return r;
 }
 
+/* ------------------------------------------------------------------------------
+ * onTileTypeClick - Sets the tile type of the editor's cursor.
+ */
+void TileSelectorLayer::onTileTypeClick(TileType tileType) {
+    std::cout << "TileType: " << tileType << std::endl;
+    selTileType = tileType;
+}
