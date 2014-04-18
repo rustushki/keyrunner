@@ -12,6 +12,7 @@ public:
 
 private:
     void onTileTypeClick(TileType tileType);
+    void onKeyDown(SDLKey key);
 
     TileType selTileType;
 };

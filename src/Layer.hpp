@@ -18,7 +18,15 @@ public:
 
     virtual void onClick(uint16_t x, uint16_t y);
 
+    virtual void onKeyDown(SDLKey key);
+
     void setOnClick(std::function<void()> cb);
+
+    bool isVisible();
+
+    void show();
+
+    void hide();
 
 protected:
     std::function<void()> getOnClickCb() const;
@@ -32,6 +40,7 @@ private:
 
     std::function<void()> onClickCb;
 
+    bool visible;
 };
 
 #endif//LAYER_HPP

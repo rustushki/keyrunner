@@ -80,3 +80,14 @@ void TileSelectorLayer::onTileTypeClick(TileType tileType) {
     std::cout << "TileType: " << tileType << std::endl;
     selTileType = tileType;
 }
+
+/* ------------------------------------------------------------------------------
+ * onKeyDown - ESC should close the tile selector layer.
+ */
+void TileSelectorLayer::onKeyDown(SDLKey key) {
+    if (key == SDLK_ESCAPE) {
+        std::cout << "escape pressed and caught by TileSelectorLayer" << std::endl;
+        hide();
+    }
+}
+

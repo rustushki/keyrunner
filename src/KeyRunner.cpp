@@ -501,6 +501,10 @@ void KeyRunner::editHandleEvents() {
             } else if (event.key.keysym.sym == SDLK_UP) {
             } else if (event.key.keysym.sym == SDLK_LEFT) {
             } else if (event.key.keysym.sym == SDLK_RIGHT) {
+
+            // Pass all other keys down to the layers to search for a handler.
+            } else {
+                rootLayer->onKeyDown(event.key.keysym.sym);
             }
 
         } else if (event.type == SDL_KEYUP) {
