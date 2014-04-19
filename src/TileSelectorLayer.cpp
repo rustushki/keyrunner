@@ -30,6 +30,8 @@ TileSelectorLayer::TileSelectorLayer() {
         addLayer(bl);
     }
 
+    show();
+
     delete blb;
 }
 
@@ -91,3 +93,17 @@ void TileSelectorLayer::onKeyDown(SDLKey key) {
     }
 }
 
+/* ------------------------------------------------------------------------------
+ * show - Show the TileSelectorLayer, granting focus to the first tile button.
+ */
+void TileSelectorLayer::show() {
+    ButtonLayer* bl = (ButtonLayer*) getChild(0);
+    if (bl != NULL) {
+        std::cout << "bl is not null" << std::endl;
+        bl->setFocus();
+    } else {
+        std::cout << "bl not null" << std::endl;
+    }
+
+    Layer::show();
+}

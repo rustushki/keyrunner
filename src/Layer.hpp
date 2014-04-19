@@ -24,14 +24,16 @@ public:
 
     bool isVisible();
 
-    void show();
+    virtual void show();
 
-    void hide();
+    virtual void hide();
 
 protected:
     std::function<void()> getOnClickCb() const;
 
     void addLayer(Layer* subLayer);
+
+    Layer* getChild(int i);
 
 private:
     bool contains(uint16_t x, uint16_t y);

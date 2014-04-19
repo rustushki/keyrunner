@@ -1,10 +1,11 @@
 #include <SDL/SDL.h>
 
+#include <iostream>
 #include "Layer.hpp"
 
 Layer::Layer() {
     onClickCb = NULL;
-    visible = true;
+    show();
 }
 
 void Layer::draw(SDL_Surface* dst) {
@@ -96,3 +97,10 @@ void Layer::hide() {
     visible = false;
 }
 
+/* ------------------------------------------------------------------------------
+ * getChild - Get the Nth child layer of this layer.  Return NULL if there
+ * isn't one.
+ */
+Layer* Layer::getChild(int i) {
+    return subLayers[i];
+}

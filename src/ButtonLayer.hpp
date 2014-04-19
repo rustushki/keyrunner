@@ -27,6 +27,8 @@ public:
     void setMarginHorz(uint8_t marginHorz);
     void setMarginVert(uint16_t marginVert);
     void setIcon(AnimationType at);
+    bool hasFocus() const;
+    void setFocus();
 
 private:
     ButtonLayer();
@@ -46,6 +48,8 @@ private:
     uint16_t width;
     Animation* icon;
     bool textDirty;
+
+    static ButtonLayer* focusedButtonLayer;
 
     SDL_Surface* textSrf;
 

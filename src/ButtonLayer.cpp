@@ -4,6 +4,8 @@
 #include "ButtonLayer.hpp"
 #include "GridLayer.hpp"
 
+ButtonLayer* ButtonLayer::focusedButtonLayer = NULL;
+
 ButtonLayer::ButtonLayer() {
     horzMargin   = 20;
     vertMargin   = 20;
@@ -48,13 +50,25 @@ void ButtonLayer::draw(SDL_Surface* dst) {
     uint8_t bC = (bgColor & 0x0000FF) >>  0;
     uint32_t pprBgColor = SDL_MapRGB(dst->format, rC, gC, bC);
 
-    // Draw the Upper Shade Light Gray.
-    uint32_t pprUShColor = SDL_MapRGB(dst->format, 0xAA, 0xAA, 0xAA);
+    uint32_t pprUShColor;
+    uint32_t pprLShColor;
+    if (!hasFocus()) {
+        // Upper Shadow Light Gray.
+        pprUShColor = SDL_MapRGB(dst->format, 0xAA, 0xAA, 0xAA);
+        // Lower Shadow Dark Gray
+        pprLShColor = SDL_MapRGB(dst->format, 0x44, 0x44, 0x44);
+    } else {
+        // Upper Shadow Yellow
+        pprUShColor = SDL_MapRGB(dst->format, 0xFF, 0xFF, 0x00);
+        // Lower Shadow Yellow
+        pprLShColor = pprUShColor;
+    }
+
+    // Draw the Upper Shadow.
     SDL_Rect fillRect = getRect();
     SDL_FillRect(dst, &fillRect, pprUShColor);
 
-    // Draw the Lower Shade Dark Gray
-    uint32_t pprLShColor = SDL_MapRGB(dst->format, 0x44, 0x44, 0x44);
+    // Draw the Lower Shadow.
     fillRect.x += shadeWidth;
     fillRect.y += shadeWidth;
     SDL_FillRect(dst, &fillRect, pprLShColor);
@@ -247,4 +261,12 @@ SDL_Surface* ButtonLayer::sizeText(std::string text) const {
 
 void ButtonLayer::setIcon(AnimationType at) {
     icon = Animation::AnimationFactory(at);
+}
+
+bool ButtonLayer::hasFocus() const {
+    return (ButtonLayer::focusedButtonLayer == this);
+}
+
+void ButtonLayer::setFocus() {
+    focusedButtonLayer = this;
 }
