@@ -3,6 +3,8 @@
 #include <iostream>
 #include "Layer.hpp"
 
+Layer* Layer::focusedLayer = NULL;
+
 Layer::Layer() {
     onClickCb = NULL;
     show();
@@ -103,4 +105,12 @@ void Layer::hide() {
  */
 Layer* Layer::getChild(int i) {
     return subLayers[i];
+}
+
+bool Layer::hasFocus() const {
+    return (Layer::focusedLayer == this);
+}
+
+void Layer::setFocus() {
+    focusedLayer = this;
 }

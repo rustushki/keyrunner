@@ -28,6 +28,10 @@ public:
 
     virtual void hide();
 
+    bool hasFocus() const;
+
+    void setFocus();
+
 protected:
     std::function<void()> getOnClickCb() const;
 
@@ -43,6 +47,9 @@ private:
     std::function<void()> onClickCb;
 
     bool visible;
+
+    static Layer* focusedLayer;
+
 };
 
 #endif//LAYER_HPP

@@ -4,8 +4,6 @@
 #include "ButtonLayer.hpp"
 #include "GridLayer.hpp"
 
-ButtonLayer* ButtonLayer::focusedButtonLayer = NULL;
-
 ButtonLayer::ButtonLayer() {
     horzMargin   = 20;
     vertMargin   = 20;
@@ -261,12 +259,4 @@ SDL_Surface* ButtonLayer::sizeText(std::string text) const {
 
 void ButtonLayer::setIcon(AnimationType at) {
     icon = Animation::AnimationFactory(at);
-}
-
-bool ButtonLayer::hasFocus() const {
-    return (ButtonLayer::focusedButtonLayer == this);
-}
-
-void ButtonLayer::setFocus() {
-    focusedButtonLayer = this;
 }
