@@ -99,10 +99,7 @@ void TileSelectorLayer::onKeyDown(SDLKey key) {
 void TileSelectorLayer::show() {
     ButtonLayer* bl = (ButtonLayer*) getChild(0);
     if (bl != NULL) {
-        std::cout << "bl is not null" << std::endl;
         bl->setFocus();
-    } else {
-        std::cout << "bl not null" << std::endl;
     }
 
     Layer::show();
