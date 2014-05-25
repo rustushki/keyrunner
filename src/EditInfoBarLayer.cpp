@@ -71,6 +71,11 @@ EditInfoBarLayer::EditInfoBarLayer() {
     // Add the Save Button to the EditInfoBarLayer.
     addLayer(tileBl);
 
+    // Create the TileSelectorLayer.
+    tsl = new TileSelectorLayer();
+    tsl->hide();
+    addLayer(tsl);
+
     delete blb;
 }
 
@@ -87,5 +92,5 @@ void EditInfoBarLayer::onSaveClick() {
 }
 
 void EditInfoBarLayer::onTileClick() {
-    addLayer(new TileSelectorLayer());
+    tsl->show();
 }

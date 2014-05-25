@@ -496,12 +496,6 @@ void KeyRunner::editHandleEvents() {
                 exitGame();
                 break;
 
-            // TODO: Expecting to need these ...
-            } else if (event.key.keysym.sym == SDLK_DOWN) {
-            } else if (event.key.keysym.sym == SDLK_UP) {
-            } else if (event.key.keysym.sym == SDLK_LEFT) {
-            } else if (event.key.keysym.sym == SDLK_RIGHT) {
-
             // Pass all other keys down to the layers to search for a handler.
             } else {
                 rootLayer->onKeyDown(event.key.keysym.sym);

@@ -4,6 +4,7 @@
 
 #include "ButtonLayer.hpp"
 #include "InfoBarLayer.hpp"
+#include "TileSelectorLayer.hpp"
 
 class EditInfoBarLayer : public InfoBarLayer {
 
@@ -23,6 +24,8 @@ private:
     void onExitClick();
     void onSaveClick();
     void onTileClick();
+
+    TileSelectorLayer* tsl;
 };
 
 #endif//EDITINFOBARLAYER_HPP

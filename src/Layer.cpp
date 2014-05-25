@@ -107,10 +107,23 @@ Layer* Layer::getChild(int i) {
     return subLayers[i];
 }
 
+/* ------------------------------------------------------------------------------
+ * getChildCount - Return the total count of child layers.
+ */
+uint16_t Layer::getChildCount() {
+    return subLayers.size();
+}
+
+/* ------------------------------------------------------------------------------
+ * hasFocus - Return whether or not this Layer is the one that has focus.
+ */
 bool Layer::hasFocus() const {
     return (Layer::focusedLayer == this);
 }
 
+/* ------------------------------------------------------------------------------
+ * setFocus - Give this Layer focus.
+ */
 void Layer::setFocus() {
     focusedLayer = this;
 }

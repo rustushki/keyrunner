@@ -39,6 +39,8 @@ protected:
 
     Layer* getChild(int i);
 
+    uint16_t getChildCount();
+
 private:
     bool contains(uint16_t x, uint16_t y);
 

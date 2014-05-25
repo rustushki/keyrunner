@@ -87,9 +87,38 @@ void TileSelectorLayer::onTileTypeClick(TileType tileType) {
  * onKeyDown - ESC should close the tile selector layer.
  */
 void TileSelectorLayer::onKeyDown(SDLKey key) {
+    // Escape closes the TileSelectorLayer.
     if (key == SDLK_ESCAPE) {
-        std::cout << "escape pressed and caught by TileSelectorLayer" << std::endl;
         hide();
+
+    // Left and Right change the Tile Button selection.
+    } else if (key == SDLK_LEFT || key == SDLK_RIGHT) {
+        // Figure out which index gets focus next.
+        int nextFocus = 0;
+        for (uint16_t x = 0; x < getChildCount(); x++) {
+            ButtonLayer* bl = (ButtonLayer*) getChild(x);
+
+            nextFocus = x;
+
+            if (bl->hasFocus()) {
+                if (key == SDLK_LEFT) {
+                    nextFocus--;
+                } else if (key == SDLK_RIGHT) {
+                    nextFocus++;
+                }
+                break;
+            }
+        }
+
+        // Handle wraparound.
+        if (nextFocus < 0) {
+            nextFocus = getChildCount() - 1;
+        } else if (nextFocus >= getChildCount()) {
+            nextFocus = 0;
+        }
+
+        // Change the focus.
+        getChild(nextFocus)->setFocus();
     }
 }
 
