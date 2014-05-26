@@ -119,6 +119,16 @@ void TileSelectorLayer::onKeyDown(SDLKey key) {
 
         // Change the focus.
         getChild(nextFocus)->setFocus();
+    } else if (key == SDLK_RETURN) {
+        for (uint16_t x = 0; x < getChildCount(); x++) {
+            ButtonLayer* bl = (ButtonLayer*) getChild(x);
+
+            if (bl->hasFocus()) {
+                selTileType = (TileType) x;
+            }
+        }
+
+        hide();
     }
 }
 
