@@ -25,8 +25,6 @@ TileSelectorLayer::TileSelectorLayer() {
             ->setIcon(at)
             ->build();
 
-        bl->setOnClick(std::bind(&TileSelectorLayer::onTileTypeClick, this, tt));
-
         addLayer(bl);
     }
 
@@ -76,14 +74,6 @@ SDL_Rect TileSelectorLayer::getRect() const {
 }
 
 /* ------------------------------------------------------------------------------
- * onTileTypeClick - Sets the tile type of the editor's cursor.
- */
-void TileSelectorLayer::onTileTypeClick(TileType tileType) {
-    std::cout << "TileType: " << tileType << std::endl;
-    selTileType = tileType;
-}
-
-/* ------------------------------------------------------------------------------
  * onKeyDown - ESC should close the tile selector layer.
  */
 void TileSelectorLayer::onKeyDown(SDLKey key) {
@@ -94,41 +84,31 @@ void TileSelectorLayer::onKeyDown(SDLKey key) {
     // Left and Right change the Tile Button selection.
     } else if (key == SDLK_LEFT || key == SDLK_RIGHT) {
         // Figure out which index gets focus next.
-        int nextFocus = 0;
-        for (uint16_t x = 0; x < getChildCount(); x++) {
-            ButtonLayer* bl = (ButtonLayer*) getChild(x);
-
-            nextFocus = x;
-
-            if (bl->hasFocus()) {
-                if (key == SDLK_LEFT) {
-                    nextFocus--;
-                } else if (key == SDLK_RIGHT) {
-                    nextFocus++;
-                }
-                break;
+        int selChild = getFocusedChildIndex();
+        if (selChild >= 0) {
+            // Selected Child should go left or right
+            if (key == SDLK_LEFT) {
+                selChild--;
+            } else if (key == SDLK_RIGHT) {
+                selChild++;
             }
-        }
 
-        // Handle wraparound.
-        if (nextFocus < 0) {
-            nextFocus = getChildCount() - 1;
-        } else if (nextFocus >= getChildCount()) {
-            nextFocus = 0;
-        }
+            // Handle wraparound.
+            if (selChild < 0) {
+                selChild = getChildCount() - 1;
+            } else if (selChild >= getChildCount()) {
+                selChild = 0;
+            }
 
-        // Change the focus.
-        getChild(nextFocus)->setFocus();
+            // Change the focus.
+            getChild(selChild)->setFocus();
+        }
     } else if (key == SDLK_RETURN) {
-        for (uint16_t x = 0; x < getChildCount(); x++) {
-            ButtonLayer* bl = (ButtonLayer*) getChild(x);
-
-            if (bl->hasFocus()) {
-                selTileType = (TileType) x;
-            }
+        int selChild = getFocusedChildIndex();
+        if (selChild >= 0) {
+            selTileType = (TileType) selChild;
+            hide();
         }
-
-        hide();
     }
 }
 

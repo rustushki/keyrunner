@@ -108,6 +108,20 @@ Layer* Layer::getChild(int i) {
 }
 
 /* ------------------------------------------------------------------------------
+ * getFocusedChildIndex - Return the index of the child Layer which has focus.
+ * Returns negative number if there is not one selected.
+ */
+int Layer::getFocusedChildIndex() {
+    for (uint16_t x = 0; x < getChildCount(); x++) {
+        if (getChild(x)->hasFocus()) {
+            return x;
+        }
+    }
+
+    return -1;
+}
+
+/* ------------------------------------------------------------------------------
  * getChildCount - Return the total count of child layers.
  */
 uint16_t Layer::getChildCount() {

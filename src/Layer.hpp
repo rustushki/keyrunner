@@ -39,6 +39,8 @@ protected:
 
     Layer* getChild(int i);
 
+    int getFocusedChildIndex();
+
     uint16_t getChildCount();
 
 private:
