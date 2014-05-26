@@ -83,8 +83,8 @@ void TileSelectorLayer::onKeyDown(SDLKey key) {
 
     // Left and Right change the Tile Button selection.
     } else if (key == SDLK_LEFT || key == SDLK_RIGHT) {
-        // Figure out which index gets focus next.
-        int selChild = getFocusedChildIndex();
+        // Figure out which index gets selected next.
+        int selChild = getSelectedChildIndex();
         if (selChild >= 0) {
             // Selected Child should go left or right
             if (key == SDLK_LEFT) {
@@ -100,11 +100,11 @@ void TileSelectorLayer::onKeyDown(SDLKey key) {
                 selChild = 0;
             }
 
-            // Change the focus.
-            getChild(selChild)->setFocus();
+            // Change the selected layer.
+            getChild(selChild)->setSelected();
         }
     } else if (key == SDLK_RETURN) {
-        int selChild = getFocusedChildIndex();
+        int selChild = getSelectedChildIndex();
         if (selChild >= 0) {
             selTileType = (TileType) selChild;
             hide();
@@ -113,12 +113,12 @@ void TileSelectorLayer::onKeyDown(SDLKey key) {
 }
 
 /* ------------------------------------------------------------------------------
- * show - Show the TileSelectorLayer, granting focus to the first tile button.
+ * show - Show the TileSelectorLayer, granting selection to the first tile button.
  */
 void TileSelectorLayer::show() {
     ButtonLayer* bl = (ButtonLayer*) getChild(0);
     if (bl != NULL) {
-        bl->setFocus();
+        bl->setSelected();
     }
 
     Layer::show();

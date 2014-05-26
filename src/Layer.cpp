@@ -3,7 +3,7 @@
 #include <iostream>
 #include "Layer.hpp"
 
-Layer* Layer::focusedLayer = NULL;
+Layer* Layer::selectedLayer = NULL;
 
 Layer::Layer() {
     onClickCb = NULL;
@@ -108,12 +108,12 @@ Layer* Layer::getChild(int i) {
 }
 
 /* ------------------------------------------------------------------------------
- * getFocusedChildIndex - Return the index of the child Layer which has focus.
- * Returns negative number if there is not one selected.
+ * getSelectedChildIndex - Return the index of the child Layer which is
+ * selected.  Returns negative number if there is not one selected.
  */
-int Layer::getFocusedChildIndex() {
+int Layer::getSelectedChildIndex() {
     for (uint16_t x = 0; x < getChildCount(); x++) {
-        if (getChild(x)->hasFocus()) {
+        if (getChild(x)->isSelected()) {
             return x;
         }
     }
@@ -129,15 +129,15 @@ uint16_t Layer::getChildCount() {
 }
 
 /* ------------------------------------------------------------------------------
- * hasFocus - Return whether or not this Layer is the one that has focus.
+ * isSelected - Return whether or not this Layer is the one that is selected.
  */
-bool Layer::hasFocus() const {
-    return (Layer::focusedLayer == this);
+bool Layer::isSelected() const {
+    return (Layer::selectedLayer == this);
 }
 
 /* ------------------------------------------------------------------------------
- * setFocus - Give this Layer focus.
+ * setSelected - Makes this layer selected.
  */
-void Layer::setFocus() {
-    focusedLayer = this;
+void Layer::setSelected() {
+    selectedLayer = this;
 }

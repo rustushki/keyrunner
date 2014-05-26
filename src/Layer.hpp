@@ -28,9 +28,9 @@ public:
 
     virtual void hide();
 
-    bool hasFocus() const;
+    bool isSelected() const;
 
-    void setFocus();
+    void setSelected();
 
 protected:
     std::function<void()> getOnClickCb() const;
@@ -39,7 +39,7 @@ protected:
 
     Layer* getChild(int i);
 
-    int getFocusedChildIndex();
+    int getSelectedChildIndex();
 
     uint16_t getChildCount();
 
@@ -52,7 +52,7 @@ private:
 
     bool visible;
 
-    static Layer* focusedLayer;
+    static Layer* selectedLayer;
 
 };
 

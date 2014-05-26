@@ -50,7 +50,7 @@ void ButtonLayer::draw(SDL_Surface* dst) {
 
     uint32_t pprUShColor;
     uint32_t pprLShColor;
-    if (!hasFocus()) {
+    if (!isSelected()) {
         // Upper Shadow Light Gray.
         pprUShColor = SDL_MapRGB(dst->format, 0xAA, 0xAA, 0xAA);
         // Lower Shadow Dark Gray
