@@ -7,9 +7,10 @@
 #include "RootLayer.hpp"
 
 RootLayer::RootLayer(InfoBarLayer* ibl) {
-    this->ibl = ibl;
     addLayer(GridLayer::GetInstance());
     addLayer(ibl);
+    this->ibl = ibl;
+    this->ibl->setSelected();
 }
 
 void RootLayer::draw(SDL_Surface* dst) {

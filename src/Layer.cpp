@@ -86,9 +86,11 @@ bool Layer::isVisible() {
 
 /* ------------------------------------------------------------------------------
  * show - Make the layer visible.  Note that layers default to visible.
+ * Calling show will automatically give this widget selection.
  */
 void Layer::show() {
     visible = true;
+    setSelected();
 }
 
 /* ------------------------------------------------------------------------------
@@ -140,4 +142,15 @@ bool Layer::isSelected() const {
  */
 void Layer::setSelected() {
     selectedLayer = this;
+    onSelected();
+}
+
+/* ------------------------------------------------------------------------------
+ * onSelected - Called when selection is set to this Layer.  Default behavior
+ * is to grant selection to the first child.  Override to change.
+ */
+void Layer::onSelected() {
+    if (subLayers.size() > 0) {
+        subLayers[0]->setSelected();
+    }
 }

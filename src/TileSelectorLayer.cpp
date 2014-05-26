@@ -28,7 +28,7 @@ TileSelectorLayer::TileSelectorLayer() {
         addLayer(bl);
     }
 
-    show();
+    Layer::show();
 
     delete blb;
 }
@@ -110,16 +110,4 @@ void TileSelectorLayer::onKeyDown(SDLKey key) {
             hide();
         }
     }
-}
-
-/* ------------------------------------------------------------------------------
- * show - Show the TileSelectorLayer, granting selection to the first tile button.
- */
-void TileSelectorLayer::show() {
-    ButtonLayer* bl = (ButtonLayer*) getChild(0);
-    if (bl != NULL) {
-        bl->setSelected();
-    }
-
-    Layer::show();
 }

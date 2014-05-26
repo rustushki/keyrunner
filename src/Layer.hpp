@@ -43,6 +43,8 @@ protected:
 
     uint16_t getChildCount();
 
+    virtual void onSelected();
+
 private:
     bool contains(uint16_t x, uint16_t y);
 
