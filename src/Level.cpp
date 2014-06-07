@@ -319,6 +319,11 @@ Tile* Level::getMatchingTeleporterTile(Tile* t) {
                 break;
             }
         }
+
+        // Handle case where there is no matching teleporter tile.
+        if (!found) {
+            matching = t;
+        }
     }
 
     return matching;
