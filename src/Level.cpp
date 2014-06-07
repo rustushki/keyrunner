@@ -17,6 +17,11 @@ Level::Level(int levelNum) {
 
 Level::~Level() {
     GridLayer::GetInstance()->clearChangedTiles();
+    for (int x = 0; x < GridLayer::GRID_WIDTH; x++) {
+        for (int y = 0; y < GridLayer::GRID_HEIGHT; y++) {
+            delete tile[y][x];
+        }
+    }
 }
 
 void Level::init() {

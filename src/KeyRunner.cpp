@@ -130,9 +130,16 @@ RootLayer* KeyRunner::getRootLayer() {
 }
 
 void KeyRunner::exitGame() {
+    // Unblock the updateLevel thread so that it can free the Level's memory.
+    SDL_UnlockMutex(levelLock);
+    SDL_CondSignal(levelCond);
+
+    // Signal the Event loop to exit.
     SDL_Event quitEvent;
     quitEvent.type = SDL_QUIT;
     SDL_PushEvent(&quitEvent);
+
+    // Let all other threads know that it's time to exit.
     state = QUIT;
 }
 
