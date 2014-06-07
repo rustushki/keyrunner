@@ -27,6 +27,7 @@ void Layer::update() {
 }
 
 void Layer::addLayer(Layer* subLayer) {
+    subLayer->setParent(this);
     subLayers.push_back(subLayer);
 }
 
@@ -153,4 +154,11 @@ void Layer::onSelected() {
     if (subLayers.size() > 0) {
         subLayers[0]->setSelected();
     }
+}
+
+/* ------------------------------------------------------------------------------
+ * setParent - set the parent Layer of this Layer.
+ */
+void Layer::setParent(Layer* parent) {
+    this->parent = parent;
 }

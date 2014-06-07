@@ -45,6 +45,8 @@ protected:
 
     virtual void onSelected();
 
+    void setParent(Layer* parent);
+
 private:
     bool contains(uint16_t x, uint16_t y);
 
@@ -56,6 +58,7 @@ private:
 
     static Layer* selectedLayer;
 
+    Layer* parent;
 };
 
 #endif//LAYER_HPP
