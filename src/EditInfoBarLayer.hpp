@@ -17,6 +17,8 @@ private:
 
     static EditInfoBarLayer* instance;
 
+    void onKeyDown(SDLKey key);
+
     ButtonLayer* exitBl;
     ButtonLayer* saveBl;
     ButtonLayer* tileBl;
