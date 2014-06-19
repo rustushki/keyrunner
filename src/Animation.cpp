@@ -21,8 +21,7 @@ Animation::Animation(AnimationType at) {
     uint16_t height = frameSize[1];
 
     // Build the SpriteSheet.
-    SpriteSheet* ss = new SpriteSheet(filename, width, height);
-    this->sheet = ss;
+    this->sheet = new SpriteSheet(filename, width, height);
 
     // Set the stills per second.
     this->sps = Animation::GetSPS(at);
@@ -140,11 +139,11 @@ void Animation::stop() {
 }
 
 uint16_t Animation::getWidth() const {
-    sheet->getWidth();
+    return sheet->getWidth();
 }
 
 uint16_t Animation::getHeight() const {
-    sheet->getHeight();
+    return sheet->getHeight();
 }
 
 /* ------------------------------------------------------------------------------
