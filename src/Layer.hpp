@@ -16,11 +16,11 @@ public:
 
     virtual void update();
 
-    virtual void onClick(uint16_t x, uint16_t y);
+    virtual void onEnter();
 
     virtual void onKeyDown(SDLKey key);
 
-    void setOnClick(std::function<void()> cb);
+    void setOnEnter(std::function<void()> cb);
 
     bool isVisible();
 
@@ -33,7 +33,7 @@ public:
     void setSelected();
 
 protected:
-    std::function<void()> getOnClickCb() const;
+    std::function<void()> getOnEnterCb() const;
 
     void addLayer(Layer* subLayer);
 
@@ -52,7 +52,7 @@ private:
 
     std::vector<Layer*> subLayers;
 
-    std::function<void()> onClickCb;
+    std::function<void()> onEnterCb;
 
     bool visible;
 

@@ -34,7 +34,7 @@ EditInfoBarLayer::EditInfoBarLayer() {
         ->setY(r.h + margin)
         ->build();
 
-    tileBl->setOnClick(std::bind(&EditInfoBarLayer::onTileClick, this));
+    tileBl->setOnEnter(std::bind(&EditInfoBarLayer::onTileEnter, this));
 
     // Add the Save Button to the EditInfoBarLayer.
     addLayer(tileBl);
@@ -50,7 +50,7 @@ EditInfoBarLayer::EditInfoBarLayer() {
         ->setY(r.h + margin)
         ->build();
 
-    saveBl->setOnClick(std::bind(&EditInfoBarLayer::onSaveClick, this));
+    saveBl->setOnEnter(std::bind(&EditInfoBarLayer::onSaveEnter, this));
 
     // Add the Save Button to the EditInfoBarLayer.
     addLayer(saveBl);
@@ -66,7 +66,7 @@ EditInfoBarLayer::EditInfoBarLayer() {
         ->setY(r.h + margin)
         ->build();
 
-    exitBl->setOnClick(std::bind(&EditInfoBarLayer::onExitClick, this));
+    exitBl->setOnEnter(std::bind(&EditInfoBarLayer::onExitEnter, this));
 
     // Add the Exit Button to the EditInfoBarLayer.
     addLayer(exitBl);
@@ -83,15 +83,15 @@ EditInfoBarLayer::~EditInfoBarLayer() {
     delete exitBl;
 }
 
-void EditInfoBarLayer::onExitClick() {
+void EditInfoBarLayer::onExitEnter() {
     KeyRunner::exitGame();
 }
 
-void EditInfoBarLayer::onSaveClick() {
+void EditInfoBarLayer::onSaveEnter() {
     LevelManager::Write(KeyRunner::getCurrentLevel());
 }
 
-void EditInfoBarLayer::onTileClick() {
+void EditInfoBarLayer::onTileEnter() {
     tsl->show();
 }
 
@@ -131,6 +131,6 @@ void EditInfoBarLayer::onKeyDown(SDLKey key) {
             getChild(selChild)->setSelected();
         }
     } else if (key == SDLK_RETURN) {
-        std::cout << "pressed enter" << std::endl;
+        getChild(getSelectedChildIndex())->onEnter();
     }
 }

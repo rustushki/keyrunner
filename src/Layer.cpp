@@ -6,7 +6,7 @@
 Layer* Layer::selectedLayer = NULL;
 
 Layer::Layer() {
-    onClickCb = NULL;
+    onEnterCb = NULL;
     show();
 }
 
@@ -31,26 +31,24 @@ void Layer::addLayer(Layer* subLayer) {
     subLayers.push_back(subLayer);
 }
 
-std::function<void()> Layer::getOnClickCb() const {
-    return onClickCb;
+std::function<void()> Layer::getOnEnterCb() const {
+    return onEnterCb;
 }
 
-void Layer::onClick(uint16_t x, uint16_t y) {
-    // Handle the click with the Layer's onClick handler (if there is one).
-    std::function<void()> onClickCb = getOnClickCb();
-    if (onClickCb != NULL) {
-        onClickCb();
+void Layer::onEnter() {
+    // Handle the enter press with the Layer's onEnter handler (if there is one).
+    std::function<void()> onEnterCb = getOnEnterCb();
+    if (onEnterCb != NULL) {
+        onEnterCb();
     }
 
     // Iterate over the sub layers backwards so that the uppermost stacked are
     // evaluated first.  The first layer from the top which contains the point
-    // will propagate the onClick event.
+    // will propagate the onEnter event.
     std::vector<Layer*>::reverse_iterator itr;
     for (itr = subLayers.rbegin(); itr < subLayers.rend(); itr++) {
-        if ((*itr)->contains(x, y) && (*itr)->isVisible()) {
-            (*itr)->onClick(x, y);
-            break;
-        }
+        (*itr)->onEnter();
+        break;
     }
 }
 
@@ -74,8 +72,8 @@ bool Layer::contains(uint16_t x, uint16_t y) {
     return ret;
 }
 
-void Layer::setOnClick(std::function<void()> cb) {
-    onClickCb = cb;
+void Layer::setOnEnter(std::function<void()> cb) {
+    onEnterCb = cb;
 }
 
 /* ------------------------------------------------------------------------------

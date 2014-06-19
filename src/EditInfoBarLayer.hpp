@@ -23,9 +23,9 @@ private:
     ButtonLayer* saveBl;
     ButtonLayer* tileBl;
 
-    void onExitClick();
-    void onSaveClick();
-    void onTileClick();
+    void onExitEnter();
+    void onSaveEnter();
+    void onTileEnter();
 
     TileSelectorLayer* tsl;
 };
