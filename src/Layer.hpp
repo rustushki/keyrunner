@@ -32,6 +32,10 @@ public:
 
     void setSelected();
 
+    static Layer* getSelectedLayer();
+
+    Layer* getParent() const;
+
 protected:
     std::function<void()> getOnEnterCb() const;
 

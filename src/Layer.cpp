@@ -94,10 +94,14 @@ void Layer::show() {
 
 /* ------------------------------------------------------------------------------
  * hide - Make the layer invisible.  Note that layers default to visible, so a
- * call must be made to hide() in order to make them invisible.
+ * call must be made to hide() in order to make them invisible.  Give the
+ * parent focus.
  */
 void Layer::hide() {
     visible = false;
+    if (getParent() != NULL) {
+        getParent()->setSelected();
+    }
 }
 
 /* ------------------------------------------------------------------------------
@@ -142,6 +146,20 @@ bool Layer::isSelected() const {
 void Layer::setSelected() {
     selectedLayer = this;
     onSelected();
+}
+
+/* ------------------------------------------------------------------------------
+ * getSelectedLayer - Return the selected layer.
+ */
+Layer* Layer::getSelectedLayer() {
+    return Layer::selectedLayer;
+}
+
+/* ------------------------------------------------------------------------------
+ * getParent - Return the parent layer.
+ */
+Layer* Layer::getParent() const {
+    return parent;
 }
 
 /* ------------------------------------------------------------------------------

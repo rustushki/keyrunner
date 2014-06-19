@@ -505,7 +505,10 @@ void KeyRunner::editHandleEvents() {
 
             // Pass all other keys down to the layers to search for a handler.
             } else {
-                rootLayer->onKeyDown(event.key.keysym.sym);
+                Layer* selected = Layer::getSelectedLayer();
+                if (selected != NULL) {
+                    selected->getParent()->onKeyDown(event.key.keysym.sym);
+                }
             }
 
         } else if (event.type == SDL_KEYUP) {
