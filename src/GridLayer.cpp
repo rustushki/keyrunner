@@ -66,8 +66,8 @@ SDL_Rect GridLayer::getRect() const {
     SDL_Rect r;
     r.x = 0;
     r.y = 0;
-    r.w = GRID_WIDTH * 25;
-    r.h = GRID_HEIGHT * 25;
+    r.w = GRID_WIDTH * Tile::SIZE;
+    r.h = GRID_HEIGHT * Tile::SIZE;
     return r;
 }
 

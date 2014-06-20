@@ -25,6 +25,19 @@ Tile::~Tile() {
     delete this->anim;
 }
 
+/* ------------------------------------------------------------------------------
+ * getRect - Get the region of the screen upon which this Layer will be drawn.
+ * For InfoBarLayer, it will be at the bottom, vertically below the GridLayer.
+ */
+SDL_Rect Tile::getRect() const {
+    SDL_Rect r;
+    r.w = Tile::SIZE;
+    r.h = Tile::SIZE;
+    r.x = Tile::SIZE * x;
+    r.y = Tile::SIZE * y;
+    return r;
+}
+
 Animation* Tile::getAnimation() const {
     return anim;
 }

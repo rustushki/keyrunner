@@ -9,11 +9,15 @@
 
 class Level;
 
-class Tile {
+class Tile : public Layer {
 
 public:
     Tile(TileType type, uint16_t x, uint16_t y, Level*);
     ~Tile();
+
+    static const uint8_t SIZE = 25;
+
+    SDL_Rect getRect() const;
 
     void draw(SDL_Surface* dst);
 
