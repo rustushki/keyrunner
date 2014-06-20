@@ -11,6 +11,7 @@ class Tile;
 class LevelManager {
 public:
     static uint16_t GetTotal();
+    static bool Exists(uint8_t levelNum);
     static Level* Read(uint8_t levelNum);
     static bool Write(Level* level);
     static Level* New(uint8_t levelNum);

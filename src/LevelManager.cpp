@@ -19,28 +19,39 @@ uint16_t LevelManager::GetTotal() {
 
     if (levelCount == -1) {
         uint8_t hiLevel = 255;
-        uint8_t loLevel =   1;
+        uint8_t loLevel =   0;
         uint8_t miLevel =   0;
 
         while (hiLevel >= loLevel) {
-
             miLevel = (hiLevel-loLevel)/2 + loLevel;
 
-            std::string levelFile = GetPath(miLevel, false);
-            FILE* fp = fopen(levelFile.c_str(), "rb");
-
-            if (fp != NULL) {
-                fclose(fp);
+            if (LevelManager::Exists(miLevel) && !LevelManager::Exists(miLevel + 1)) {
+                levelCount = miLevel;
+                break;
+            } else if (LevelManager::Exists(miLevel)) {
                 loLevel = miLevel + 1;
             } else {
                 hiLevel = miLevel - 1;
             }
         }
-        levelCount = miLevel - 1;
+        levelCount = miLevel;
     }
 
     return levelCount;
 
+}
+
+bool LevelManager::Exists(uint8_t levelNum) {
+    std::string levelFile = GetPath(levelNum, false);
+    FILE* fp = fopen(levelFile.c_str(), "rb");
+
+    bool exists = false;
+    if (fp != NULL) {
+        exists = true;
+        fclose(fp);
+    }
+
+    return exists;
 }
 
 bool LevelManager::Write(Level* level) {
