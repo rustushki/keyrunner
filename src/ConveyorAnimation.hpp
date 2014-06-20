@@ -4,14 +4,14 @@
 #include <stdint.h>
 #include <vector>
 
-class Tile;
+class TileLayer;
 
 class ConveyorAnimation {
 public:
-    ConveyorAnimation(std::vector<Tile*>);
+    ConveyorAnimation(std::vector<TileLayer*>);
     ~ConveyorAnimation();
 
-    static bool TileInConveyor(Tile* tile);
+    static bool TileInConveyor(TileLayer* tile);
     static bool StartConveyors();
     static void ClearConveyors();
 
@@ -19,8 +19,8 @@ public:
 
 private:
 
-    std::vector<Tile*> conveyorTiles;
-    bool hasTile(Tile*) const;
+    std::vector<TileLayer*> conveyorTiles;
+    bool hasTile(TileLayer*) const;
 
     uint16_t nextTileToStart;
 

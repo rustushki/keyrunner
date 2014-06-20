@@ -20,7 +20,7 @@ PlayInfoBarLayer.cpp   \
 PlayRootLayer.cpp      \
 RootLayer.cpp          \
 SpriteSheet.cpp        \
-Tile.cpp               \
+TileLayer.cpp          \
 TileSelectorLayer.cpp  \
 main.cpp
 

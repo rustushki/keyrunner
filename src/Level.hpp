@@ -8,7 +8,7 @@
 #include "Direction.hpp"
 #include "GridLayer.hpp"
 #include "TileType.hpp"
-#include "Tile.hpp"
+#include "TileLayer.hpp"
 
 class Animation;
 
@@ -19,19 +19,19 @@ private:
 
     void init();
 
-    Tile* tile[GridLayer::GRID_HEIGHT][GridLayer::GRID_WIDTH];
+    TileLayer* tile[GridLayer::GRID_HEIGHT][GridLayer::GRID_WIDTH];
 
     int level;
 
-    Tile* tileHasPlayer;
-    Tile* tileHasKey;
+    TileLayer* tileHasPlayer;
+    TileLayer* tileHasKey;
 
     bool playerHasKey;
 
     Animation* keyAnim;
     Animation* playerAnim;
 
-    Tile* getMatchingTeleporterTile(Tile*);
+    TileLayer* getMatchingTeleporterTile(TileLayer*);
 
     void buildConveyorAnimations();
 
@@ -45,14 +45,14 @@ public:
     bool isWall(int x, int y);
 
     bool movePlayer(Direction d);
-    bool movePlayerToTile(Tile*);
-    Tile* getPlayerTile() const;
-    Tile* getKeyTile() const;
+    bool movePlayerToTile(TileLayer*);
+    TileLayer* getPlayerTile() const;
+    TileLayer* getKeyTile() const;
 
     bool isComplete() const;
     int toInt() const;
 
-    Tile* getTile(uint16_t x, uint16_t y) const;
+    TileLayer* getTile(uint16_t x, uint16_t y) const;
 
     friend class LevelManager;
 

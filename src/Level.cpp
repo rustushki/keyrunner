@@ -37,23 +37,23 @@ void Level::buildConveyorAnimations() {
     for (int x = 0; x < GridLayer::GRID_WIDTH; x++) {
 
         for (int y = 0; y < GridLayer::GRID_HEIGHT; y++) {
-            Tile* tile = this->getTile(x, y);
+            TileLayer* tile = this->getTile(x, y);
 
             if (tile->isConveyor()) {
 
                 if (!ConveyorAnimation::TileInConveyor(tile)) {
 
-                    // This Tile must be part of a Conveyor.  Find the start of
+                    // This TileLayer must be part of a Conveyor.  Find the start of
                     // the Conveyor.
 
-                    Tile* q = tile;
-                    Tile* p = q;
+                    TileLayer* q = tile;
+                    TileLayer* p = q;
 
                     if (ConveyorAnimation::TileInConveyor(p)) {
                         continue;
                     }
 
-                    //std::cout << "Found Tile: " << q->getX() << "," << q->getY() << std::endl;
+                    //std::cout << "Found TileLayer: " << q->getX() << "," << q->getY() << std::endl;
 
                     Direction conveyDir = q->getConveyorDirection();
 
@@ -84,7 +84,7 @@ void Level::buildConveyorAnimations() {
                     // Go backwards along the belt until you hit a non-conveyor
                     // tile, or a conveyor tile which is part of another
                     // conveyor, or we find that the current belt is circular.
-                    Tile* prev = p;
+                    TileLayer* prev = p;
                     while (    p->isConveyor()
                             && p->getConveyorDirection() == conveyDir
                             && !ConveyorAnimation::TileInConveyor(p)
@@ -108,8 +108,8 @@ void Level::buildConveyorAnimations() {
 
                     }
 
-                    Tile* start = p = prev;
-                    std::vector<Tile*> conveyorTiles;
+                    TileLayer* start = p = prev;
+                    std::vector<TileLayer*> conveyorTiles;
 
                     //std::cout << "\tStart " << start->getX() << "," << start->getY() << std::endl;
                     //std::cout << "\t" << p->isConveyor() << std::endl;
@@ -161,7 +161,7 @@ void Level::buildConveyorAnimations() {
 
 }
 
-Tile* Level::getTile(uint16_t x, uint16_t y) const {
+TileLayer* Level::getTile(uint16_t x, uint16_t y) const {
     if (y >= GridLayer::GRID_HEIGHT || x >= GridLayer::GRID_WIDTH) {
         return NULL;
     }
@@ -198,7 +198,7 @@ bool Level::movePlayer(Direction d) {
         KeyRunner::exitGame();
     }
 
-    Tile* newTile = NULL;
+    TileLayer* newTile = NULL;
     if (d == DIRECTION_UP) {
         newTile = this->tileHasPlayer->up();
     }
@@ -230,7 +230,7 @@ bool Level::movePlayer(Direction d) {
  * Return true if the player movement is to be interrupted.  It will do so if
  * the provided tile is a wall or a teleporter.
  */
-bool Level::movePlayerToTile(Tile* newTile) {
+bool Level::movePlayerToTile(TileLayer* newTile) {
     if (newTile == NULL) {
 
         return true;
@@ -258,7 +258,7 @@ bool Level::movePlayerToTile(Tile* newTile) {
 
     // Handle Teleporter Tiles.
     if (this->tileHasPlayer->isTeleporter()) {
-        Tile* matching = this->getMatchingTeleporterTile(this->tileHasPlayer);
+        TileLayer* matching = this->getMatchingTeleporterTile(this->tileHasPlayer);
         this->tileHasPlayer = matching;
         gl->addChangedTile(this->tileHasPlayer);
         return true;
@@ -276,14 +276,14 @@ bool Level::movePlayerToTile(Tile* newTile) {
 /* ------------------------------------------------------------------------------
  * getPlayerTile - Return the current tile of the player.
  */
-Tile* Level::getPlayerTile() const {
+TileLayer* Level::getPlayerTile() const {
     return this->tileHasPlayer;
 }
 
 /* ------------------------------------------------------------------------------
  * getKeyTile - Return the current tile of the player.
  */
-Tile* Level::getKeyTile() const {
+TileLayer* Level::getKeyTile() const {
     return this->tileHasKey;
 }
 
@@ -291,9 +291,9 @@ Tile* Level::getKeyTile() const {
  * getMatchingTeleporterTile - Given a teleporter tile X and Y, return the
  * matching teleporter tile's X and Y.  Return as a vector int.
  */
-Tile* Level::getMatchingTeleporterTile(Tile* t) {
+TileLayer* Level::getMatchingTeleporterTile(TileLayer* t) {
 
-    Tile* matching = NULL;
+    TileLayer* matching = NULL;
 
     // Handle case where a non-telepoprter tile is passed in.  Return the same
     // tile provided.  This should never happen.
@@ -311,7 +311,7 @@ Tile* Level::getMatchingTeleporterTile(Tile* t) {
 
                 if (x != t->getX() || y != t->getY()) {
 
-                    // Found the a Teleporter Tile of the same color which is not this tile.
+                    // Found the a Teleporter TileLayer of the same color which is not this tile.
                     if (t->getType() == this->getTile(x,y)->getType()) {
                         matching = this->getTile(x, y);
                         found = true;

@@ -2,11 +2,11 @@
 #include "ConveyorAnimation.hpp"
 #include "GridLayer.hpp"
 #include "KeyRunner.hpp"
-#include "Tile.hpp"
+#include "TileLayer.hpp"
 
 std::vector<ConveyorAnimation*> ConveyorAnimation::Conveyors;
 
-ConveyorAnimation::ConveyorAnimation(std::vector<Tile*> conveyorTiles) {
+ConveyorAnimation::ConveyorAnimation(std::vector<TileLayer*> conveyorTiles) {
     this->conveyorTiles = conveyorTiles;
 
     ConveyorAnimation::Conveyors.push_back(this);
@@ -28,7 +28,7 @@ bool ConveyorAnimation::startAnimation() {
 
     GridLayer* gl = GridLayer::GetInstance();
 
-    Tile* currentTile = NULL;
+    TileLayer* currentTile = NULL;
     if (this->nextTileToStart == 0) {
 
         // Always start the first tile in the belt.
@@ -42,7 +42,7 @@ bool ConveyorAnimation::startAnimation() {
 
         if ((currentTile->getAnimation()->getCurrentStill()+1) % 8 == 0) {
 
-            Tile* tile = this->conveyorTiles[this->nextTileToStart];
+            TileLayer* tile = this->conveyorTiles[this->nextTileToStart];
             this->conveyorTiles[this->nextTileToStart]->getAnimation()->play();
             gl->pushAnimatedTile(tile);
 
@@ -54,7 +54,7 @@ bool ConveyorAnimation::startAnimation() {
 
 }
 
-bool ConveyorAnimation::hasTile(Tile* tile) const {
+bool ConveyorAnimation::hasTile(TileLayer* tile) const {
     for (Uint16 x = 0; x < this->conveyorTiles.size(); x++) {
         if (tile == this->conveyorTiles[x]) {
             return true;
@@ -68,7 +68,7 @@ bool ConveyorAnimation::hasTile(Tile* tile) const {
  * TileInConveyor - Check all conveyors to see if the provided tile is already
  * in a conveyor belt.
  */
-bool ConveyorAnimation::TileInConveyor(Tile* tile) {
+bool ConveyorAnimation::TileInConveyor(TileLayer* tile) {
 
     for (Uint16 c = 0; c < ConveyorAnimation::Conveyors.size(); c++) {
         ConveyorAnimation* conveyor = ConveyorAnimation::Conveyors[c];

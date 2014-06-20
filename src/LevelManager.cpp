@@ -7,7 +7,7 @@
 uint16_t LevelManager::w;
 uint16_t LevelManager::h;
 TileType LevelManager::defTT;
-std::vector<Tile*> LevelManager::deviations;
+std::vector<TileLayer*> LevelManager::deviations;
 uint16_t LevelManager::px;
 uint16_t LevelManager::py;
 uint16_t LevelManager::kx;
@@ -70,10 +70,10 @@ bool LevelManager::Write(Level* level) {
     fwrite(&tt, sizeof(uint8_t), 1, fp);
 
     // Count and Collect the number of Tile Deviations
-    std::vector<Tile*> devTiles;
+    std::vector<TileLayer*> devTiles;
     for (int x = 0; x < w; x++) {
         for (int y = 0; y < h; y++) {
-            Tile* tile = level->getTile(x, y);
+            TileLayer* tile = level->getTile(x, y);
             if (tile->getType() != tt) {
                 devTiles.push_back(tile);
             }
@@ -85,7 +85,7 @@ bool LevelManager::Write(Level* level) {
     fwrite(&devCount, sizeof(uint16_t), 1, fp);
 
     // Write Initial Char Location.
-    Tile* pTile = level->getPlayerTile();
+    TileLayer* pTile = level->getPlayerTile();
     uint16_t x = pTile->getX();
     uint16_t y = pTile->getY();
     fwrite(&x, sizeof(uint16_t), 1, fp);
@@ -98,7 +98,7 @@ bool LevelManager::Write(Level* level) {
 
     // Write Each Default Tile Type Deviation.
     for (auto dtItr = devTiles.begin(); dtItr < devTiles.end(); dtItr++) {
-        Tile* devTile = *dtItr;
+        TileLayer* devTile = *dtItr;
 
         // Write Deviation Tile Coordinate
         uint16_t x = devTile->getX();
@@ -113,7 +113,7 @@ bool LevelManager::Write(Level* level) {
 
     // Write Each Item Type
     // For now, we only need to record the location of the key.
-    Tile* kTile = level->getKeyTile();
+    TileLayer* kTile = level->getKeyTile();
     x = kTile->getX();
     y = kTile->getY();
     uint8_t it = 0;
@@ -173,7 +173,7 @@ Level* LevelManager::Read(uint8_t levelNum) {
         fread(&ttInt, sizeof(uint8_t), 1, fp);
         TileType tt = static_cast<TileType>(ttInt);
 
-        deviations.push_back(new Tile(tt, x, y, level));
+        deviations.push_back(new TileLayer(tt, x, y, level));
     }
 
     // Read the Key Location.
@@ -232,7 +232,7 @@ void LevelManager::Populate(Level* level) {
         for (int ty = 0; ty < h; ty++) {
             bool deviationMatch = false;
             if (deviations.size() > 0 && curDevIdx < deviations.size()) {
-                Tile* curDev = deviations[curDevIdx];
+                TileLayer* curDev = deviations[curDevIdx];
                 if (curDev->getX() == tx && curDev->getY() == ty) {
                     level->tile[ty][tx] = curDev;
                     curDevIdx++;
@@ -241,8 +241,8 @@ void LevelManager::Populate(Level* level) {
             }
 
             if (!deviationMatch) {
-                // Build a Default Tile at the coordinate.
-                Tile* tile = new Tile(defTT, tx, ty, level);
+                // Build a Default TileLayer at the coordinate.
+                TileLayer* tile = new TileLayer(defTT, tx, ty, level);
 
                 // Add the tile to the level.
                 level->tile[ty][tx] = tile;

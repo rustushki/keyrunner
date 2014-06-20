@@ -12,7 +12,7 @@ TileSelectorLayer::TileSelectorLayer() {
 
     for (int ttIdx = 0; ttIdx < TILETYPE_COUNT; ttIdx++) {
         TileType tt = (TileType) ttIdx;
-        AnimationType at = Tile::TileTypeToAnimType(tt);
+        AnimationType at = TileLayer::TileTypeToAnimType(tt);
 
         // Build the Button for the TileType.
         ButtonLayer* bl = blb

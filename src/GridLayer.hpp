@@ -5,7 +5,7 @@
 
 #include "Layer.hpp"
 
-class Tile;
+class TileLayer;
 
 class GridLayer : public Layer {
 
@@ -16,11 +16,11 @@ public:
     static const uint16_t GRID_HEIGHT = 16;
     static const uint16_t GRID_WIDTH  = 25;
 
-    void pushAnimatedTile(Tile* tile);
+    void pushAnimatedTile(TileLayer* tile);
     void clearAnimatedTiles();
     void animateTiles();
     void clearChangedTiles();
-    void addChangedTile(Tile* tile);
+    void addChangedTile(TileLayer* tile);
 
     virtual void draw(SDL_Surface* dst);
     virtual SDL_Rect getRect() const;
@@ -32,8 +32,8 @@ private:
 
     GridLayer();
 
-    std::vector<Tile*> changedTiles;
-    std::vector<Tile*> animatedTiles;
+    std::vector<TileLayer*> changedTiles;
+    std::vector<TileLayer*> animatedTiles;
 
 };
 

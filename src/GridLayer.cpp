@@ -1,5 +1,5 @@
 #include "GridLayer.hpp"
-#include "Tile.hpp"
+#include "TileLayer.hpp"
 #include "ConveyorAnimation.hpp"
 
 GridLayer* GridLayer::instance = NULL;
@@ -21,7 +21,7 @@ GridLayer::GridLayer() {
  * PushAnimatedTile - Push the provided animated tile onto the vector of tiles
  * which have animations which require advancing.
  */
-void GridLayer::pushAnimatedTile(Tile* tile) {
+void GridLayer::pushAnimatedTile(TileLayer* tile) {
     animatedTiles.push_back(tile);
 }
 
@@ -39,7 +39,7 @@ void GridLayer::clearAnimatedTiles() {
  */
 void GridLayer::animateTiles() {
     for (uint16_t x = 0; x < animatedTiles.size(); x++) {
-        Tile* tile = animatedTiles[x];
+        TileLayer* tile = animatedTiles[x];
         if (tile->getAnimation()->advance()) {
             addChangedTile(tile);
         }
@@ -51,7 +51,7 @@ void GridLayer::draw(SDL_Surface* dst) {
     while (!changedTiles.empty()) {
 
         // Get pair to update.
-        Tile* t = changedTiles.back();
+        TileLayer* t = changedTiles.back();
 
         // Redraw the tile referenced by that pair.
         t->draw(dst);
@@ -66,8 +66,8 @@ SDL_Rect GridLayer::getRect() const {
     SDL_Rect r;
     r.x = 0;
     r.y = 0;
-    r.w = GRID_WIDTH * Tile::SIZE;
-    r.h = GRID_HEIGHT * Tile::SIZE;
+    r.w = GRID_WIDTH * TileLayer::SIZE;
+    r.h = GRID_HEIGHT * TileLayer::SIZE;
     return r;
 }
 
@@ -90,7 +90,7 @@ void GridLayer::clearChangedTiles() {
     changedTiles.clear();
 }
 
-void GridLayer::addChangedTile(Tile* tile) {
+void GridLayer::addChangedTile(TileLayer* tile) {
     changedTiles.push_back(tile);
 }
 

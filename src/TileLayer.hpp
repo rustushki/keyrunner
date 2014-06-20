@@ -9,11 +9,11 @@
 
 class Level;
 
-class Tile : public Layer {
+class TileLayer : public Layer {
 
 public:
-    Tile(TileType type, uint16_t x, uint16_t y, Level*);
-    ~Tile();
+    TileLayer(TileType type, uint16_t x, uint16_t y, Level*);
+    ~TileLayer();
 
     static const uint8_t SIZE = 25;
 
@@ -36,14 +36,14 @@ public:
     bool hasPlayer() const;
     bool hasKey() const;
 
-    Tile* getNextConveyorTile() const;
+    TileLayer* getNextConveyorTile() const;
 
-    Tile* up() const;
-    Tile* down() const;
-    Tile* left() const;
-    Tile* right() const;
+    TileLayer* up() const;
+    TileLayer* down() const;
+    TileLayer* left() const;
+    TileLayer* right() const;
 
-    Tile* getTileInDirection(Direction d) const;
+    TileLayer* getTileInDirection(Direction d) const;
 
     Direction getConveyorDirection() const;
 

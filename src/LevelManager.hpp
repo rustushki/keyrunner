@@ -6,7 +6,7 @@
 #include "TileType.hpp"
 
 class Level;
-class Tile;
+class TileLayer;
 
 class LevelManager {
 public:
@@ -25,7 +25,7 @@ private:
     static uint16_t w;
     static uint16_t h;
     static TileType defTT;
-    static std::vector<Tile*> deviations;
+    static std::vector<TileLayer*> deviations;
     static uint16_t px;
     static uint16_t py;
     static uint16_t kx;

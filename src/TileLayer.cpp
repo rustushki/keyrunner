@@ -5,10 +5,10 @@
 #include "KeyRunner.hpp"
 #include "Level.hpp"
 #include "TileType.hpp"
-#include "Tile.hpp"
+#include "TileLayer.hpp"
 
-Tile::Tile(TileType type, uint16_t x, uint16_t y, Level* level) {
-    AnimationType at = Tile::TileTypeToAnimType(type);
+TileLayer::TileLayer(TileType type, uint16_t x, uint16_t y, Level* level) {
+    AnimationType at = TileLayer::TileTypeToAnimType(type);
     this->anim = Animation::AnimationFactory(at);
 
     if (this->anim->isAnimating()) {
@@ -21,7 +21,7 @@ Tile::Tile(TileType type, uint16_t x, uint16_t y, Level* level) {
     this->level = level;
 }
 
-Tile::~Tile() {
+TileLayer::~TileLayer() {
     delete this->anim;
 }
 
@@ -29,20 +29,20 @@ Tile::~Tile() {
  * getRect - Get the region of the screen upon which this Layer will be drawn.
  * For InfoBarLayer, it will be at the bottom, vertically below the GridLayer.
  */
-SDL_Rect Tile::getRect() const {
+SDL_Rect TileLayer::getRect() const {
     SDL_Rect r;
-    r.w = Tile::SIZE;
-    r.h = Tile::SIZE;
-    r.x = Tile::SIZE * x;
-    r.y = Tile::SIZE * y;
+    r.w = TileLayer::SIZE;
+    r.h = TileLayer::SIZE;
+    r.x = TileLayer::SIZE * x;
+    r.y = TileLayer::SIZE * y;
     return r;
 }
 
-Animation* Tile::getAnimation() const {
+Animation* TileLayer::getAnimation() const {
     return anim;
 }
 
-AnimationType Tile::TileTypeToAnimType(TileType tt) {
+AnimationType TileLayer::TileTypeToAnimType(TileType tt) {
     switch (tt) {
         case TILETYPE_EMPTY:
             return ANIMATION_TYPE_EMPTY;
@@ -89,14 +89,14 @@ AnimationType Tile::TileTypeToAnimType(TileType tt) {
     return ANIMATION_TYPE_EMPTY;
 }
 
-TileType Tile::getType() const {
+TileType TileLayer::getType() const {
     return this->type;
 }
 
 /* ------------------------------------------------------------------------------
  * isTeleporter - Return true if the tile is a teleporter tile.
  */
-bool Tile::isTeleporter() const {
+bool TileLayer::isTeleporter() const {
     TileType tt = this->getType();
 
     return (    tt == TILETYPE_TELEPORTER_RED
@@ -104,18 +104,18 @@ bool Tile::isTeleporter() const {
             || tt == TILETYPE_TELEPORTER_BLUE);
 }
 
-bool Tile::isDoor() const {
+bool TileLayer::isDoor() const {
     return (this->getType() == TILETYPE_DOOR);
 }
 
-bool Tile::isWall() const {
+bool TileLayer::isWall() const {
     return (this->getType() == TILETYPE_WALL);
 }
 
 /* ------------------------------------------------------------------------------
- * isConveyor - Return true if the Tile is a conveyor tile.
+ * isConveyor - Return true if the TileLayer is a conveyor tile.
  */
-bool Tile::isConveyor() const {
+bool TileLayer::isConveyor() const {
     return (    this->getType() == TILETYPE_CONVEY_UP
             || this->getType() == TILETYPE_CONVEY_DOWN
             || this->getType() == TILETYPE_CONVEY_RIGHT
@@ -123,7 +123,7 @@ bool Tile::isConveyor() const {
 }
 
 
-Tile* Tile::up() const{
+TileLayer* TileLayer::up() const{
     int x = this->x + 0;
     int y = this->y - 1;
     if (y < 0) {
@@ -132,7 +132,7 @@ Tile* Tile::up() const{
     return this->level->getTile(x, y);
 }
 
-Tile* Tile::down() const{
+TileLayer* TileLayer::down() const{
     int x = this->x + 0;
     int y = this->y + 1;
     if (y >= GridLayer::GRID_HEIGHT) {
@@ -141,7 +141,7 @@ Tile* Tile::down() const{
     return this->level->getTile(x, y);
 }
 
-Tile* Tile::left() const{
+TileLayer* TileLayer::left() const{
     int x = this->x - 1;
     int y = this->y + 0;
     if (x < 0) {
@@ -150,7 +150,7 @@ Tile* Tile::left() const{
     return this->level->getTile(x, y);
 }
 
-Tile* Tile::right() const{
+TileLayer* TileLayer::right() const{
     int x = this->x + 1;
     int y = this->y + 0;
     if (x >= GridLayer::GRID_WIDTH) {
@@ -163,7 +163,7 @@ Tile* Tile::right() const{
  * getConveyorDirection - Return the direction the conveyor is pointing
  * towards.
  */
-Direction Tile::getConveyorDirection() const {
+Direction TileLayer::getConveyorDirection() const {
     if (this->getType() == TILETYPE_CONVEY_UP) {
         return DIRECTION_UP;
 
@@ -189,7 +189,7 @@ Direction Tile::getConveyorDirection() const {
 /* ------------------------------------------------------------------------------
  * hasPlayer - Determine whether this tile has the player.
  */
-bool Tile::hasPlayer() const {
+bool TileLayer::hasPlayer() const {
     uint16_t x = this->getX();
     uint16_t y = this->getY();
     return (this->level->hasPlayer(x, y));
@@ -198,7 +198,7 @@ bool Tile::hasPlayer() const {
 /* ------------------------------------------------------------------------------
  * hasKey - Determine whether this tile has the key.
  */
-bool Tile::hasKey() const {
+bool TileLayer::hasKey() const {
     uint16_t x = this->getX();
     uint16_t y = this->getY();
     return (this->level->hasKey(x, y));
@@ -216,7 +216,7 @@ bool Tile::hasKey() const {
  *        3. If there is no suitable second place, return the current tile in
  *        the conveyor belt sequence.
  */
-Tile* Tile::getNextConveyorTile() const {
+TileLayer* TileLayer::getNextConveyorTile() const {
     if (!this->isConveyor()) {
         std::cout << "Trying to get next conveyor tile from non conveyor tile." << std::endl;
         KeyRunner::exitGame();
@@ -238,9 +238,9 @@ Tile* Tile::getNextConveyorTile() const {
         oppDir = DIRECTION_RIGHT;
     }
 
-    Tile* tryTile = NULL;
-    Tile* secondPlace = NULL;
-    Tile* thirdPlace = const_cast<Tile*>(this);
+    TileLayer* tryTile = NULL;
+    TileLayer* secondPlace = NULL;
+    TileLayer* thirdPlace = const_cast<TileLayer*>(this);
 
 
     while (true) {
@@ -258,7 +258,7 @@ Tile* Tile::getNextConveyorTile() const {
             if (dir != oppDir) {
                 Direction dir = tryTile->getConveyorDirection();
 
-                Tile* check = tryTile->getTileInDirection(dir);
+                TileLayer* check = tryTile->getTileInDirection(dir);
 
                 if (check != this) {
                     return tryTile;
@@ -299,7 +299,7 @@ Tile* Tile::getNextConveyorTile() const {
  * getTileInDirection - Given a direction, return the tile to that direction
  * from this tile..
  */
-Tile* Tile::getTileInDirection(Direction dir) const {
+TileLayer* TileLayer::getTileInDirection(Direction dir) const {
     if (dir == DIRECTION_UP) {
         return this->up();
     } else if (dir == DIRECTION_DOWN) {
@@ -313,15 +313,15 @@ Tile* Tile::getTileInDirection(Direction dir) const {
     return NULL;
 }
 
-uint16_t Tile::getX() const {
+uint16_t TileLayer::getX() const {
     return this->x;
 }
 
-uint16_t Tile::getY() const {
+uint16_t TileLayer::getY() const {
     return this->y;
 }
 
-void Tile::draw(SDL_Surface* dst) {
+void TileLayer::draw(SDL_Surface* dst) {
 
     const uint16_t tileSize = 25;
 

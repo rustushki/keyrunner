@@ -355,13 +355,13 @@ int KeyRunner::convey(void* unused) {
 
 
         // Get the current tile of the player.
-        Tile* playerTile = level->getPlayerTile();
+        TileLayer* playerTile = level->getPlayerTile();
 
         // If the tile in a conveyor tile,
         if (playerTile->isConveyor()) {
 
             // Convey the player to the next tile.
-            Tile* newTile = playerTile->getNextConveyorTile();
+            TileLayer* newTile = playerTile->getNextConveyorTile();
             if (level->movePlayerToTile(newTile)) {
                 if (level->isComplete()){
                     SDL_UnlockMutex(levelLock);
