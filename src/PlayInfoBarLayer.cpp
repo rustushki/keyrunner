@@ -1,3 +1,4 @@
+#include "GridLayer.hpp"
 #include "PlayInfoBarLayer.hpp"
 #include "RootLayer.hpp"
 
@@ -21,7 +22,7 @@ void PlayInfoBarLayer::draw(SDL_Surface* dst) {
     InfoBarLayer::draw(dst);
 
     // As they say.
-    this->drawLevel(dst, KeyRunner::getLevelNum());
+    this->drawLevel(dst, GridLayer::GetInstance()->getLevelNum());
     this->drawTimer(dst);
 
 }

@@ -3,22 +3,15 @@
 #include "AnimationType.hpp"
 #include "GridLayer.hpp"
 #include "KeyRunner.hpp"
-#include "Level.hpp"
 #include "TileType.hpp"
 #include "TileLayer.hpp"
 
-TileLayer::TileLayer(TileType type, uint16_t x, uint16_t y, Level* level) {
-    AnimationType at = TileLayer::TileTypeToAnimType(type);
-    this->anim = Animation::AnimationFactory(at);
-
-    if (this->anim->isAnimating()) {
-        GridLayer::GetInstance()->pushAnimatedTile(this);
-    }
+TileLayer::TileLayer(TileType type, uint16_t x, uint16_t y) {
+    setType(type);
 
     this->type = type;
     this->x = x;
     this->y = y;
-    this->level = level;
 }
 
 TileLayer::~TileLayer() {
@@ -93,6 +86,17 @@ TileType TileLayer::getType() const {
     return this->type;
 }
 
+void TileLayer::setType(TileType tt) {
+    type = tt;
+
+    AnimationType at = TileLayer::TileTypeToAnimType(type);
+    this->anim = Animation::AnimationFactory(at);
+
+    if (this->anim->isAnimating()) {
+        GridLayer::GetInstance()->pushAnimatedTile(this);
+    }
+}
+
 /* ------------------------------------------------------------------------------
  * isTeleporter - Return true if the tile is a teleporter tile.
  */
@@ -129,7 +133,7 @@ TileLayer* TileLayer::up() const{
     if (y < 0) {
         y = GridLayer::GRID_HEIGHT-1;
     }
-    return this->level->getTile(x, y);
+    return GridLayer::GetInstance()->getTile(x, y);
 }
 
 TileLayer* TileLayer::down() const{
@@ -138,7 +142,7 @@ TileLayer* TileLayer::down() const{
     if (y >= GridLayer::GRID_HEIGHT) {
         y = 0;
     }
-    return this->level->getTile(x, y);
+    return GridLayer::GetInstance()->getTile(x, y);
 }
 
 TileLayer* TileLayer::left() const{
@@ -147,7 +151,7 @@ TileLayer* TileLayer::left() const{
     if (x < 0) {
         x = GridLayer::GRID_WIDTH-1;
     }
-    return this->level->getTile(x, y);
+    return GridLayer::GetInstance()->getTile(x, y);
 }
 
 TileLayer* TileLayer::right() const{
@@ -156,7 +160,7 @@ TileLayer* TileLayer::right() const{
     if (x >= GridLayer::GRID_WIDTH) {
         x = 0;
     }
-    return this->level->getTile(x, y);
+    return GridLayer::GetInstance()->getTile(x, y);
 }
 
 /* ------------------------------------------------------------------------------
@@ -192,7 +196,7 @@ Direction TileLayer::getConveyorDirection() const {
 bool TileLayer::hasPlayer() const {
     uint16_t x = this->getX();
     uint16_t y = this->getY();
-    return (this->level->hasPlayer(x, y));
+    return (GridLayer::GetInstance()->hasPlayer(x, y));
 }
 
 /* ------------------------------------------------------------------------------
@@ -201,7 +205,7 @@ bool TileLayer::hasPlayer() const {
 bool TileLayer::hasKey() const {
     uint16_t x = this->getX();
     uint16_t y = this->getY();
-    return (this->level->hasKey(x, y));
+    return (GridLayer::GetInstance()->hasKey(x, y));
 }
 
 /* ------------------------------------------------------------------------------

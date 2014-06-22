@@ -12,16 +12,16 @@ class LevelManager {
 public:
     static uint16_t GetTotal();
     static bool Exists(uint8_t levelNum);
-    static Level* Read(uint8_t levelNum);
-    static bool Write(Level* level);
-    static Level* New(uint8_t levelNum);
+    static void Read(uint8_t levelNum);
+    static bool Write();
+    static void New(uint8_t levelNum);
 
 private:
     static std::string GetPath(uint8_t levelNum, bool inCwd);
     static void Reset();
 
     // Populate uses the data below to 'fill in' a Level object.
-    static void Populate(Level* level);
+    static void Populate(uint8_t levelNum);
     static uint16_t w;
     static uint16_t h;
     static TileType defTT;

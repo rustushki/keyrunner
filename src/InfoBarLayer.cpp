@@ -1,4 +1,5 @@
 #include "InfoBarLayer.hpp"
+#include "GridLayer.hpp"
 #include "RootLayer.hpp"
 
 InfoBarLayer::InfoBarLayer() {

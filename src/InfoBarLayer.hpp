@@ -4,7 +4,6 @@
 #include "InfoBarPos.hpp"
 #include "KeyRunner.hpp"
 #include "Layer.hpp"
-#include "Level.hpp"
 
 class InfoBarLayer : public Layer {
 

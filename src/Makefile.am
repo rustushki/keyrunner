@@ -13,7 +13,6 @@ GridLayer.cpp          \
 InfoBarLayer.cpp       \
 KeyRunner.cpp          \
 Layer.cpp              \
-Level.cpp              \
 LevelManager.cpp       \
 Options.cpp            \
 PlayInfoBarLayer.cpp   \

@@ -12,7 +12,7 @@ class Level;
 class TileLayer : public Layer {
 
 public:
-    TileLayer(TileType type, uint16_t x, uint16_t y, Level*);
+    TileLayer(TileType type, uint16_t x, uint16_t y);
     ~TileLayer();
 
     static const uint8_t SIZE = 25;
@@ -25,6 +25,7 @@ public:
     static AnimationType TileTypeToAnimType(TileType tt);
 
     TileType getType() const;
+    void setType(TileType tt);
 
     uint16_t getX() const;
     uint16_t getY() const;

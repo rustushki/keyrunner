@@ -2,6 +2,7 @@
 
 #include "ButtonLayerBuilder.hpp"
 #include "EditInfoBarLayer.hpp"
+#include "GridLayer.hpp"
 #include "LevelManager.hpp"
 #include "TileSelectorLayer.hpp"
 
@@ -88,7 +89,7 @@ void EditInfoBarLayer::onExitEnter() {
 }
 
 void EditInfoBarLayer::onSaveEnter() {
-    LevelManager::Write(KeyRunner::getCurrentLevel());
+    LevelManager::Write();
 }
 
 void EditInfoBarLayer::onTileEnter() {

@@ -26,7 +26,6 @@
 #include "State.hpp"
 
 class Animation;
-class Level;
 class RootLayer;
 
 extern Animation* KeyAnim;
@@ -38,9 +37,7 @@ public:
     static void edit();
     static void exitGame();
     static int getTimeClock();
-    static uint16_t getLevelNum();
     static RootLayer* getRootLayer();
-    static Level* getCurrentLevel();
 
 private:
     // Thread functions.
@@ -66,7 +63,6 @@ private:
     static SDL_mutex*  initialLevelLoadLock;
     static State       state;
     static int         timeClock;
-    static Level*      level;
     static RootLayer*  rootLayer;
 };
 

@@ -1,6 +1,8 @@
 #ifndef ROOTLAYER_HPP
 #define ROOTLAYER_HPP
 
+#include "Layer.hpp"
+
 class InfoBarLayer;
 
 class RootLayer : public Layer {

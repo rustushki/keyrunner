@@ -3,8 +3,8 @@
 
 #include "Animation.hpp"
 #include "ConveyorAnimation.hpp"
+#include "GridLayer.hpp"
 #include "KeyRunner.hpp"
-#include "Level.hpp"
 #include "LevelManager.hpp"
 #include "Options.hpp"
 #include "EditRootLayer.hpp"
@@ -26,7 +26,6 @@ SDL_mutex*   KeyRunner::initialLevelLoadLock;
 uint16_t     KeyRunner::levelNum;
 State        KeyRunner::state;
 int          KeyRunner::timeClock;
-Level*       KeyRunner::level;
 RootLayer*   KeyRunner::rootLayer;
 
 void KeyRunner::play() {
@@ -88,19 +87,19 @@ void KeyRunner::edit() {
         // Create New Level for Edit
         if (Options::getCreateNewLevel()) {
             levelNum = LevelManager::GetTotal() + 1;
-            level = LevelManager::New(levelNum);
+            LevelManager::New(levelNum);
 
         // Load Existing Level for Edit
         } else {
             levelNum = Options::getStartingLevel();
-            level = LevelManager::Read(levelNum);
+            LevelManager::Read(levelNum);
         }
 
         // Signal that it's OK to observe level tiles now.
         SDL_UnlockMutex(levelLoadLock);
 
         // Mark all tiles as needing to be redrawn.
-        level->refreshTiles();
+        GridLayer::GetInstance()->refreshTiles();
 
         SDL_Thread *udThread = SDL_CreateThread(&updateDisplay, NULL);
 
@@ -115,14 +114,6 @@ void KeyRunner::edit() {
 
 int KeyRunner::getTimeClock() {
     return timeClock;
-}
-
-uint16_t KeyRunner::getLevelNum() {
-    SDL_LockMutex(levelLoadLock);
-    uint16_t levelNum = level->toInt();
-    SDL_UnlockMutex(levelLoadLock);
-
-    return levelNum;
 }
 
 RootLayer* KeyRunner::getRootLayer() {
@@ -241,7 +232,7 @@ void KeyRunner::moveDirection(Direction d) {
     // loop if movePlayer returns true.  That implies that movement has been
     // interrupted.
     SDL_LockMutex(levelLoadLock);
-    bool interrupt = level->movePlayer(d);
+    bool interrupt = GridLayer::GetInstance()->movePlayer(d);
     SDL_UnlockMutex(levelLoadLock);
     if (interrupt) {
         return;
@@ -309,7 +300,7 @@ void KeyRunner::moveDirection(Direction d) {
                 // Move the player.  Exit this movement loop if the player
                 // movement is interrupted (i.e. movePlayer returns true)
                 SDL_LockMutex(levelLoadLock);
-                bool interrupt = level->movePlayer(d);
+                bool interrupt = GridLayer::GetInstance()->movePlayer(d);
                 SDL_UnlockMutex(levelLoadLock);
                 if (interrupt) {
                     return;
@@ -355,15 +346,15 @@ int KeyRunner::convey(void* unused) {
 
 
         // Get the current tile of the player.
-        TileLayer* playerTile = level->getPlayerTile();
+        TileLayer* playerTile = GridLayer::GetInstance()->getPlayerTile();
 
         // If the tile in a conveyor tile,
         if (playerTile->isConveyor()) {
 
             // Convey the player to the next tile.
             TileLayer* newTile = playerTile->getNextConveyorTile();
-            if (level->movePlayerToTile(newTile)) {
-                if (level->isComplete()){
+            if (GridLayer::GetInstance()->movePlayerToTile(newTile)) {
+                if (GridLayer::GetInstance()->isComplete()){
                     SDL_UnlockMutex(levelLock);
                     SDL_CondSignal(levelCond);
                 }
@@ -417,7 +408,7 @@ int KeyRunner::updateLevel(void* unused) {
 
         SDL_LockMutex(levelLoadLock);
 
-        level = LevelManager::Read(levelNum);
+        LevelManager::Read(levelNum);
 
         // Signal that it's OK to observe level tiles now.
         SDL_UnlockMutex(levelLoadLock);
@@ -427,13 +418,12 @@ int KeyRunner::updateLevel(void* unused) {
         SDL_CondSignal(initialLevelLoadCond);
 
         // Mark all tiles as needing to be redrawn.
-        level->refreshTiles();
+        GridLayer::GetInstance()->refreshTiles();
 
         SDL_LockMutex(levelLock);
         SDL_CondWait(levelCond, levelLock);
 
         levelNum++;
-        delete level;
 
         timeClock += 6000;
 
@@ -473,7 +463,7 @@ void KeyRunner::playHandleEvents() {
 
             // If the prior movement causes the level to be complete,
             // signal that the new level may be loaded.
-            if (level->isComplete()){
+            if (GridLayer::GetInstance()->isComplete()){
                 SDL_UnlockMutex(levelLock);
                 SDL_CondSignal(levelCond);
             }
@@ -520,8 +510,4 @@ void KeyRunner::editHandleEvents() {
 
         }
     }
-}
-
-Level* KeyRunner::getCurrentLevel() {
-    return level;
 }

@@ -1,6 +1,10 @@
-#include "GridLayer.hpp"
-#include "TileLayer.hpp"
+#include <iostream>
+
 #include "ConveyorAnimation.hpp"
+#include "GridLayer.hpp"
+#include "KeyRunner.hpp"
+#include "TileLayer.hpp"
+#include "TileType.hpp"
 
 GridLayer* GridLayer::instance = NULL;
 
@@ -13,7 +17,147 @@ GridLayer* GridLayer::GetInstance() {
 }
 
 GridLayer::GridLayer() {
-    // Do nothing.
+    for (int x = 0; x < GRID_WIDTH; x++) {
+        for (int y = 0; y < GRID_HEIGHT; y++) {
+            tile[y][x] = new TileLayer(TileType::TILETYPE_EMPTY, x, y);
+        }
+    }
+}
+
+void GridLayer::init() {
+    clearAnimatedTiles();
+    buildConveyorAnimations();
+}
+
+void GridLayer::buildConveyorAnimations() {
+
+    ConveyorAnimation::ClearConveyors();
+
+    for (int x = 0; x < GridLayer::GRID_WIDTH; x++) {
+
+        for (int y = 0; y < GridLayer::GRID_HEIGHT; y++) {
+            TileLayer* tile = getTile(x, y);
+
+            if (tile->isConveyor()) {
+
+                if (!ConveyorAnimation::TileInConveyor(tile)) {
+
+                    // This TileLayer must be part of a Conveyor.  Find the start of
+                    // the Conveyor.
+
+                    TileLayer* q = tile;
+                    TileLayer* p = q;
+
+                    if (ConveyorAnimation::TileInConveyor(p)) {
+                        continue;
+                    }
+
+                    //std::cout << "Found TileLayer: " << q->getX() << "," << q->getY() << std::endl;
+
+                    Direction conveyDir = q->getConveyorDirection();
+
+                    // Initialize oppDir to something invalid to pacify
+                    // compiler warnings.
+                    Direction oppDir = DIRECTION_COUNT;
+
+                    // Determine the opposite direction of this belt.
+                    if (conveyDir == DIRECTION_UP) {
+                        oppDir = DIRECTION_DOWN;
+                    } else if (conveyDir == DIRECTION_DOWN) {
+                        oppDir = DIRECTION_UP;
+                    } else if (conveyDir == DIRECTION_LEFT) {
+                        oppDir = DIRECTION_RIGHT;
+                    } else if (conveyDir == DIRECTION_RIGHT) {
+                        oppDir = DIRECTION_LEFT;
+                    }
+
+                    //std::cout << "\tOppDir: " << oppDir << std::endl;
+
+
+                    // A circular conveyor is one which stretches from one
+                    // border to the other, causing it it wrap-around.  We need
+                    // to check for this behavior so that we can prevent
+                    // infinite looping here.
+                    bool circular = false;
+
+                    // Go backwards along the belt until you hit a non-conveyor
+                    // tile, or a conveyor tile which is part of another
+                    // conveyor, or we find that the current belt is circular.
+                    TileLayer* prev = p;
+                    while (    p->isConveyor()
+                            && p->getConveyorDirection() == conveyDir
+                            && !ConveyorAnimation::TileInConveyor(p)
+                            && !circular) {
+
+                        prev = p;
+
+                        if (oppDir == DIRECTION_UP) {
+                            p = p->up();
+                        } else if (oppDir == DIRECTION_DOWN) {
+                            p = p->down();
+                        } else if (oppDir == DIRECTION_RIGHT) {
+                            p = p->right();
+                        } else if (oppDir == DIRECTION_LEFT) {
+                            p = p->left();
+                        }
+
+                        if (p == q) {
+                            circular = true;
+                        }
+
+                    }
+
+                    TileLayer* start = p = prev;
+                    std::vector<TileLayer*> conveyorTiles;
+
+                    //std::cout << "\tStart " << start->getX() << "," << start->getY() << std::endl;
+                    //std::cout << "\t" << p->isConveyor() << std::endl;
+                    //std::cout << "\t" << p->getConveyorDirection() << "=" << conveyDir << std::endl;
+                    //std::cout << "\t" << ConveyorAnimation::TileInConveyor(p) << std::endl;
+
+                    int tileNum = 0;
+                    // Now follow the conveyor from its start until a
+                    // non-conveyor tile, or a conveyor tile which is part of
+                    // another conveyor or if the belt is found to be circular,
+                    // the start tile.
+                    while (    p->isConveyor()
+                            && p->getConveyorDirection() == conveyDir
+                            && !ConveyorAnimation::TileInConveyor(p)) {
+
+                        conveyorTiles.push_back(p);
+
+                        tileNum++;
+                        //std::cout << "\ttile #" << tileNum << " " << p->getX() << "," << p->getY() << std::endl;
+
+                        if (conveyDir == DIRECTION_UP) {
+                            p = p->up();
+                        } else if (conveyDir == DIRECTION_DOWN) {
+                            p = p->down();
+                        } else if (conveyDir == DIRECTION_RIGHT) {
+                            p = p->right();
+                        } else if (conveyDir == DIRECTION_LEFT) {
+                            p = p->left();
+                        }
+
+                        if (circular) {
+                            if (p == start) {
+                                break;
+                            }
+                        }
+
+                    }
+
+                    // Creating a ConveyorAnimation causes it to be added to
+                    // the ConveyorAnimation array.
+                    new ConveyorAnimation(conveyorTiles);
+
+                }
+
+            }
+        }
+
+    }
+
 }
 
 
@@ -94,3 +238,198 @@ void GridLayer::addChangedTile(TileLayer* tile) {
     changedTiles.push_back(tile);
 }
 
+GridLayer::~GridLayer() {
+    clearChangedTiles();
+    for (int x = 0; x < GridLayer::GRID_WIDTH; x++) {
+        for (int y = 0; y < GridLayer::GRID_HEIGHT; y++) {
+            delete tile[y][x];
+        }
+    }
+}
+
+TileLayer* GridLayer::getTile(uint16_t x, uint16_t y) const {
+    if (y >= GridLayer::GRID_HEIGHT || x >= GridLayer::GRID_WIDTH) {
+        return NULL;
+    }
+    return tile[y][x];
+}
+
+void GridLayer::changeTileType(uint16_t x, uint16_t y, TileType tt) {
+    TileLayer* tile = getTile(x, y);
+    if (tile->getType() != tt) {
+        tile->setType(tt);
+        addChangedTile(tile);
+    }
+}
+
+void GridLayer::refreshTiles() {
+    // Blit all Tiles.
+    for (int x = 0; x < GridLayer::GRID_WIDTH; x++) {
+        for (int y = 0; y < GridLayer::GRID_HEIGHT; y++) {
+            addChangedTile(getTile(x, y));
+        }
+    }
+}
+
+bool GridLayer::hasPlayer(int x, int y) const {
+    return (tileHasPlayer == getTile(x, y));
+}
+
+bool GridLayer::hasKey(int x, int y) const {
+    return (tileHasKey == getTile(x, y));
+}
+
+/* ------------------------------------------------------------------------------
+ * movePlayer - Move the player in the provided direction by one tile.  Handle
+ * walls, teleporters, keys and other gameplay elements.
+ */
+bool GridLayer::movePlayer(Direction d) {
+
+    if (d > DIRECTION_COUNT) {
+        std::cout << "Invalid direction." << std::endl;
+        KeyRunner::exitGame();
+    }
+
+    TileLayer* newTile = NULL;
+    if (d == DIRECTION_UP) {
+        newTile = tileHasPlayer->up();
+    }
+
+    if (d == DIRECTION_DOWN) {
+        newTile = tileHasPlayer->down();
+    }
+
+    if (d == DIRECTION_LEFT) {
+        newTile = tileHasPlayer->left();
+    }
+
+    if (d == DIRECTION_RIGHT) {
+        newTile = tileHasPlayer->right();
+    }
+
+    bool interruptMovement = movePlayerToTile(newTile);
+
+    return interruptMovement;
+}
+
+/* ------------------------------------------------------------------------------
+ * movePlayerToTile - Given a tile, move a player to that tile.  Refuse to move
+ * a player to a wall tile.  If the tile has the key, the player will take it.
+ * If the tile is a lock/door and the player has the key then end the level.
+ * If the tile is a teleporter, then actually move the player to the matching
+ * tile.
+ *
+ * Return true if the player movement is to be interrupted.  It will do so if
+ * the provided tile is a wall or a teleporter.
+ */
+bool GridLayer::movePlayerToTile(TileLayer* newTile) {
+    if (newTile == NULL) {
+
+        return true;
+    }
+
+    // Do not move player if the new tile is a wall.  Do not continue
+    // evaluating criteria either, such as teleporters and wraparound.  They do
+    // not apply since the player has attempt to walk into a wall.
+    if (newTile->isWall()) {
+        return true;
+    }
+
+    // Move the player to the tile.
+    addChangedTile(tileHasPlayer);
+    tileHasPlayer = newTile;
+    addChangedTile(tileHasPlayer);
+
+    // Give the player the key if the tile has the key.
+    if (hasKey(tileHasPlayer->getX(), tileHasPlayer->getY())) {
+        tileHasKey = NULL;
+        playerHasKey = true;
+    }
+
+    // Handle Teleporter Tiles.
+    if (tileHasPlayer->isTeleporter()) {
+        TileLayer* matching = getMatchingTeleporterTile(tileHasPlayer);
+        tileHasPlayer = matching;
+        addChangedTile(tileHasPlayer);
+        return true;
+    }
+
+    // Interrupt movement if the level is over due to prior movement.
+    if (isComplete()) {
+        return true;
+    }
+
+    // Normal case, movement is not interrupted.
+    return false;
+}
+
+/* ------------------------------------------------------------------------------
+ * getPlayerTile - Return the current tile of the player.
+ */
+TileLayer* GridLayer::getPlayerTile() const {
+    return tileHasPlayer;
+}
+
+/* ------------------------------------------------------------------------------
+ * getKeyTile - Return the current tile of the player.
+ */
+TileLayer* GridLayer::getKeyTile() const {
+    return tileHasKey;
+}
+
+/* ------------------------------------------------------------------------------
+ * getMatchingTeleporterTile - Given a teleporter tile X and Y, return the
+ * matching teleporter tile's X and Y.  Return as a vector int.
+ */
+TileLayer* GridLayer::getMatchingTeleporterTile(TileLayer* t) {
+
+    TileLayer* matching = NULL;
+
+    // Handle case where a non-telepoprter tile is passed in.  Return the same
+    // tile provided.  This should never happen.
+    if (!t->isTeleporter()) {
+        matching = t;
+
+
+        // Normal case. Find the first matching teleporter tile.
+    } else {
+
+        // Search for the matching tile.
+        bool found = false;
+        for (Uint16 x = 0; x < GridLayer::GRID_WIDTH; x++) {
+            for (Uint16 y = 0; y < GridLayer::GRID_HEIGHT; y++) {
+
+                if (x != t->getX() || y != t->getY()) {
+
+                    // Found the a Teleporter TileLayer of the same color which is not this tile.
+                    if (t->getType() == getTile(x,y)->getType()) {
+                        matching = getTile(x, y);
+                        found = true;
+                        break;
+                    }
+
+                }
+            }
+            if (found) {
+                break;
+            }
+        }
+
+        // Handle case where there is no matching teleporter tile.
+        if (!found) {
+            matching = t;
+        }
+    }
+
+    return matching;
+
+
+}
+
+bool GridLayer::isComplete() const {
+    return (playerHasKey && tileHasPlayer->isDoor());
+}
+
+int GridLayer::getLevelNum() const {
+    return level;
+}

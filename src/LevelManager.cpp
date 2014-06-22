@@ -1,7 +1,7 @@
 #include <sstream>
 
 #include "KeyRunner.hpp"
-#include "Level.hpp"
+#include "GridLayer.hpp"
 #include "LevelManager.hpp"
 
 uint16_t LevelManager::w;
@@ -54,9 +54,12 @@ bool LevelManager::Exists(uint8_t levelNum) {
     return exists;
 }
 
-bool LevelManager::Write(Level* level) {
+/* ------------------------------------------------------------------------------
+ * Write - Writes the current state of the GridLayer into a static level file.
+ */
+bool LevelManager::Write() {
     // Open the Level File.
-    std::string levelFile = GetPath(level->toInt(), true);
+    std::string levelFile = GetPath(GridLayer::GetInstance()->getLevelNum(), true);
     FILE* fp = fopen(levelFile.c_str(), "wb");
 
     // Write Width and Height.
@@ -73,7 +76,7 @@ bool LevelManager::Write(Level* level) {
     std::vector<TileLayer*> devTiles;
     for (int x = 0; x < w; x++) {
         for (int y = 0; y < h; y++) {
-            TileLayer* tile = level->getTile(x, y);
+            TileLayer* tile = GridLayer::GetInstance()->getTile(x, y);
             if (tile->getType() != tt) {
                 devTiles.push_back(tile);
             }
@@ -85,7 +88,7 @@ bool LevelManager::Write(Level* level) {
     fwrite(&devCount, sizeof(uint16_t), 1, fp);
 
     // Write Initial Char Location.
-    TileLayer* pTile = level->getPlayerTile();
+    TileLayer* pTile = GridLayer::GetInstance()->getPlayerTile();
     uint16_t x = pTile->getX();
     uint16_t y = pTile->getY();
     fwrite(&x, sizeof(uint16_t), 1, fp);
@@ -113,7 +116,7 @@ bool LevelManager::Write(Level* level) {
 
     // Write Each Item Type
     // For now, we only need to record the location of the key.
-    TileLayer* kTile = level->getKeyTile();
+    TileLayer* kTile = GridLayer::GetInstance()->getKeyTile();
     x = kTile->getX();
     y = kTile->getY();
     uint8_t it = 0;
@@ -125,7 +128,7 @@ bool LevelManager::Write(Level* level) {
     return true;
 }
 
-Level* LevelManager::Read(uint8_t levelNum) {
+void LevelManager::Read(uint8_t levelNum) {
     Reset();
 
     // Open the Level File.
@@ -156,9 +159,6 @@ Level* LevelManager::Read(uint8_t levelNum) {
     uint16_t itemCount;
     fread(&itemCount, sizeof(uint16_t), 1, fp);
 
-    // Build Level and initialize all Tiles to NULL.
-    Level* level = new Level(levelNum);
-
     // Read Each Default Tile Type Deviation & populate each matching tile slot
     // with the deviation.
     for (int ttd = 0; ttd < devCount; ttd++) {
@@ -173,7 +173,7 @@ Level* LevelManager::Read(uint8_t levelNum) {
         fread(&ttInt, sizeof(uint8_t), 1, fp);
         TileType tt = static_cast<TileType>(ttInt);
 
-        deviations.push_back(new TileLayer(tt, x, y, level));
+        deviations.push_back(new TileLayer(tt, x, y));
     }
 
     // Read the Key Location.
@@ -184,17 +184,12 @@ Level* LevelManager::Read(uint8_t levelNum) {
     fread(&it, sizeof(uint8_t), 1, fp);
     fclose(fp);
 
-    Populate(level);
-
-
-    return level;
+    Populate(levelNum);
 }
 
-Level* LevelManager::New(uint8_t levelNum) {
+void LevelManager::New(uint8_t levelNum) {
     Reset();
-    Level* level = new Level(levelNum);
-    Populate(level);
-    return level;
+    Populate(levelNum);
 }
 
 /* ------------------------------------------------------------------------------
@@ -224,7 +219,16 @@ void LevelManager::Reset() {
     deviations.clear();
 }
 
-void LevelManager::Populate(Level* level) {
+void LevelManager::Populate(uint8_t levelNum) {
+    // Get the GridLayer instance.
+    GridLayer* gl  = GridLayer::GetInstance();
+
+    // Set the Level in the GridLayer.
+    gl->level = levelNum;
+
+    // Player does not have key at level start.
+    gl->playerHasKey = false;
+
     // Populate the remaining tiles with the default tile.  Also, not which
     // tiles have the key and the player.
     uint16_t curDevIdx = 0;
@@ -234,18 +238,15 @@ void LevelManager::Populate(Level* level) {
             if (deviations.size() > 0 && curDevIdx < deviations.size()) {
                 TileLayer* curDev = deviations[curDevIdx];
                 if (curDev->getX() == tx && curDev->getY() == ty) {
-                    level->tile[ty][tx] = curDev;
+                    gl->changeTileType(tx, ty, curDev->getType());
                     curDevIdx++;
                     deviationMatch = true;
                 }
             }
 
             if (!deviationMatch) {
-                // Build a Default TileLayer at the coordinate.
-                TileLayer* tile = new TileLayer(defTT, tx, ty, level);
-
                 // Add the tile to the level.
-                level->tile[ty][tx] = tile;
+                gl->changeTileType(tx, ty, defTT);
             }
 
             // TODO: Support multiple items. (not just hard coded key and
@@ -253,15 +254,15 @@ void LevelManager::Populate(Level* level) {
 
             // Does the current tile have the player?
             if (tx == px && ty == py) {
-                level->tileHasPlayer = level->tile[ty][tx];
+                gl->tileHasPlayer = gl->tile[ty][tx];
             }
 
             // Does the current tile have the key?
             if (tx == kx && ty == ky) {
-                level->tileHasKey = level->tile[ty][tx];
+                gl->tileHasKey = gl->tile[ty][tx];
             }
 
         }
     }
-    level->init();
+    gl->init();
 }

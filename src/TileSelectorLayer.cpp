@@ -1,5 +1,7 @@
 #include "ButtonLayer.hpp"
 #include "ButtonLayerBuilder.hpp"
+#include "GridLayer.hpp"
+#include "TileLayer.hpp"
 #include "TileSelectorLayer.hpp"
 
 TileSelectorLayer::TileSelectorLayer() {
