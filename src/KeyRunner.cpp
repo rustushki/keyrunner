@@ -493,11 +493,22 @@ void KeyRunner::editHandleEvents() {
                 exitGame();
                 break;
 
-            // Pass all other keys down to the layers to search for a handler.
+            // Pass all other keys to the parent of the selected layer.  Or the
+            // selected layer if it's a root layer.
             } else {
                 Layer* selected = Layer::getSelectedLayer();
                 if (selected != NULL) {
-                    selected->getParent()->onKeyDown(event.key.keysym.sym);
+                    // Find the Event Handling Layer.  It'll either be the
+                    // selected layer's parent or the selected layer (depending
+                    // on whether the selected layer has no parent).
+                    Layer* handler = selected->getParent();
+                    if (handler == NULL) {
+                        handler = selected;
+                    }
+
+                    if (handler != NULL) {
+                        handler->onKeyDown(event.key.keysym.sym);
+                    }
                 }
             }
 
