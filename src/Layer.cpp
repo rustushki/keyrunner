@@ -7,6 +7,7 @@ Layer* Layer::selectedLayer = NULL;
 
 Layer::Layer() {
     onEnterCb = NULL;
+    parent = NULL;
     show();
 }
 
@@ -167,7 +168,7 @@ Layer* Layer::getParent() const {
  * is to grant selection to the first child.  Override to change.
  */
 void Layer::onSelected() {
-    if (subLayers.size() > 0) {
+    if (getChildCount() > 0) {
         subLayers[0]->setSelected();
     }
 }
