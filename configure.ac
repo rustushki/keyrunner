@@ -12,5 +12,6 @@ PKG_CHECK_MODULES([SDL], [sdl >= 1.2])
 PKG_CHECK_MODULES([SDL_image], [SDL_image])
 PKG_CHECK_MODULES([SDL_ttf], [SDL_ttf])
 PKG_CHECK_MODULES([libpng], [libpng])
+PKG_CHECK_MODULES([liblzma], [liblzma])
 AC_OUTPUT
 
