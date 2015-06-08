@@ -4,11 +4,11 @@
 #include <vector>
 
 #include "AnimationType.hpp"
-#include "Direction.hpp"
 #include "GridLayer.hpp"
-#include "TileType.hpp"
 #include "TileLayer.hpp"
-#include "uitk/Layer.hpp"
+#include "../game/Direction.hpp"
+#include "../game/TileType.hpp"
+#include "../uitk/Layer.hpp"
 
 
 class Animation;

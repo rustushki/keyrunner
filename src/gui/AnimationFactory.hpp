@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "AnimationType.hpp"
-#include "KeyRunner.hpp"
+#include "../game/KeyRunner.hpp"
 
 class Animation;
 

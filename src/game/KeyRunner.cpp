@@ -1,16 +1,16 @@
 #include <sstream>
 #include <SDL/SDL_ttf.h>
 
-#include "AnimationFactory.hpp"
-#include "ConveyorAnimation.hpp"
-#include "GridLayer.hpp"
 #include "KeyRunner.hpp"
 #include "LevelManager.hpp"
 #include "Options.hpp"
-#include "EditRootLayer.hpp"
-#include "PlayRootLayer.hpp"
-#include "RootLayer.hpp"
-#include "uitk/Animation.hpp"
+#include "../gui/AnimationFactory.hpp"
+#include "../gui/ConveyorAnimation.hpp"
+#include "../gui/GridLayer.hpp"
+#include "../gui/EditRootLayer.hpp"
+#include "../gui/PlayRootLayer.hpp"
+#include "../gui/RootLayer.hpp"
+#include "../uitk/Animation.hpp"
 
 // Items yet to be absorbed into KeyRunner static class.
 Animation* KeyAnim;

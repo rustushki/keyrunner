@@ -1,8 +1,8 @@
 #include <iostream>
 #include "ConveyorAnimation.hpp"
 #include "GridLayer.hpp"
-#include "KeyRunner.hpp"
 #include "TileLayer.hpp"
+#include "../game/KeyRunner.hpp"
 
 std::vector<ConveyorAnimation*> ConveyorAnimation::Conveyors;
 

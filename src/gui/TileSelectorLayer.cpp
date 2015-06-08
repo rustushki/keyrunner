@@ -2,8 +2,8 @@
 #include "GridLayer.hpp"
 #include "TileLayer.hpp"
 #include "TileSelectorLayer.hpp"
-#include "uitk/ButtonLayer.hpp"
-#include "uitk/ButtonLayerBuilder.hpp"
+#include "../uitk/ButtonLayer.hpp"
+#include "../uitk/ButtonLayerBuilder.hpp"
 
 TileSelectorLayer::TileSelectorLayer() {
     ButtonLayerBuilder* blb = new ButtonLayerBuilder();

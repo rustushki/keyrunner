@@ -1,8 +1,8 @@
 #include <sstream>
 
 #include "KeyRunner.hpp"
-#include "GridLayer.hpp"
 #include "LevelManager.hpp"
+#include "../gui/GridLayer.hpp"
 
 uint16_t LevelManager::w;
 uint16_t LevelManager::h;

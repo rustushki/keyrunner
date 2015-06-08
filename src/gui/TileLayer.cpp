@@ -2,9 +2,9 @@
 #include "AnimationFactory.hpp"
 #include "AnimationType.hpp"
 #include "GridLayer.hpp"
-#include "KeyRunner.hpp"
-#include "TileType.hpp"
 #include "TileLayer.hpp"
+#include "../game/TileType.hpp"
+#include "../game/KeyRunner.hpp"
 
 TileLayer::TileLayer(TileType type, uint16_t x, uint16_t y) {
     setType(type);

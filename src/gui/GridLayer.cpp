@@ -2,9 +2,9 @@
 
 #include "ConveyorAnimation.hpp"
 #include "GridLayer.hpp"
-#include "KeyRunner.hpp"
 #include "TileLayer.hpp"
-#include "TileType.hpp"
+#include "../game/KeyRunner.hpp"
+#include "../game/TileType.hpp"
 
 GridLayer* GridLayer::instance = NULL;
 

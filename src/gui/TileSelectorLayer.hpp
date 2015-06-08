@@ -1,7 +1,7 @@
 #ifndef TILESELECTORLAYER_HPP
 #define TILESELECTORLAYER_HPP
 
-#include "TileType.hpp"
+#include "../game/TileType.hpp"
 
 class TileSelectorLayer : public Layer {
 public:

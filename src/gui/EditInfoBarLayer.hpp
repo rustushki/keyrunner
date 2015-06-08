@@ -4,7 +4,7 @@
 
 #include "InfoBarLayer.hpp"
 #include "TileSelectorLayer.hpp"
-#include "uitk/ButtonLayer.hpp"
+#include "../uitk/ButtonLayer.hpp"
 
 class EditInfoBarLayer : public InfoBarLayer {
 

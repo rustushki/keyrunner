@@ -14,21 +14,21 @@ add_library(uitk STATIC
 
 # Source Files.
 set(SOURCES
-  src/AnimationFactory.cpp
-  src/EditInfoBarLayer.cpp
-  src/GridLayer.cpp
-  src/KeyRunner.cpp
-  src/main.cpp
-  src/PlayInfoBarLayer.cpp
-  src/RootLayer.cpp
-  src/TileLayer.cpp
-  src/ConveyorAnimation.cpp
-  src/EditRootLayer.cpp
-  src/InfoBarLayer.cpp
-  src/LevelManager.cpp
-  src/Options.cpp
-  src/PlayRootLayer.cpp
-  src/TileSelectorLayer.cpp
+  src/game/KeyRunner.cpp
+  src/game/main.cpp
+  src/game/LevelManager.cpp
+  src/game/Options.cpp
+  src/gui/AnimationFactory.cpp
+  src/gui/EditInfoBarLayer.cpp
+  src/gui/GridLayer.cpp
+  src/gui/PlayInfoBarLayer.cpp
+  src/gui/RootLayer.cpp
+  src/gui/TileLayer.cpp
+  src/gui/ConveyorAnimation.cpp
+  src/gui/EditRootLayer.cpp
+  src/gui/InfoBarLayer.cpp
+  src/gui/PlayRootLayer.cpp
+  src/gui/TileSelectorLayer.cpp
 )
 
 # Declare Executable.

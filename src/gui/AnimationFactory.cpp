@@ -2,7 +2,7 @@
 #include <string>
 #include <sstream>
 #include "AnimationFactory.hpp"
-#include "uitk/Animation.hpp"
+#include "../uitk/Animation.hpp"
 
 #define FL(x,y) frameList.push_back(x);frameList.push_back(y);
 

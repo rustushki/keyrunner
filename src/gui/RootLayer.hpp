@@ -1,7 +1,7 @@
 #ifndef ROOTLAYER_HPP
 #define ROOTLAYER_HPP
 
-#include "uitk/Layer.hpp"
+#include "../uitk/Layer.hpp"
 
 class InfoBarLayer;
 
