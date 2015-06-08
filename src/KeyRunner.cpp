@@ -1,7 +1,7 @@
 #include <sstream>
 #include <SDL/SDL_ttf.h>
 
-#include "Animation.hpp"
+#include "AnimationFactory.hpp"
 #include "ConveyorAnimation.hpp"
 #include "GridLayer.hpp"
 #include "KeyRunner.hpp"
@@ -10,6 +10,7 @@
 #include "EditRootLayer.hpp"
 #include "PlayRootLayer.hpp"
 #include "RootLayer.hpp"
+#include "uitk/Animation.hpp"
 
 // Items yet to be absorbed into KeyRunner static class.
 Animation* KeyAnim;
@@ -44,8 +45,8 @@ void KeyRunner::play() {
 
     if (init()) {
         // There's not a good place for these yet.  Putting them here for now.
-        KeyAnim    = Animation::AnimationFactory(ANIMATION_TYPE_KEY);
-        PlayerAnim = Animation::AnimationFactory(ANIMATION_TYPE_PUMPKIN);
+        KeyAnim    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
+        PlayerAnim = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
 
         SDL_Thread *ulThread = SDL_CreateThread(&updateLevel, NULL);
 
@@ -79,8 +80,8 @@ void KeyRunner::edit() {
 
     if (init()) {
         // There's not a good place for these yet.  Putting them here for now.
-        KeyAnim    = Animation::AnimationFactory(ANIMATION_TYPE_KEY);
-        PlayerAnim = Animation::AnimationFactory(ANIMATION_TYPE_PUMPKIN);
+        KeyAnim    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
+        PlayerAnim = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
 
         SDL_LockMutex(levelLoadLock);
 

@@ -2,10 +2,11 @@
 #define TILE_HPP
 
 #include <vector>
-#include "Animation.hpp"
 #include "AnimationType.hpp"
 #include "Direction.hpp"
 #include "TileType.hpp"
+#include "uitk/Animation.hpp"
+#include "uitk/Layer.hpp"
 
 class Level;
 

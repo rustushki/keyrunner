@@ -3,7 +3,7 @@
 #include <SDL/SDL_ttf.h>
 #include "InfoBarPos.hpp"
 #include "KeyRunner.hpp"
-#include "Layer.hpp"
+#include "uitk/Layer.hpp"
 
 class InfoBarLayer : public Layer {
 

@@ -4,10 +4,17 @@ cmake_minimum_required (VERSION 3.0.1)
 # Project Name.
 project (keyrunner)
 
+add_library(uitk STATIC
+  src/uitk/Animation.cpp
+  src/uitk/ButtonLayer.cpp
+  src/uitk/ButtonLayerBuilder.cpp
+  src/uitk/Layer.cpp
+  src/uitk/SpriteSheet.cpp
+)
+
 # Source Files.
 set(SOURCES
-  src/Animation.cpp
-  src/ButtonLayer.cpp
+  src/AnimationFactory.cpp
   src/EditInfoBarLayer.cpp
   src/GridLayer.cpp
   src/KeyRunner.cpp
@@ -15,15 +22,12 @@ set(SOURCES
   src/PlayInfoBarLayer.cpp
   src/RootLayer.cpp
   src/TileLayer.cpp
-  src/ButtonLayerBuilder.cpp
   src/ConveyorAnimation.cpp
   src/EditRootLayer.cpp
   src/InfoBarLayer.cpp
-  src/Layer.cpp
   src/LevelManager.cpp
   src/Options.cpp
   src/PlayRootLayer.cpp
-  src/SpriteSheet.cpp
   src/TileSelectorLayer.cpp
 )
 
@@ -32,6 +36,8 @@ add_executable(keyrunner ${SOURCES})
 
 # Define CWD for KeyRunner.
 add_definitions(-D_ROOT_="${CMAKE_INSTALL_PREFIX}/share/keyrunner")
+
+target_link_libraries(keyrunner uitk)
 
 # Define Path Separator depending on OS.
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")

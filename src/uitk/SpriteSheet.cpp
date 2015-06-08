@@ -1,6 +1,5 @@
 #include <SDL/SDL_image.h>
 
-#include "KeyRunner.hpp"
 #include "SpriteSheet.hpp"
 
 /* ------------------------------------------------------------------------------

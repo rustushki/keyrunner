@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Animation.hpp"
+#include "AnimationFactory.hpp"
 #include "AnimationType.hpp"
 #include "GridLayer.hpp"
 #include "KeyRunner.hpp"
@@ -90,7 +90,7 @@ void TileLayer::setType(TileType tt) {
     type = tt;
 
     AnimationType at = TileLayer::TileTypeToAnimType(type);
-    this->anim = Animation::AnimationFactory(at);
+    this->anim = AnimationFactory::Build(at);
 
     if (this->anim->isAnimating()) {
         GridLayer::GetInstance()->pushAnimatedTile(this);

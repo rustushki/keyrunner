@@ -6,9 +6,9 @@
 #include "AnimationType.hpp"
 #include "Direction.hpp"
 #include "GridLayer.hpp"
-#include "Layer.hpp"
 #include "TileType.hpp"
 #include "TileLayer.hpp"
+#include "uitk/Layer.hpp"
 
 
 class Animation;

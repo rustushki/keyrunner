@@ -1,8 +1,9 @@
-#include "ButtonLayer.hpp"
-#include "ButtonLayerBuilder.hpp"
+#include "AnimationFactory.hpp"
 #include "GridLayer.hpp"
 #include "TileLayer.hpp"
 #include "TileSelectorLayer.hpp"
+#include "uitk/ButtonLayer.hpp"
+#include "uitk/ButtonLayerBuilder.hpp"
 
 TileSelectorLayer::TileSelectorLayer() {
     ButtonLayerBuilder* blb = new ButtonLayerBuilder();
@@ -24,7 +25,7 @@ TileSelectorLayer::TileSelectorLayer() {
             ->setHeight(blHeight)
             ->setX(initOffset + ttIdx * blWidth + ttIdx * margin)
             ->setY(getRect().y + (getRect().h - blHeight)/2)
-            ->setIcon(at)
+            ->setIcon(AnimationFactory::Build(at))
             ->build();
 
         addLayer(bl);

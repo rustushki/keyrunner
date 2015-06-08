@@ -5,8 +5,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 
-#include "AnimationType.hpp"
-#include "KeyRunner.hpp"
+#include "Animation.hpp"
 #include "Layer.hpp"
 
 class ButtonLayer : public Layer {
@@ -26,7 +25,8 @@ public:
     void setY(uint16_t pY);
     void setMarginHorz(uint8_t marginHorz);
     void setMarginVert(uint16_t marginVert);
-    void setIcon(AnimationType at);
+    void setIcon(Animation* animation);
+    void setFontPath(std::string fontPath);
 
 private:
     ButtonLayer();
@@ -45,6 +45,7 @@ private:
     uint16_t height;
     uint16_t width;
     Animation* icon;
+    std::string fontPath;
     bool textDirty;
 
     SDL_Surface* textSrf;

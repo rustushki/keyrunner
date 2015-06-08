@@ -1,8 +1,8 @@
+#include <iostream>
 #include <math.h>
 
 #include "Animation.hpp"
 #include "ButtonLayer.hpp"
-#include "GridLayer.hpp"
 
 ButtonLayer::ButtonLayer() {
     horzMargin   = 20;
@@ -108,7 +108,7 @@ TTF_Font* ButtonLayer::getFont(uint8_t size) const {
     if (font == NULL) {
 
         // Is there a way to find these fonts in the filesystem?
-        font = TTF_OpenFont(FONTPATH, size);
+        font = TTF_OpenFont(fontPath.c_str(), size);
 
     }
 
@@ -257,6 +257,10 @@ SDL_Surface* ButtonLayer::sizeText(std::string text) const {
     return textSrf;
 }
 
-void ButtonLayer::setIcon(AnimationType at) {
-    icon = Animation::AnimationFactory(at);
+void ButtonLayer::setIcon(Animation* animation) {
+    icon = animation;
+}
+
+void ButtonLayer::setFontPath(std::string fontPath) {
+    this->fontPath = fontPath;
 }
