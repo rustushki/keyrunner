@@ -72,6 +72,12 @@ ButtonLayerBuilder* ButtonLayerBuilder::setIcon(Animation* animation) {
     return this;
 }
 
+ButtonLayerBuilder* ButtonLayerBuilder::setFontPath(std::string fontPath) {
+    resetIfNull();
+    buttonLayer->setFontPath(fontPath);
+    return this;
+}
+
 ButtonLayer* ButtonLayerBuilder::build() {
     ButtonLayer* temp = buttonLayer;
     buttonLayer = NULL;

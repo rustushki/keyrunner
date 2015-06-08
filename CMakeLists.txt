@@ -79,6 +79,9 @@ else()
         message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 
+# Add Debug Flags.
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+
 # Installation Directives.
 install (TARGETS keyrunner DESTINATION bin)
 install (DIRECTORY img level font DESTINATION share/keyrunner)

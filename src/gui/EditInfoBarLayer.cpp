@@ -33,6 +33,7 @@ EditInfoBarLayer::EditInfoBarLayer() {
         ->setHeight(blHeight)
         ->setX(r.w - 3 * blWidth - 3 * margin)
         ->setY(r.h + margin)
+        ->setFontPath(FONTPATH)
         ->build();
 
     tileBl->setOnEnter(std::bind(&EditInfoBarLayer::onTileEnter, this));
@@ -49,6 +50,7 @@ EditInfoBarLayer::EditInfoBarLayer() {
         ->setHeight(blHeight)
         ->setX(r.w - 2 * blWidth - 2 * margin)
         ->setY(r.h + margin)
+        ->setFontPath(FONTPATH)
         ->build();
 
     saveBl->setOnEnter(std::bind(&EditInfoBarLayer::onSaveEnter, this));
@@ -65,6 +67,7 @@ EditInfoBarLayer::EditInfoBarLayer() {
         ->setHeight(blHeight)
         ->setX(r.w - blWidth - margin)
         ->setY(r.h + margin)
+        ->setFontPath(FONTPATH)
         ->build();
 
     exitBl->setOnEnter(std::bind(&EditInfoBarLayer::onExitEnter, this));

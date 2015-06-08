@@ -17,6 +17,7 @@ public:
     ButtonLayerBuilder* setMarginHorz(uint8_t marginHorz);
     ButtonLayerBuilder* setMarginVert(uint8_t marginVert);
     ButtonLayerBuilder* setIcon(Animation* animation);
+    ButtonLayerBuilder* setFontPath(std::string fontPath);
     ButtonLayer* build();
     void resetIfNull();
 
