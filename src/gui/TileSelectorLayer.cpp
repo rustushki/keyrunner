@@ -6,6 +6,13 @@
 #include "../uitk/ButtonLayer.hpp"
 #include "../uitk/ButtonLayerBuilder.hpp"
 
+/* ------------------------------------------------------------------------------
+ * Constructor.
+ *
+ * Build a TileSelectorLayer which is a Layer full of image ButtonLayers.  Each
+ * ButtonLayer corresponds to a TileType.  The TileTypes are ordered from
+ * lowest to highest as they appear in the TileType enum.
+ */
 TileSelectorLayer::TileSelectorLayer() {
     ButtonLayerBuilder* blb = new ButtonLayerBuilder();
 
@@ -38,6 +45,12 @@ TileSelectorLayer::TileSelectorLayer() {
     delete blb;
 }
 
+/* ------------------------------------------------------------------------------
+ * React to receiving selection.
+ *
+ * Upon receiving selection, pass selection to the child which cotains the
+ * Editor's selected TileType.
+ */
 void TileSelectorLayer::onSelected() {
     for (uint16_t x = 0; x < getChildCount(); x++) {
         ButtonLayer* buttonLayer = (ButtonLayer*) getChild(x);
@@ -49,9 +62,10 @@ void TileSelectorLayer::onSelected() {
 }
 
 /* ------------------------------------------------------------------------------
- * draw - Draws the TileSelectorLayer to the screen.  This is mainly a black
- * box, with a gray border.  Inside is a horizontal list of Tiles which may be
- * selected.
+ * Draws the TileSelectorLayer to the screen.
+ *
+ * This is mainly a black box, with a gray border.  Inside is a horizontal list
+ * of Tiles which may be selected.
  */
 void TileSelectorLayer::draw(SDL_Surface* dst) {
     const uint8_t  borderWidth = 2;
@@ -73,7 +87,8 @@ void TileSelectorLayer::draw(SDL_Surface* dst) {
 }
 
 /* ------------------------------------------------------------------------------
- * getRect - Get the region of the screen upon which this Layer will be drawn.
+ * Get the region of the screen upon which this Layer will be drawn.
+ *
  * For TileSelectorLayer, it will be at the bottom, taking up some portion of
  * the InfoBarLayer.
  */
@@ -89,7 +104,12 @@ SDL_Rect TileSelectorLayer::getRect() const {
 }
 
 /* ------------------------------------------------------------------------------
- * onKeyDown - ESC should close the tile selector layer.
+ * React to Receiving a Key Down.
+ *
+ * Escape        - Closes the TileSelectorLayer.
+ * Left / Right  - Iterates over the child Layers.
+ * Enter         - Sets the EditorModel's TileType based on current child
+ *                 ButtonLayer.
  */
 void TileSelectorLayer::onKeyDown(SDLKey key) {
     // Escape closes the TileSelectorLayer.
