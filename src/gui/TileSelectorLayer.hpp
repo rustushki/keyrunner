@@ -10,10 +10,10 @@ public:
     virtual void draw(SDL_Surface* screen);
     virtual SDL_Rect getRect() const;
 
+    virtual void onSelected();
+
 private:
     void onKeyDown(SDLKey key);
-
-    TileType selTileType;
 };
 
 #endif//TILESELECTORLAYER_HPP

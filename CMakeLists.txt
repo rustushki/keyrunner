@@ -29,6 +29,7 @@ set(SOURCES
   src/gui/InfoBarLayer.cpp
   src/gui/PlayRootLayer.cpp
   src/gui/TileSelectorLayer.cpp
+  src/model/EditorModel.cpp
 )
 
 # Declare Executable.

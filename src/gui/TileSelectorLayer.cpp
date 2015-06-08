@@ -2,6 +2,7 @@
 #include "GridLayer.hpp"
 #include "TileLayer.hpp"
 #include "TileSelectorLayer.hpp"
+#include "../model/EditorModel.hpp"
 #include "../uitk/ButtonLayer.hpp"
 #include "../uitk/ButtonLayerBuilder.hpp"
 
@@ -29,11 +30,22 @@ TileSelectorLayer::TileSelectorLayer() {
             ->build();
 
         addLayer(bl);
+
     }
 
     Layer::show();
 
     delete blb;
+}
+
+void TileSelectorLayer::onSelected() {
+    for (uint16_t x = 0; x < getChildCount(); x++) {
+        ButtonLayer* buttonLayer = (ButtonLayer*) getChild(x);
+        TileType tileType = (TileType) x;
+        if (tileType == EditorModel::GetInstance()->getTileType()) {
+            buttonLayer->setSelected();
+        }
+    }
 }
 
 /* ------------------------------------------------------------------------------
@@ -109,7 +121,7 @@ void TileSelectorLayer::onKeyDown(SDLKey key) {
     } else if (key == SDLK_RETURN) {
         int selChild = getSelectedChildIndex();
         if (selChild >= 0) {
-            selTileType = (TileType) selChild;
+            EditorModel::GetInstance()->setTileType((TileType) selChild);
             hide();
         }
     }
