@@ -5,6 +5,7 @@
 #include "TileLayer.hpp"
 #include "../game/KeyRunner.hpp"
 #include "../game/TileType.hpp"
+#include "../model/PlayModel.hpp"
 
 GridLayer* GridLayer::instance = NULL;
 
@@ -343,7 +344,7 @@ bool GridLayer::movePlayerToTile(TileLayer* newTile) {
     // Give the player the key if the tile has the key.
     if (hasKey(tileHasPlayer->getX(), tileHasPlayer->getY())) {
         tileHasKey = NULL;
-        playerHasKey = true;
+        PlayModel::GetInstance()->setPlayerHasKey(true);
     }
 
     // Handle Teleporter Tiles.
@@ -355,7 +356,7 @@ bool GridLayer::movePlayerToTile(TileLayer* newTile) {
     }
 
     // Interrupt movement if the level is over due to prior movement.
-    if (isComplete()) {
+    if (PlayModel::GetInstance()->isComplete()) {
         return true;
     }
 
@@ -424,10 +425,6 @@ TileLayer* GridLayer::getMatchingTeleporterTile(TileLayer* t) {
     return matching;
 
 
-}
-
-bool GridLayer::isComplete() const {
-    return (playerHasKey && tileHasPlayer->isDoor());
 }
 
 int GridLayer::getLevelNum() const {

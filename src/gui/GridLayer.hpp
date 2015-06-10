@@ -44,7 +44,6 @@ public:
     bool hasKey(int x, int y) const;
     bool hasPlayer(int x, int y) const;
     bool isWall(int x, int y) const;
-    bool isComplete() const;
     int getLevelNum() const;
     TileLayer* getTile(uint16_t x, uint16_t y) const;
 

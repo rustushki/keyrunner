@@ -10,6 +10,7 @@
 #include "../gui/EditRootLayer.hpp"
 #include "../gui/PlayRootLayer.hpp"
 #include "../gui/RootLayer.hpp"
+#include "../model/PlayModel.hpp"
 #include "../uitk/Animation.hpp"
 
 // Items yet to be absorbed into KeyRunner static class.
@@ -355,7 +356,7 @@ int KeyRunner::convey(void* unused) {
             // Convey the player to the next tile.
             TileLayer* newTile = playerTile->getNextConveyorTile();
             if (GridLayer::GetInstance()->movePlayerToTile(newTile)) {
-                if (GridLayer::GetInstance()->isComplete()){
+                if (PlayModel::GetInstance()->isComplete()){
                     SDL_UnlockMutex(levelLock);
                     SDL_CondSignal(levelCond);
                 }
@@ -464,7 +465,7 @@ void KeyRunner::playHandleEvents() {
 
             // If the prior movement causes the level to be complete,
             // signal that the new level may be loaded.
-            if (GridLayer::GetInstance()->isComplete()){
+            if (PlayModel::GetInstance()->isComplete()){
                 SDL_UnlockMutex(levelLock);
                 SDL_CondSignal(levelCond);
             }
