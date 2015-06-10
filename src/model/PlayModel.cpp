@@ -24,3 +24,11 @@ bool PlayModel::isComplete() const {
 void PlayModel::setPlayerHasKey(bool playerHasKey) {
     this->playerHasKey = playerHasKey;
 }
+
+uint16_t PlayModel::getLevelNum() const {
+    return level;
+}
+
+void PlayModel::setLevelNum(uint16_t level) {
+    this->level = level;
+}

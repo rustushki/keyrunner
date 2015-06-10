@@ -44,7 +44,6 @@ public:
     bool hasKey(int x, int y) const;
     bool hasPlayer(int x, int y) const;
     bool isWall(int x, int y) const;
-    int getLevelNum() const;
     TileLayer* getTile(uint16_t x, uint16_t y) const;
 
 private:
@@ -56,7 +55,6 @@ private:
     // Various stateful variables which describe the current state of the
     // GridLayer.
     TileLayer* tile[GridLayer::GRID_HEIGHT][GridLayer::GRID_WIDTH];
-    int level;
     TileLayer* tileHasPlayer;
     TileLayer* tileHasKey;
     bool playerHasKey;

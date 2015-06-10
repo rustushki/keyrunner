@@ -3,6 +3,7 @@
 #include "KeyRunner.hpp"
 #include "LevelManager.hpp"
 #include "../gui/GridLayer.hpp"
+#include "../model/PlayModel.hpp"
 
 uint16_t LevelManager::w;
 uint16_t LevelManager::h;
@@ -59,7 +60,7 @@ bool LevelManager::Exists(uint8_t levelNum) {
  */
 bool LevelManager::Write() {
     // Open the Level File.
-    std::string levelFile = GetPath(GridLayer::GetInstance()->getLevelNum(), true);
+    std::string levelFile = GetPath(PlayModel::GetInstance()->getLevelNum(), true);
     FILE* fp = fopen(levelFile.c_str(), "wb");
 
     // Write Width and Height.
@@ -222,9 +223,10 @@ void LevelManager::Reset() {
 void LevelManager::Populate(uint8_t levelNum) {
     // Get the GridLayer instance.
     GridLayer* gl  = GridLayer::GetInstance();
+    PlayModel* playModel  = PlayModel::GetInstance();
 
     // Set the Level in the GridLayer.
-    gl->level = levelNum;
+    playModel->setLevelNum(levelNum);
 
     // Player does not have key at level start.
     gl->playerHasKey = false;

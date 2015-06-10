@@ -426,7 +426,3 @@ TileLayer* GridLayer::getMatchingTeleporterTile(TileLayer* t) {
 
 
 }
-
-int GridLayer::getLevelNum() const {
-    return level;
-}

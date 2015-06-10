@@ -12,6 +12,8 @@ class PlayModel {
         static PlayModel* GetInstance();
         bool isComplete() const;
         void setPlayerHasKey(bool playerHasKey);
+        uint16_t getLevelNum() const;
+        void setLevelNum(uint16_t level);
 
     private:
         // PlayMode is singleton.
@@ -19,6 +21,7 @@ class PlayModel {
         PlayModel();
 
         bool playerHasKey;
+        uint16_t level;
 };
 
 #endif//PLAYMODEL_HPP
