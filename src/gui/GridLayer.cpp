@@ -324,15 +324,16 @@ bool GridLayer::movePlayer(Direction d) {
  * the provided tile is a wall or a teleporter.
  */
 bool GridLayer::movePlayerToTile(TileLayer* newTile) {
-    if (newTile == NULL) {
+    PlayModel* playModel = PlayModel::GetInstance();
 
+    if (newTile == NULL) {
         return true;
     }
 
     // Do not move player if the new tile is a wall.  Do not continue
     // evaluating criteria either, such as teleporters and wraparound.  They do
     // not apply since the player has attempt to walk into a wall.
-    if (PlayModel::GetInstance()->isWall(TileCoord(newTile->getX(), newTile->getY()))) {
+    if (playModel->isWall(TileCoord(newTile->getX(), newTile->getY()))) {
         return true;
     }
 
@@ -344,7 +345,7 @@ bool GridLayer::movePlayerToTile(TileLayer* newTile) {
     // Give the player the key if the tile has the key.
     if (hasKey(tileHasPlayer->getX(), tileHasPlayer->getY())) {
         tileHasKey = NULL;
-        PlayModel::GetInstance()->setPlayerHasKey(true);
+        playModel->setPlayerHasKey(true);
     }
 
     // Handle Teleporter Tiles.
@@ -356,7 +357,7 @@ bool GridLayer::movePlayerToTile(TileLayer* newTile) {
     }
 
     // Interrupt movement if the level is over due to prior movement.
-    if (PlayModel::GetInstance()->isComplete()) {
+    if (playModel->isComplete()) {
         return true;
     }
 
