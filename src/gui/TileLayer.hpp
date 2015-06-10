@@ -4,7 +4,7 @@
 #include <vector>
 #include "AnimationType.hpp"
 #include "../game/TileType.hpp"
-#include "../game/Direction.hpp"
+#include "../model/Direction.hpp"
 #include "../uitk/Animation.hpp"
 #include "../uitk/Layer.hpp"
 
