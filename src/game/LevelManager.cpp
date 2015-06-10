@@ -229,7 +229,7 @@ void LevelManager::Populate(uint8_t levelNum) {
     playModel->setLevelNum(levelNum);
 
     // Player does not have key at level start.
-    gl->playerHasKey = false;
+    playModel->setPlayerHasKey(false);
 
     // Populate the remaining tiles with the default tile.  Also, not which
     // tiles have the key and the player.
