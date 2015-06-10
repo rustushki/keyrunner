@@ -332,7 +332,7 @@ bool GridLayer::movePlayerToTile(TileLayer* newTile) {
     // Do not move player if the new tile is a wall.  Do not continue
     // evaluating criteria either, such as teleporters and wraparound.  They do
     // not apply since the player has attempt to walk into a wall.
-    if (newTile->isWall()) {
+    if (PlayModel::GetInstance()->isWall(TileCoord(newTile->getX(), newTile->getY()))) {
         return true;
     }
 

@@ -43,7 +43,6 @@ public:
     TileLayer* getKeyTile() const;
     bool hasKey(int x, int y) const;
     bool hasPlayer(int x, int y) const;
-    bool isWall(int x, int y) const;
     TileLayer* getTile(uint16_t x, uint16_t y) const;
 
 private:

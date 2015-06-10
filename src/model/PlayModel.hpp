@@ -14,6 +14,7 @@ class PlayModel {
         void setPlayerHasKey(bool playerHasKey);
         uint16_t getLevelNum() const;
         void setLevelNum(uint16_t level);
+        bool isWall(TileCoord coord) const;
 
     private:
         // PlayMode is singleton.

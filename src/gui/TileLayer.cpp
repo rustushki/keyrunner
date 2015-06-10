@@ -5,6 +5,7 @@
 #include "TileLayer.hpp"
 #include "../game/TileType.hpp"
 #include "../game/KeyRunner.hpp"
+#include "../model/PlayModel.hpp"
 
 TileLayer::TileLayer(TileType type, uint16_t x, uint16_t y) {
     setType(type);
@@ -110,10 +111,6 @@ bool TileLayer::isTeleporter() const {
 
 bool TileLayer::isDoor() const {
     return (this->getType() == TILETYPE_DOOR);
-}
-
-bool TileLayer::isWall() const {
-    return (this->getType() == TILETYPE_WALL);
 }
 
 /* ------------------------------------------------------------------------------
@@ -251,7 +248,8 @@ TileLayer* TileLayer::getNextConveyorTile() const {
 
         tryTile = this->getTileInDirection(dir);
 
-        if (!tryTile->isWall() && !tryTile->isConveyor() && secondPlace == NULL) {
+        if (!PlayModel::GetInstance()->isWall(TileCoord(tryTile->getX(), tryTile->getY()))
+                && !tryTile->isConveyor() && secondPlace == NULL) {
             secondPlace = tryTile;
 
             // Prefer adjacent conveyor belt tiles.  Explicitly do not place the

@@ -33,7 +33,6 @@ public:
 
     bool isTeleporter() const;
     bool isDoor() const;
-    bool isWall() const;
     bool isConveyor() const;
     bool hasPlayer() const;
     bool hasKey() const;
