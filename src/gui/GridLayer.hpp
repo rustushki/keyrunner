@@ -8,6 +8,7 @@
 #include "TileLayer.hpp"
 #include "../game/TileType.hpp"
 #include "../model/Direction.hpp"
+#include "../model/PlayModel.hpp"
 #include "../uitk/Layer.hpp"
 
 
@@ -17,10 +18,6 @@ class TileLayer;
 class GridLayer : public Layer {
 
 public:
-    // Fixed Height and Width of the Grid.
-    static const uint16_t GRID_HEIGHT = 16;
-    static const uint16_t GRID_WIDTH  = 25;
-
     // GridLayer is Singleton.
     static GridLayer* GetInstance();
     ~GridLayer();
@@ -52,7 +49,7 @@ private:
 
     // Various stateful variables which describe the current state of the
     // GridLayer.
-    TileLayer* tile[GridLayer::GRID_HEIGHT][GridLayer::GRID_WIDTH];
+    TileLayer* tile[PlayModel::GRID_HEIGHT][PlayModel::GRID_WIDTH];
     TileLayer* tileHasPlayer;
     TileLayer* tileHasKey;
     Animation* keyAnim;

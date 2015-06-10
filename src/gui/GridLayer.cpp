@@ -18,8 +18,8 @@ GridLayer* GridLayer::GetInstance() {
 }
 
 GridLayer::GridLayer() {
-    for (int x = 0; x < GRID_WIDTH; x++) {
-        for (int y = 0; y < GRID_HEIGHT; y++) {
+    for (int x = 0; x < PlayModel::GRID_WIDTH; x++) {
+        for (int y = 0; y < PlayModel::GRID_HEIGHT; y++) {
             tile[y][x] = new TileLayer(TileType::TILETYPE_EMPTY, x, y);
         }
     }
@@ -34,9 +34,9 @@ void GridLayer::buildConveyorAnimations() {
 
     ConveyorAnimation::ClearConveyors();
 
-    for (int x = 0; x < GridLayer::GRID_WIDTH; x++) {
+    for (int x = 0; x < PlayModel::GRID_WIDTH; x++) {
 
-        for (int y = 0; y < GridLayer::GRID_HEIGHT; y++) {
+        for (int y = 0; y < PlayModel::GRID_HEIGHT; y++) {
             TileLayer* tile = getTile(x, y);
 
             if (tile->isConveyor()) {
@@ -211,8 +211,8 @@ SDL_Rect GridLayer::getRect() const {
     SDL_Rect r;
     r.x = 0;
     r.y = 0;
-    r.w = GRID_WIDTH * TileLayer::SIZE;
-    r.h = GRID_HEIGHT * TileLayer::SIZE;
+    r.w = PlayModel::GRID_WIDTH * TileLayer::SIZE;
+    r.h = PlayModel::GRID_HEIGHT * TileLayer::SIZE;
     return r;
 }
 
@@ -241,15 +241,15 @@ void GridLayer::addChangedTile(TileLayer* tile) {
 
 GridLayer::~GridLayer() {
     clearChangedTiles();
-    for (int x = 0; x < GridLayer::GRID_WIDTH; x++) {
-        for (int y = 0; y < GridLayer::GRID_HEIGHT; y++) {
+    for (int x = 0; x < PlayModel::GRID_WIDTH; x++) {
+        for (int y = 0; y < PlayModel::GRID_HEIGHT; y++) {
             delete tile[y][x];
         }
     }
 }
 
 TileLayer* GridLayer::getTile(uint16_t x, uint16_t y) const {
-    if (y >= GridLayer::GRID_HEIGHT || x >= GridLayer::GRID_WIDTH) {
+    if (y >= PlayModel::GRID_HEIGHT || x >= PlayModel::GRID_WIDTH) {
         return NULL;
     }
     return tile[y][x];
@@ -265,8 +265,8 @@ void GridLayer::changeTileType(uint16_t x, uint16_t y, TileType tt) {
 
 void GridLayer::refreshTiles() {
     // Blit all Tiles.
-    for (int x = 0; x < GridLayer::GRID_WIDTH; x++) {
-        for (int y = 0; y < GridLayer::GRID_HEIGHT; y++) {
+    for (int x = 0; x < PlayModel::GRID_WIDTH; x++) {
+        for (int y = 0; y < PlayModel::GRID_HEIGHT; y++) {
             addChangedTile(getTile(x, y));
         }
     }
@@ -349,7 +349,7 @@ bool GridLayer::movePlayerToTile(TileLayer* newTile) {
     }
 
     // Handle Teleporter Tiles.
-    if (tileHasPlayer->isTeleporter()) {
+    if (playModel->isTeleporter(TileCoord(tileHasPlayer->getX(), tileHasPlayer->getY()))) {
         TileLayer* matching = getMatchingTeleporterTile(tileHasPlayer);
         tileHasPlayer = matching;
         addChangedTile(tileHasPlayer);
@@ -382,7 +382,7 @@ TileLayer* GridLayer::getMatchingTeleporterTile(TileLayer* t) {
 
     // Handle case where a non-telepoprter tile is passed in.  Return the same
     // tile provided.  This should never happen.
-    if (!t->isTeleporter()) {
+    if (!PlayModel::GetInstance()->isTeleporter(TileCoord(t->getX(), t->getY()))) {
         matching = t;
 
 
@@ -391,8 +391,8 @@ TileLayer* GridLayer::getMatchingTeleporterTile(TileLayer* t) {
 
         // Search for the matching tile.
         bool found = false;
-        for (Uint16 x = 0; x < GridLayer::GRID_WIDTH; x++) {
-            for (Uint16 y = 0; y < GridLayer::GRID_HEIGHT; y++) {
+        for (Uint16 x = 0; x < PlayModel::GRID_WIDTH; x++) {
+            for (Uint16 y = 0; y < PlayModel::GRID_HEIGHT; y++) {
 
                 if (x != t->getX() || y != t->getY()) {
 

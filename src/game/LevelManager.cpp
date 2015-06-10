@@ -64,8 +64,8 @@ bool LevelManager::Write() {
     FILE* fp = fopen(levelFile.c_str(), "wb");
 
     // Write Width and Height.
-    uint16_t w = static_cast<uint16_t>(GridLayer::GRID_WIDTH);
-    uint16_t h = static_cast<uint16_t>(GridLayer::GRID_HEIGHT);
+    uint16_t w = static_cast<uint16_t>(PlayModel::GRID_WIDTH);
+    uint16_t h = static_cast<uint16_t>(PlayModel::GRID_HEIGHT);
     fwrite(&w, sizeof(uint16_t), 1, fp);
     fwrite(&h, sizeof(uint16_t), 1, fp);
 
@@ -210,8 +210,8 @@ std::string LevelManager::GetPath(uint8_t levelNum, bool inCwd) {
 }
 
 void LevelManager::Reset() {
-    w = GridLayer::GRID_WIDTH;
-    h = GridLayer::GRID_HEIGHT;
+    w = PlayModel::GRID_WIDTH;
+    h = PlayModel::GRID_HEIGHT;
     px = 0;
     py = 0;
     kx = w-1;
@@ -241,6 +241,7 @@ void LevelManager::Populate(uint8_t levelNum) {
                 TileLayer* curDev = deviations[curDevIdx];
                 if (curDev->getX() == tx && curDev->getY() == ty) {
                     gl->changeTileType(tx, ty, curDev->getType());
+                    playModel->changeTileType(TileCoord(tx, ty), curDev->getType());
                     curDevIdx++;
                     deviationMatch = true;
                 }
@@ -249,6 +250,7 @@ void LevelManager::Populate(uint8_t levelNum) {
             if (!deviationMatch) {
                 // Add the tile to the level.
                 gl->changeTileType(tx, ty, defTT);
+                playModel->changeTileType(TileCoord(tx, ty), defTT);
             }
 
             // TODO: Support multiple items. (not just hard coded key and

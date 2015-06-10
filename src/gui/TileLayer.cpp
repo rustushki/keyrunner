@@ -98,17 +98,6 @@ void TileLayer::setType(TileType tt) {
     }
 }
 
-/* ------------------------------------------------------------------------------
- * isTeleporter - Return true if the tile is a teleporter tile.
- */
-bool TileLayer::isTeleporter() const {
-    TileType tt = this->getType();
-
-    return (    tt == TILETYPE_TELEPORTER_RED
-            || tt == TILETYPE_TELEPORTER_GREEN
-            || tt == TILETYPE_TELEPORTER_BLUE);
-}
-
 bool TileLayer::isDoor() const {
     return (this->getType() == TILETYPE_DOOR);
 }
@@ -128,7 +117,7 @@ TileLayer* TileLayer::up() const{
     int x = this->x + 0;
     int y = this->y - 1;
     if (y < 0) {
-        y = GridLayer::GRID_HEIGHT-1;
+        y = PlayModel::GRID_HEIGHT-1;
     }
     return GridLayer::GetInstance()->getTile(x, y);
 }
@@ -136,7 +125,7 @@ TileLayer* TileLayer::up() const{
 TileLayer* TileLayer::down() const{
     int x = this->x + 0;
     int y = this->y + 1;
-    if (y >= GridLayer::GRID_HEIGHT) {
+    if (y >= PlayModel::GRID_HEIGHT) {
         y = 0;
     }
     return GridLayer::GetInstance()->getTile(x, y);
@@ -146,7 +135,7 @@ TileLayer* TileLayer::left() const{
     int x = this->x - 1;
     int y = this->y + 0;
     if (x < 0) {
-        x = GridLayer::GRID_WIDTH-1;
+        x = PlayModel::GRID_WIDTH-1;
     }
     return GridLayer::GetInstance()->getTile(x, y);
 }
@@ -154,7 +143,7 @@ TileLayer* TileLayer::left() const{
 TileLayer* TileLayer::right() const{
     int x = this->x + 1;
     int y = this->y + 0;
-    if (x >= GridLayer::GRID_WIDTH) {
+    if (x >= PlayModel::GRID_WIDTH) {
         x = 0;
     }
     return GridLayer::GetInstance()->getTile(x, y);

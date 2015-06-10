@@ -44,3 +44,18 @@ bool PlayModel::isWall(TileCoord coord) const {
 TileCoord PlayModel::getKeyCoord() const {
     return keyCoord;
 }
+
+/* ------------------------------------------------------------------------------
+ * isTeleporter - Return true if the tile is a teleporter tile.
+ */
+bool PlayModel::isTeleporter(TileCoord coord) const {
+    TileType tt = tileType[coord.second][coord.first];
+
+    return (   tt == TILETYPE_TELEPORTER_RED
+            || tt == TILETYPE_TELEPORTER_GREEN
+            || tt == TILETYPE_TELEPORTER_BLUE);
+}
+
+void PlayModel::changeTileType(TileCoord coord, TileType tt) {
+    tileType[coord.second][coord.first] = tt;
+}
