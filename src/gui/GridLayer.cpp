@@ -373,13 +373,6 @@ TileLayer* GridLayer::getPlayerTile() const {
 }
 
 /* ------------------------------------------------------------------------------
- * getKeyTile - Return the current tile of the player.
- */
-TileLayer* GridLayer::getKeyTile() const {
-    return tileHasKey;
-}
-
-/* ------------------------------------------------------------------------------
  * getMatchingTeleporterTile - Given a teleporter tile X and Y, return the
  * matching teleporter tile's X and Y.  Return as a vector int.
  */

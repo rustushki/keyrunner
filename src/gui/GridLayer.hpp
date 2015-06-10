@@ -40,7 +40,6 @@ public:
 
     // Const Accessors which describe the current state of the GridLayer.
     TileLayer* getPlayerTile() const;
-    TileLayer* getKeyTile() const;
     bool hasKey(int x, int y) const;
     bool hasPlayer(int x, int y) const;
     TileLayer* getTile(uint16_t x, uint16_t y) const;

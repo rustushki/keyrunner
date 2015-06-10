@@ -15,6 +15,7 @@ class PlayModel {
         uint16_t getLevelNum() const;
         void setLevelNum(uint16_t level);
         bool isWall(TileCoord coord) const;
+        TileCoord getKeyCoord() const;
 
     private:
         // PlayMode is singleton.
@@ -23,6 +24,8 @@ class PlayModel {
 
         bool playerHasKey;
         uint16_t level;
+
+        TileCoord keyCoord;
 };
 
 #endif//PLAYMODEL_HPP

@@ -117,9 +117,9 @@ bool LevelManager::Write() {
 
     // Write Each Item Type
     // For now, we only need to record the location of the key.
-    TileLayer* kTile = GridLayer::GetInstance()->getKeyTile();
-    x = kTile->getX();
-    y = kTile->getY();
+    TileCoord kCoord = PlayModel::GetInstance()->getKeyCoord();
+    x = kCoord.first;
+    y = kCoord.second;
     uint8_t it = 0;
     fwrite(&x, sizeof(uint16_t), 1, fp);
     fwrite(&y, sizeof(uint16_t), 1, fp);

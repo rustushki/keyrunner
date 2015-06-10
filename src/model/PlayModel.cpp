@@ -37,3 +37,10 @@ bool PlayModel::isWall(TileCoord coord) const {
     TileLayer* tile = GridLayer::GetInstance()->getTile(coord.first, coord.second);
     return (tile->getType() == TILETYPE_WALL);
 }
+
+/* ------------------------------------------------------------------------------
+ * getKeyCoord - Return the current tile of the player.
+ */
+TileCoord PlayModel::getKeyCoord() const {
+    return keyCoord;
+}
