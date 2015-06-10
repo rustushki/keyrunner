@@ -24,6 +24,7 @@ class PlayModel {
         bool isTeleporter(TileCoord coord) const;
         TileCoord getKeyCoord() const;
         void changeTileType(TileCoord coord, TileType tt);
+        bool isDoor(TileCoord coord) const;
 
     private:
         // PlayMode is singleton.

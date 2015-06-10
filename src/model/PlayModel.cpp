@@ -17,8 +17,14 @@ PlayModel::PlayModel() {
     // Do nothing.
 }
 
+/* ------------------------------------------------------------------------------
+ * Is the current PlayModel is a Complete State?
+ *
+ * This happens when the player has the key and is standing at the door.
+ */
 bool PlayModel::isComplete() const {
-    return (playerHasKey && GridLayer::GetInstance()->getPlayerTile()->isDoor());
+    TileLayer* playerTile = GridLayer::GetInstance()->getPlayerTile();
+    return (playerHasKey && isDoor(TileCoord(playerTile->getX(), playerTile->getY())));
 }
 
 void PlayModel::setPlayerHasKey(bool playerHasKey) {
@@ -58,4 +64,11 @@ bool PlayModel::isTeleporter(TileCoord coord) const {
 
 void PlayModel::changeTileType(TileCoord coord, TileType tt) {
     tileType[coord.second][coord.first] = tt;
+}
+
+/* ------------------------------------------------------------------------------
+ * Is the Tile at the provided TileCoord a Door?
+ */
+bool PlayModel::isDoor(TileCoord coord) const {
+    return tileType[coord.second][coord.first] == TILETYPE_DOOR;
 }

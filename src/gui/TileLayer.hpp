@@ -31,7 +31,6 @@ public:
     uint16_t getX() const;
     uint16_t getY() const;
 
-    bool isDoor() const;
     bool isConveyor() const;
     bool hasPlayer() const;
     bool hasKey() const;

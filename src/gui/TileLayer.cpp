@@ -98,10 +98,6 @@ void TileLayer::setType(TileType tt) {
     }
 }
 
-bool TileLayer::isDoor() const {
-    return (this->getType() == TILETYPE_DOOR);
-}
-
 /* ------------------------------------------------------------------------------
  * isConveyor - Return true if the TileLayer is a conveyor tile.
  */
