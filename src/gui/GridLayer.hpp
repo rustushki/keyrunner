@@ -56,7 +56,6 @@ private:
     TileLayer* tile[GridLayer::GRID_HEIGHT][GridLayer::GRID_WIDTH];
     TileLayer* tileHasPlayer;
     TileLayer* tileHasKey;
-    bool playerHasKey;
     Animation* keyAnim;
     Animation* playerAnim;
     std::vector<TileLayer*> changedTiles;
