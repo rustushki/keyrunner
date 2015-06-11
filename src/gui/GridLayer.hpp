@@ -61,7 +61,6 @@ private:
     void init();
     void animateTiles();
     void clearAnimatedTiles();
-    void buildConveyorAnimations();
     void clearChangedTiles();
     void addChangedTile(TileLayer* tile);
     void changeTileType(uint16_t x, uint16_t y, TileType tt);

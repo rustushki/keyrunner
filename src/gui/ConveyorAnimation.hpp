@@ -10,18 +10,19 @@ class TileLayer;
 
 class ConveyorAnimation {
 public:
-    ConveyorAnimation(std::vector<TileLayer*>);
+    ConveyorAnimation(std::vector<TileCoord>);
     ~ConveyorAnimation();
 
     static bool TileInConveyor(TileCoord tileCoord);
     static bool StartConveyors();
     static void ClearConveyors();
+    static void BuildConveyorAnimations();
 
     bool startAnimation();
 
 private:
 
-    std::vector<TileLayer*> conveyorTiles;
+    std::vector<TileCoord> conveyorTiles;
     bool hasTile(TileCoord tileCoord) const;
 
     uint16_t nextTileToStart;
