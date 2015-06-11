@@ -57,7 +57,7 @@ void GridLayer::buildConveyorAnimations() {
 
                     //std::cout << "Found TileLayer: " << q->getX() << "," << q->getY() << std::endl;
 
-                    Direction conveyDir = q->getConveyorDirection();
+                    Direction conveyDir = playModel->getConveyorDirection(TileCoord(q->getX(), q->getY()));
 
                     // Initialize oppDir to something invalid to pacify
                     // compiler warnings.
@@ -88,7 +88,7 @@ void GridLayer::buildConveyorAnimations() {
                     // conveyor, or we find that the current belt is circular.
                     TileLayer* prev = p;
                     while (    playModel->isConveyor(TileCoord(p->getX(), p->getY()))
-                            && p->getConveyorDirection() == conveyDir
+                            && playModel->getConveyorDirection(TileCoord(p->getX(), p->getY())) == conveyDir
                             && !ConveyorAnimation::TileInConveyor(p)
                             && !circular) {
 
@@ -119,7 +119,7 @@ void GridLayer::buildConveyorAnimations() {
                     // another conveyor or if the belt is found to be circular,
                     // the start tile.
                     while (    playModel->isConveyor(TileCoord(p->getX(), p->getY()))
-                            && p->getConveyorDirection() == conveyDir
+                            && playModel->getConveyorDirection(TileCoord(p->getX(), p->getY())) == conveyDir
                             && !ConveyorAnimation::TileInConveyor(p)) {
 
                         conveyorTiles.push_back(p);

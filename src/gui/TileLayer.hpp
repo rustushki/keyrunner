@@ -41,8 +41,6 @@ public:
     TileLayer* left() const;
     TileLayer* right() const;
 
-    Direction getConveyorDirection() const;
-
 private:
     TileType type;
     Animation* anim;

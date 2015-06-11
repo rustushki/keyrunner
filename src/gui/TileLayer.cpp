@@ -135,33 +135,6 @@ TileLayer* TileLayer::right() const{
 }
 
 /* ------------------------------------------------------------------------------
- * getConveyorDirection - Return the direction the conveyor is pointing
- * towards.
- */
-Direction TileLayer::getConveyorDirection() const {
-    if (this->getType() == TILETYPE_CONVEY_UP) {
-        return DIRECTION_UP;
-
-    } else if (this->getType() == TILETYPE_CONVEY_DOWN) {
-        return DIRECTION_DOWN;
-
-    } else if (this->getType() == TILETYPE_CONVEY_RIGHT) {
-        return DIRECTION_RIGHT;
-
-    } else if (this->getType() == TILETYPE_CONVEY_LEFT) {
-        return DIRECTION_LEFT;
-
-    }
-
-    std::cout << "Non-conveyor tile queried for direction." << std::endl;
-    KeyRunner::exitGame();
-
-    // Should never execute.
-    return DIRECTION_UP;
-}
-
-
-/* ------------------------------------------------------------------------------
  * hasPlayer - Determine whether this tile has the player.
  */
 bool TileLayer::hasPlayer() const {
@@ -199,7 +172,7 @@ TileLayer* TileLayer::getNextConveyorTile() const {
         KeyRunner::exitGame();
     }
 
-    Direction dir = this->getConveyorDirection();
+    Direction dir = playModel->getConveyorDirection(TileCoord(getX(), getY()));
     Direction origDir = dir;
 
     // Initialize oppDir to pacify compiler.
@@ -236,7 +209,7 @@ TileLayer* TileLayer::getNextConveyorTile() const {
         } else if (playModel->isConveyor(tryTileCoord)) {
 
             if (dir != oppDir) {
-                Direction dir = tryTile->getConveyorDirection();
+                Direction dir = playModel->getConveyorDirection(TileCoord(tryTile->getX(), tryTile->getY()));
 
                 TileCoord check = playModel->getTileCoordInDirection(tryTileCoord, dir);
 

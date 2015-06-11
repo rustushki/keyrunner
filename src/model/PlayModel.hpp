@@ -28,6 +28,8 @@ class PlayModel {
         bool isDoor(TileCoord coord) const;
         bool isConveyor(TileCoord coord) const;
         TileCoord getTileCoordInDirection(TileCoord coord, Direction d) const;
+        Direction getConveyorDirection(TileCoord coord) const;
+
 
         TileCoord getTileCoordUp(TileCoord current) const;
         TileCoord getTileCoordDown(TileCoord current) const;

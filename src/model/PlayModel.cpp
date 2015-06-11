@@ -1,4 +1,5 @@
 #include "PlayModel.hpp"
+#include "../game/KeyRunner.hpp"
 
 // TODO: Remove These:
 #include "../gui/GridLayer.hpp"
@@ -136,6 +137,32 @@ bool PlayModel::isConveyor(TileCoord coord) const {
             || tt == TILETYPE_CONVEY_DOWN
             || tt == TILETYPE_CONVEY_RIGHT
             || tt == TILETYPE_CONVEY_LEFT);
+}
+
+/* ------------------------------------------------------------------------------
+ * Return the direction the conveyor is pointing towards.
+ */
+Direction PlayModel::getConveyorDirection(TileCoord coord) const {
+    TileType tt = tileType[coord.second][coord.first];
+    if (tt == TILETYPE_CONVEY_UP) {
+        return DIRECTION_UP;
+
+    } else if (tt == TILETYPE_CONVEY_DOWN) {
+        return DIRECTION_DOWN;
+
+    } else if (tt == TILETYPE_CONVEY_RIGHT) {
+        return DIRECTION_RIGHT;
+
+    } else if (tt == TILETYPE_CONVEY_LEFT) {
+        return DIRECTION_LEFT;
+
+    }
+
+    std::cout << "Non-conveyor tile queried for direction." << std::endl;
+    KeyRunner::exitGame();
+
+    // Should never execute.
+    return DIRECTION_UP;
 }
 
 
