@@ -140,10 +140,6 @@ void GridLayer::refreshTiles() {
     }
 }
 
-bool GridLayer::hasPlayer(int x, int y) const {
-    return (tileHasPlayer == getTile(x, y));
-}
-
 /* ------------------------------------------------------------------------------
  * movePlayer - Move the player in the provided direction by one tile.  Handle
  * walls, teleporters, keys and other gameplay elements.
@@ -156,7 +152,7 @@ bool GridLayer::movePlayer(Direction d) {
     }
 
     PlayModel* playModel = PlayModel::GetInstance();
-    TileCoord oldTileCoord = TileCoord(tileHasPlayer->getX(), tileHasPlayer->getY());
+    TileCoord oldTileCoord = playModel->getPlayerCoord();
     TileCoord newTileCoord;
     if (d == DIRECTION_UP) {
         newTileCoord = playModel->getTileCoordUp(oldTileCoord);
@@ -204,22 +200,23 @@ bool GridLayer::movePlayerToTile(TileLayer* newTile) {
         return true;
     }
 
+    // Update the old and new TileLayers of the player.
+    addChangedTile(getTile(playModel->getPlayerCoord().first, playModel->getPlayerCoord().second));
+    addChangedTile(newTile);
+
     // Move the player to the tile.
-    addChangedTile(tileHasPlayer);
-    tileHasPlayer = newTile;
-    addChangedTile(tileHasPlayer);
+    playModel->setPlayerCoord(TileCoord(newTile->getX(), newTile->getY()));
 
     // Give the player the key if the tile has the key.
-    if (playModel->tileCoordHasKey(TileCoord(tileHasPlayer->getX(), tileHasPlayer->getY()))) {
+    if (playModel->tileCoordHasKey(TileCoord(newTile->getX(), newTile->getY()))) {
         playModel->setPlayerHasKey(true);
     }
 
     // Handle Teleporter Tiles.
-    TileCoord tileHasPlayerCoord(tileHasPlayer->getX(), tileHasPlayer->getY());
-    if (playModel->isTeleporter(tileHasPlayerCoord)) {
-        TileCoord matching = playModel->getMatchingTeleporterTileCoord(tileHasPlayerCoord);
-        tileHasPlayer = getTile(matching.first, matching.second);
-        addChangedTile(tileHasPlayer);
+    if (playModel->isTeleporter(playModel->getPlayerCoord())) {
+        TileCoord matching = playModel->getMatchingTeleporterTileCoord(playModel->getPlayerCoord());
+        playModel->setPlayerCoord(matching);
+        addChangedTile(getTile(matching.first, matching.second));
         return true;
     }
 
@@ -230,11 +227,4 @@ bool GridLayer::movePlayerToTile(TileLayer* newTile) {
 
     // Normal case, movement is not interrupted.
     return false;
-}
-
-/* ------------------------------------------------------------------------------
- * getPlayerTile - Return the current tile of the player.
- */
-TileLayer* GridLayer::getPlayerTile() const {
-    return tileHasPlayer;
 }

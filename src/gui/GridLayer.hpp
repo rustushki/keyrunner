@@ -35,9 +35,6 @@ public:
     bool movePlayer(Direction d);
     bool movePlayerToTile(TileLayer*);
 
-    // Const Accessors which describe the current state of the GridLayer.
-    TileLayer* getPlayerTile() const;
-    bool hasPlayer(int x, int y) const;
     TileLayer* getTile(uint16_t x, uint16_t y) const;
 
 private:
@@ -49,7 +46,6 @@ private:
     // Various stateful variables which describe the current state of the
     // GridLayer.
     TileLayer* tile[PlayModel::GRID_HEIGHT][PlayModel::GRID_WIDTH];
-    TileLayer* tileHasPlayer;
     Animation* keyAnim;
     Animation* playerAnim;
     std::vector<TileLayer*> changedTiles;

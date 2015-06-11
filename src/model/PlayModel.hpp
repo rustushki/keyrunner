@@ -25,6 +25,8 @@ class PlayModel {
         bool isTeleporter(TileCoord coord) const;
         TileCoord getKeyCoord() const;
         void setKeyCoord(TileCoord tileCoord);
+        TileCoord getPlayerCoord() const;
+        void setPlayerCoord(TileCoord tileCoord);
         void changeTileType(TileCoord coord, TileType tt);
         bool isDoor(TileCoord coord) const;
         bool isConveyor(TileCoord coord) const;
@@ -33,6 +35,7 @@ class PlayModel {
         TileCoord getNextConveyorTileCoord(TileCoord tileCoord) const;
         TileCoord getMatchingTeleporterTileCoord(TileCoord t) const;
         bool tileCoordHasKey(TileCoord tileCoord) const;
+        bool tileCoordHasPlayer(TileCoord tileCoord) const;
 
         TileCoord getTileCoordUp(TileCoord current) const;
         TileCoord getTileCoordDown(TileCoord current) const;
@@ -48,6 +51,7 @@ class PlayModel {
         uint16_t level;
 
         TileCoord keyCoord;
+        TileCoord playerCoord;
 
         TileType tileType[GRID_HEIGHT][GRID_WIDTH];
 };

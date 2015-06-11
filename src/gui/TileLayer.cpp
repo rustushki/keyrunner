@@ -98,15 +98,6 @@ void TileLayer::setType(TileType tt) {
     }
 }
 
-/* ------------------------------------------------------------------------------
- * hasPlayer - Determine whether this tile has the player.
- */
-bool TileLayer::hasPlayer() const {
-    uint16_t x = this->getX();
-    uint16_t y = this->getY();
-    return (GridLayer::GetInstance()->hasPlayer(x, y));
-}
-
 uint16_t TileLayer::getX() const {
     return this->x;
 }
@@ -135,7 +126,7 @@ void TileLayer::draw(SDL_Surface* dst) {
     }
 
     // Redraw the Player.
-    if (this->hasPlayer()) {
+    if (playModel->tileCoordHasPlayer(TileCoord(this->x, this->y))) {
         PlayerAnim->move(xp, yp);
         PlayerAnim->blit(dst);
     }

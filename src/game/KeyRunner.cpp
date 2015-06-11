@@ -346,17 +346,13 @@ int KeyRunner::convey(void* unused) {
         // Don't attempt to convey if the level is being loaded.
         SDL_LockMutex(levelLoadLock);
 
-
-        // Get the current tile of the player.
-        TileLayer* playerTile = GridLayer::GetInstance()->getPlayerTile();
-
         PlayModel* playModel = PlayModel::GetInstance();
 
         // If the tile in a conveyor tile,
-        if (playModel->isConveyor(TileCoord(playerTile->getX(), playerTile->getY()))) {
+        if (playModel->isConveyor(playModel->getPlayerCoord())) {
 
             // Convey the player to the next tile.
-            TileCoord newTileCoord = playModel->getNextConveyorTileCoord(TileCoord(playerTile->getX(), playerTile->getY()));
+            TileCoord newTileCoord = playModel->getNextConveyorTileCoord(playModel->getPlayerCoord());
             TileLayer* newTile = GridLayer::GetInstance()->getTile(newTileCoord.first, newTileCoord.second);
             if (GridLayer::GetInstance()->movePlayerToTile(newTile)) {
                 if (PlayModel::GetInstance()->isComplete()){

@@ -59,8 +59,10 @@ bool LevelManager::Exists(uint8_t levelNum) {
  * Write - Writes the current state of the GridLayer into a static level file.
  */
 bool LevelManager::Write() {
+    PlayModel* playModel = PlayModel::GetInstance();
+
     // Open the Level File.
-    std::string levelFile = GetPath(PlayModel::GetInstance()->getLevelNum(), true);
+    std::string levelFile = GetPath(playModel->getLevelNum(), true);
     FILE* fp = fopen(levelFile.c_str(), "wb");
 
     // Write Width and Height.
@@ -89,9 +91,9 @@ bool LevelManager::Write() {
     fwrite(&devCount, sizeof(uint16_t), 1, fp);
 
     // Write Initial Char Location.
-    TileLayer* pTile = GridLayer::GetInstance()->getPlayerTile();
-    uint16_t x = pTile->getX();
-    uint16_t y = pTile->getY();
+    TileCoord playerCoord = playModel->getPlayerCoord();
+    uint16_t x = playerCoord.first;
+    uint16_t y = playerCoord.second;
     fwrite(&x, sizeof(uint16_t), 1, fp);
     fwrite(&y, sizeof(uint16_t), 1, fp);
 
@@ -258,7 +260,7 @@ void LevelManager::Populate(uint8_t levelNum) {
 
             // Does the current tile have the player?
             if (tx == px && ty == py) {
-                gl->tileHasPlayer = gl->tile[ty][tx];
+                playModel->setPlayerCoord(TileCoord(tx, ty));
             }
 
             // Does the current tile have the key?

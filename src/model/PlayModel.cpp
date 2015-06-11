@@ -26,8 +26,7 @@ PlayModel::PlayModel() {
  * This happens when the player has the key and is standing at the door.
  */
 bool PlayModel::isComplete() const {
-    TileLayer* playerTile = GridLayer::GetInstance()->getPlayerTile();
-    return (playerHasKey && isDoor(TileCoord(playerTile->getX(), playerTile->getY())));
+    return (playerHasKey && isDoor(getPlayerCoord()));
 }
 
 void PlayModel::setPlayerHasKey(bool playerHasKey) {
@@ -50,7 +49,7 @@ bool PlayModel::isWall(TileCoord coord) const {
 }
 
 /* ------------------------------------------------------------------------------
- * getKeyCoord - Return the current tile of the player.
+ * Return the current tile of the key.
  */
 TileCoord PlayModel::getKeyCoord() const {
     return keyCoord;
@@ -58,6 +57,17 @@ TileCoord PlayModel::getKeyCoord() const {
 
 void PlayModel::setKeyCoord(TileCoord tileCoord) {
     keyCoord = tileCoord;
+}
+
+/* ------------------------------------------------------------------------------
+ * Return the current tile of the player.
+ */
+TileCoord PlayModel::getPlayerCoord() const {
+    return playerCoord;
+}
+
+void PlayModel::setPlayerCoord(TileCoord tileCoord) {
+    playerCoord = tileCoord;
 }
 
 /* ------------------------------------------------------------------------------
@@ -311,3 +321,11 @@ TileCoord PlayModel::getMatchingTeleporterTileCoord(TileCoord t) const {
 bool PlayModel::tileCoordHasKey(TileCoord tileCoord) const {
     return (keyCoord == tileCoord);
 }
+
+/* ------------------------------------------------------------------------------
+ * Determine whether this tile has the player.
+ */
+bool PlayModel::tileCoordHasPlayer(TileCoord tileCoord) const {
+    return (playerCoord == tileCoord);
+}
+

@@ -29,8 +29,6 @@ public:
     uint16_t getX() const;
     uint16_t getY() const;
 
-    bool hasPlayer() const;
-
 private:
     TileType type;
     Animation* anim;
