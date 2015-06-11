@@ -54,9 +54,10 @@ bool ConveyorAnimation::startAnimation() {
 
 }
 
-bool ConveyorAnimation::hasTile(TileLayer* tile) const {
+bool ConveyorAnimation::hasTile(TileCoord tileCoord) const {
+    GridLayer* gl = GridLayer::GetInstance();
     for (Uint16 x = 0; x < this->conveyorTiles.size(); x++) {
-        if (tile == this->conveyorTiles[x]) {
+        if (gl->getTile(tileCoord.first, tileCoord.second) == this->conveyorTiles[x]) {
             return true;
         }
     }
@@ -68,11 +69,11 @@ bool ConveyorAnimation::hasTile(TileLayer* tile) const {
  * TileInConveyor - Check all conveyors to see if the provided tile is already
  * in a conveyor belt.
  */
-bool ConveyorAnimation::TileInConveyor(TileLayer* tile) {
+bool ConveyorAnimation::TileInConveyor(TileCoord tileCoord) {
 
     for (Uint16 c = 0; c < ConveyorAnimation::Conveyors.size(); c++) {
         ConveyorAnimation* conveyor = ConveyorAnimation::Conveyors[c];
-        if (conveyor->hasTile(tile)) {
+        if (conveyor->hasTile(tileCoord)) {
 
             return true;
 

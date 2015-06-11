@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <vector>
 
+#include "../model/PlayModel.hpp"
+
 class TileLayer;
 
 class ConveyorAnimation {
@@ -11,7 +13,7 @@ public:
     ConveyorAnimation(std::vector<TileLayer*>);
     ~ConveyorAnimation();
 
-    static bool TileInConveyor(TileLayer* tile);
+    static bool TileInConveyor(TileCoord tileCoord);
     static bool StartConveyors();
     static void ClearConveyors();
 
@@ -20,7 +22,7 @@ public:
 private:
 
     std::vector<TileLayer*> conveyorTiles;
-    bool hasTile(TileLayer*) const;
+    bool hasTile(TileCoord tileCoord) const;
 
     uint16_t nextTileToStart;
 

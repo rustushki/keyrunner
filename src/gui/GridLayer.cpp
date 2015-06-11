@@ -43,7 +43,7 @@ void GridLayer::buildConveyorAnimations() {
 
             if (playModel->isConveyor(TileCoord(tile->getX(), tile->getY()))) {
 
-                if (!ConveyorAnimation::TileInConveyor(tile)) {
+                if (!ConveyorAnimation::TileInConveyor(TileCoord(tile->getX(), tile->getY()))) {
 
                     // This TileLayer must be part of a Conveyor.  Find the start of
                     // the Conveyor.
@@ -51,7 +51,7 @@ void GridLayer::buildConveyorAnimations() {
                     TileLayer* q = tile;
                     TileLayer* p = q;
 
-                    if (ConveyorAnimation::TileInConveyor(p)) {
+                    if (ConveyorAnimation::TileInConveyor(TileCoord(tile->getX(), tile->getY()))) {
                         continue;
                     }
 
@@ -89,7 +89,7 @@ void GridLayer::buildConveyorAnimations() {
                     TileLayer* prev = p;
                     while (    playModel->isConveyor(TileCoord(p->getX(), p->getY()))
                             && playModel->getConveyorDirection(TileCoord(p->getX(), p->getY())) == conveyDir
-                            && !ConveyorAnimation::TileInConveyor(p)
+                            && !ConveyorAnimation::TileInConveyor(TileCoord(p->getX(), p->getY()))
                             && !circular) {
 
                         prev = p;
@@ -120,7 +120,7 @@ void GridLayer::buildConveyorAnimations() {
                     // the start tile.
                     while (    playModel->isConveyor(TileCoord(p->getX(), p->getY()))
                             && playModel->getConveyorDirection(TileCoord(p->getX(), p->getY())) == conveyDir
-                            && !ConveyorAnimation::TileInConveyor(p)) {
+                            && !ConveyorAnimation::TileInConveyor(TileCoord(p->getX(), p->getY()))) {
 
                         conveyorTiles.push_back(p);
 
