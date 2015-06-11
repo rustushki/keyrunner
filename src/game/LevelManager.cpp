@@ -263,7 +263,7 @@ void LevelManager::Populate(uint8_t levelNum) {
 
             // Does the current tile have the key?
             if (tx == kx && ty == ky) {
-                gl->tileHasKey = gl->tile[ty][tx];
+                playModel->setKeyCoord(TileCoord(tx, ty));
             }
 
         }

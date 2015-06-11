@@ -37,7 +37,6 @@ public:
 
     // Const Accessors which describe the current state of the GridLayer.
     TileLayer* getPlayerTile() const;
-    bool hasKey(int x, int y) const;
     bool hasPlayer(int x, int y) const;
     TileLayer* getTile(uint16_t x, uint16_t y) const;
 
@@ -51,7 +50,6 @@ private:
     // GridLayer.
     TileLayer* tile[PlayModel::GRID_HEIGHT][PlayModel::GRID_WIDTH];
     TileLayer* tileHasPlayer;
-    TileLayer* tileHasKey;
     Animation* keyAnim;
     Animation* playerAnim;
     std::vector<TileLayer*> changedTiles;

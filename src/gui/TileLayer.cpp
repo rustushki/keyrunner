@@ -107,15 +107,6 @@ bool TileLayer::hasPlayer() const {
     return (GridLayer::GetInstance()->hasPlayer(x, y));
 }
 
-/* ------------------------------------------------------------------------------
- * hasKey - Determine whether this tile has the key.
- */
-bool TileLayer::hasKey() const {
-    uint16_t x = this->getX();
-    uint16_t y = this->getY();
-    return (GridLayer::GetInstance()->hasKey(x, y));
-}
-
 uint16_t TileLayer::getX() const {
     return this->x;
 }
@@ -135,8 +126,10 @@ void TileLayer::draw(SDL_Surface* dst) {
     this->getAnimation()->move(xp, yp);
     this->getAnimation()->blit(dst);
 
+    PlayModel* playModel = PlayModel::GetInstance();
+
     // Redraw the Key.
-    if (this->hasKey()) {
+    if (playModel->tileCoordHasKey(TileCoord(this->x, this->y))) {
         KeyAnim->move(xp, yp);
         KeyAnim->blit(dst);
     }

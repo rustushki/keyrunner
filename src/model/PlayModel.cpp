@@ -5,6 +5,8 @@
 #include "../gui/GridLayer.hpp"
 
 PlayModel* PlayModel::instance = NULL;
+const uint16_t PlayModel::GRID_HEIGHT;
+const uint16_t PlayModel::GRID_WIDTH;
 
 PlayModel* PlayModel::GetInstance() {
     if (instance == NULL) {
@@ -30,6 +32,9 @@ bool PlayModel::isComplete() const {
 
 void PlayModel::setPlayerHasKey(bool playerHasKey) {
     this->playerHasKey = playerHasKey;
+    if (this->playerHasKey) {
+        this->keyCoord = TileCoord(PlayModel::GRID_WIDTH, PlayModel::GRID_HEIGHT);
+    }
 }
 
 uint16_t PlayModel::getLevelNum() const {
@@ -50,6 +55,10 @@ bool PlayModel::isWall(TileCoord coord) const {
  */
 TileCoord PlayModel::getKeyCoord() const {
     return keyCoord;
+}
+
+void PlayModel::setKeyCoord(TileCoord tileCoord) {
+    keyCoord = tileCoord;
 }
 
 /* ------------------------------------------------------------------------------
@@ -298,6 +307,8 @@ TileCoord PlayModel::getMatchingTeleporterTileCoord(TileCoord t) const {
     }
 
     return matching;
+}
 
-
+bool PlayModel::tileCoordHasKey(TileCoord tileCoord) const {
+    return (keyCoord == tileCoord);
 }

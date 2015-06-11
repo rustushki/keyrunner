@@ -32,7 +32,6 @@ public:
     uint16_t getY() const;
 
     bool hasPlayer() const;
-    bool hasKey() const;
 
 private:
     TileType type;

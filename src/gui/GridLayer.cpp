@@ -144,10 +144,6 @@ bool GridLayer::hasPlayer(int x, int y) const {
     return (tileHasPlayer == getTile(x, y));
 }
 
-bool GridLayer::hasKey(int x, int y) const {
-    return (tileHasKey == getTile(x, y));
-}
-
 /* ------------------------------------------------------------------------------
  * movePlayer - Move the player in the provided direction by one tile.  Handle
  * walls, teleporters, keys and other gameplay elements.
@@ -214,8 +210,7 @@ bool GridLayer::movePlayerToTile(TileLayer* newTile) {
     addChangedTile(tileHasPlayer);
 
     // Give the player the key if the tile has the key.
-    if (hasKey(tileHasPlayer->getX(), tileHasPlayer->getY())) {
-        tileHasKey = NULL;
+    if (playModel->tileCoordHasKey(TileCoord(tileHasPlayer->getX(), tileHasPlayer->getY()))) {
         playModel->setPlayerHasKey(true);
     }
 
