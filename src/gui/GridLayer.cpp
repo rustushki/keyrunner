@@ -159,23 +159,26 @@ bool GridLayer::movePlayer(Direction d) {
         KeyRunner::exitGame();
     }
 
-    TileLayer* newTile = NULL;
+    PlayModel* playModel = PlayModel::GetInstance();
+    TileCoord oldTileCoord = TileCoord(tileHasPlayer->getX(), tileHasPlayer->getY());
+    TileCoord newTileCoord;
     if (d == DIRECTION_UP) {
-        newTile = tileHasPlayer->up();
+        newTileCoord = playModel->getTileCoordUp(oldTileCoord);
     }
 
     if (d == DIRECTION_DOWN) {
-        newTile = tileHasPlayer->down();
+        newTileCoord = playModel->getTileCoordDown(oldTileCoord);
     }
 
     if (d == DIRECTION_LEFT) {
-        newTile = tileHasPlayer->left();
+        newTileCoord = playModel->getTileCoordLeft(oldTileCoord);
     }
 
     if (d == DIRECTION_RIGHT) {
-        newTile = tileHasPlayer->right();
+        newTileCoord = playModel->getTileCoordRight(oldTileCoord);
     }
 
+    TileLayer* newTile = getTile(newTileCoord.first, newTileCoord.second);
     bool interruptMovement = movePlayerToTile(newTile);
 
     return interruptMovement;

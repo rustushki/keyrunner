@@ -98,42 +98,6 @@ void TileLayer::setType(TileType tt) {
     }
 }
 
-TileLayer* TileLayer::up() const{
-    int x = this->x + 0;
-    int y = this->y - 1;
-    if (y < 0) {
-        y = PlayModel::GRID_HEIGHT-1;
-    }
-    return GridLayer::GetInstance()->getTile(x, y);
-}
-
-TileLayer* TileLayer::down() const{
-    int x = this->x + 0;
-    int y = this->y + 1;
-    if (y >= PlayModel::GRID_HEIGHT) {
-        y = 0;
-    }
-    return GridLayer::GetInstance()->getTile(x, y);
-}
-
-TileLayer* TileLayer::left() const{
-    int x = this->x - 1;
-    int y = this->y + 0;
-    if (x < 0) {
-        x = PlayModel::GRID_WIDTH-1;
-    }
-    return GridLayer::GetInstance()->getTile(x, y);
-}
-
-TileLayer* TileLayer::right() const{
-    int x = this->x + 1;
-    int y = this->y + 0;
-    if (x >= PlayModel::GRID_WIDTH) {
-        x = 0;
-    }
-    return GridLayer::GetInstance()->getTile(x, y);
-}
-
 /* ------------------------------------------------------------------------------
  * hasPlayer - Determine whether this tile has the player.
  */

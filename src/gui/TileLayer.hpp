@@ -34,11 +34,6 @@ public:
     bool hasPlayer() const;
     bool hasKey() const;
 
-    TileLayer* up() const;
-    TileLayer* down() const;
-    TileLayer* left() const;
-    TileLayer* right() const;
-
 private:
     TileType type;
     Animation* anim;
