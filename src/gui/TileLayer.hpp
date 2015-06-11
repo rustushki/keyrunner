@@ -34,8 +34,6 @@ public:
     bool hasPlayer() const;
     bool hasKey() const;
 
-    TileLayer* getNextConveyorTile() const;
-
     TileLayer* up() const;
     TileLayer* down() const;
     TileLayer* left() const;

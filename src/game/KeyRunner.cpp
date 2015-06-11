@@ -356,7 +356,8 @@ int KeyRunner::convey(void* unused) {
         if (playModel->isConveyor(TileCoord(playerTile->getX(), playerTile->getY()))) {
 
             // Convey the player to the next tile.
-            TileLayer* newTile = playerTile->getNextConveyorTile();
+            TileCoord newTileCoord = playModel->getNextConveyorTileCoord(TileCoord(playerTile->getX(), playerTile->getY()));
+            TileLayer* newTile = GridLayer::GetInstance()->getTile(newTileCoord.first, newTileCoord.second);
             if (GridLayer::GetInstance()->movePlayerToTile(newTile)) {
                 if (PlayModel::GetInstance()->isComplete()){
                     SDL_UnlockMutex(levelLock);

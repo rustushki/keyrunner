@@ -165,4 +165,90 @@ Direction PlayModel::getConveyorDirection(TileCoord coord) const {
     return DIRECTION_UP;
 }
 
+/* ------------------------------------------------------------------------------
+ *  Return the 'drop off' spot of this tile if its a conveyor tile.  The
+ *  strategy here is relatively simple:
+ *    Check each tile clock wise inclusive from the current tile:
+ *        1. If the tile is a conveyor, return that tile.
+ *
+ *        2. If the tile is not wall or conveyor, make that tile the backup in
+ *        case no conveyor is found. (second place)
+ *
+ *        3. If there is no suitable second place, return the current tile in
+ *        the conveyor belt sequence.
+ */
+TileCoord PlayModel::getNextConveyorTileCoord(TileCoord current) const {
+    if (!isConveyor(current)) {
+        std::cout << "Trying to get next conveyor tile from non conveyor tile." << std::endl;
+        KeyRunner::exitGame();
+    }
 
+    Direction dir = getConveyorDirection(current);
+    Direction origDir = dir;
+
+    // Initialize oppDir to pacify compiler.
+    Direction oppDir = DIRECTION_COUNT;
+
+    if (origDir == DIRECTION_UP) {
+        oppDir = DIRECTION_DOWN;
+    } else if (origDir == DIRECTION_DOWN) {
+        oppDir = DIRECTION_UP;
+    } else if (origDir == DIRECTION_RIGHT) {
+        oppDir = DIRECTION_LEFT;
+    } else if (origDir == DIRECTION_LEFT) {
+        oppDir = DIRECTION_RIGHT;
+    }
+
+    TileCoord tryTileCoord;
+    TileCoord secondPlaceCoord(GRID_WIDTH, GRID_HEIGHT);
+    TileCoord thirdPlaceCoord = current;
+
+    while (true) {
+
+        tryTileCoord = getTileCoordInDirection(current, dir);
+
+        if (!isWall(tryTileCoord) && !isConveyor(tryTileCoord) && secondPlaceCoord.first != GRID_WIDTH) {
+            secondPlaceCoord = tryTileCoord;
+
+            // Prefer adjacent conveyor belt tiles.  Explicitly do not place the
+            // player on a conveyor belt tile in the exact opposite direction of
+            // current travel.
+        } else if (isConveyor(tryTileCoord)) {
+
+            if (dir != oppDir) {
+                Direction dir = getConveyorDirection(tryTileCoord);
+
+                TileCoord check = getTileCoordInDirection(tryTileCoord, dir);
+
+                if (check.first != current.first || check.second != current.second) {
+                    return tryTileCoord;
+                }
+            }
+        }
+
+        if (dir == DIRECTION_UP) {
+            dir = DIRECTION_RIGHT;
+        } else if (dir == DIRECTION_RIGHT) {
+            dir = DIRECTION_DOWN;
+        } else if (dir == DIRECTION_DOWN) {
+            dir = DIRECTION_LEFT;
+        } else if (dir == DIRECTION_LEFT) {
+            dir = DIRECTION_UP;
+        }
+
+        if (dir == DIRECTION_COUNT) {
+            dir = DIRECTION_UP;
+        }
+
+        if (dir == origDir) {
+            break;
+        }
+
+    }
+
+    if (secondPlaceCoord.first != GRID_WIDTH && secondPlaceCoord.second != GRID_HEIGHT) {
+        return secondPlaceCoord;
+    }
+
+    return thirdPlaceCoord;
+}
