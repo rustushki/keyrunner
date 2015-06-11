@@ -252,3 +252,52 @@ TileCoord PlayModel::getNextConveyorTileCoord(TileCoord current) const {
 
     return thirdPlaceCoord;
 }
+
+/* ------------------------------------------------------------------------------
+ * Given a teleporter tile X and Y, return the matching teleporter tile's X and
+ * Y.  Return as a vector int.
+ */
+TileCoord PlayModel::getMatchingTeleporterTileCoord(TileCoord t) const {
+
+    TileCoord matching = t;
+
+    // Handle case where a non-telepoprter tile is passed in.  Return the same
+    // tile provided.  This should never happen.
+    if (!isTeleporter(t)) {
+        matching = t;
+
+
+        // Normal case. Find the first matching teleporter tile.
+    } else {
+
+        // Search for the matching tile.
+        bool found = false;
+        for (uint16_t x = 0; x < GRID_WIDTH; x++) {
+            for (uint16_t y = 0; y < GRID_HEIGHT; y++) {
+
+                if (x != t.first || y != t.second) {
+
+                    // Found the a Teleporter TileLayer of the same color which is not this tile.
+                    if (tileType[t.second][t.first] == tileType[y][x]) {
+                        matching = TileCoord(x, y);
+                        found = true;
+                        break;
+                    }
+
+                }
+            }
+            if (found) {
+                break;
+            }
+        }
+
+        // Handle case where there is no matching teleporter tile.
+        if (!found) {
+            matching = t;
+        }
+    }
+
+    return matching;
+
+
+}

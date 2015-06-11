@@ -220,9 +220,10 @@ bool GridLayer::movePlayerToTile(TileLayer* newTile) {
     }
 
     // Handle Teleporter Tiles.
-    if (playModel->isTeleporter(TileCoord(tileHasPlayer->getX(), tileHasPlayer->getY()))) {
-        TileLayer* matching = getMatchingTeleporterTile(tileHasPlayer);
-        tileHasPlayer = matching;
+    TileCoord tileHasPlayerCoord(tileHasPlayer->getX(), tileHasPlayer->getY());
+    if (playModel->isTeleporter(tileHasPlayerCoord)) {
+        TileCoord matching = playModel->getMatchingTeleporterTileCoord(tileHasPlayerCoord);
+        tileHasPlayer = getTile(matching.first, matching.second);
         addChangedTile(tileHasPlayer);
         return true;
     }
@@ -241,53 +242,4 @@ bool GridLayer::movePlayerToTile(TileLayer* newTile) {
  */
 TileLayer* GridLayer::getPlayerTile() const {
     return tileHasPlayer;
-}
-
-/* ------------------------------------------------------------------------------
- * getMatchingTeleporterTile - Given a teleporter tile X and Y, return the
- * matching teleporter tile's X and Y.  Return as a vector int.
- */
-TileLayer* GridLayer::getMatchingTeleporterTile(TileLayer* t) {
-
-    TileLayer* matching = NULL;
-
-    // Handle case where a non-telepoprter tile is passed in.  Return the same
-    // tile provided.  This should never happen.
-    if (!PlayModel::GetInstance()->isTeleporter(TileCoord(t->getX(), t->getY()))) {
-        matching = t;
-
-
-        // Normal case. Find the first matching teleporter tile.
-    } else {
-
-        // Search for the matching tile.
-        bool found = false;
-        for (Uint16 x = 0; x < PlayModel::GRID_WIDTH; x++) {
-            for (Uint16 y = 0; y < PlayModel::GRID_HEIGHT; y++) {
-
-                if (x != t->getX() || y != t->getY()) {
-
-                    // Found the a Teleporter TileLayer of the same color which is not this tile.
-                    if (t->getType() == getTile(x,y)->getType()) {
-                        matching = getTile(x, y);
-                        found = true;
-                        break;
-                    }
-
-                }
-            }
-            if (found) {
-                break;
-            }
-        }
-
-        // Handle case where there is no matching teleporter tile.
-        if (!found) {
-            matching = t;
-        }
-    }
-
-    return matching;
-
-
 }

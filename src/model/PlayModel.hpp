@@ -30,6 +30,7 @@ class PlayModel {
         TileCoord getTileCoordInDirection(TileCoord coord, Direction d) const;
         Direction getConveyorDirection(TileCoord coord) const;
         TileCoord getNextConveyorTileCoord(TileCoord tileCoord) const;
+        TileCoord getMatchingTeleporterTileCoord(TileCoord t) const;
 
         TileCoord getTileCoordUp(TileCoord current) const;
         TileCoord getTileCoordDown(TileCoord current) const;
