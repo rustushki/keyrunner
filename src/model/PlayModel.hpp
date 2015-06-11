@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 #include "../game/TileType.hpp"
+#include "../model/Direction.hpp"
 
 typedef std::pair<uint16_t, uint16_t> TileCoord;
 
@@ -25,6 +26,13 @@ class PlayModel {
         TileCoord getKeyCoord() const;
         void changeTileType(TileCoord coord, TileType tt);
         bool isDoor(TileCoord coord) const;
+        bool isConveyor(TileCoord coord) const;
+        TileCoord getTileCoordInDirection(TileCoord coord, Direction d) const;
+
+        TileCoord getTileCoordUp(TileCoord current) const;
+        TileCoord getTileCoordDown(TileCoord current) const;
+        TileCoord getTileCoordLeft(TileCoord current) const;
+        TileCoord getTileCoordRight(TileCoord current) const;
 
     private:
         // PlayMode is singleton.

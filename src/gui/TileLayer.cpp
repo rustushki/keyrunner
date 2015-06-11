@@ -98,17 +98,6 @@ void TileLayer::setType(TileType tt) {
     }
 }
 
-/* ------------------------------------------------------------------------------
- * isConveyor - Return true if the TileLayer is a conveyor tile.
- */
-bool TileLayer::isConveyor() const {
-    return (    this->getType() == TILETYPE_CONVEY_UP
-            || this->getType() == TILETYPE_CONVEY_DOWN
-            || this->getType() == TILETYPE_CONVEY_RIGHT
-            || this->getType() == TILETYPE_CONVEY_LEFT);
-}
-
-
 TileLayer* TileLayer::up() const{
     int x = this->x + 0;
     int y = this->y - 1;
@@ -203,7 +192,9 @@ bool TileLayer::hasKey() const {
  *        the conveyor belt sequence.
  */
 TileLayer* TileLayer::getNextConveyorTile() const {
-    if (!this->isConveyor()) {
+    PlayModel* playModel = PlayModel::GetInstance();
+
+    if (!playModel->isConveyor(TileCoord(getX(), getY()))) {
         std::cout << "Trying to get next conveyor tile from non conveyor tile." << std::endl;
         KeyRunner::exitGame();
     }
@@ -224,30 +215,32 @@ TileLayer* TileLayer::getNextConveyorTile() const {
         oppDir = DIRECTION_RIGHT;
     }
 
+    TileCoord tryTileCoord;
     TileLayer* tryTile = NULL;
     TileLayer* secondPlace = NULL;
     TileLayer* thirdPlace = const_cast<TileLayer*>(this);
 
+    TileCoord current(getX(), getY());
 
     while (true) {
 
-        tryTile = this->getTileInDirection(dir);
+        tryTileCoord = playModel->getTileCoordInDirection(current, dir);
+        tryTile = GridLayer::GetInstance()->getTile(tryTileCoord.first, tryTileCoord.second);
 
-        if (!PlayModel::GetInstance()->isWall(TileCoord(tryTile->getX(), tryTile->getY()))
-                && !tryTile->isConveyor() && secondPlace == NULL) {
+        if (!playModel->isWall(tryTileCoord) && !playModel->isConveyor(tryTileCoord) && secondPlace == NULL) {
             secondPlace = tryTile;
 
             // Prefer adjacent conveyor belt tiles.  Explicitly do not place the
             // player on a conveyor belt tile in the exact opposite direction of
             // current travel.
-        } else if (tryTile->isConveyor()) {
+        } else if (playModel->isConveyor(tryTileCoord)) {
 
             if (dir != oppDir) {
                 Direction dir = tryTile->getConveyorDirection();
 
-                TileLayer* check = tryTile->getTileInDirection(dir);
+                TileCoord check = playModel->getTileCoordInDirection(tryTileCoord, dir);
 
-                if (check != this) {
+                if (check.first != getX() || check.second != getY()) {
                     return tryTile;
                 }
             }
@@ -280,24 +273,6 @@ TileLayer* TileLayer::getNextConveyorTile() const {
     return thirdPlace;
 
 
-}
-
-/* ------------------------------------------------------------------------------
- * getTileInDirection - Given a direction, return the tile to that direction
- * from this tile..
- */
-TileLayer* TileLayer::getTileInDirection(Direction dir) const {
-    if (dir == DIRECTION_UP) {
-        return this->up();
-    } else if (dir == DIRECTION_DOWN) {
-        return this->down();
-    } else if (dir == DIRECTION_RIGHT) {
-        return this->right();
-    } else if (dir == DIRECTION_LEFT) {
-        return this->left();
-    }
-
-    return NULL;
 }
 
 uint16_t TileLayer::getX() const {

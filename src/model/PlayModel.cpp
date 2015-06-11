@@ -72,3 +72,70 @@ void PlayModel::changeTileType(TileCoord coord, TileType tt) {
 bool PlayModel::isDoor(TileCoord coord) const {
     return tileType[coord.second][coord.first] == TILETYPE_DOOR;
 }
+
+/* ------------------------------------------------------------------------------
+ * Given a direction, return the tile to that direction from this tile.
+ */
+TileCoord PlayModel::getTileCoordInDirection(TileCoord coord, Direction dir) const {
+    if (dir == DIRECTION_UP) {
+        return getTileCoordUp(coord);
+    } else if (dir == DIRECTION_DOWN) {
+        return getTileCoordDown(coord);
+    } else if (dir == DIRECTION_RIGHT) {
+        return getTileCoordRight(coord);
+    } else if (dir == DIRECTION_LEFT) {
+        return getTileCoordLeft(coord);
+    }
+
+    return getTileCoordLeft(coord);
+}
+
+TileCoord PlayModel::getTileCoordUp(TileCoord current) const {
+    int x = current.first + 0;
+    int y = current.second - 1;
+    if (y < 0) {
+        y = GRID_HEIGHT-1;
+    }
+    return TileCoord(x, y);
+}
+
+TileCoord PlayModel::getTileCoordDown(TileCoord current) const {
+    int x = current.first + 0;
+    int y = current.second + 1;
+    if (y >= GRID_HEIGHT) {
+        y = 0;
+    }
+    return TileCoord(x, y);
+}
+
+TileCoord PlayModel::getTileCoordLeft(TileCoord current) const {
+    int x = current.first - 1;
+    int y = current.second + 0;
+    if (x < 0) {
+        x = GRID_WIDTH-1;
+    }
+    return TileCoord(x, y);
+}
+
+TileCoord PlayModel::getTileCoordRight(TileCoord current) const {
+    int x = current.first + 1;
+    int y = current.second + 0;
+    if (x >= GRID_WIDTH) {
+        x = 0;
+    }
+    return TileCoord(x, y);
+}
+
+/* ------------------------------------------------------------------------------
+ * Return true if the TileLayer is a conveyor tile.
+ */
+bool PlayModel::isConveyor(TileCoord coord) const {
+    TileType tt = tileType[coord.second][coord.first];
+
+    return (   tt == TILETYPE_CONVEY_UP
+            || tt == TILETYPE_CONVEY_DOWN
+            || tt == TILETYPE_CONVEY_RIGHT
+            || tt == TILETYPE_CONVEY_LEFT);
+}
+
+

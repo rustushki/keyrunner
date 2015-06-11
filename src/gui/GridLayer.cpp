@@ -34,12 +34,14 @@ void GridLayer::buildConveyorAnimations() {
 
     ConveyorAnimation::ClearConveyors();
 
+    PlayModel* playModel = PlayModel::GetInstance();
+
     for (int x = 0; x < PlayModel::GRID_WIDTH; x++) {
 
         for (int y = 0; y < PlayModel::GRID_HEIGHT; y++) {
             TileLayer* tile = getTile(x, y);
 
-            if (tile->isConveyor()) {
+            if (playModel->isConveyor(TileCoord(tile->getX(), tile->getY()))) {
 
                 if (!ConveyorAnimation::TileInConveyor(tile)) {
 
@@ -85,7 +87,7 @@ void GridLayer::buildConveyorAnimations() {
                     // tile, or a conveyor tile which is part of another
                     // conveyor, or we find that the current belt is circular.
                     TileLayer* prev = p;
-                    while (    p->isConveyor()
+                    while (    playModel->isConveyor(TileCoord(p->getX(), p->getY()))
                             && p->getConveyorDirection() == conveyDir
                             && !ConveyorAnimation::TileInConveyor(p)
                             && !circular) {
@@ -111,17 +113,12 @@ void GridLayer::buildConveyorAnimations() {
                     TileLayer* start = p = prev;
                     std::vector<TileLayer*> conveyorTiles;
 
-                    //std::cout << "\tStart " << start->getX() << "," << start->getY() << std::endl;
-                    //std::cout << "\t" << p->isConveyor() << std::endl;
-                    //std::cout << "\t" << p->getConveyorDirection() << "=" << conveyDir << std::endl;
-                    //std::cout << "\t" << ConveyorAnimation::TileInConveyor(p) << std::endl;
-
                     int tileNum = 0;
                     // Now follow the conveyor from its start until a
                     // non-conveyor tile, or a conveyor tile which is part of
                     // another conveyor or if the belt is found to be circular,
                     // the start tile.
-                    while (    p->isConveyor()
+                    while (    playModel->isConveyor(TileCoord(p->getX(), p->getY()))
                             && p->getConveyorDirection() == conveyDir
                             && !ConveyorAnimation::TileInConveyor(p)) {
 

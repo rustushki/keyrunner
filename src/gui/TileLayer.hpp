@@ -31,7 +31,6 @@ public:
     uint16_t getX() const;
     uint16_t getY() const;
 
-    bool isConveyor() const;
     bool hasPlayer() const;
     bool hasKey() const;
 
@@ -41,8 +40,6 @@ public:
     TileLayer* down() const;
     TileLayer* left() const;
     TileLayer* right() const;
-
-    TileLayer* getTileInDirection(Direction d) const;
 
     Direction getConveyorDirection() const;
 

@@ -350,8 +350,10 @@ int KeyRunner::convey(void* unused) {
         // Get the current tile of the player.
         TileLayer* playerTile = GridLayer::GetInstance()->getPlayerTile();
 
+        PlayModel* playModel = PlayModel::GetInstance();
+
         // If the tile in a conveyor tile,
-        if (playerTile->isConveyor()) {
+        if (playModel->isConveyor(TileCoord(playerTile->getX(), playerTile->getY()))) {
 
             // Convey the player to the next tile.
             TileLayer* newTile = playerTile->getNextConveyorTile();
