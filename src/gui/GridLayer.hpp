@@ -63,13 +63,8 @@ private:
     void addChangedTile(TileLayer* tile);
     void changeTileType(uint16_t x, uint16_t y, TileType tt);
 
-    // Get the Matching Teleporter Tile.
-    TileLayer* getMatchingTeleporterTile(TileLayer*);
-
-
     // LevelManager can Read and Write the GridLayer to / from Level files.
     friend class LevelManager;
-
 };
 
 #endif//GLIDLAYER_HPP

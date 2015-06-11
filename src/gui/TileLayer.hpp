@@ -8,8 +8,6 @@
 #include "../uitk/Animation.hpp"
 #include "../uitk/Layer.hpp"
 
-class Level;
-
 class TileLayer : public Layer {
 
 public:
@@ -36,7 +34,6 @@ public:
 private:
     TileType type;
     Animation* anim;
-    Level* level;
 
     uint16_t x;
     uint16_t y;

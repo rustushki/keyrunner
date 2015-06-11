@@ -46,8 +46,7 @@ void PlayModel::setLevelNum(uint16_t level) {
 }
 
 bool PlayModel::isWall(TileCoord coord) const {
-    TileLayer* tile = GridLayer::GetInstance()->getTile(coord.first, coord.second);
-    return (tile->getType() == TILETYPE_WALL);
+    return (tileType[coord.second][coord.first] == TILETYPE_WALL);
 }
 
 /* ------------------------------------------------------------------------------
