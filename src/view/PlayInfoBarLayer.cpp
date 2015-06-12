@@ -104,7 +104,7 @@ void PlayInfoBarLayer::drawTimer(SDL_Surface* dst) const {
 
     // Convert the timeout into a string.
     std::string timer = "";
-    float time = (float)KeyRunner::getTimeClock()/1000;
+    float time = (float)PlayModel::GetInstance()->getTimeClock()/1000;
 
     if (time >= 1) {
         while (time >= 1) {
@@ -119,7 +119,7 @@ void PlayInfoBarLayer::drawTimer(SDL_Surface* dst) const {
     timer += ".";
 
     // Get the tenths place.
-    int decimal = (KeyRunner::getTimeClock() % 1000) / 100;
+    int decimal = (PlayModel::GetInstance()->getTimeClock() % 1000) / 100;
     timer += (char)decimal + 0x30;
 
     // Format the Timer String for Display

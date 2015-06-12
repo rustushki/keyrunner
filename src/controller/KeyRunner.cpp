@@ -25,13 +25,16 @@ SDL_cond*    KeyRunner::levelLoadCond;
 SDL_mutex*   KeyRunner::levelLoadLock;
 SDL_cond*    KeyRunner::initialLevelLoadCond;
 SDL_mutex*   KeyRunner::initialLevelLoadLock;
-State        KeyRunner::state;
-int          KeyRunner::timeClock;
 RootLayer*   KeyRunner::rootLayer;
 PlayModel*   KeyRunner::playModel;
 
 void KeyRunner::play() {
-    state = PLAY;
+    // Initialize the PlayModel.
+    playModel = PlayModel::GetInstance();
+    playModel->setTimeClock(50000);
+
+    playModel->setState(PLAY);
+    playModel->setLevelNum(Options::getStartingLevel());
 
     screenLock           = SDL_CreateMutex();
     levelLock            = SDL_CreateMutex();
@@ -41,11 +44,7 @@ void KeyRunner::play() {
     initialLevelLoadLock = SDL_CreateMutex();
     initialLevelLoadCond = SDL_CreateCond();
 
-    timeClock = 50000;
-
     if (init()) {
-        playModel->setLevelNum(Options::getStartingLevel());
-
         // There's not a good place for these yet.  Putting them here for now.
         KeyAnim    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
         PlayerAnim = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
@@ -72,7 +71,10 @@ void KeyRunner::play() {
 }
 
 void KeyRunner::edit() {
-    state = EDIT;
+    // Initialize the PlayModel.
+    playModel = PlayModel::GetInstance();
+
+    playModel->setState(EDIT);
 
     screenLock           = SDL_CreateMutex();
     levelLoadLock        = SDL_CreateMutex();
@@ -115,10 +117,6 @@ void KeyRunner::edit() {
     }
 }
 
-int KeyRunner::getTimeClock() {
-    return timeClock;
-}
-
 RootLayer* KeyRunner::getRootLayer() {
     return rootLayer;
 }
@@ -134,7 +132,7 @@ void KeyRunner::exitGame() {
     SDL_PushEvent(&quitEvent);
 
     // Let all other threads know that it's time to exit.
-    state = QUIT;
+    playModel->setState(QUIT);
 }
 
 /* ------------------------------------------------------------------------------
@@ -148,7 +146,7 @@ bool KeyRunner::init() {
         return false;
     }
 
-    if (state == EDIT) {
+    if (playModel->getState() == EDIT) {
         rootLayer = EditRootLayer::GetInstance();
     } else {
         rootLayer = PlayRootLayer::GetInstance();
@@ -182,9 +180,9 @@ bool KeyRunner::init() {
 int KeyRunner::clockTick(void* unused) {
     int step = 100;
 
-    while (timeClock > 0 && state == PLAY) {
+    while (playModel->getTimeClock() > 0 && playModel->getState() == PLAY) {
         SDL_Delay(step);
-        timeClock -= step;
+        playModel->decrementTimeClock(step);
     }
 
     SDL_CondSignal(levelCond);
@@ -343,7 +341,7 @@ void KeyRunner::moveDirection(Direction d) {
 int KeyRunner::convey(void* unused) {
 
     // Convey only while the game has not yet been quit.
-    while(state != QUIT) {
+    while(playModel->getState() != QUIT) {
 
         // Don't attempt to convey if the level is being loaded.
         SDL_LockMutex(levelLoadLock);
@@ -381,7 +379,7 @@ int KeyRunner::updateDisplay(void* unused) {
     int fps = 25;
     int delay = 1000/fps;
 
-    while(state != QUIT) {
+    while(playModel->getState() != QUIT) {
         SDL_LockMutex(screenLock);
 
         SDL_LockMutex(levelLoadLock);
@@ -405,7 +403,7 @@ int KeyRunner::updateDisplay(void* unused) {
 
 int KeyRunner::updateLevel(void* unused) {
 
-    while (playModel->getLevelNum() <= LevelManager::GetTotal() && state != QUIT) {
+    while (playModel->getLevelNum() <= LevelManager::GetTotal() && playModel->getState() != QUIT) {
 
         SDL_LockMutex(levelLoadLock);
 
@@ -426,8 +424,7 @@ int KeyRunner::updateLevel(void* unused) {
 
         playModel->setLevelNum(playModel->getLevelNum() + 1);
 
-        timeClock += 6000;
-
+        playModel->incrementTimeClock(6000);
     }
 
     exitGame();
@@ -437,7 +434,7 @@ int KeyRunner::updateLevel(void* unused) {
 void KeyRunner::playHandleEvents() {
     // Wait for an Event.
     SDL_Event event;
-    while (state != QUIT) {
+    while (playModel->getState() != QUIT) {
         SDL_WaitEvent(&event);
 
         // Keydown.
@@ -483,7 +480,7 @@ void KeyRunner::playHandleEvents() {
 void KeyRunner::editHandleEvents() {
     // Wait for an Event.
     SDL_Event event;
-    while (state != QUIT) {
+    while (playModel->getState() != QUIT) {
         SDL_WaitEvent(&event);
 
         // Keydown.

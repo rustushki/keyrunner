@@ -24,7 +24,6 @@
 
 #include "../model/Direction.hpp"
 #include "../model/PlayModel.hpp"
-#include "../model/State.hpp"
 
 class Animation;
 class RootLayer;
@@ -37,7 +36,6 @@ public:
     static void play();
     static void edit();
     static void exitGame();
-    static int getTimeClock();
     static RootLayer* getRootLayer();
 
 private:
@@ -61,8 +59,6 @@ private:
     static SDL_mutex*  levelLoadLock;
     static SDL_cond*   initialLevelLoadCond;
     static SDL_mutex*  initialLevelLoadLock;
-    static State       state;
-    static int         timeClock;
     static RootLayer*  rootLayer;
     static PlayModel*  playModel;
 };

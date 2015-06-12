@@ -331,3 +331,26 @@ bool PlayModel::tileCoordHasPlayer(TileCoord tileCoord) const {
     return (playerCoord == tileCoord);
 }
 
+State PlayModel::getState() const {
+    return state;
+}
+
+void PlayModel::setState(State state) {
+    this->state = state;
+}
+
+uint16_t PlayModel::getTimeClock() {
+    return timeClock;
+}
+
+void PlayModel::setTimeClock(uint16_t timeClockValue) {
+    timeClock = timeClockValue;
+}
+
+void PlayModel::decrementTimeClock(uint16_t step) {
+    timeClock -= step;
+}
+
+void PlayModel::incrementTimeClock(uint16_t step) {
+    timeClock += step;
+}

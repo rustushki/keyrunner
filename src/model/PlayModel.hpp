@@ -6,6 +6,7 @@
 
 #include "Direction.hpp"
 #include "TileType.hpp"
+#include "State.hpp"
 
 typedef std::pair<uint16_t, uint16_t> TileCoord;
 
@@ -37,6 +38,12 @@ class PlayModel {
         TileCoord getMatchingTeleporterTileCoord(TileCoord t) const;
         bool tileCoordHasKey(TileCoord tileCoord) const;
         bool tileCoordHasPlayer(TileCoord tileCoord) const;
+        State getState() const;
+        void setState(State state);
+        uint16_t getTimeClock();
+        void setTimeClock(uint16_t timeClockValue);
+        void decrementTimeClock(uint16_t step);
+        void incrementTimeClock(uint16_t step);
 
         TileCoord getTileCoordUp(TileCoord current) const;
         TileCoord getTileCoordDown(TileCoord current) const;
@@ -50,6 +57,8 @@ class PlayModel {
 
         bool playerHasKey;
         uint16_t level;
+        State state;
+        uint16_t timeClock;
 
         TileCoord keyCoord;
         TileCoord playerCoord;

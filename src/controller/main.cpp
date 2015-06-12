@@ -1,5 +1,6 @@
 #include "KeyRunner.hpp"
 #include "Options.hpp"
+#include "../model/PlayModel.hpp"
 
 int main(int argc, char** argv) {
 
