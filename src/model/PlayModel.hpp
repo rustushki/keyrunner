@@ -28,6 +28,7 @@ class PlayModel {
         TileCoord getPlayerCoord() const;
         void setPlayerCoord(TileCoord tileCoord);
         void changeTileType(TileCoord coord, TileType tt);
+        TileType getTileType(TileCoord coord) const;
         bool isDoor(TileCoord coord) const;
         bool isConveyor(TileCoord coord) const;
         TileCoord getTileCoordInDirection(TileCoord coord, Direction d) const;

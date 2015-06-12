@@ -8,11 +8,9 @@
 uint16_t LevelManager::w;
 uint16_t LevelManager::h;
 TileType LevelManager::defTT;
-std::vector<TileLayer*> LevelManager::deviations;
-uint16_t LevelManager::px;
-uint16_t LevelManager::py;
-uint16_t LevelManager::kx;
-uint16_t LevelManager::ky;
+std::map<TileCoord, TileType> LevelManager::deviations;
+TileCoord LevelManager::playerCoord;
+TileCoord LevelManager::keyCoord;
 
 uint16_t LevelManager::GetTotal() {
 
@@ -56,7 +54,7 @@ bool LevelManager::Exists(uint8_t levelNum) {
 }
 
 /* ------------------------------------------------------------------------------
- * Write - Writes the current state of the GridLayer into a static level file.
+ * Write - Writes the current state of the PlayModel into a static level file.
  */
 bool LevelManager::Write() {
     PlayModel* playModel = PlayModel::GetInstance();
@@ -76,18 +74,18 @@ bool LevelManager::Write() {
     fwrite(&tt, sizeof(uint8_t), 1, fp);
 
     // Count and Collect the number of Tile Deviations
-    std::vector<TileLayer*> devTiles;
+    std::vector<TileCoord> devTileCoords;
     for (int x = 0; x < w; x++) {
         for (int y = 0; y < h; y++) {
-            TileLayer* tile = GridLayer::GetInstance()->getTile(x, y);
-            if (tile->getType() != tt) {
-                devTiles.push_back(tile);
+            TileCoord tileCoord(x, y);
+            if (playModel->getTileType(tileCoord) != tt) {
+                devTileCoords.push_back(tileCoord);
             }
         }
     }
 
     // Write Tile Deviation Count
-    uint16_t devCount = devTiles.size();
+    uint16_t devCount = devTileCoords.size();
     fwrite(&devCount, sizeof(uint16_t), 1, fp);
 
     // Write Initial Char Location.
@@ -103,17 +101,17 @@ bool LevelManager::Write() {
     fwrite(&itemCount, sizeof(uint16_t), 1, fp);
 
     // Write Each Default Tile Type Deviation.
-    for (auto dtItr = devTiles.begin(); dtItr < devTiles.end(); dtItr++) {
-        TileLayer* devTile = *dtItr;
+    for (auto dtItr = devTileCoords.begin(); dtItr < devTileCoords.end(); dtItr++) {
+        TileCoord tileCoord = *dtItr;
 
         // Write Deviation Tile Coordinate
-        uint16_t x = devTile->getX();
-        uint16_t y = devTile->getY();
+        uint16_t x = tileCoord.first;
+        uint16_t y = tileCoord.second;
         fwrite(&x, sizeof(uint16_t), 1, fp);
         fwrite(&y, sizeof(uint16_t), 1, fp);
 
         // Write Deviation Tile Type
-        uint8_t tt = static_cast<uint8_t>(devTile->getType());
+        uint8_t tt = static_cast<uint8_t>(playModel->getTileType(tileCoord));
         fwrite(&tt, sizeof(uint8_t), 1, fp);
     }
 
@@ -154,8 +152,8 @@ void LevelManager::Read(uint8_t levelNum) {
     fread(&devCount, sizeof(uint16_t), 1, fp);
 
     // Read Initial Char Location.
-    fread(&px, sizeof(uint16_t), 1, fp);
-    fread(&py, sizeof(uint16_t), 1, fp);
+    fread(&playerCoord.first, sizeof(uint16_t), 1, fp);
+    fread(&playerCoord.second, sizeof(uint16_t), 1, fp);
 
     // Read Count of Items.
     // Hardcoded to 1 since there can only be a key in the puzzle for now.
@@ -176,14 +174,14 @@ void LevelManager::Read(uint8_t levelNum) {
         fread(&ttInt, sizeof(uint8_t), 1, fp);
         TileType tt = static_cast<TileType>(ttInt);
 
-        deviations.push_back(new TileLayer(tt, x, y));
+        deviations[TileCoord(x, y)] = tt;
     }
 
     // Read the Key Location.
     // TODO: Add support for more items.
     uint8_t it;
-    fread(&kx, sizeof(uint16_t), 1, fp);
-    fread(&ky, sizeof(uint16_t), 1, fp);
+    fread(&keyCoord.first, sizeof(uint16_t), 1, fp);
+    fread(&keyCoord.second, sizeof(uint16_t), 1, fp);
     fread(&it, sizeof(uint8_t), 1, fp);
     fclose(fp);
 
@@ -214,10 +212,10 @@ std::string LevelManager::GetPath(uint8_t levelNum, bool inCwd) {
 void LevelManager::Reset() {
     w = PlayModel::GRID_WIDTH;
     h = PlayModel::GRID_HEIGHT;
-    px = 0;
-    py = 0;
-    kx = w-1;
-    ky = h-1;
+    playerCoord.first = 0;
+    playerCoord.second = 0;
+    keyCoord.first = w-1;
+    keyCoord.second = h-1;
     defTT = TileType::TILETYPE_EMPTY;
     deviations.clear();
 }
@@ -238,34 +236,33 @@ void LevelManager::Populate(uint8_t levelNum) {
     uint16_t curDevIdx = 0;
     for (int tx = 0; tx < w; tx++) {
         for (int ty = 0; ty < h; ty++) {
+            TileCoord curTileCoord(tx, ty);
+
             bool deviationMatch = false;
-            if (deviations.size() > 0 && curDevIdx < deviations.size()) {
-                TileLayer* curDev = deviations[curDevIdx];
-                if (curDev->getX() == tx && curDev->getY() == ty) {
-                    gl->changeTileType(tx, ty, curDev->getType());
-                    playModel->changeTileType(TileCoord(tx, ty), curDev->getType());
-                    curDevIdx++;
-                    deviationMatch = true;
-                }
+            if (deviations.find(curTileCoord) != deviations.end()) {
+                gl->changeTileType(tx, ty, deviations[curTileCoord]);
+                playModel->changeTileType(curTileCoord, deviations[curTileCoord]);
+                curDevIdx++;
+                deviationMatch = true;
             }
 
             if (!deviationMatch) {
                 // Add the tile to the level.
                 gl->changeTileType(tx, ty, defTT);
-                playModel->changeTileType(TileCoord(tx, ty), defTT);
+                playModel->changeTileType(curTileCoord, defTT);
             }
 
             // TODO: Support multiple items. (not just hard coded key and
             // player)
 
             // Does the current tile have the player?
-            if (tx == px && ty == py) {
-                playModel->setPlayerCoord(TileCoord(tx, ty));
+            if (curTileCoord == playerCoord) {
+                playModel->setPlayerCoord(curTileCoord);
             }
 
             // Does the current tile have the key?
-            if (tx == kx && ty == ky) {
-                playModel->setKeyCoord(TileCoord(tx, ty));
+            if (curTileCoord == keyCoord) {
+                playModel->setKeyCoord(curTileCoord);
             }
 
         }

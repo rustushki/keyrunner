@@ -1,12 +1,14 @@
 #ifndef LEVELMANAGER_HPP
 #define LEVELMANAGER_HPP
 
+#include <string>
+#include <map>
 #include <vector>
 
 #include "TileType.hpp"
+#include "../model/PlayModel.hpp"
 
 class Level;
-class TileLayer;
 
 class LevelManager {
 public:
@@ -25,11 +27,9 @@ private:
     static uint16_t w;
     static uint16_t h;
     static TileType defTT;
-    static std::vector<TileLayer*> deviations;
-    static uint16_t px;
-    static uint16_t py;
-    static uint16_t kx;
-    static uint16_t ky;
+    static std::map<TileCoord, TileType> deviations;
+    static TileCoord playerCoord;
+    static TileCoord keyCoord;
 };
 
 #endif//LEVELMANAGER_HPP

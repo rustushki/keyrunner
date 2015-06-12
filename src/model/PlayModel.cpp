@@ -85,6 +85,10 @@ void PlayModel::changeTileType(TileCoord coord, TileType tt) {
     tileType[coord.second][coord.first] = tt;
 }
 
+TileType PlayModel::getTileType(TileCoord coord) const {
+    return tileType[coord.second][coord.first];
+}
+
 /* ------------------------------------------------------------------------------
  * Is the Tile at the provided TileCoord a Door?
  */
@@ -146,7 +150,7 @@ TileCoord PlayModel::getTileCoordRight(TileCoord current) const {
 }
 
 /* ------------------------------------------------------------------------------
- * Return true if the TileLayer is a conveyor tile.
+ * Return true if the TileCoord has a conveyor tile type.
  */
 bool PlayModel::isConveyor(TileCoord coord) const {
     TileType tt = tileType[coord.second][coord.first];
@@ -295,7 +299,8 @@ TileCoord PlayModel::getMatchingTeleporterTileCoord(TileCoord t) const {
 
                 if (x != t.first || y != t.second) {
 
-                    // Found the a Teleporter TileLayer of the same color which is not this tile.
+                    // Found a TileCoord with a Teleporter Type of the same
+                    // color which is not this tile.
                     if (tileType[t.second][t.first] == tileType[y][x]) {
                         matching = TileCoord(x, y);
                         found = true;
