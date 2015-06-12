@@ -53,7 +53,6 @@ private:
     static void editHandleEvents();
 
     static SDL_Surface *screen;
-    static uint16_t    levelNum;
     static SDL_mutex*  screenLock;
     static SDL_cond*   levelCond;
     static SDL_mutex*  levelLock;

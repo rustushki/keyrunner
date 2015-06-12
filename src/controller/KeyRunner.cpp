@@ -25,7 +25,6 @@ SDL_cond*    KeyRunner::levelLoadCond;
 SDL_mutex*   KeyRunner::levelLoadLock;
 SDL_cond*    KeyRunner::initialLevelLoadCond;
 SDL_mutex*   KeyRunner::initialLevelLoadLock;
-uint16_t     KeyRunner::levelNum;
 State        KeyRunner::state;
 int          KeyRunner::timeClock;
 RootLayer*   KeyRunner::rootLayer;
@@ -41,7 +40,7 @@ void KeyRunner::play() {
     initialLevelLoadLock = SDL_CreateMutex();
     initialLevelLoadCond = SDL_CreateCond();
 
-    levelNum = Options::getStartingLevel();
+    PlayModel::GetInstance()->setLevelNum(Options::getStartingLevel());
     timeClock = 50000;
 
     if (init()) {
@@ -79,6 +78,8 @@ void KeyRunner::edit() {
     initialLevelLoadLock = SDL_CreateMutex();
     initialLevelLoadCond = SDL_CreateCond();
 
+    PlayModel* playModel = PlayModel::GetInstance();
+
     if (init()) {
         // There's not a good place for these yet.  Putting them here for now.
         KeyAnim    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
@@ -88,13 +89,13 @@ void KeyRunner::edit() {
 
         // Create New Level for Edit
         if (Options::getCreateNewLevel()) {
-            levelNum = LevelManager::GetTotal() + 1;
-            LevelManager::New(levelNum);
+            playModel->setLevelNum(LevelManager::GetTotal() + 1);
+            LevelManager::New(playModel->getLevelNum());
 
         // Load Existing Level for Edit
         } else {
-            levelNum = Options::getStartingLevel();
-            LevelManager::Read(levelNum);
+            playModel->setLevelNum(Options::getStartingLevel());
+            LevelManager::Read(playModel->getLevelNum());
         }
 
         // Signal that it's OK to observe level tiles now.
@@ -405,11 +406,13 @@ int KeyRunner::updateDisplay(void* unused) {
 
 int KeyRunner::updateLevel(void* unused) {
 
-    while (levelNum <= LevelManager::GetTotal() && state != QUIT) {
+    PlayModel* playModel = PlayModel::GetInstance();
+
+    while (playModel->getLevelNum() <= LevelManager::GetTotal() && state != QUIT) {
 
         SDL_LockMutex(levelLoadLock);
 
-        LevelManager::Read(levelNum);
+        LevelManager::Read(playModel->getLevelNum());
 
         // Signal that it's OK to observe level tiles now.
         SDL_UnlockMutex(levelLoadLock);
@@ -424,7 +427,7 @@ int KeyRunner::updateLevel(void* unused) {
         SDL_LockMutex(levelLock);
         SDL_CondWait(levelCond, levelLock);
 
-        levelNum++;
+        playModel->setLevelNum(playModel->getLevelNum() + 1);
 
         timeClock += 6000;
 
