@@ -16,7 +16,6 @@ add_library(uitk STATIC
 set(SOURCES
   src/game/KeyRunner.cpp
   src/game/main.cpp
-  src/game/LevelManager.cpp
   src/game/Options.cpp
   src/gui/AnimationFactory.cpp
   src/gui/EditInfoBarLayer.cpp
@@ -30,6 +29,7 @@ set(SOURCES
   src/gui/PlayRootLayer.cpp
   src/gui/TileSelectorLayer.cpp
   src/model/EditorModel.cpp
+  src/model/LevelManager.cpp
   src/model/PlayModel.cpp
 )
 

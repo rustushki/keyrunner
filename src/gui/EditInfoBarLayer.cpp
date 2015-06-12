@@ -3,7 +3,7 @@
 #include "EditInfoBarLayer.hpp"
 #include "GridLayer.hpp"
 #include "TileSelectorLayer.hpp"
-#include "../game/LevelManager.hpp"
+#include "../model/LevelManager.hpp"
 #include "../uitk/ButtonLayerBuilder.hpp"
 
 EditInfoBarLayer* EditInfoBarLayer::instance = 0;

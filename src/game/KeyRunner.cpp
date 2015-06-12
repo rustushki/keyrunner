@@ -2,7 +2,6 @@
 #include <SDL/SDL_ttf.h>
 
 #include "KeyRunner.hpp"
-#include "LevelManager.hpp"
 #include "Options.hpp"
 #include "../gui/AnimationFactory.hpp"
 #include "../gui/ConveyorAnimation.hpp"
@@ -10,6 +9,7 @@
 #include "../gui/EditRootLayer.hpp"
 #include "../gui/PlayRootLayer.hpp"
 #include "../gui/RootLayer.hpp"
+#include "../model/LevelManager.hpp"
 #include "../model/PlayModel.hpp"
 #include "../uitk/Animation.hpp"
 

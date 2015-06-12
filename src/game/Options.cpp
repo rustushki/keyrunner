@@ -6,7 +6,7 @@
 #include "KeyRunner.hpp"
 #include "Options.hpp"
 #include "State.hpp"
-#include "LevelManager.hpp"
+#include "../model/LevelManager.hpp"
 
 uint16_t Options::startingLevelNum = 1;
 State Options::initialState = PLAY;

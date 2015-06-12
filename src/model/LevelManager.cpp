@@ -1,7 +1,7 @@
 #include <sstream>
 
-#include "KeyRunner.hpp"
 #include "LevelManager.hpp"
+#include "../game/KeyRunner.hpp"
 #include "../gui/GridLayer.hpp"
 #include "../model/PlayModel.hpp"
 
