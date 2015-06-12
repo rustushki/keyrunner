@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "PlayModel.hpp"
-#include "../game/TileType.hpp"
+#include "TileType.hpp"
 
 class Level;
 

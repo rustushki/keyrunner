@@ -4,8 +4,8 @@
 #include <utility>
 #include <stdint.h>
 
-#include "../game/TileType.hpp"
-#include "../model/Direction.hpp"
+#include "Direction.hpp"
+#include "TileType.hpp"
 
 typedef std::pair<uint16_t, uint16_t> TileCoord;
 

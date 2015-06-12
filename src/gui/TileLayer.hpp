@@ -3,8 +3,8 @@
 
 #include <vector>
 #include "AnimationType.hpp"
-#include "../game/TileType.hpp"
 #include "../model/Direction.hpp"
+#include "../model/TileType.hpp"
 #include "../uitk/Animation.hpp"
 #include "../uitk/Layer.hpp"
 

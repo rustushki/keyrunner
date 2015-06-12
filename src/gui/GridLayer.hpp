@@ -6,8 +6,8 @@
 #include "AnimationType.hpp"
 #include "GridLayer.hpp"
 #include "TileLayer.hpp"
-#include "../game/TileType.hpp"
 #include "../model/Direction.hpp"
+#include "../model/TileType.hpp"
 #include "../model/PlayModel.hpp"
 #include "../uitk/Layer.hpp"
 

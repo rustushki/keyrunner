@@ -4,7 +4,6 @@
 #include "GridLayer.hpp"
 #include "TileLayer.hpp"
 #include "../game/KeyRunner.hpp"
-#include "../game/TileType.hpp"
 #include "../model/PlayModel.hpp"
 
 GridLayer* GridLayer::instance = NULL;

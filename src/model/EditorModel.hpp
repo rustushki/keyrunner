@@ -1,7 +1,7 @@
 #ifndef EDITORMODEL_HPP
 #define EDITORMODEL_HPP
 
-#include "../game/TileType.hpp"
+#include "TileType.hpp"
 
 class EditorModel {
     public:

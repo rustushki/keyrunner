@@ -3,7 +3,6 @@
 #include "AnimationType.hpp"
 #include "GridLayer.hpp"
 #include "TileLayer.hpp"
-#include "../game/TileType.hpp"
 #include "../game/KeyRunner.hpp"
 #include "../model/PlayModel.hpp"
 
