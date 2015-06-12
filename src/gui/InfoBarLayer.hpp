@@ -2,7 +2,7 @@
 #define INFOBARLAYER_HPP
 #include <SDL/SDL_ttf.h>
 #include "InfoBarPos.hpp"
-#include "../game/KeyRunner.hpp"
+#include "../controller/KeyRunner.hpp"
 #include "../uitk/Layer.hpp"
 
 class InfoBarLayer : public Layer {

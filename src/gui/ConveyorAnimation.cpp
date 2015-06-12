@@ -2,7 +2,7 @@
 #include "ConveyorAnimation.hpp"
 #include "GridLayer.hpp"
 #include "TileLayer.hpp"
-#include "../game/KeyRunner.hpp"
+#include "../controller/KeyRunner.hpp"
 
 std::vector<ConveyorAnimation*> ConveyorAnimation::Conveyors;
 

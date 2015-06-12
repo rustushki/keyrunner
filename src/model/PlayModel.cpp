@@ -1,5 +1,5 @@
 #include "PlayModel.hpp"
-#include "../game/KeyRunner.hpp"
+#include "../controller/KeyRunner.hpp"
 
 // TODO: Remove These:
 #include "../gui/GridLayer.hpp"

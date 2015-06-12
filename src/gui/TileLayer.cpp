@@ -3,7 +3,7 @@
 #include "AnimationType.hpp"
 #include "GridLayer.hpp"
 #include "TileLayer.hpp"
-#include "../game/KeyRunner.hpp"
+#include "../controller/KeyRunner.hpp"
 #include "../model/PlayModel.hpp"
 
 TileLayer::TileLayer(TileType type, uint16_t x, uint16_t y) {
