@@ -22,8 +22,8 @@
 
 #define VERSION 3
 
-#include "State.hpp"
 #include "../model/Direction.hpp"
+#include "../model/State.hpp"
 
 class Animation;
 class RootLayer;
