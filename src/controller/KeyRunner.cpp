@@ -28,6 +28,7 @@ SDL_mutex*   KeyRunner::initialLevelLoadLock;
 State        KeyRunner::state;
 int          KeyRunner::timeClock;
 RootLayer*   KeyRunner::rootLayer;
+PlayModel*   KeyRunner::playModel;
 
 void KeyRunner::play() {
     state = PLAY;
@@ -40,10 +41,11 @@ void KeyRunner::play() {
     initialLevelLoadLock = SDL_CreateMutex();
     initialLevelLoadCond = SDL_CreateCond();
 
-    PlayModel::GetInstance()->setLevelNum(Options::getStartingLevel());
     timeClock = 50000;
 
     if (init()) {
+        playModel->setLevelNum(Options::getStartingLevel());
+
         // There's not a good place for these yet.  Putting them here for now.
         KeyAnim    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
         PlayerAnim = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
@@ -77,8 +79,6 @@ void KeyRunner::edit() {
     levelLoadCond        = SDL_CreateCond();
     initialLevelLoadLock = SDL_CreateMutex();
     initialLevelLoadCond = SDL_CreateCond();
-
-    PlayModel* playModel = PlayModel::GetInstance();
 
     if (init()) {
         // There's not a good place for these yet.  Putting them here for now.
@@ -174,6 +174,7 @@ bool KeyRunner::init() {
     ss << "Key Runner r" << VERSION;
     SDL_WM_SetCaption(ss.str().c_str(), "");
 
+    playModel = PlayModel::GetInstance();
 
     return true;
 }
@@ -347,8 +348,6 @@ int KeyRunner::convey(void* unused) {
         // Don't attempt to convey if the level is being loaded.
         SDL_LockMutex(levelLoadLock);
 
-        PlayModel* playModel = PlayModel::GetInstance();
-
         // If the tile in a conveyor tile,
         if (playModel->isConveyor(playModel->getPlayerCoord())) {
 
@@ -356,7 +355,7 @@ int KeyRunner::convey(void* unused) {
             TileCoord newTileCoord = playModel->getNextConveyorTileCoord(playModel->getPlayerCoord());
             TileLayer* newTile = GridLayer::GetInstance()->getTile(newTileCoord.first, newTileCoord.second);
             if (GridLayer::GetInstance()->movePlayerToTile(newTile)) {
-                if (PlayModel::GetInstance()->isComplete()){
+                if (playModel->isComplete()){
                     SDL_UnlockMutex(levelLock);
                     SDL_CondSignal(levelCond);
                 }
@@ -405,8 +404,6 @@ int KeyRunner::updateDisplay(void* unused) {
 }
 
 int KeyRunner::updateLevel(void* unused) {
-
-    PlayModel* playModel = PlayModel::GetInstance();
 
     while (playModel->getLevelNum() <= LevelManager::GetTotal() && state != QUIT) {
 
@@ -467,7 +464,7 @@ void KeyRunner::playHandleEvents() {
 
             // If the prior movement causes the level to be complete,
             // signal that the new level may be loaded.
-            if (PlayModel::GetInstance()->isComplete()){
+            if (playModel->isComplete()){
                 SDL_UnlockMutex(levelLock);
                 SDL_CondSignal(levelCond);
             }

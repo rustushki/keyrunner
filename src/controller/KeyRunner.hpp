@@ -23,6 +23,7 @@
 #define VERSION 3
 
 #include "../model/Direction.hpp"
+#include "../model/PlayModel.hpp"
 #include "../model/State.hpp"
 
 class Animation;
@@ -63,6 +64,7 @@ private:
     static State       state;
     static int         timeClock;
     static RootLayer*  rootLayer;
+    static PlayModel*  playModel;
 };
 
 #endif//KEYRUNNER_HPP
