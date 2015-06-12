@@ -1,9 +1,6 @@
 #include "PlayModel.hpp"
 #include "../controller/KeyRunner.hpp"
 
-// TODO: Remove These:
-#include "../view/GridLayer.hpp"
-
 PlayModel* PlayModel::instance = NULL;
 const uint16_t PlayModel::GRID_HEIGHT;
 const uint16_t PlayModel::GRID_WIDTH;
