@@ -2,7 +2,7 @@
 #include "../controller/KeyRunner.hpp"
 
 // TODO: Remove These:
-#include "../gui/GridLayer.hpp"
+#include "../view/GridLayer.hpp"
 
 PlayModel* PlayModel::instance = NULL;
 const uint16_t PlayModel::GRID_HEIGHT;

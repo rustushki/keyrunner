@@ -3,15 +3,15 @@
 
 #include "KeyRunner.hpp"
 #include "Options.hpp"
-#include "../gui/AnimationFactory.hpp"
-#include "../gui/ConveyorAnimation.hpp"
-#include "../gui/GridLayer.hpp"
-#include "../gui/EditRootLayer.hpp"
-#include "../gui/PlayRootLayer.hpp"
-#include "../gui/RootLayer.hpp"
 #include "../model/LevelManager.hpp"
 #include "../model/PlayModel.hpp"
 #include "../uitk/Animation.hpp"
+#include "../view/AnimationFactory.hpp"
+#include "../view/ConveyorAnimation.hpp"
+#include "../view/GridLayer.hpp"
+#include "../view/EditRootLayer.hpp"
+#include "../view/PlayRootLayer.hpp"
+#include "../view/RootLayer.hpp"
 
 // Items yet to be absorbed into KeyRunner static class.
 Animation* KeyAnim;

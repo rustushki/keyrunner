@@ -2,8 +2,8 @@
 
 #include "LevelManager.hpp"
 #include "../controller/KeyRunner.hpp"
-#include "../gui/GridLayer.hpp"
 #include "../model/PlayModel.hpp"
+#include "../view/GridLayer.hpp"
 
 uint16_t LevelManager::w;
 uint16_t LevelManager::h;

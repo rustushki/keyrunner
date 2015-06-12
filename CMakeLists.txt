@@ -17,17 +17,17 @@ set(SOURCES
   src/controller/KeyRunner.cpp
   src/controller/main.cpp
   src/controller/Options.cpp
-  src/gui/AnimationFactory.cpp
-  src/gui/EditInfoBarLayer.cpp
-  src/gui/GridLayer.cpp
-  src/gui/PlayInfoBarLayer.cpp
-  src/gui/RootLayer.cpp
-  src/gui/TileLayer.cpp
-  src/gui/ConveyorAnimation.cpp
-  src/gui/EditRootLayer.cpp
-  src/gui/InfoBarLayer.cpp
-  src/gui/PlayRootLayer.cpp
-  src/gui/TileSelectorLayer.cpp
+  src/view/AnimationFactory.cpp
+  src/view/EditInfoBarLayer.cpp
+  src/view/GridLayer.cpp
+  src/view/PlayInfoBarLayer.cpp
+  src/view/RootLayer.cpp
+  src/view/TileLayer.cpp
+  src/view/ConveyorAnimation.cpp
+  src/view/EditRootLayer.cpp
+  src/view/InfoBarLayer.cpp
+  src/view/PlayRootLayer.cpp
+  src/view/TileSelectorLayer.cpp
   src/model/EditorModel.cpp
   src/model/LevelManager.cpp
   src/model/PlayModel.cpp
