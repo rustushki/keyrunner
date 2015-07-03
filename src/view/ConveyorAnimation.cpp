@@ -58,7 +58,7 @@ bool ConveyorAnimation::startAnimation() {
 
 bool ConveyorAnimation::hasTile(TileCoord tileCoord) const {
     GridLayer* gl = GridLayer::GetInstance();
-    for (Uint16 x = 0; x < this->conveyorTiles.size(); x++) {
+    for (uint16_t x = 0; x < this->conveyorTiles.size(); x++) {
         TileCoord conveyorTileCoord = this->conveyorTiles[x];
         TileLayer* conveyorTile = gl->getTile(conveyorTileCoord.first, conveyorTileCoord.second);
         if (gl->getTile(tileCoord.first, tileCoord.second) == conveyorTile) {
@@ -75,7 +75,7 @@ bool ConveyorAnimation::hasTile(TileCoord tileCoord) const {
  */
 bool ConveyorAnimation::TileInConveyor(TileCoord tileCoord) {
 
-    for (Uint16 c = 0; c < Conveyors.size(); c++) {
+    for (uint16_t c = 0; c < Conveyors.size(); c++) {
         ConveyorAnimation* conveyor = Conveyors[c];
         if (conveyor->hasTile(tileCoord)) {
 
@@ -94,7 +94,7 @@ bool ConveyorAnimation::TileInConveyor(TileCoord tileCoord) {
  */
 bool ConveyorAnimation::StartConveyors() {
     bool allStarted = true;
-    for (Uint16 x = 0; x < Conveyors.size(); x++) {
+    for (uint16_t x = 0; x < Conveyors.size(); x++) {
         ConveyorAnimation* ca = Conveyors[x];
         bool started = ca->startAnimation();
 
