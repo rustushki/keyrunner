@@ -339,7 +339,7 @@ void PlayModel::setState(State state) {
     this->state = state;
 }
 
-uint16_t PlayModel::getTimeClock() {
+uint32_t PlayModel::getTimeClock() {
     return timeClock;
 }
 

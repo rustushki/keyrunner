@@ -100,10 +100,11 @@ void PlayInfoBarLayer::drawText(SDL_Surface* dst, std::string s, InfoBarPos posi
  * drawTimer - draws the timer at the bottom right of the screen.
  */
 void PlayInfoBarLayer::drawTimer(SDL_Surface* dst) const {
+    uint32_t currentTimeClock = PlayModel::GetInstance()->getTimeClock();
 
     // Convert the timeout into a string.
     std::string timer = "";
-    float time = (float)PlayModel::GetInstance()->getTimeClock()/1000;
+    float time = (float) currentTimeClock / 1000;
 
     if (time >= 1) {
         while (time >= 1) {
@@ -118,7 +119,7 @@ void PlayInfoBarLayer::drawTimer(SDL_Surface* dst) const {
     timer += ".";
 
     // Get the tenths place.
-    int decimal = (PlayModel::GetInstance()->getTimeClock() % 1000) / 100;
+    int decimal = (currentTimeClock % 1000) / 100;
     timer += (char)decimal + 0x30;
 
     // Format the Timer String for Display
