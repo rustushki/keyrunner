@@ -3,6 +3,10 @@
 
 PlayInfoBarLayer* PlayInfoBarLayer::instance = 0;
 
+/**
+ * Singleton getter.
+ * @return the singleton instance of this information bar
+ */
 PlayInfoBarLayer* PlayInfoBarLayer::GetInstance() {
     if (PlayInfoBarLayer::instance == 0) {
         PlayInfoBarLayer::instance = new PlayInfoBarLayer();
@@ -11,12 +15,20 @@ PlayInfoBarLayer* PlayInfoBarLayer::GetInstance() {
     return PlayInfoBarLayer::instance;
 }
 
-PlayInfoBarLayer::PlayInfoBarLayer() {
-}
+/**
+ * Constructor.
+ */
+PlayInfoBarLayer::PlayInfoBarLayer() {}
 
-PlayInfoBarLayer::~PlayInfoBarLayer() {
-}
+/**
+ * Destructor.
+ */
+PlayInfoBarLayer::~PlayInfoBarLayer() {}
 
+/**
+ * Draws the timer and the level onto the Play Information Bar.
+ * @param dst surface on which to draw
+ */
 void PlayInfoBarLayer::draw(SDL_Surface* dst) {
     InfoBarLayer::draw(dst);
 
@@ -26,8 +38,10 @@ void PlayInfoBarLayer::draw(SDL_Surface* dst) {
 
 }
 
-/* ------------------------------------------------------------------------------
- * drawLevel - draws the level at the bottom left of the screen.
+/**
+ * Draws the level at the bottom left of the screen.
+ * @param dst the surface on which to draw
+ * @param level the current level
  */
 void PlayInfoBarLayer::drawLevel(SDL_Surface* dst, uint16_t level) const {
 
@@ -45,12 +59,13 @@ void PlayInfoBarLayer::drawLevel(SDL_Surface* dst, uint16_t level) const {
     drawText(dst, levelStr, BOTTOM_LEFT);
 }
 
-/* ------------------------------------------------------------------------------
- * drawText - Draws a string to a given position.  The positions where it may
- * be drawn are simplified to the those described in the InfoBarPos enum.  See
- * it for details.  Uses SDL_ttf to create a surface containing text provided
- * by the given string.  It then blits this surface to the screen at the given
- * position.  Color is assumed gray for now.
+/**
+ * Draws a string to a given position.  The positions where it may be drawn are simplified to the those described in the
+ * InfoBarPos enum.  See it for details.  Uses SDL_ttf to create a surface containing text provided by the given string.
+ * It then blits this surface to the screen at the given position.  Color is assumed gray for now.
+ * @param dst surface on which to draw
+ * @param s string to draw
+ * @param position location on information bar to draw
  */
 void PlayInfoBarLayer::drawText(SDL_Surface* dst, std::string s, InfoBarPos position) const {
 
@@ -73,8 +88,8 @@ void PlayInfoBarLayer::drawText(SDL_Surface* dst, std::string s, InfoBarPos posi
         // Create a destination rectangle based on the created text surface and
         // the position parameter.
         SDL_Rect r;
-        r.w = text_surface->w;
-        r.h = text_surface->h;
+        r.w = (uint16_t) text_surface->w;
+        r.h = (uint16_t) text_surface->h;
         r.y = getRect().y + marginTop;
 
         SDL_Rect rlr = keyRunner.getRootLayer()->getRect();
@@ -96,8 +111,9 @@ void PlayInfoBarLayer::drawText(SDL_Surface* dst, std::string s, InfoBarPos posi
 
 }
 
-/* ------------------------------------------------------------------------------
- * drawTimer - draws the timer at the bottom right of the screen.
+/**
+ * Draws the timer at the bottom right of the screen.
+ * @param dst surface on which to draw
  */
 void PlayInfoBarLayer::drawTimer(SDL_Surface* dst) const {
     uint32_t currentTimeClock = PlayModel::GetInstance()->getTimeClock();
@@ -129,10 +145,10 @@ void PlayInfoBarLayer::drawTimer(SDL_Surface* dst) const {
     drawText(dst, timer, BOTTOM_RIGHT);
 }
 
-/* ------------------------------------------------------------------------------
- * getFont - Load a font for usage.  Once the font is loaded, keep it
- * statically within to eliminate a global and also prevent re-loading the same
- * font.
+/**
+ * Load a font for usage.  Once the font is loaded, keep it statically within to eliminate a global and also prevent
+ * reloading the same font.
+ * @return TTF_Font*
  */
 TTF_Font* PlayInfoBarLayer::getFont() const {
     // Store loaded font here.
