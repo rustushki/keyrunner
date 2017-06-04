@@ -8,6 +8,10 @@
 #include "TileType.hpp"
 #include "State.hpp"
 
+class KeyRunner;
+
+extern KeyRunner keyRunner;
+
 typedef std::pair<uint16_t, uint16_t> TileCoord;
 
 class PlayModel {

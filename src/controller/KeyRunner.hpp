@@ -33,34 +33,34 @@ extern Animation* PlayerAnim;
 
 class KeyRunner {
 public:
-    static void play();
-    static void edit();
-    static void exitGame();
-    static RootLayer* getRootLayer();
+    void play();
+    void edit();
+    void exitGame();
+    RootLayer* getRootLayer();
 
 private:
     // Thread functions.
-    static int clockTick(void* unused);
-    static int updateDisplay(void* unused);
-    static int updateLevel(void* unused);
-    static int convey(void* unused);
+    static int clockTick(void* game);
+    static int updateDisplay(void* game);
+    static int updateLevel(void* game);
+    static int convey(void* game);
 
     // Helpers
-    static bool init();
-    static void moveDirection(Direction d);
-    static void playHandleEvents();
-    static void editHandleEvents();
+    bool init();
+    void moveDirection(Direction d);
+    void playHandleEvents();
+    void editHandleEvents();
 
-    static SDL_Surface *screen;
-    static SDL_mutex*  screenLock;
-    static SDL_cond*   levelCond;
-    static SDL_mutex*  levelLock;
-    static SDL_cond*   levelLoadCond;
-    static SDL_mutex*  levelLoadLock;
-    static SDL_cond*   initialLevelLoadCond;
-    static SDL_mutex*  initialLevelLoadLock;
-    static RootLayer*  rootLayer;
-    static PlayModel*  playModel;
+    SDL_Surface *screen;
+    SDL_mutex*  screenLock;
+    SDL_cond*   levelCond;
+    SDL_mutex*  levelLock;
+    SDL_cond*   levelLoadCond;
+    SDL_mutex*  levelLoadLock;
+    SDL_cond*   initialLevelLoadCond;
+    SDL_mutex*  initialLevelLoadLock;
+    RootLayer*  rootLayer;
+    PlayModel*  playModel;
 };
 
 #endif//KEYRUNNER_HPP

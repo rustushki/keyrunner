@@ -6,6 +6,8 @@
 #include "TileSelectorLayer.hpp"
 #include "../uitk/ButtonLayer.hpp"
 
+extern KeyRunner keyRunner;
+
 class EditInfoBarLayer : public InfoBarLayer {
 
 public:

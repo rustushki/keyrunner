@@ -1,6 +1,5 @@
 #include "PlayInfoBarLayer.hpp"
 #include "RootLayer.hpp"
-#include "../model/PlayModel.hpp"
 
 PlayInfoBarLayer* PlayInfoBarLayer::instance = 0;
 
@@ -78,7 +77,7 @@ void PlayInfoBarLayer::drawText(SDL_Surface* dst, std::string s, InfoBarPos posi
         r.h = text_surface->h;
         r.y = getRect().y + marginTop;
 
-        SDL_Rect rlr = KeyRunner::getRootLayer()->getRect();
+        SDL_Rect rlr = keyRunner.getRootLayer()->getRect();
 
         if (position == BOTTOM_LEFT) {
             r.x = getRect().x;

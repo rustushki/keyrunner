@@ -2,7 +2,6 @@
 
 #include "EditInfoBarLayer.hpp"
 #include "GridLayer.hpp"
-#include "TileSelectorLayer.hpp"
 #include "../model/LevelManager.hpp"
 #include "../uitk/ButtonLayerBuilder.hpp"
 
@@ -88,7 +87,7 @@ EditInfoBarLayer::~EditInfoBarLayer() {
 }
 
 void EditInfoBarLayer::onExitEnter() {
-    KeyRunner::exitGame();
+    keyRunner.exitGame();
 }
 
 void EditInfoBarLayer::onSaveEnter() {

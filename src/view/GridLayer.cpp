@@ -147,7 +147,7 @@ bool GridLayer::movePlayer(Direction d) {
 
     if (d > DIRECTION_COUNT) {
         std::cout << "Invalid direction." << std::endl;
-        KeyRunner::exitGame();
+        keyRunner.exitGame();
     }
 
     PlayModel* playModel = PlayModel::GetInstance();

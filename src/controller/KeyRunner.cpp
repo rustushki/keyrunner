@@ -4,29 +4,16 @@
 #include "KeyRunner.hpp"
 #include "Options.hpp"
 #include "../model/LevelManager.hpp"
-#include "../model/PlayModel.hpp"
 #include "../uitk/Animation.hpp"
 #include "../view/AnimationFactory.hpp"
 #include "../view/ConveyorAnimation.hpp"
 #include "../view/GridLayer.hpp"
 #include "../view/EditRootLayer.hpp"
 #include "../view/PlayRootLayer.hpp"
-#include "../view/RootLayer.hpp"
 
 // Items yet to be absorbed into KeyRunner static class.
 Animation* KeyAnim;
 Animation* PlayerAnim;
-
-SDL_Surface* KeyRunner::screen;
-SDL_mutex*   KeyRunner::screenLock;
-SDL_cond*    KeyRunner::levelCond;
-SDL_mutex*   KeyRunner::levelLock;
-SDL_cond*    KeyRunner::levelLoadCond;
-SDL_mutex*   KeyRunner::levelLoadLock;
-SDL_cond*    KeyRunner::initialLevelLoadCond;
-SDL_mutex*   KeyRunner::initialLevelLoadLock;
-RootLayer*   KeyRunner::rootLayer;
-PlayModel*   KeyRunner::playModel;
 
 void KeyRunner::play() {
     // Initialize the PlayModel.
@@ -49,14 +36,14 @@ void KeyRunner::play() {
         KeyAnim    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
         PlayerAnim = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
 
-        SDL_Thread *ulThread = SDL_CreateThread(&updateLevel, NULL);
+        SDL_Thread *ulThread = SDL_CreateThread(&updateLevel, this);
 
         SDL_LockMutex(initialLevelLoadLock);
         SDL_CondWait(initialLevelLoadCond, initialLevelLoadLock);
 
-        SDL_Thread *ctThread = SDL_CreateThread(&clockTick, NULL);
-        SDL_Thread *udThread = SDL_CreateThread(&updateDisplay, NULL);
-        SDL_Thread *cyThread = SDL_CreateThread(&convey, NULL);
+        SDL_Thread *ctThread = SDL_CreateThread(&clockTick, this);
+        SDL_Thread *udThread = SDL_CreateThread(&updateDisplay, this);
+        SDL_Thread *cyThread = SDL_CreateThread(&convey, this);
 
         playHandleEvents();
 
@@ -177,16 +164,18 @@ bool KeyRunner::init() {
     return true;
 }
 
-int KeyRunner::clockTick(void* unused) {
+int KeyRunner::clockTick(void* game) {
     int step = 100;
 
-    while (playModel->getTimeClock() > 0 && playModel->getState() == PLAY) {
+    KeyRunner* gameInstance = (KeyRunner*) game;
+
+    while (gameInstance->playModel->getTimeClock() > 0 && gameInstance->playModel->getState() == PLAY) {
         SDL_Delay(step);
-        playModel->decrementTimeClock(step);
+        gameInstance->playModel->decrementTimeClock(step);
     }
 
-    SDL_CondSignal(levelCond);
-    exitGame();
+    SDL_CondSignal(gameInstance->levelCond);
+    gameInstance->exitGame();
     return 0;
 }
 
@@ -338,31 +327,34 @@ void KeyRunner::moveDirection(Direction d) {
  * convey - Thread. Every 100 ms, check to see if the player is on a conveyor
  * tile.  If so, move them to the next conveyor tile on the belt.
  */
-int KeyRunner::convey(void* unused) {
+int KeyRunner::convey(void* game) {
+
+    KeyRunner* gameInstance = (KeyRunner*) game;
 
     // Convey only while the game has not yet been quit.
-    while(playModel->getState() != QUIT) {
+    while(gameInstance->playModel->getState() != QUIT) {
 
         // Don't attempt to convey if the level is being loaded.
-        SDL_LockMutex(levelLoadLock);
+        SDL_LockMutex(gameInstance->levelLoadLock);
 
         // If the tile in a conveyor tile,
-        if (playModel->isConveyor(playModel->getPlayerCoord())) {
+        if (gameInstance->playModel->isConveyor(gameInstance->playModel->getPlayerCoord())) {
 
             // Convey the player to the next tile.
-            TileCoord newTileCoord = playModel->getNextConveyorTileCoord(playModel->getPlayerCoord());
+            TileCoord newTileCoord = gameInstance->playModel->getNextConveyorTileCoord(
+                    gameInstance->playModel->getPlayerCoord());
             TileLayer* newTile = GridLayer::GetInstance()->getTile(newTileCoord.first, newTileCoord.second);
             if (GridLayer::GetInstance()->movePlayerToTile(newTile)) {
-                if (playModel->isComplete()){
-                    SDL_UnlockMutex(levelLock);
-                    SDL_CondSignal(levelCond);
+                if (gameInstance->playModel->isComplete()){
+                    SDL_UnlockMutex(gameInstance->levelLock);
+                    SDL_CondSignal(gameInstance->levelCond);
                 }
             }
 
         }
 
         // Indicate that it's OK to load a new level.
-        SDL_UnlockMutex(levelLoadLock);
+        SDL_UnlockMutex(gameInstance->levelLoadLock);
 
         // Delay 100 ms before conveying the player again..
         SDL_Delay(100);
@@ -375,59 +367,65 @@ int KeyRunner::convey(void* unused) {
  * updateDisplay - Thread.  Flip the screen 25 times per second.  Update any
  * and all animations.
  */
-int KeyRunner::updateDisplay(void* unused) {
+int KeyRunner::updateDisplay(void* game) {
+
+    KeyRunner* gameInstance = (KeyRunner*) game;
+
     int fps = 25;
     int delay = 1000/fps;
 
-    while(playModel->getState() != QUIT) {
-        SDL_LockMutex(screenLock);
+    while(gameInstance->playModel->getState() != QUIT) {
+        SDL_LockMutex(gameInstance->screenLock);
 
-        SDL_LockMutex(levelLoadLock);
+        SDL_LockMutex(gameInstance->levelLoadLock);
 
         // Update and Draw the RootLayer (and all nested layers beneath).
-        rootLayer->update();
-        rootLayer->draw(screen);
+        gameInstance->rootLayer->update();
+        gameInstance->rootLayer->draw(gameInstance->screen);
 
-        SDL_UnlockMutex(levelLoadLock);
+        SDL_UnlockMutex(gameInstance->levelLoadLock);
 
-        SDL_Flip(screen);
+        SDL_Flip(gameInstance->screen);
 
-        SDL_UnlockMutex(screenLock);
+        SDL_UnlockMutex(gameInstance->screenLock);
 
         SDL_Delay(delay);
     }
 
-    exitGame();
+    gameInstance->exitGame();
     return 0;
 }
 
-int KeyRunner::updateLevel(void* unused) {
+int KeyRunner::updateLevel(void* game) {
 
-    while (playModel->getLevelNum() <= LevelManager::GetTotal() && playModel->getState() != QUIT) {
+    KeyRunner* gameInstance = (KeyRunner*) game;
 
-        SDL_LockMutex(levelLoadLock);
+    while (gameInstance->playModel->getLevelNum() <= LevelManager::GetTotal() &&
+            gameInstance->playModel->getState() != QUIT) {
 
-        LevelManager::Read(playModel->getLevelNum());
+        SDL_LockMutex(gameInstance->levelLoadLock);
+
+        LevelManager::Read(gameInstance->playModel->getLevelNum());
 
         // Signal that it's OK to observe level tiles now.
-        SDL_UnlockMutex(levelLoadLock);
+        SDL_UnlockMutex(gameInstance->levelLoadLock);
 
         // Unrelated to the previous unlock, Signal every thread waiting on a
         // level to load initially that a level has been loaded.
-        SDL_CondSignal(initialLevelLoadCond);
+        SDL_CondSignal(gameInstance->initialLevelLoadCond);
 
         // Mark all tiles as needing to be redrawn.
         GridLayer::GetInstance()->refreshTiles();
 
-        SDL_LockMutex(levelLock);
-        SDL_CondWait(levelCond, levelLock);
+        SDL_LockMutex(gameInstance->levelLock);
+        SDL_CondWait(gameInstance->levelCond, gameInstance->levelLock);
 
-        playModel->setLevelNum(playModel->getLevelNum() + 1);
+        gameInstance->playModel->setLevelNum(gameInstance->playModel->getLevelNum() + 1);
 
-        playModel->incrementTimeClock(6000);
+        gameInstance->playModel->incrementTimeClock(6000);
     }
 
-    exitGame();
+    gameInstance->exitGame();
     return 0;
 }
 

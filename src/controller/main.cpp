@@ -2,6 +2,8 @@
 #include "Options.hpp"
 #include "../model/PlayModel.hpp"
 
+KeyRunner keyRunner;
+
 int main(int argc, char** argv) {
 
     Options::parse(argc, argv);
@@ -15,11 +17,11 @@ int main(int argc, char** argv) {
 
     // Normal Gameplay Mode
     if (startState == PLAY) {
-        KeyRunner::play();
+        keyRunner.play();
 
     // Editor Mode
     } else if (startState == EDIT) {
-        KeyRunner::edit();
+        keyRunner.edit();
     }
 
     return 0;

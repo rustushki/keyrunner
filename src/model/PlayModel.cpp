@@ -178,7 +178,7 @@ Direction PlayModel::getConveyorDirection(TileCoord coord) const {
     }
 
     std::cout << "Non-conveyor tile queried for direction." << std::endl;
-    KeyRunner::exitGame();
+    keyRunner.exitGame();
 
     // Should never execute.
     return DIRECTION_UP;
@@ -199,7 +199,7 @@ Direction PlayModel::getConveyorDirection(TileCoord coord) const {
 TileCoord PlayModel::getNextConveyorTileCoord(TileCoord current) const {
     if (!isConveyor(current)) {
         std::cout << "Trying to get next conveyor tile from non conveyor tile." << std::endl;
-        KeyRunner::exitGame();
+        keyRunner.exitGame();
     }
 
     Direction dir = getConveyorDirection(current);

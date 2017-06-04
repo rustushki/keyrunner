@@ -70,13 +70,13 @@ AnimationType TileLayer::TileTypeToAnimType(TileType tt) {
         default:
             std::cout << "Could not determine AnimationType." << std::endl;
             std::cout << "Invalid TileType." << std::endl;
-            KeyRunner::exitGame();
+            keyRunner.exitGame();
             break;
     }
 
     // Should not arrive here.
     std::cout << "Logic error detected." << std::endl;
-    KeyRunner::exitGame();
+    keyRunner.exitGame();
 
     // Should certainly never arrive here.
     return ANIMATION_TYPE_EMPTY;
