@@ -1,5 +1,5 @@
-#ifndef GLIDLAYER_HPP
-#define GLIDLAYER_HPP
+#ifndef GRID_LAYER_HPP
+#define GRID_LAYER_HPP
 
 #include <vector>
 
@@ -27,7 +27,7 @@ public:
     virtual SDL_Rect getRect() const;
     virtual void update();
 
-    // Some mutators.  These are good candidates to make private later.
+    // Some state changing methods.  These are good candidates to make private later.
     void pushAnimatedTile(TileLayer* tile);
     void refreshTiles();
 
@@ -46,12 +46,10 @@ private:
     // Various stateful variables which describe the current state of the
     // GridLayer.
     TileLayer* tile[PlayModel::GRID_HEIGHT][PlayModel::GRID_WIDTH];
-    Animation* keyAnim;
-    Animation* playerAnim;
     std::vector<TileLayer*> changedTiles;
     std::vector<TileLayer*> animatedTiles;
 
-    // Various mutators which can change the state of the GridLayer.
+    // Various methods which can change the state of the GridLayer.
     void init();
     void animateTiles();
     void clearAnimatedTiles();
@@ -63,4 +61,4 @@ private:
     friend class LevelManager;
 };
 
-#endif//GLIDLAYER_HPP
+#endif//GRID_LAYER_HPP
