@@ -21,7 +21,6 @@ public:
     void draw(SDL_Surface* dst);
 
     Animation* getAnimation() const;
-    static AnimationType TileTypeToAnimType(TileType tt);
 
     TileType getType() const;
     void setType(TileType tt);

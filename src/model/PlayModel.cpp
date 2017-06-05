@@ -42,7 +42,7 @@ void PlayModel::setLevelNum(uint16_t level) {
 }
 
 bool PlayModel::isWall(TileCoord coord) const {
-    return (tileType[coord.second][coord.first] == TILETYPE_WALL);
+    return (tileType[coord.second][coord.first] == TILE_TYPE_WALL);
 }
 
 /* ------------------------------------------------------------------------------
@@ -73,9 +73,9 @@ void PlayModel::setPlayerCoord(TileCoord tileCoord) {
 bool PlayModel::isTeleporter(TileCoord coord) const {
     TileType tt = tileType[coord.second][coord.first];
 
-    return (   tt == TILETYPE_TELEPORTER_RED
-            || tt == TILETYPE_TELEPORTER_GREEN
-            || tt == TILETYPE_TELEPORTER_BLUE);
+    return (   tt == TILE_TYPE_TELEPORTER_RED
+            || tt == TILE_TYPE_TELEPORTER_GREEN
+            || tt == TILE_TYPE_TELEPORTER_BLUE);
 }
 
 void PlayModel::changeTileType(TileCoord coord, TileType tt) {
@@ -90,7 +90,7 @@ TileType PlayModel::getTileType(TileCoord coord) const {
  * Is the Tile at the provided TileCoord a Door?
  */
 bool PlayModel::isDoor(TileCoord coord) const {
-    return tileType[coord.second][coord.first] == TILETYPE_DOOR;
+    return tileType[coord.second][coord.first] == TILE_TYPE_DOOR;
 }
 
 /* ------------------------------------------------------------------------------
@@ -152,10 +152,10 @@ TileCoord PlayModel::getTileCoordRight(TileCoord current) const {
 bool PlayModel::isConveyor(TileCoord coord) const {
     TileType tt = tileType[coord.second][coord.first];
 
-    return (   tt == TILETYPE_CONVEY_UP
-            || tt == TILETYPE_CONVEY_DOWN
-            || tt == TILETYPE_CONVEY_RIGHT
-            || tt == TILETYPE_CONVEY_LEFT);
+    return (   tt == TILE_TYPE_CONVEY_UP
+            || tt == TILE_TYPE_CONVEY_DOWN
+            || tt == TILE_TYPE_CONVEY_RIGHT
+            || tt == TILE_TYPE_CONVEY_LEFT);
 }
 
 /* ------------------------------------------------------------------------------
@@ -163,16 +163,16 @@ bool PlayModel::isConveyor(TileCoord coord) const {
  */
 Direction PlayModel::getConveyorDirection(TileCoord coord) const {
     TileType tt = tileType[coord.second][coord.first];
-    if (tt == TILETYPE_CONVEY_UP) {
+    if (tt == TILE_TYPE_CONVEY_UP) {
         return DIRECTION_UP;
 
-    } else if (tt == TILETYPE_CONVEY_DOWN) {
+    } else if (tt == TILE_TYPE_CONVEY_DOWN) {
         return DIRECTION_DOWN;
 
-    } else if (tt == TILETYPE_CONVEY_RIGHT) {
+    } else if (tt == TILE_TYPE_CONVEY_RIGHT) {
         return DIRECTION_RIGHT;
 
-    } else if (tt == TILETYPE_CONVEY_LEFT) {
+    } else if (tt == TILE_TYPE_CONVEY_LEFT) {
         return DIRECTION_LEFT;
 
     }

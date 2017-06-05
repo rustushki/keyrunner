@@ -21,9 +21,9 @@ TileSelectorLayer::TileSelectorLayer() {
     const uint8_t margin = 4;
     const uint8_t initOffset = 10;
 
-    for (int ttIdx = 0; ttIdx < TILETYPE_COUNT; ttIdx++) {
+    for (int ttIdx = 0; ttIdx < TileType::length(); ttIdx++) {
         TileType tt = (TileType) ttIdx;
-        AnimationType at = TileLayer::TileTypeToAnimType(tt);
+        AnimationType at = tt.toAnimationType();
 
         // Build the Button for the TileType.
         ButtonLayer* bl = blb

@@ -19,7 +19,7 @@ GridLayer* GridLayer::GetInstance() {
 GridLayer::GridLayer() {
     for (int x = 0; x < PlayModel::GRID_WIDTH; x++) {
         for (int y = 0; y < PlayModel::GRID_HEIGHT; y++) {
-            tile[y][x] = new TileLayer(TileType::TILETYPE_EMPTY, x, y);
+            tile[y][x] = new TileLayer(TILE_TYPE_EMPTY, x, y);
         }
     }
 }

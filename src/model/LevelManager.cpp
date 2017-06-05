@@ -70,7 +70,7 @@ bool LevelManager::Write() {
     fwrite(&h, sizeof(uint16_t), 1, fp);
 
     // Write Default Tile Type
-    uint8_t tt = static_cast<uint8_t>(TILETYPE_EMPTY);
+    uint8_t tt = static_cast<uint8_t>(TILE_TYPE_EMPTY);
     fwrite(&tt, sizeof(uint8_t), 1, fp);
 
     // Count and Collect the number of Tile Deviations
@@ -216,7 +216,7 @@ void LevelManager::Reset() {
     playerCoord.second = 0;
     keyCoord.first = w-1;
     keyCoord.second = h-1;
-    defTT = TileType::TILETYPE_EMPTY;
+    defTT = TILE_TYPE_EMPTY;
     deviations.clear();
 }
 

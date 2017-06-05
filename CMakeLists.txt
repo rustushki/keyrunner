@@ -31,7 +31,7 @@ set(SOURCES
   src/model/EditorModel.cpp
   src/model/LevelManager.cpp
   src/model/PlayModel.cpp
-)
+  src/model/TileType.cpp)
 
 # Declare Executable.
 add_executable(keyrunner ${SOURCES})

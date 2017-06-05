@@ -25,10 +25,7 @@ EditorModel* EditorModel::GetInstance() {
  *
  * Initialize the Editor's fields.
  */
-EditorModel::EditorModel() {
-    setTileType(TILETYPE_EMPTY);
-
-}
+EditorModel::EditorModel() : tileType{TILE_TYPE_EMPTY} {}
 
 /* ------------------------------------------------------------------------------
  * Set Tile Type.
