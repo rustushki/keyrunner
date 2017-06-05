@@ -11,7 +11,7 @@
 class TileLayer : public Layer {
 
 public:
-    TileLayer(TileType type, uint16_t x, uint16_t y);
+    TileLayer(TileType tileType, uint16_t x, uint16_t y);
     ~TileLayer();
 
     static const uint8_t SIZE = 25;
@@ -29,8 +29,8 @@ public:
     uint16_t getY() const;
 
 private:
-    TileType type;
-    Animation* anim;
+    TileType tileType;
+    Animation* animation;
 
     uint16_t x;
     uint16_t y;
