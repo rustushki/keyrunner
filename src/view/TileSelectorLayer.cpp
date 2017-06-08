@@ -67,7 +67,7 @@ void TileSelectorLayer::onSelected() {
  * This is mainly a black box, with a gray border.  Inside is a horizontal list
  * of Tiles which may be selected.
  */
-void TileSelectorLayer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
+void TileSelectorLayer::draw(SDL_Renderer* renderer) {
     const uint8_t  borderWidth = 2;
 
     SDL_Rect r = getRect();
@@ -84,7 +84,7 @@ void TileSelectorLayer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
     SDL_SetRenderDrawColor(renderer, 0xAA, 0xAA, 0xAA, 0xFF);
     SDL_RenderDrawRect(renderer, &r);
 
-    Layer::draw(renderer, destination);
+    Layer::draw(renderer);
 
 }
 

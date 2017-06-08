@@ -2,9 +2,7 @@
 
 #include "ConveyorAnimation.hpp"
 #include "GridLayer.hpp"
-#include "TileLayer.hpp"
 #include "../controller/KeyRunner.hpp"
-#include "../model/PlayModel.hpp"
 
 GridLayer* GridLayer::instance = NULL;
 
@@ -56,11 +54,11 @@ void GridLayer::animateTiles() {
     }
 }
 
-void GridLayer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
+void GridLayer::draw(SDL_Renderer* renderer) {
     // Redraw the tile referenced by that pair.
     for (int y = 0; y < PlayModel::GRID_HEIGHT; y++) {
         for (int x = 0; x < PlayModel::GRID_WIDTH; x++) {
-            tile[y][x]->draw(renderer, destination);
+            tile[y][x]->draw(renderer);
         }
     }
 }

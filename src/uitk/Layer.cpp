@@ -11,11 +11,11 @@ Layer::Layer() {
     show();
 }
 
-void Layer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
+void Layer::draw(SDL_Renderer* renderer) {
     std::vector<Layer*>::iterator itr;
     for (itr = subLayers.begin(); itr < subLayers.end(); itr++) {
         if ((*itr)->isVisible()) {
-            (*itr)->draw(renderer, destination);
+            (*itr)->draw(renderer);
         }
     }
 }

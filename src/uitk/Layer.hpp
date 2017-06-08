@@ -10,7 +10,7 @@ class Layer {
 public:
     Layer();
 
-    virtual void draw(SDL_Renderer* renderer, SDL_Texture* destination);
+    virtual void draw(SDL_Renderer* renderer);
 
     virtual SDL_Rect getRect() const = 0;
 

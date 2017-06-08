@@ -64,7 +64,7 @@ uint16_t Animation::getCurrentStill() const {
 /* ------------------------------------------------------------------------------
  * blit - Draw the current frame of the animation onto the screen.
  */
-void Animation::blit(SDL_Renderer* renderer, SDL_Texture* destination) {
+void Animation::blit(SDL_Renderer* renderer) {
 
     // Look into the frame list to determine the logical coordinates of the
     // frame in the sprite sheet.

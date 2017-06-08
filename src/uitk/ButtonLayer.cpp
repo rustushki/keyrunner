@@ -33,7 +33,7 @@ void ButtonLayer::update() {
 /* ------------------------------------------------------------------------------
  * draw - Given a surface, draw a button onto the surface.
  */
-void ButtonLayer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
+void ButtonLayer::draw(SDL_Renderer* renderer) {
     // Width of the button shading.  Anything other than 1 looks ugly.
     const uint8_t shadeWidth = 1;
 
@@ -91,7 +91,7 @@ void ButtonLayer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
         uint16_t x = fillRect.x + (fillRect.w - icon->getWidth()) / 2;
         uint16_t y = fillRect.y + (fillRect.h - icon->getHeight()) / 2;
         icon->move(x, y);
-        icon->blit(renderer, destination);
+        icon->blit(renderer);
     }
 
 }

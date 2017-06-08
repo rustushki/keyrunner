@@ -18,7 +18,7 @@ public:
 
     SDL_Rect getRect() const;
 
-    void draw(SDL_Renderer* renderer, SDL_Texture* destination);
+    void draw(SDL_Renderer* renderer);
 
     Animation* getAnimation() const;
 

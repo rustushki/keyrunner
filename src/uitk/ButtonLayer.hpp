@@ -12,7 +12,7 @@ class ButtonLayer : public Layer {
 public:
     ~ButtonLayer();
 
-    virtual void draw(SDL_Renderer* renderer, SDL_Texture* destination);
+    virtual void draw(SDL_Renderer* renderer);
     virtual SDL_Rect getRect() const;
     virtual void update();
 

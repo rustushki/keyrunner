@@ -155,8 +155,6 @@ bool KeyRunner::init() {
         return false;
     }
 
-    screen = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, rlr.w, rlr.h);
-
     // Initialize SDL_ttf
     if (TTF_Init() == -1) {
         std::cout << "Error initializing SDL_ttf: " << TTF_GetError() << std::endl;
@@ -379,7 +377,7 @@ void KeyRunner::updateDisplay() {
 
     // Update and Draw the RootLayer (and all nested layers beneath).
     rootLayer->update();
-    rootLayer->draw(renderer, screen);
+    rootLayer->draw(renderer);
 
     SDL_UnlockMutex(levelLoadLock);
     SDL_RenderPresent(renderer);

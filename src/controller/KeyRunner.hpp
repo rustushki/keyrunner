@@ -54,7 +54,6 @@ private:
 
     SDL_Window*   window;
     SDL_Renderer* renderer;
-    SDL_Texture*  screen;
     SDL_mutex*    screenLock;
     SDL_cond*     levelCond;
     SDL_mutex*    levelLock;

@@ -12,13 +12,13 @@ public:
     static PlayInfoBarLayer* GetInstance();
     ~PlayInfoBarLayer();
 
-    virtual void draw(SDL_Renderer* renderer, SDL_Texture* screen);
+    virtual void draw(SDL_Renderer* renderer);
 
 protected:
     TTF_Font* getFont() const;
-    void drawText(SDL_Renderer* renderer, SDL_Texture* destination, std::string s, InfoBarPos position) const;
-    void drawLevel(SDL_Renderer* renderer, SDL_Texture* dst, uint16_t level) const;
-    void drawTimer(SDL_Renderer* renderer, SDL_Texture* destination) const;
+    void drawText(SDL_Renderer* renderer, std::string s, InfoBarPos position) const;
+    void drawLevel(SDL_Renderer* renderer, uint16_t level) const;
+    void drawTimer(SDL_Renderer* renderer) const;
 
 private:
     PlayInfoBarLayer();

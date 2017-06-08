@@ -29,12 +29,12 @@ PlayInfoBarLayer::~PlayInfoBarLayer() {}
  * Draws the timer and the level onto the Play Information Bar.
  * @param dst surface on which to draw
  */
-void PlayInfoBarLayer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
-    InfoBarLayer::draw(renderer, destination);
+void PlayInfoBarLayer::draw(SDL_Renderer* renderer) {
+    InfoBarLayer::draw(renderer);
 
     // As they say.
-    this->drawLevel(renderer, destination, PlayModel::GetInstance()->getLevelNum());
-    this->drawTimer(renderer, destination);
+    this->drawLevel(renderer, PlayModel::GetInstance()->getLevelNum());
+    this->drawTimer(renderer);
 
 }
 
@@ -43,7 +43,7 @@ void PlayInfoBarLayer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
  * @param dst the surface on which to draw
  * @param level the current level
  */
-void PlayInfoBarLayer::drawLevel(SDL_Renderer* renderer, SDL_Texture* dst, uint16_t level) const {
+void PlayInfoBarLayer::drawLevel(SDL_Renderer* renderer, uint16_t level) const {
 
     // Covert the level into a string.
     std::string levelStr = "";
@@ -56,7 +56,7 @@ void PlayInfoBarLayer::drawLevel(SDL_Renderer* renderer, SDL_Texture* dst, uint1
     levelStr = "Level: " + levelStr;
 
     // Draw the text to the screen.
-    drawText(renderer, dst, levelStr, BOTTOM_LEFT);
+    drawText(renderer, levelStr, BOTTOM_LEFT);
 }
 
 /**
@@ -67,7 +67,7 @@ void PlayInfoBarLayer::drawLevel(SDL_Renderer* renderer, SDL_Texture* dst, uint1
  * @param s string to draw
  * @param position location on information bar to draw
  */
-void PlayInfoBarLayer::drawText(SDL_Renderer* renderer, SDL_Texture* destination, std::string s, InfoBarPos position)
+void PlayInfoBarLayer::drawText(SDL_Renderer* renderer, std::string s, InfoBarPos position)
         const {
 
     // Gray
@@ -118,7 +118,7 @@ void PlayInfoBarLayer::drawText(SDL_Renderer* renderer, SDL_Texture* destination
  * Draws the timer at the bottom right of the screen.
  * @param destination surface on which to draw
  */
-void PlayInfoBarLayer::drawTimer(SDL_Renderer* renderer, SDL_Texture* destination) const {
+void PlayInfoBarLayer::drawTimer(SDL_Renderer* renderer) const {
     uint32_t currentTimeClock = PlayModel::GetInstance()->getTimeClock();
 
     // Convert the timeout into a string.
@@ -145,7 +145,7 @@ void PlayInfoBarLayer::drawTimer(SDL_Renderer* renderer, SDL_Texture* destinatio
     timer = "Time: " + timer + " s";
 
     // Draw it to th screen.
-    drawText(renderer, destination, timer, BOTTOM_RIGHT);
+    drawText(renderer, timer, BOTTOM_RIGHT);
 }
 
 /**

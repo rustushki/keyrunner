@@ -8,7 +8,7 @@
 class InfoBarLayer : public Layer {
 
 public:
-    virtual void draw(SDL_Renderer* renderer, SDL_Texture* screen);
+    virtual void draw(SDL_Renderer* renderer);
     virtual SDL_Rect getRect() const;
 
 protected:

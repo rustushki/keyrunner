@@ -13,8 +13,8 @@ RootLayer::RootLayer(InfoBarLayer* ibl) {
     this->ibl->setSelected();
 }
 
-void RootLayer::draw(SDL_Renderer* renderer, SDL_Texture* dst) {
-    Layer::draw(renderer, dst);
+void RootLayer::draw(SDL_Renderer* renderer) {
+    Layer::draw(renderer);
 }
 
 SDL_Rect RootLayer::getRect() const {
