@@ -95,9 +95,6 @@ void KeyRunner::edit() {
         // Signal that it's OK to observe level tiles now.
         SDL_UnlockMutex(levelLoadLock);
 
-        // Mark all tiles as needing to be redrawn.
-        GridLayer::GetInstance()->refreshTiles();
-
         editHandleEvents();
     } else {
         // TODO: What to do if we fail to initialize?
@@ -406,9 +403,6 @@ int KeyRunner::updateLevel(void* game) {
         // Unrelated to the previous unlock, Signal every thread waiting on a
         // level to load initially that a level has been loaded.
         SDL_CondSignal(gameInstance->initialLevelLoadCond);
-
-        // Mark all tiles as needing to be redrawn.
-        GridLayer::GetInstance()->refreshTiles();
 
         SDL_LockMutex(gameInstance->levelLock);
         SDL_CondWait(gameInstance->levelCond, gameInstance->levelLock);

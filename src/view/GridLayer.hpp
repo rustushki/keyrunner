@@ -29,7 +29,6 @@ public:
 
     // Some state changing methods.  These are good candidates to make private later.
     void pushAnimatedTile(TileLayer* tile);
-    void refreshTiles();
 
     // Change Player position.
     bool movePlayer(Direction d);
@@ -46,15 +45,12 @@ private:
     // Various stateful variables which describe the current state of the
     // GridLayer.
     TileLayer* tile[PlayModel::GRID_HEIGHT][PlayModel::GRID_WIDTH];
-    std::vector<TileLayer*> changedTiles;
     std::vector<TileLayer*> animatedTiles;
 
     // Various methods which can change the state of the GridLayer.
     void init();
     void animateTiles();
     void clearAnimatedTiles();
-    void clearChangedTiles();
-    void addChangedTile(TileLayer* tile);
     void changeTileType(uint16_t x, uint16_t y, TileType tt);
 
     // LevelManager can Read and Write the GridLayer to / from Level files.

@@ -150,9 +150,6 @@ void ConveyorAnimation::BuildConveyorAnimations() {
                         oppDir = DIRECTION_LEFT;
                     }
 
-                    //std::cout << "\tOppDir: " << oppDir << std::endl;
-
-
                     // A circular conveyor is one which stretches from one
                     // border to the other, causing it it wrap-around.  We need
                     // to check for this behavior so that we can prevent
@@ -201,7 +198,6 @@ void ConveyorAnimation::BuildConveyorAnimations() {
                         conveyorTiles.push_back(p);
 
                         tileNum++;
-                        //std::cout << "\ttile #" << tileNum << " " << p->getX() << "," << p->getY() << std::endl;
 
                         if (conveyDir == DIRECTION_UP) {
                             p = playModel->getTileCoordUp(p);
@@ -218,7 +214,6 @@ void ConveyorAnimation::BuildConveyorAnimations() {
                                 break;
                             }
                         }
-
                     }
 
                     // Creating a ConveyorAnimation causes it to be added to

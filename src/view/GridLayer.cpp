@@ -52,26 +52,17 @@ void GridLayer::clearAnimatedTiles() {
 void GridLayer::animateTiles() {
     for (uint16_t x = 0; x < animatedTiles.size(); x++) {
         TileLayer* tile = animatedTiles[x];
-        if (tile->getAnimation()->advance()) {
-            addChangedTile(tile);
-        }
+        tile->getAnimation()->advance();
     }
 }
 
 void GridLayer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
-
-    while (!changedTiles.empty()) {
-
-        // Get pair to update.
-        TileLayer* t = changedTiles.back();
-
-        // Redraw the tile referenced by that pair.
-        t->draw(renderer, destination);
-
-        // Remove that pair from the changed tiles list.
-        changedTiles.pop_back();
+    // Redraw the tile referenced by that pair.
+    for (int y = 0; y < PlayModel::GRID_HEIGHT; y++) {
+        for (int x = 0; x < PlayModel::GRID_WIDTH; x++) {
+            tile[y][x]->draw(renderer, destination);
+        }
     }
-
 }
 
 SDL_Rect GridLayer::getRect() const {
@@ -95,19 +86,7 @@ void GridLayer::update() {
     animateTiles();
 }
 
-/* ------------------------------------------------------------------------------
- * ClearChangedTiles - Remove all tiles from the changed tile array.
- */
-void GridLayer::clearChangedTiles() {
-    changedTiles.clear();
-}
-
-void GridLayer::addChangedTile(TileLayer* tile) {
-    changedTiles.push_back(tile);
-}
-
 GridLayer::~GridLayer() {
-    clearChangedTiles();
     for (int x = 0; x < PlayModel::GRID_WIDTH; x++) {
         for (int y = 0; y < PlayModel::GRID_HEIGHT; y++) {
             delete tile[y][x];
@@ -126,16 +105,6 @@ void GridLayer::changeTileType(uint16_t x, uint16_t y, TileType tt) {
     TileLayer* tile = getTile(x, y);
     if (tile->getType() != tt) {
         tile->setType(tt);
-        addChangedTile(tile);
-    }
-}
-
-void GridLayer::refreshTiles() {
-    // Blit all Tiles.
-    for (int x = 0; x < PlayModel::GRID_WIDTH; x++) {
-        for (int y = 0; y < PlayModel::GRID_HEIGHT; y++) {
-            addChangedTile(getTile(x, y));
-        }
     }
 }
 
@@ -199,10 +168,6 @@ bool GridLayer::movePlayerToTile(TileLayer* newTile) {
         return true;
     }
 
-    // Update the old and new TileLayers of the player.
-    addChangedTile(getTile(playModel->getPlayerCoord().first, playModel->getPlayerCoord().second));
-    addChangedTile(newTile);
-
     // Move the player to the tile.
     playModel->setPlayerCoord(TileCoord(newTile->getX(), newTile->getY()));
 
@@ -215,7 +180,6 @@ bool GridLayer::movePlayerToTile(TileLayer* newTile) {
     if (playModel->isTeleporter(playModel->getPlayerCoord())) {
         TileCoord matching = playModel->getMatchingTeleporterTileCoord(playModel->getPlayerCoord());
         playModel->setPlayerCoord(matching);
-        addChangedTile(getTile(matching.first, matching.second));
         return true;
     }
 
