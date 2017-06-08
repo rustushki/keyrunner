@@ -56,7 +56,6 @@ private:
     SDL_Renderer* renderer;
     SDL_cond*     levelCond;
     SDL_mutex*    levelLock;
-    SDL_cond*     levelLoadCond;
     SDL_mutex*    levelLoadLock;
     SDL_cond*     initialLevelLoadCond;
     SDL_mutex*    initialLevelLoadLock;

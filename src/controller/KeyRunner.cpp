@@ -26,7 +26,6 @@ void KeyRunner::play() {
     levelLock            = SDL_CreateMutex();
     levelCond            = SDL_CreateCond();
     levelLoadLock        = SDL_CreateMutex();
-    levelLoadCond        = SDL_CreateCond();
     initialLevelLoadLock = SDL_CreateMutex();
     initialLevelLoadCond = SDL_CreateCond();
 
@@ -68,7 +67,6 @@ void KeyRunner::edit() {
     playModel->setState(EDIT);
 
     levelLoadLock        = SDL_CreateMutex();
-    levelLoadCond        = SDL_CreateCond();
     initialLevelLoadLock = SDL_CreateMutex();
     initialLevelLoadCond = SDL_CreateCond();
 
