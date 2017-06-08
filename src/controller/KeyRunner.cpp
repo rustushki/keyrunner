@@ -23,7 +23,6 @@ void KeyRunner::play() {
     playModel->setState(PLAY);
     playModel->setLevelNum(Options::getStartingLevel());
 
-    screenLock           = SDL_CreateMutex();
     levelLock            = SDL_CreateMutex();
     levelCond            = SDL_CreateCond();
     levelLoadLock        = SDL_CreateMutex();
@@ -68,7 +67,6 @@ void KeyRunner::edit() {
 
     playModel->setState(EDIT);
 
-    screenLock           = SDL_CreateMutex();
     levelLoadLock        = SDL_CreateMutex();
     levelLoadCond        = SDL_CreateCond();
     initialLevelLoadLock = SDL_CreateMutex();
@@ -364,21 +362,23 @@ int KeyRunner::convey(void* game) {
 }
 
 /**
- * Flip the screen 25 times per second.  Update any and all animations.
+ * Clear the back frame, redraw everything onto it, then present it.
  */
 void KeyRunner::updateDisplay() {
-    SDL_LockMutex(screenLock);
+    // Do not allow level loading while the back frame is being prepared
     SDL_LockMutex(levelLoadLock);
 
+    // Clear the back frame
     SDL_RenderClear(renderer);
 
-    // Update and Draw the RootLayer (and all nested layers beneath).
+    // Update and draw the RootLayer (and all nested layers beneath).
     rootLayer->update();
     rootLayer->draw(renderer);
 
-    SDL_UnlockMutex(levelLoadLock);
     SDL_RenderPresent(renderer);
-    SDL_UnlockMutex(screenLock);
+
+    // Allow level loading now that the back frame has been presented
+    SDL_UnlockMutex(levelLoadLock);
 }
 
 int KeyRunner::updateLevel(void* game) {
