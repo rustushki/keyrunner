@@ -16,8 +16,7 @@ private:
     uint16_t height;
     uint16_t width;
 
-    SDL_Renderer* renderer;
     SDL_Surface* sheet;
 };
 
-#endif//SPRITE_SHEET_HPP
+#endif

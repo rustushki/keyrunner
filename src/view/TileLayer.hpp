@@ -37,4 +37,4 @@ private:
 
 };
 
-#endif//TILE_HPP
+#endif

@@ -6,7 +6,7 @@ public:
     // Parsers
     static void parse(int argc, char** argv);
 
-    // Outputters
+    // Output functions
     static void showHelp();
     static void showVersion();
 
@@ -25,4 +25,4 @@ private:
 
 };
 
-#endif//OPTIONS_HPP
+#endif

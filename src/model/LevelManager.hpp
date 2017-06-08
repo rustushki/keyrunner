@@ -1,5 +1,5 @@
-#ifndef LEVELMANAGER_HPP
-#define LEVELMANAGER_HPP
+#ifndef LEVEL_MANAGER_HPP
+#define LEVEL_MANAGER_HPP
 
 #include <string>
 #include <map>
@@ -32,4 +32,4 @@ private:
     static TileCoord keyCoord;
 };
 
-#endif//LEVELMANAGER_HPP
+#endif

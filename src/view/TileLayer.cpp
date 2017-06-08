@@ -101,13 +101,13 @@ void TileLayer::draw(SDL_Renderer* renderer) {
 
     // Redraw the Key.
     if (playModel->tileCoordHasKey(TileCoord(this->x, this->y))) {
-        KeyAnim->move(xp, yp);
-        KeyAnim->blit(renderer);
+        KeyAnimation->move(xp, yp);
+        KeyAnimation->blit(renderer);
     }
 
     // Redraw the Player.
     if (playModel->tileCoordHasPlayer(TileCoord(this->x, this->y))) {
-        PlayerAnim->move(xp, yp);
-        PlayerAnim->blit(renderer);
+        PlayerAnimation->move(xp, yp);
+        PlayerAnimation->blit(renderer);
     }
 }

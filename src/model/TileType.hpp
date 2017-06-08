@@ -28,4 +28,4 @@ constexpr TileType TILE_TYPE_CONVEY_DOWN(7);
 constexpr TileType TILE_TYPE_CONVEY_LEFT(8);
 constexpr TileType TILE_TYPE_CONVEY_RIGHT(9);
 
-#endif//TILE_TYPE_HPP
+#endif

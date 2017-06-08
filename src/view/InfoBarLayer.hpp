@@ -1,5 +1,5 @@
-#ifndef INFOBARLAYER_HPP
-#define INFOBARLAYER_HPP
+#ifndef INFO_BAR_LAYER_HPP
+#define INFO_BAR_LAYER_HPP
 #include <SDL2/SDL_ttf.h>
 #include "InfoBarPos.hpp"
 #include "../controller/KeyRunner.hpp"
@@ -16,4 +16,4 @@ protected:
 
 };
 
-#endif//INFOBARLAYER_HPP
+#endif

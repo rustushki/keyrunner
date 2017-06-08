@@ -13,13 +13,12 @@ Animation::Animation(SpriteSheet* spriteSheet, std::vector<uint16_t> frameList, 
     // Get List of Frames for this kind of Animation.
     this->frameList = frameList;
 
-    this->firstBlit     = true;
     this->currentStill  = 0;
     this->shouldAdvance = false;
 
     if (this->sps != 0) {
         int fps = 25;
-        this->framesPerStill = fps/this->sps;
+        this->framesPerStill = (uint16_t) (fps / this->sps);
     }
 
     this->advanceCount = 0;
@@ -68,8 +67,8 @@ void Animation::blit(SDL_Renderer* renderer) {
 
     // Look into the frame list to determine the logical coordinates of the
     // frame in the sprite sheet.
-    uint16_t frameXc = this->currentStill * 2 + 0;
-    uint16_t frameYc = this->currentStill * 2 + 1;
+    uint16_t frameXc = (uint16_t) (this->currentStill * 2 + 0);
+    uint16_t frameYc = (uint16_t) (this->currentStill * 2 + 1);
     uint16_t frameX  = this->frameList[frameXc];
     uint16_t frameY  = this->frameList[frameYc];
 
@@ -84,7 +83,7 @@ void Animation::blit(SDL_Renderer* renderer) {
 }
 
 /* ------------------------------------------------------------------------------
- * move - Move the blitting location of this Animation elsewhere.
+ * move - Move the drawing location of this Animation elsewhere.
  */
 void Animation::move(uint16_t x, uint16_t y) {
     this->x = x;

@@ -12,8 +12,8 @@
 #include "../view/PlayRootLayer.hpp"
 
 // Items yet to be absorbed into KeyRunner static class.
-Animation* KeyAnim;
-Animation* PlayerAnim;
+Animation* KeyAnimation;
+Animation* PlayerAnimation;
 
 void KeyRunner::play() {
     // Initialize the PlayModel.
@@ -31,8 +31,8 @@ void KeyRunner::play() {
 
     if (init()) {
         // There's not a good place for these yet.  Putting them here for now.
-        KeyAnim    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
-        PlayerAnim = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
+        KeyAnimation    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
+        PlayerAnimation = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
 
         SDL_Thread *ulThread = SDL_CreateThread(&updateLevel, "updateLevel", this);
 
@@ -44,13 +44,14 @@ void KeyRunner::play() {
         SDL_Thread *phThread = SDL_CreateThread(&playHandleEvents, "playHandleEvents", this);
 
         while(playModel->getState() != QUIT) {
-            int fps = 25;
-            int delay = 1000/fps;
+            uint32_t fps = 25;
+            uint32_t delay = 1000 / fps;
 
             updateDisplay();
             SDL_Delay(delay);
         }
 
+        SDL_WaitThread(phThread, NULL);
         SDL_WaitThread(cyThread, NULL);
         SDL_WaitThread(ctThread, NULL);
         SDL_WaitThread(ulThread, NULL);
@@ -72,14 +73,14 @@ void KeyRunner::edit() {
 
     if (init()) {
         // There's not a good place for these yet.  Putting them here for now.
-        KeyAnim    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
-        PlayerAnim = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
+        KeyAnimation    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
+        PlayerAnimation = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
 
         SDL_LockMutex(levelLoadLock);
 
         // Create New Level for Edit
         if (Options::getCreateNewLevel()) {
-            playModel->setLevelNum(LevelManager::GetTotal() + 1);
+            playModel->setLevelNum((uint16_t) (LevelManager::GetTotal() + 1));
             LevelManager::New(playModel->getLevelNum());
 
         // Load Existing Level for Edit
@@ -165,11 +166,10 @@ bool KeyRunner::init() {
 }
 
 int KeyRunner::clockTick(void* game) {
-    int step = 100;
-
     KeyRunner* gameInstance = (KeyRunner*) game;
 
     while (gameInstance->playModel->getTimeClock() > 0 && gameInstance->playModel->getState() == PLAY) {
+        uint16_t step = 100;
         SDL_Delay(step);
         gameInstance->playModel->decrementTimeClock(step);
     }
@@ -182,7 +182,7 @@ int KeyRunner::clockTick(void* game) {
 /* ------------------------------------------------------------------------------
  * moveDirection - Move the player in the provided direction and pay close
  * attention to keyboard input while doing so.  This must run in the same
- * thread that initted SDL.
+ * thread that initialized SDL.
  *
  */
 void KeyRunner::moveDirection(Direction d) {
@@ -190,20 +190,20 @@ void KeyRunner::moveDirection(Direction d) {
     const Uint8* keyState = SDL_GetKeyboardState(nullptr);
 
     // How long to wait in MS before assuming the user wishes to 'auto move'
-    Uint16 holdDelayMs = 200;
+    uint16_t holdDelayMs = 200;
 
     // How frequently to check to see if the user is holding down an arrow button.
-    Uint16 holdDelayPollCheck = 10;
+    uint16_t holdDelayPollCheck = 10;
 
     // Count of poll attempts to check to see if the user is holding an arrow.
-    Uint16 holdDelayPollTries = holdDelayMs/holdDelayPollCheck;
+    uint16_t holdDelayPollTries = holdDelayMs/holdDelayPollCheck;
 
     // Number of atomic moves per second.  Each 'move' causes the player to
     // traverse one tile.
-    Uint16 movesPerSecond = 10;
+    uint16_t movesPerSecond = 10;
 
     // The amount of delay between tile moves.
-    Uint16 autoMoveDelay = 1000/movesPerSecond;
+    uint16_t autoMoveDelay = (uint16_t) (1000/movesPerSecond);
 
     // Based on the provided direction, infer which key the player must be
     // pressing.
@@ -261,26 +261,18 @@ void KeyRunner::moveDirection(Direction d) {
                 // which key they are pressing without the holdDelayMs wait.
 
                 if (keyState[SDL_SCANCODE_DOWN] && sdlKey != SDL_SCANCODE_DOWN) {
-                    d = DIRECTION_DOWN;
-                    sdlKey = SDL_SCANCODE_DOWN;
                     break;
                 }
 
                 if (keyState[SDL_SCANCODE_UP] && sdlKey != SDL_SCANCODE_UP) {
-                    d = DIRECTION_UP;
-                    sdlKey = SDL_SCANCODE_UP;
                     break;
                 }
 
                 if (keyState[SDL_SCANCODE_LEFT] && sdlKey != SDL_SCANCODE_LEFT) {
-                    d = DIRECTION_LEFT;
-                    sdlKey = SDL_SCANCODE_LEFT;
                     break;
                 }
 
                 if (keyState[SDL_SCANCODE_RIGHT] && sdlKey != SDL_SCANCODE_RIGHT) {
-                    d = DIRECTION_RIGHT;
-                    sdlKey = SDL_SCANCODE_RIGHT;
                     break;
                 }
 
@@ -456,6 +448,8 @@ int KeyRunner::playHandleEvents(void* game) {
 
         }
     }
+
+    return 0;
 }
 
 void KeyRunner::editHandleEvents() {
@@ -464,7 +458,7 @@ void KeyRunner::editHandleEvents() {
     while (playModel->getState() != QUIT) {
         SDL_WaitEvent(&event);
 
-        // Keydown.
+        // Key down.
         if (event.type == SDL_KEYDOWN) {
 
             // User Presses Q
@@ -485,9 +479,7 @@ void KeyRunner::editHandleEvents() {
                         handler = selected;
                     }
 
-                    if (handler != NULL) {
-                        handler->onKeyDown(event.key.keysym.sym);
-                    }
+                    handler->onKeyDown(event.key.keysym.sym);
                 }
             }
 

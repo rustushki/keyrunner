@@ -1,6 +1,5 @@
 #include "AnimationFactory.hpp"
 #include "GridLayer.hpp"
-#include "TileLayer.hpp"
 #include "TileSelectorLayer.hpp"
 #include "../model/EditorModel.hpp"
 #include "../uitk/ButtonLayer.hpp"
@@ -31,8 +30,8 @@ TileSelectorLayer::TileSelectorLayer() {
             ->setTextColor(0xFF0000)
             ->setWidth(blWidth)
             ->setHeight(blHeight)
-            ->setX(initOffset + ttIdx * blWidth + ttIdx * margin)
-            ->setY(getRect().y + (getRect().h - blHeight)/2)
+            ->setX((uint16_t) (initOffset + ttIdx * blWidth + ttIdx * margin))
+            ->setY((uint16_t) (getRect().y + (getRect().h - blHeight)/2))
             ->setIcon(AnimationFactory::Build(at))
             ->build();
 
@@ -45,11 +44,10 @@ TileSelectorLayer::TileSelectorLayer() {
     delete blb;
 }
 
-/* ------------------------------------------------------------------------------
+/**
  * React to receiving selection.
  *
- * Upon receiving selection, pass selection to the child which cotains the
- * Editor's selected TileType.
+ * Upon receiving selection, pass selection to the child which contains the Editor's selected TileType.
  */
 void TileSelectorLayer::onSelected() {
     for (uint16_t x = 0; x < getChildCount(); x++) {
@@ -126,7 +124,7 @@ void TileSelectorLayer::onKeyDown(SDL_Keycode key) {
             // Selected Child should go left or right
             if (key == SDLK_LEFT) {
                 selChild--;
-            } else if (key == SDLK_RIGHT) {
+            } else {
                 selChild++;
             }
 

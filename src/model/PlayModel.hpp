@@ -1,5 +1,5 @@
-#ifndef PLAYMODEL_HPP
-#define PLAYMODEL_HPP
+#ifndef PLAY_MODEL_HPP
+#define PLAY_MODEL_HPP
 
 #include <utility>
 #include <stdint.h>
@@ -19,12 +19,12 @@ class PlayModel {
     public:
         // Fixed Height and Width of the Grid.
         static const uint16_t GRID_HEIGHT = 16;
-        static const uint16_t GRID_WIDTH  = 25;
+        static const uint16_t GRID_WIDTH = 25;
 
         static PlayModel* GetInstance();
         bool isComplete() const;
         void setPlayerHasKey(bool playerHasKey);
-        uint16_t getLevelNum() const;
+        uint8_t getLevelNum() const;
         void setLevelNum(uint16_t level);
         bool isWall(TileCoord coord) const;
         bool isTeleporter(TileCoord coord) const;
@@ -60,14 +60,14 @@ class PlayModel {
         PlayModel();
 
         bool playerHasKey;
-        uint16_t level;
+        uint8_t level;
         State state;
         uint32_t timeClock;
 
         TileCoord keyCoord;
         TileCoord playerCoord;
 
-        TileType tileType[GRID_HEIGHT][GRID_WIDTH];
+        TileType tileType[PlayModel::GRID_HEIGHT][PlayModel::GRID_WIDTH];
 };
 
-#endif//PLAYMODEL_HPP
+#endif

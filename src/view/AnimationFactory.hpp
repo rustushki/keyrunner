@@ -1,5 +1,5 @@
-#ifndef ANIMATIONFACTORY_HPP
-#define ANIMATIONFACTORY_HPP
+#ifndef ANIMATION_FACTORY_HPP
+#define ANIMATION_FACTORY_HPP
 
 #include <vector>
 
@@ -19,4 +19,4 @@ class AnimationFactory {
         static uint16_t GetSPS(AnimationType animationType);
 };
 
-#endif//ANIMATIONFACTORY_HPP
+#endif

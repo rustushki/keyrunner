@@ -1,5 +1,5 @@
-#ifndef EDITORMODEL_HPP
-#define EDITORMODEL_HPP
+#ifndef EDITOR_MODEL_HPP
+#define EDITOR_MODEL_HPP
 
 #include "TileType.hpp"
 
@@ -17,4 +17,4 @@ class EditorModel {
         TileType tileType;
 };
 
-#endif//EDITORMODEL_HPP
+#endif

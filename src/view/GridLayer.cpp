@@ -15,8 +15,8 @@ GridLayer* GridLayer::GetInstance() {
 }
 
 GridLayer::GridLayer() {
-    for (int x = 0; x < PlayModel::GRID_WIDTH; x++) {
-        for (int y = 0; y < PlayModel::GRID_HEIGHT; y++) {
+    for (uint16_t x = 0; x < PlayModel::GRID_WIDTH; x++) {
+        for (uint16_t y = 0; y < PlayModel::GRID_HEIGHT; y++) {
             tile[y][x] = new TileLayer(TILE_TYPE_EMPTY, x, y);
         }
     }
@@ -43,9 +43,8 @@ void GridLayer::clearAnimatedTiles() {
     animatedTiles.clear();
 }
 
-/* ------------------------------------------------------------------------------
- * AdvanceAnimatables - Iterate the list of Animations which require advancing,
- * and advance each one.
+/**
+ * Iterate the list of animations which require advancing and advance each one.
  */
 void GridLayer::animateTiles() {
     for (uint16_t x = 0; x < animatedTiles.size(); x++) {
@@ -181,11 +180,7 @@ bool GridLayer::movePlayerToTile(TileLayer* newTile) {
         return true;
     }
 
-    // Interrupt movement if the level is over due to prior movement.
-    if (playModel->isComplete()) {
-        return true;
-    }
-
-    // Normal case, movement is not interrupted.
-    return false;
+    // This will interrupt movement if the level is over due to prior movement; otherwise movement will not be
+    // interrupted
+    return playModel->isComplete();
 }

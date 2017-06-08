@@ -1,5 +1,5 @@
-#ifndef TILESELECTORLAYER_HPP
-#define TILESELECTORLAYER_HPP
+#ifndef TILE_SELECTOR_LAYER_HPP
+#define TILE_SELECTOR_LAYER_HPP
 
 #include "../model/TileType.hpp"
 
@@ -16,4 +16,4 @@ private:
     void onKeyDown(SDL_Keycode key);
 };
 
-#endif//TILESELECTORLAYER_HPP
+#endif

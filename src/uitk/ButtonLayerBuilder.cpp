@@ -54,15 +54,15 @@ ButtonLayerBuilder* ButtonLayerBuilder::setY(uint16_t y) {
     return this;
 }
 
-ButtonLayerBuilder* ButtonLayerBuilder::setMarginHorz(uint8_t marginHorz) {
+ButtonLayerBuilder* ButtonLayerBuilder::setMarginHorizontal(uint8_t marginHorizontal) {
     resetIfNull();
-    buttonLayer->setMarginHorz(marginHorz);
+    buttonLayer->setMarginHorizontal(marginHorizontal);
     return this;
 }
 
-ButtonLayerBuilder* ButtonLayerBuilder::setMarginVert(uint8_t marginVert) {
+ButtonLayerBuilder* ButtonLayerBuilder::setMarginVertical(uint8_t marginVertical) {
     resetIfNull();
-    buttonLayer->setMarginVert(marginVert);
+    buttonLayer->setMarginVertical(marginVertical);
     return this;
 }
 

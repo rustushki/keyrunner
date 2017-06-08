@@ -1,5 +1,5 @@
-#ifndef INFOBARPOS_HPP
-#define INFOBARPOS_HPP
+#ifndef INFO_BAR_POS_HPP
+#define INFO_BAR_POS_HPP
 
 // Position indicates where text should be drawn on the screen.
 enum InfoBarPos {
@@ -9,4 +9,4 @@ enum InfoBarPos {
     , MIDDLE_CENTER
 };
 
-#endif//INFOBARPOS_HPP
+#endif

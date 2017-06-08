@@ -1,6 +1,5 @@
 #include "KeyRunner.hpp"
 #include "Options.hpp"
-#include "../model/PlayModel.hpp"
 
 KeyRunner keyRunner;
 

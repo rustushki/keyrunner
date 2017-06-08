@@ -30,9 +30,9 @@ EditInfoBarLayer::EditInfoBarLayer() {
         ->setTextColor(0xFF0000)
         ->setWidth(blWidth)
         ->setHeight(blHeight)
-        ->setX(r.w - 3 * blWidth - 3 * margin)
-        ->setY(r.h + margin)
-        ->setFontPath(FONTPATH)
+        ->setX((uint16_t) (r.w - 3 * blWidth - 3 * margin))
+        ->setY((uint16_t) (r.h + margin))
+        ->setFontPath(FONT_PATH)
         ->build();
 
     tileBl->setOnEnter(std::bind(&EditInfoBarLayer::onTileEnter, this));
@@ -47,9 +47,9 @@ EditInfoBarLayer::EditInfoBarLayer() {
         ->setTextColor(0xFF0000)
         ->setWidth(blWidth)
         ->setHeight(blHeight)
-        ->setX(r.w - 2 * blWidth - 2 * margin)
-        ->setY(r.h + margin)
-        ->setFontPath(FONTPATH)
+        ->setX((uint16_t) (r.w - 2 * blWidth - 2 * margin))
+        ->setY((uint16_t) (r.h + margin))
+        ->setFontPath(FONT_PATH)
         ->build();
 
     saveBl->setOnEnter(std::bind(&EditInfoBarLayer::onSaveEnter, this));
@@ -64,9 +64,9 @@ EditInfoBarLayer::EditInfoBarLayer() {
         ->setTextColor(0xFF0000)
         ->setWidth(blWidth)
         ->setHeight(blHeight)
-        ->setX(r.w - blWidth - margin)
-        ->setY(r.h + margin)
-        ->setFontPath(FONTPATH)
+        ->setX((uint16_t) (r.w - blWidth - margin))
+        ->setY((uint16_t) (r.h + margin))
+        ->setFontPath(FONT_PATH)
         ->build();
 
     exitBl->setOnEnter(std::bind(&EditInfoBarLayer::onExitEnter, this));
@@ -116,7 +116,7 @@ void EditInfoBarLayer::onKeyDown(SDL_Keycode key) {
                 // Selected Child should go left or right
                 if (key == SDLK_LEFT) {
                     selChild--;
-                } else if (key == SDLK_RIGHT) {
+                } else {
                     selChild++;
                 }
 

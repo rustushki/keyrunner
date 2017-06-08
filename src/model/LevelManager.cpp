@@ -2,7 +2,6 @@
 
 #include "LevelManager.hpp"
 #include "../controller/KeyRunner.hpp"
-#include "../model/PlayModel.hpp"
 #include "../view/GridLayer.hpp"
 
 uint16_t LevelManager::w;
@@ -22,21 +21,21 @@ uint16_t LevelManager::GetTotal() {
         uint8_t miLevel =   0;
 
         while (hiLevel >= loLevel) {
-            miLevel = (hiLevel-loLevel)/2 + loLevel;
+            miLevel = (uint8_t) ((hiLevel-loLevel)/2 + loLevel);
 
-            if (LevelManager::Exists(miLevel) && !LevelManager::Exists(miLevel + 1)) {
+            if (LevelManager::Exists(miLevel) && !LevelManager::Exists((uint8_t) (miLevel + 1))) {
                 levelCount = miLevel;
                 break;
             } else if (LevelManager::Exists(miLevel)) {
-                loLevel = miLevel + 1;
+                loLevel = (uint8_t) (miLevel + 1);
             } else {
-                hiLevel = miLevel - 1;
+                hiLevel = (uint8_t) (miLevel - 1);
             }
         }
         levelCount = miLevel;
     }
 
-    return levelCount;
+    return (uint16_t) levelCount;
 
 }
 
@@ -74,18 +73,18 @@ bool LevelManager::Write() {
     fwrite(&tt, sizeof(uint8_t), 1, fp);
 
     // Count and Collect the number of Tile Deviations
-    std::vector<TileCoord> devTileCoords;
+    std::vector<TileCoord> deviatedTileCoordinates;
     for (int x = 0; x < w; x++) {
         for (int y = 0; y < h; y++) {
             TileCoord tileCoord(x, y);
             if (playModel->getTileType(tileCoord) != tt) {
-                devTileCoords.push_back(tileCoord);
+                deviatedTileCoordinates.push_back(tileCoord);
             }
         }
     }
 
     // Write Tile Deviation Count
-    uint16_t devCount = devTileCoords.size();
+    uint16_t devCount = (uint16_t) deviatedTileCoordinates.size();
     fwrite(&devCount, sizeof(uint16_t), 1, fp);
 
     // Write Initial Char Location.
@@ -101,7 +100,7 @@ bool LevelManager::Write() {
     fwrite(&itemCount, sizeof(uint16_t), 1, fp);
 
     // Write Each Default Tile Type Deviation.
-    for (auto dtItr = devTileCoords.begin(); dtItr < devTileCoords.end(); dtItr++) {
+    for (auto dtItr = deviatedTileCoordinates.begin(); dtItr < deviatedTileCoordinates.end(); dtItr++) {
         TileCoord tileCoord = *dtItr;
 
         // Write Deviation Tile Coordinate
@@ -198,7 +197,7 @@ void LevelManager::New(uint8_t levelNum) {
  * in the current working directory.
  */
 std::string LevelManager::GetPath(uint8_t levelNum, bool inCwd) {
-    std::string prefix = LEVELPATH;
+    std::string prefix = LEVEL_PATH;
     if (inCwd) {
         prefix = "./";
     }
@@ -214,8 +213,8 @@ void LevelManager::Reset() {
     h = PlayModel::GRID_HEIGHT;
     playerCoord.first = 0;
     playerCoord.second = 0;
-    keyCoord.first = w-1;
-    keyCoord.second = h-1;
+    keyCoord.first = (uint16_t) (w - 1);
+    keyCoord.second = (uint16_t) (h - 1);
     defTT = TILE_TYPE_EMPTY;
     deviations.clear();
 }
@@ -240,7 +239,7 @@ void LevelManager::Populate(uint8_t levelNum) {
 
             bool deviationMatch = false;
             if (deviations.find(curTileCoord) != deviations.end()) {
-                gl->changeTileType(tx, ty, deviations[curTileCoord]);
+                gl->changeTileType((uint16_t) tx, (uint16_t) ty, deviations[curTileCoord]);
                 playModel->changeTileType(curTileCoord, deviations[curTileCoord]);
                 curDevIdx++;
                 deviationMatch = true;
@@ -248,7 +247,7 @@ void LevelManager::Populate(uint8_t levelNum) {
 
             if (!deviationMatch) {
                 // Add the tile to the level.
-                gl->changeTileType(tx, ty, defTT);
+                gl->changeTileType((uint16_t) tx, (uint16_t) ty, defTT);
                 playModel->changeTileType(curTileCoord, defTT);
             }
 

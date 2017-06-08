@@ -1,5 +1,5 @@
-#ifndef PLAYROOTLAYER_HPP
-#define PLAYROOTLAYER_HPP
+#ifndef PLAY_ROOT_LAYER_HPP
+#define PLAY_ROOT_LAYER_HPP
 
 #include "RootLayer.hpp"
 
@@ -16,5 +16,4 @@ private:
 
 };
 
-#endif//PLAYROOTLAYER_HPP
-
+#endif

@@ -1,5 +1,5 @@
-#ifndef PLAYINFOBARLAYER_HPP
-#define PLAYINFOBARLAYER_HPP
+#ifndef PLAY_INFO_BAR_LAYER_HPP
+#define PLAY_INFO_BAR_LAYER_HPP
 #include <SDL2/SDL.h>
 
 #include "InfoBarLayer.hpp"
@@ -26,4 +26,4 @@ private:
     static PlayInfoBarLayer* instance;
 };
 
-#endif//PLAYINFOBARLAYER_HPP
+#endif

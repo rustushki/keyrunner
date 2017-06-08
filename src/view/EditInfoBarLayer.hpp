@@ -1,5 +1,5 @@
-#ifndef EDITINFOBARLAYER_HPP
-#define EDITINFOBARLAYER_HPP
+#ifndef EDIT_INFO_BAR_LAYER_HPP
+#define EDIT_INFO_BAR_LAYER_HPP
 #include <SDL2/SDL.h>
 
 #include "InfoBarLayer.hpp"
@@ -32,4 +32,4 @@ private:
     TileSelectorLayer* tsl;
 };
 
-#endif//EDITINFOBARLAYER_HPP
+#endif

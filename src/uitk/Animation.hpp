@@ -22,7 +22,6 @@ public:
 private:
     SpriteSheet* sheet;
     uint16_t sps;
-    bool firstBlit;
     std::vector<uint16_t> frameList;
     uint16_t currentStill;
     uint16_t x;
@@ -34,4 +33,4 @@ private:
 
 };
 
-#endif//ANIMATION_HPP
+#endif

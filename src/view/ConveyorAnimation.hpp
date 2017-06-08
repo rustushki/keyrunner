@@ -30,4 +30,4 @@ private:
     static std::vector<ConveyorAnimation*> Conveyors;
 };
 
-#endif//CONVEYOR_HPP
+#endif

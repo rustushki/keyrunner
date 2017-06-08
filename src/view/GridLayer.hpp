@@ -57,4 +57,4 @@ private:
     friend class LevelManager;
 };
 
-#endif//GRID_LAYER_HPP
+#endif

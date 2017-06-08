@@ -12,4 +12,4 @@ enum State {
     , EDIT     // User wants to edit levels
 };
 
-#endif//STATE_HPP
+#endif

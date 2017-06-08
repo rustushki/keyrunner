@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include <sstream>
 #include "AnimationFactory.hpp"
 #include "../uitk/Animation.hpp"
@@ -22,7 +21,7 @@ Animation* AnimationFactory::Build(AnimationType animationType) {
 
 /* ------------------------------------------------------------------------------
  * GetSpriteSFN - Given an animation type, determine the path to the
- * spritesheet associated with that animation.
+ * sprite sheet associated with that animation.
  */
 std::string AnimationFactory::GetSpriteSFN(AnimationType at) {
 
@@ -80,9 +79,9 @@ std::string AnimationFactory::GetSpriteSFN(AnimationType at) {
 
     // Prepend the image path.
     std::stringstream ss;
-    ss << IMGPATH << fn;
+    ss << IMAGE_PATH << fn;
 
-    // Return path to the spritesheet file.
+    // Return path to the sprite sheet file.
     return ss.str();
 }
 

@@ -161,7 +161,7 @@ TTF_Font* PlayInfoBarLayer::getFont() const {
     if (font == NULL) {
 
         // Is there a way to find these fonts in the filesystem?
-        font = TTF_OpenFont(FONTPATH, 52);
+        font = TTF_OpenFont(FONT_PATH, 52);
 
     }
 

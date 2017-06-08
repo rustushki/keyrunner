@@ -1,5 +1,5 @@
-#ifndef EDITROOTLAYER_HPP
-#define EDITROOTLAYER_HPP
+#ifndef EDIT_ROOT_LAYER_HPP
+#define EDIT_ROOT_LAYER_HPP
 
 #include "RootLayer.hpp"
 
@@ -16,4 +16,4 @@ private:
 
 };
 
-#endif//EDITROOTLAYER_HPP
+#endif

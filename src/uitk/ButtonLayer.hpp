@@ -1,5 +1,5 @@
-#ifndef BUTTONLAYER_HPP
-#define BUTTONLAYER_HPP
+#ifndef BUTTON_LAYER_HPP
+#define BUTTON_LAYER_HPP
 
 #include <string>
 #include <SDL2/SDL.h>
@@ -23,8 +23,8 @@ public:
     void setWidth(uint16_t newWidth);
     void setX(uint16_t pX);
     void setY(uint16_t pY);
-    void setMarginHorz(uint8_t marginHorz);
-    void setMarginVert(uint16_t marginVert);
+    void setMarginHorizontal(uint16_t marginHorizontal);
+    void setMarginVertical(uint16_t marginVertical);
     void setIcon(Animation* animation);
     void setFontPath(std::string fontPath);
 
@@ -38,8 +38,8 @@ private:
 
     uint32_t bgColor;
     uint32_t textColor;
-    uint8_t horzMargin;
-    uint8_t vertMargin;
+    uint16_t horizontalMargin;
+    uint16_t verticalMargin;
     uint16_t x;
     uint16_t y;
     uint16_t height;
@@ -53,4 +53,4 @@ private:
     friend class ButtonLayerBuilder;
 };
 
-#endif//BUTTONLAYER_HPP
+#endif

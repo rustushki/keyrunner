@@ -1,5 +1,5 @@
-#ifndef KEYRUNNER_HPP
-#define KEYRUNNER_HPP
+#ifndef KEY_RUNNER_HPP
+#define KEY_RUNNER_HPP
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -16,9 +16,9 @@
 #define PATHSEP "/"
 #endif
 
-#define FONTPATH  _ROOT_ PATHSEP "font" PATHSEP "teleindicadores.ttf"
-#define LEVELPATH _ROOT_ PATHSEP "level" PATHSEP
-#define IMGPATH   _ROOT_ PATHSEP "img" PATHSEP
+#define FONT_PATH  _ROOT_ PATHSEP "font" PATHSEP "teleindicadores.ttf"
+#define LEVEL_PATH _ROOT_ PATHSEP "level" PATHSEP
+#define IMAGE_PATH _ROOT_ PATHSEP "img" PATHSEP
 
 #define VERSION 3
 
@@ -28,8 +28,8 @@
 class Animation;
 class RootLayer;
 
-extern Animation* KeyAnim;
-extern Animation* PlayerAnim;
+extern Animation* KeyAnimation;
+extern Animation* PlayerAnimation;
 
 class KeyRunner {
 public:
@@ -63,4 +63,4 @@ private:
     PlayModel*    playModel;
 };
 
-#endif//KEYRUNNER_HPP
+#endif

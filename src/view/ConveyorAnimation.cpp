@@ -1,7 +1,6 @@
 #include <iostream>
 #include "ConveyorAnimation.hpp"
 #include "GridLayer.hpp"
-#include "TileLayer.hpp"
 #include "../controller/KeyRunner.hpp"
 
 std::vector<ConveyorAnimation*> ConveyorAnimation::Conveyors;
@@ -16,10 +15,9 @@ ConveyorAnimation::ConveyorAnimation(std::vector<TileCoord> conveyorTiles) {
 
 ConveyorAnimation::~ConveyorAnimation(){ }
 
-/* ------------------------------------------------------------------------------
- * startAnimation - Attempts to start the next tile in the chained conveyor
- * belt animation.  Returns true if all tiles have been started.  For best
- * results, call this method each time a new screen frame is blitted.
+/**
+ * Attempts to start the next tile in the chained conveyor belt animation.  Returns true if all tiles have been started.
+ * For best results, call this method each time a new screen frame is drawn.
  */
 bool ConveyorAnimation::startAnimation() {
     if (this->nextTileToStart >= this->conveyorTiles.size()) {
@@ -69,35 +67,27 @@ bool ConveyorAnimation::hasTile(TileCoord tileCoord) const {
     return false;
 }
 
-/* ------------------------------------------------------------------------------
- * TileInConveyor - Check all conveyors to see if the provided tile is already
- * in a conveyor belt.
+/**
+ * Check all conveyors to see if the provided tile is already in a conveyor belt.
  */
 bool ConveyorAnimation::TileInConveyor(TileCoord tileCoord) {
-
-    for (uint16_t c = 0; c < Conveyors.size(); c++) {
-        ConveyorAnimation* conveyor = Conveyors[c];
-        if (conveyor->hasTile(tileCoord)) {
-
+    for (ConveyorAnimation* conveyorAnimation : Conveyors) {
+        if (conveyorAnimation->hasTile(tileCoord)) {
             return true;
-
         }
     }
 
     return false;
 }
 
-/* ------------------------------------------------------------------------------
- * StartConveyors - For each ConveyorAnimation currently loaded, attempt to
- * start the next tile in each.  This method ought to be called once per frame
- * blit until it returns true.
+/**
+ * For each ConveyorAnimation currently loaded, attempt to start the next tile in each.  This method ought to be called
+ * once per frame blit until it returns true.
  */
 bool ConveyorAnimation::StartConveyors() {
     bool allStarted = true;
-    for (uint16_t x = 0; x < Conveyors.size(); x++) {
-        ConveyorAnimation* ca = Conveyors[x];
-        bool started = ca->startAnimation();
-
+    for (ConveyorAnimation* conveyorAnimation : Conveyors) {
+        bool started = conveyorAnimation->startAnimation();
         allStarted &= started;
     }
 
@@ -109,7 +99,6 @@ void ConveyorAnimation::ClearConveyors() {
 }
 
 void ConveyorAnimation::BuildConveyorAnimations() {
-
     ClearConveyors();
 
     PlayModel* playModel = PlayModel::GetInstance();
@@ -224,5 +213,3 @@ void ConveyorAnimation::BuildConveyorAnimations() {
         }
     }
 }
-
-

@@ -47,10 +47,7 @@ void Layer::onEnter() {
     // evaluated first.  The first layer from the top which contains the point
     // will propagate the onEnter event.
     std::vector<Layer*>::reverse_iterator itr;
-    for (itr = subLayers.rbegin(); itr < subLayers.rend(); itr++) {
-        (*itr)->onEnter();
-        break;
-    }
+    (*itr)->onEnter();
 }
 
 void Layer::onKeyDown(SDL_Keycode key) {
@@ -131,7 +128,7 @@ int Layer::getSelectedChildIndex() {
  * getChildCount - Return the total count of child layers.
  */
 uint16_t Layer::getChildCount() {
-    return subLayers.size();
+    return (uint16_t) subLayers.size();
 }
 
 /* ------------------------------------------------------------------------------

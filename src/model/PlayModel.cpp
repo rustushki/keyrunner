@@ -29,11 +29,11 @@ bool PlayModel::isComplete() const {
 void PlayModel::setPlayerHasKey(bool playerHasKey) {
     this->playerHasKey = playerHasKey;
     if (this->playerHasKey) {
-        this->keyCoord = TileCoord(PlayModel::GRID_WIDTH, PlayModel::GRID_HEIGHT);
+        this->keyCoord = TileCoord(GRID_WIDTH, GRID_HEIGHT);
     }
 }
 
-uint16_t PlayModel::getLevelNum() const {
+uint8_t PlayModel::getLevelNum() const {
     return level;
 }
 
@@ -280,7 +280,7 @@ TileCoord PlayModel::getMatchingTeleporterTileCoord(TileCoord t) const {
 
     TileCoord matching = t;
 
-    // Handle case where a non-telepoprter tile is passed in.  Return the same
+    // Handle case where a non-teleporter tile is passed in.  Return the same
     // tile provided.  This should never happen.
     if (!isTeleporter(t)) {
         matching = t;

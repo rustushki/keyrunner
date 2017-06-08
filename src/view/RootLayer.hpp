@@ -1,5 +1,5 @@
-#ifndef ROOTLAYER_HPP
-#define ROOTLAYER_HPP
+#ifndef ROOT_LAYER_HPP
+#define ROOT_LAYER_HPP
 
 #include "../uitk/Layer.hpp"
 
@@ -21,4 +21,4 @@ private:
 
 };
 
-#endif//ROOTLAYER_HPP
+#endif

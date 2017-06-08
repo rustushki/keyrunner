@@ -65,4 +65,4 @@ private:
     Layer* parent;
 };
 
-#endif//LAYER_HPP
+#endif

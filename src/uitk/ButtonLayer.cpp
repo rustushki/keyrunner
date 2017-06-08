@@ -5,8 +5,8 @@
 #include "ButtonLayer.hpp"
 
 ButtonLayer::ButtonLayer() {
-    horzMargin   = 20;
-    vertMargin   = 20;
+    horizontalMargin   = 20;
+    verticalMargin   = 20;
     textDirty = true;
     textTexture = NULL;
     icon = NULL;
@@ -88,8 +88,8 @@ void ButtonLayer::draw(SDL_Renderer* renderer) {
     // OR,
     // Draw the Icon, centered.
     } else if (icon != NULL) {
-        uint16_t x = fillRect.x + (fillRect.w - icon->getWidth()) / 2;
-        uint16_t y = fillRect.y + (fillRect.h - icon->getHeight()) / 2;
+        uint16_t x = (uint16_t) (fillRect.x + (fillRect.w - icon->getWidth()) / 2);
+        uint16_t y = (uint16_t) (fillRect.y + (fillRect.h - icon->getHeight()) / 2);
         icon->move(x, y);
         icon->blit(renderer);
     }
@@ -102,19 +102,7 @@ void ButtonLayer::draw(SDL_Renderer* renderer) {
  * font.
  */
 TTF_Font* ButtonLayer::getFont(uint8_t size) const {
-    // Store loaded font here.
-    TTF_Font* font = NULL;
-
-    // If the font hasn't been loaded, load it.
-    if (font == NULL) {
-
-        // Is there a way to find these fonts in the filesystem?
-        font = TTF_OpenFont(fontPath.c_str(), size);
-
-    }
-
-    // Return the font.
-    return font;
+    return TTF_OpenFont(fontPath.c_str(), size);
 }
 
 void ButtonLayer::setBackgroundColor(uint32_t color) {
@@ -160,12 +148,12 @@ void ButtonLayer::setY(uint16_t pY) {
     y = pY;
 }
 
-void ButtonLayer::setMarginHorz(uint8_t marginHorz) {
-    horzMargin = marginHorz;
+void ButtonLayer::setMarginHorizontal(uint16_t marginHorizontal) {
+    horizontalMargin = marginHorizontal;
 }
 
-void ButtonLayer::setMarginVert(uint16_t marginVert) {
-    vertMargin = marginVert;
+void ButtonLayer::setMarginVertical(uint16_t marginVertical) {
+    verticalMargin = marginVertical;
 }
 
 /* ------------------------------------------------------------------------------
@@ -195,8 +183,8 @@ SDL_Texture* ButtonLayer::sizeText(SDL_Renderer* renderer, std::string text) con
     // Determine the region of the button to fill with text based on the margin
     // and button height/width.
     SDL_Rect r = getRect();
-    int fillH = r.w - horzMargin;
-    int fillV = r.h - vertMargin;
+    int fillH = r.w - horizontalMargin;
+    int fillV = r.h - verticalMargin;
 
     // Calculate the largest font size which will fit the ButtonLayer surface
     // height-wise.

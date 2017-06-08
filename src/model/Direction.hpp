@@ -9,4 +9,4 @@ enum Direction {
     , DIRECTION_COUNT
 };
 
-#endif//DIRECTION_HPP
+#endif
