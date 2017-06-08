@@ -370,9 +370,6 @@ void KeyRunner::updateDisplay() {
     SDL_LockMutex(screenLock);
     SDL_LockMutex(levelLoadLock);
 
-    // TODO: The SDL Migration Guide strongly recommends clearing the buffer before redrawing.  The current design
-    // expects that only certain regions are redrawn.  I suspect that SDL_RenderClear() will be just as efficient, but
-    // will also resolve the periodic graphical glitches.
     SDL_RenderClear(renderer);
 
     // Update and Draw the RootLayer (and all nested layers beneath).
