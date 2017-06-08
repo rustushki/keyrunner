@@ -2,8 +2,8 @@
 #define BUTTONLAYER_HPP
 
 #include <string>
-#include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "Animation.hpp"
 #include "Layer.hpp"
@@ -12,7 +12,7 @@ class ButtonLayer : public Layer {
 public:
     ~ButtonLayer();
 
-    virtual void draw(SDL_Surface* dst);
+    virtual void draw(SDL_Renderer* renderer, SDL_Texture* destination);
     virtual SDL_Rect getRect() const;
     virtual void update();
 
@@ -32,7 +32,7 @@ private:
     ButtonLayer();
 
     TTF_Font* getFont(uint8_t size) const;
-    SDL_Surface* sizeText(std::string text) const;
+    SDL_Texture* sizeText(SDL_Renderer* renderer, std::string text) const;
 
     std::string buttonText;
 
@@ -48,7 +48,7 @@ private:
     std::string fontPath;
     bool textDirty;
 
-    SDL_Surface* textSrf;
+    SDL_Texture* textTexture;
 
     friend class ButtonLayerBuilder;
 };

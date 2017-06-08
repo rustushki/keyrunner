@@ -58,7 +58,7 @@ void GridLayer::animateTiles() {
     }
 }
 
-void GridLayer::draw(SDL_Surface* dst) {
+void GridLayer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
 
     while (!changedTiles.empty()) {
 
@@ -66,7 +66,7 @@ void GridLayer::draw(SDL_Surface* dst) {
         TileLayer* t = changedTiles.back();
 
         // Redraw the tile referenced by that pair.
-        t->draw(dst);
+        t->draw(renderer, destination);
 
         // Remove that pair from the changed tiles list.
         changedTiles.pop_back();

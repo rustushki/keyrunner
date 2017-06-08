@@ -8,7 +8,7 @@ ButtonLayer::ButtonLayer() {
     horzMargin   = 20;
     vertMargin   = 20;
     textDirty = true;
-    textSrf = NULL;
+    textTexture = NULL;
     icon = NULL;
 }
 
@@ -28,61 +28,62 @@ SDL_Rect ButtonLayer::getRect() const {
 }
 
 void ButtonLayer::update() {
-    if (textDirty) {
-        // Build the text surface containing the given string.
-        textSrf = sizeText(buttonText);
-        textDirty = false;
-    }
 }
 
 /* ------------------------------------------------------------------------------
  * draw - Given a surface, draw a button onto the surface.
  */
-void ButtonLayer::draw(SDL_Surface* dst) {
+void ButtonLayer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
     // Width of the button shading.  Anything other than 1 looks ugly.
     const uint8_t shadeWidth = 1;
 
-    // Map Background Color
-    uint8_t rC = (bgColor & 0xFF0000) >> 16;
-    uint8_t gC = (bgColor & 0x00FF00) >>  8;
-    uint8_t bC = (bgColor & 0x0000FF) >>  0;
-    uint32_t pprBgColor = SDL_MapRGB(dst->format, rC, gC, bC);
-
-    uint32_t pprUShColor;
-    uint32_t pprLShColor;
-    if (!isSelected()) {
-        // Upper Shadow Light Gray.
-        pprUShColor = SDL_MapRGB(dst->format, 0xAA, 0xAA, 0xAA);
-        // Lower Shadow Dark Gray
-        pprLShColor = SDL_MapRGB(dst->format, 0x44, 0x44, 0x44);
-    } else {
-        // Upper Shadow Yellow
-        pprUShColor = SDL_MapRGB(dst->format, 0xFF, 0xFF, 0x00);
-        // Lower Shadow Yellow
-        pprLShColor = pprUShColor;
-    }
-
-    // Draw the Upper Shadow.
     SDL_Rect fillRect = getRect();
-    SDL_FillRect(dst, &fillRect, pprUShColor);
 
-    // Draw the Lower Shadow.
+    // Draw the Upper Shadow
+    if (isSelected()) {
+        SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0x00, 0xFF);
+
+    } else {
+        SDL_SetRenderDrawColor(renderer, 0xAA, 0xAA, 0xAA, 0xFF);
+    }
+    SDL_RenderDrawRect(renderer, &fillRect);
+
+    // Draw the Lower Shadow
+    if (isSelected()) {
+        SDL_SetRenderDrawColor(renderer, 0xAA, 0xAA, 0xAA, 0xFF);
+
+    } else {
+        SDL_SetRenderDrawColor(renderer, 0x44, 0x44, 0x44, 0xFF);
+    }
     fillRect.x += shadeWidth;
     fillRect.y += shadeWidth;
-    SDL_FillRect(dst, &fillRect, pprLShColor);
+    SDL_RenderDrawRect(renderer, &fillRect);
 
-    // Draw the Background.
+    // Draw Background
+    uint8_t rC = (uint8_t) (bgColor & 0xFF0000) >> 16;
+    uint8_t gC = (uint8_t) (bgColor & 0x00FF00) >>  8;
+    uint8_t bC = (uint8_t) (bgColor & 0x0000FF) >>  0;
+    SDL_SetRenderDrawColor(renderer, rC, gC, bC, 0xFF);
     fillRect.h -= shadeWidth;
     fillRect.w -= shadeWidth;
-    SDL_FillRect(dst, &fillRect, pprBgColor);
+    SDL_RenderDrawRect(renderer, &fillRect);
+
+    if (textDirty) {
+        // Build the text surface containing the given string.
+        textTexture = sizeText(renderer, buttonText);
+        textDirty = false;
+    }
 
     // Draw the text centered within the button, obeying the margin.
-    // A NULL textSrf implies the text is a 0-length string.
-    if (textSrf != NULL) {
+    // A NULL textTexture implies the text is a 0-length string.
+    if (textTexture != nullptr) {
         SDL_Rect btRect = getRect();
-        btRect.x += round((btRect.w - textSrf->w) / 2.0) + shadeWidth;
-        btRect.y += round((btRect.h - textSrf->h) / 2.0) + shadeWidth;
-        SDL_BlitSurface(textSrf, NULL, dst, &btRect);
+        int w;
+        int h;
+        SDL_QueryTexture(textTexture, nullptr, nullptr, &w, &h);
+        btRect.x += round((btRect.w - w) / 2.0) + shadeWidth;
+        btRect.y += round((btRect.h - h) / 2.0) + shadeWidth;
+        SDL_RenderCopy(renderer, textTexture, nullptr, &btRect);
 
     // OR,
     // Draw the Icon, centered.
@@ -90,7 +91,7 @@ void ButtonLayer::draw(SDL_Surface* dst) {
         uint16_t x = fillRect.x + (fillRect.w - icon->getWidth()) / 2;
         uint16_t y = fillRect.y + (fillRect.h - icon->getHeight()) / 2;
         icon->move(x, y);
-        icon->blit(dst);
+        icon->blit(renderer, destination);
     }
 
 }
@@ -176,15 +177,9 @@ void ButtonLayer::setMarginVert(uint16_t marginVert) {
  * Maintenance note: If implementing a mutator which affects text appearance,
  * be sure to set textDirty = true.
  */
-SDL_Surface* ButtonLayer::sizeText(std::string text) const {
+SDL_Texture* ButtonLayer::sizeText(SDL_Renderer* renderer, std::string text) const {
     if (text.empty()) {
         return NULL;
-    }
-
-    // Don't resize the text if it's already been sized once.
-    SDL_Surface* textSrf = NULL;
-    if (textSrf != NULL) {
-        return textSrf;
     }
 
     // Lo, Hi and Mid variables for the binary search.
@@ -206,16 +201,16 @@ SDL_Surface* ButtonLayer::sizeText(std::string text) const {
     // Calculate the largest font size which will fit the ButtonLayer surface
     // height-wise.
     while (lo < hi && h != fillV) {
-        mi = ((hi - lo) / 2) + lo;
+        mi = (uint8_t) ((hi - lo) / 2) + lo;
 
         TTF_Font* fnt = getFont(mi);
         TTF_SizeText(fnt, text.c_str(), &w, &h);
         TTF_CloseFont(fnt);
 
         if (h > fillV) {
-            hi = mi - 1;
+            hi = (uint8_t) (mi - 1);
         } else if (h < fillV) {
-            lo = mi + 1;
+            lo = (uint8_t) (mi + 1);
         }
     }
 
@@ -224,37 +219,37 @@ SDL_Surface* ButtonLayer::sizeText(std::string text) const {
     lo = 1;
     hi = mi;
     while (lo < hi && w != fillH) {
-        mi = ((hi - lo) / 2) + lo;
+        mi = (uint8_t) ((hi - lo) / 2) + lo;
 
         TTF_Font* fnt = getFont(mi);
         TTF_SizeText(fnt, text.c_str(), &w, &h);
         TTF_CloseFont(fnt);
 
         if (w > fillH) {
-            hi = mi - 1;
+            hi = (uint8_t) (mi - 1);
         } else if (w < fillH) {
-            lo = mi + 1;
+            lo = (uint8_t) (mi + 1);
         }
     }
 
     // Render and return the text surface which fits in the ButtonLayer.
     TTF_Font* fnt = getFont(mi);
-    uint8_t rC = (textColor & 0xFF0000) >> 16;
-    uint8_t gC = (textColor & 0x00FF00) >>  8;
-    uint8_t bC = (textColor & 0x0000FF) >>  0;
+    uint8_t rC = (uint8_t) (textColor & 0xFF0000) >> 16;
+    uint8_t gC = (uint8_t) (textColor & 0x00FF00) >>  8;
+    uint8_t bC = (uint8_t) (textColor & 0x0000FF) >>  0;
     SDL_Color color = {rC, gC, bC};
-    textSrf = TTF_RenderText_Blended(fnt, text.c_str(), color);
+    SDL_Surface* textSurface = TTF_RenderText_Blended(fnt, text.c_str(), color);
     TTF_CloseFont(fnt);
 
     // Confirm that the text surface was created.  If not something is horribly
     // wrong, so die.
-    if (textSrf == NULL) {
+    if (textSurface == nullptr) {
         std::cout << text << std::endl;
         std::cout << "Error drawing text: " << TTF_GetError() << std::endl;
         exit(2);
     }
 
-    return textSrf;
+    return SDL_CreateTextureFromSurface(renderer, textSurface);
 }
 
 void ButtonLayer::setIcon(Animation* animation) {

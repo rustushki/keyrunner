@@ -8,7 +8,7 @@ class InfoBarLayer;
 class RootLayer : public Layer {
 public:
 
-    virtual void draw(SDL_Surface* dst);
+    virtual void draw(SDL_Renderer* renderer, SDL_Texture* destination);
 
     virtual SDL_Rect getRect() const;
 

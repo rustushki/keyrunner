@@ -9,12 +9,13 @@ InfoBarLayer::InfoBarLayer() {
  * draw - Draws the InfoBarLayer to the screen.  This includes the level and a
  * timeclock.
  */
-void InfoBarLayer::draw(SDL_Surface* dst) {
+void InfoBarLayer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
     // Build the black bar at the bottom.
     SDL_Rect r = getRect();
-    SDL_FillRect(dst, &r, 0x000000);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    SDL_RenderDrawRect(renderer, &r);
 
-    Layer::draw(dst);
+    Layer::draw(renderer, destination);
 
 }
 

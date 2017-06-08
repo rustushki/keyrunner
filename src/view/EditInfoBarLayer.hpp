@@ -1,6 +1,6 @@
 #ifndef EDITINFOBARLAYER_HPP
 #define EDITINFOBARLAYER_HPP
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 #include "InfoBarLayer.hpp"
 #include "TileSelectorLayer.hpp"
@@ -19,7 +19,7 @@ private:
 
     static EditInfoBarLayer* instance;
 
-    void onKeyDown(SDLKey key);
+    void onKeyDown(SDL_Keycode key);
 
     ButtonLayer* exitBl;
     ButtonLayer* saveBl;

@@ -85,9 +85,9 @@ uint16_t TileLayer::getY() const {
 
 /**
  * Draw the TileLayer onto its destination surface.
- * @param dst the destination surface
+ * @param destination the destination surface
  */
-void TileLayer::draw(SDL_Surface* dst) {
+void TileLayer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
     const uint16_t tileSize = 25;
 
     // Determine the coordinate to draw the tile animation..
@@ -95,19 +95,19 @@ void TileLayer::draw(SDL_Surface* dst) {
     uint16_t yp = this->y * tileSize;
 
     this->getAnimation()->move(xp, yp);
-    this->getAnimation()->blit(dst);
+    this->getAnimation()->blit(renderer, destination);
 
     PlayModel* playModel = PlayModel::GetInstance();
 
     // Redraw the Key.
     if (playModel->tileCoordHasKey(TileCoord(this->x, this->y))) {
         KeyAnim->move(xp, yp);
-        KeyAnim->blit(dst);
+        KeyAnim->blit(renderer, destination);
     }
 
     // Redraw the Player.
     if (playModel->tileCoordHasPlayer(TileCoord(this->x, this->y))) {
         PlayerAnim->move(xp, yp);
-        PlayerAnim->blit(dst);
+        PlayerAnim->blit(renderer, destination);
     }
 }

@@ -1,6 +1,6 @@
 #ifndef PLAYINFOBARLAYER_HPP
 #define PLAYINFOBARLAYER_HPP
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 #include "InfoBarLayer.hpp"
 
@@ -12,13 +12,13 @@ public:
     static PlayInfoBarLayer* GetInstance();
     ~PlayInfoBarLayer();
 
-    virtual void draw(SDL_Surface* screen);
+    virtual void draw(SDL_Renderer* renderer, SDL_Texture* screen);
 
 protected:
     TTF_Font* getFont() const;
-    void drawText(SDL_Surface* dst, std::string s, InfoBarPos position) const;
-    void drawLevel(SDL_Surface* dst, uint16_t level) const;
-    void drawTimer(SDL_Surface* dst) const;
+    void drawText(SDL_Renderer* renderer, SDL_Texture* destination, std::string s, InfoBarPos position) const;
+    void drawLevel(SDL_Renderer* renderer, SDL_Texture* dst, uint16_t level) const;
+    void drawTimer(SDL_Renderer* renderer, SDL_Texture* destination) const;
 
 private:
     PlayInfoBarLayer();

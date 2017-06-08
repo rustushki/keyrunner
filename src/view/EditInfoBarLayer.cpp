@@ -101,7 +101,7 @@ void EditInfoBarLayer::onTileEnter() {
 /* ------------------------------------------------------------------------------
  * onKeyDown - ESC should close the tile selector layer.
  */
-void EditInfoBarLayer::onKeyDown(SDLKey key) {
+void EditInfoBarLayer::onKeyDown(SDL_Keycode key) {
     // Escape closes the TileSelectorLayer.
     if (key == SDLK_ESCAPE) {
         hide();

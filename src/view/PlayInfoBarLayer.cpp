@@ -29,12 +29,12 @@ PlayInfoBarLayer::~PlayInfoBarLayer() {}
  * Draws the timer and the level onto the Play Information Bar.
  * @param dst surface on which to draw
  */
-void PlayInfoBarLayer::draw(SDL_Surface* dst) {
-    InfoBarLayer::draw(dst);
+void PlayInfoBarLayer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
+    InfoBarLayer::draw(renderer, destination);
 
     // As they say.
-    this->drawLevel(dst, PlayModel::GetInstance()->getLevelNum());
-    this->drawTimer(dst);
+    this->drawLevel(renderer, destination, PlayModel::GetInstance()->getLevelNum());
+    this->drawTimer(renderer, destination);
 
 }
 
@@ -43,7 +43,7 @@ void PlayInfoBarLayer::draw(SDL_Surface* dst) {
  * @param dst the surface on which to draw
  * @param level the current level
  */
-void PlayInfoBarLayer::drawLevel(SDL_Surface* dst, uint16_t level) const {
+void PlayInfoBarLayer::drawLevel(SDL_Renderer* renderer, SDL_Texture* dst, uint16_t level) const {
 
     // Covert the level into a string.
     std::string levelStr = "";
@@ -56,18 +56,19 @@ void PlayInfoBarLayer::drawLevel(SDL_Surface* dst, uint16_t level) const {
     levelStr = "Level: " + levelStr;
 
     // Draw the text to the screen.
-    drawText(dst, levelStr, BOTTOM_LEFT);
+    drawText(renderer, dst, levelStr, BOTTOM_LEFT);
 }
 
 /**
  * Draws a string to a given position.  The positions where it may be drawn are simplified to the those described in the
  * InfoBarPos enum.  See it for details.  Uses SDL_ttf to create a surface containing text provided by the given string.
  * It then blits this surface to the screen at the given position.  Color is assumed gray for now.
- * @param dst surface on which to draw
+ * @param destination surface on which to draw
  * @param s string to draw
  * @param position location on information bar to draw
  */
-void PlayInfoBarLayer::drawText(SDL_Surface* dst, std::string s, InfoBarPos position) const {
+void PlayInfoBarLayer::drawText(SDL_Renderer* renderer, SDL_Texture* destination, std::string s, InfoBarPos position)
+        const {
 
     // Gray
     SDL_Color color = {0xAA, 0xAA, 0xAA};
@@ -105,17 +106,19 @@ void PlayInfoBarLayer::drawText(SDL_Surface* dst, std::string s, InfoBarPos posi
             r.y = (rlr.h - text_surface->h)/2;
         }
 
+        SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, text_surface);
+
         // Blit the text to the screen.
-        SDL_BlitSurface(text_surface, NULL, dst, &r);
+        SDL_RenderCopy(renderer, textTexture, nullptr, &r);
     }
 
 }
 
 /**
  * Draws the timer at the bottom right of the screen.
- * @param dst surface on which to draw
+ * @param destination surface on which to draw
  */
-void PlayInfoBarLayer::drawTimer(SDL_Surface* dst) const {
+void PlayInfoBarLayer::drawTimer(SDL_Renderer* renderer, SDL_Texture* destination) const {
     uint32_t currentTimeClock = PlayModel::GetInstance()->getTimeClock();
 
     // Convert the timeout into a string.
@@ -142,7 +145,7 @@ void PlayInfoBarLayer::drawTimer(SDL_Surface* dst) const {
     timer = "Time: " + timer + " s";
 
     // Draw it to th screen.
-    drawText(dst, timer, BOTTOM_RIGHT);
+    drawText(renderer, destination, timer, BOTTOM_RIGHT);
 }
 
 /**

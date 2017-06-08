@@ -67,22 +67,24 @@ void TileSelectorLayer::onSelected() {
  * This is mainly a black box, with a gray border.  Inside is a horizontal list
  * of Tiles which may be selected.
  */
-void TileSelectorLayer::draw(SDL_Surface* dst) {
+void TileSelectorLayer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
     const uint8_t  borderWidth = 2;
-    const uint32_t borderColor = SDL_MapRGB(dst->format, 0xAA, 0xAA, 0xAA);
-    const uint32_t fillColor   = SDL_MapRGB(dst->format, 0x00, 0x00, 0x00);
 
-    // Build the black bar at the bottom.
     SDL_Rect r = getRect();
-    SDL_FillRect(dst, &r, borderColor);
 
+    // Draw Border
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
+    SDL_RenderDrawRect(renderer, &r);
+
+    // Draw the bar at the bottom
     r.x += borderWidth;
     r.y += borderWidth;
     r.w -= 2 * borderWidth;
     r.h -= 2 * borderWidth;
-    SDL_FillRect(dst, &r, fillColor);
+    SDL_SetRenderDrawColor(renderer, 0xAA, 0xAA, 0xAA, 0xFF);
+    SDL_RenderDrawRect(renderer, &r);
 
-    Layer::draw(dst);
+    Layer::draw(renderer, destination);
 
 }
 
@@ -111,7 +113,7 @@ SDL_Rect TileSelectorLayer::getRect() const {
  * Enter         - Sets the EditorModel's TileType based on current child
  *                 ButtonLayer.
  */
-void TileSelectorLayer::onKeyDown(SDLKey key) {
+void TileSelectorLayer::onKeyDown(SDL_Keycode key) {
     // Escape closes the TileSelectorLayer.
     if (key == SDLK_ESCAPE) {
         hide();

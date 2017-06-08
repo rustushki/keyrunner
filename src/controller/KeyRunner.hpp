@@ -1,8 +1,8 @@
 #ifndef KEYRUNNER_HPP
 #define KEYRUNNER_HPP
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <iostream>
 #include <stdint.h>
 
@@ -39,28 +39,31 @@ public:
     RootLayer* getRootLayer();
 
 private:
+    void updateDisplay();
+
     // Thread functions.
     static int clockTick(void* game);
-    static int updateDisplay(void* game);
     static int updateLevel(void* game);
     static int convey(void* game);
+    static int playHandleEvents(void* game);
 
     // Helpers
     bool init();
     void moveDirection(Direction d);
-    void playHandleEvents();
     void editHandleEvents();
 
-    SDL_Surface *screen;
-    SDL_mutex*  screenLock;
-    SDL_cond*   levelCond;
-    SDL_mutex*  levelLock;
-    SDL_cond*   levelLoadCond;
-    SDL_mutex*  levelLoadLock;
-    SDL_cond*   initialLevelLoadCond;
-    SDL_mutex*  initialLevelLoadLock;
-    RootLayer*  rootLayer;
-    PlayModel*  playModel;
+    SDL_Window*   window;
+    SDL_Renderer* renderer;
+    SDL_Texture*  screen;
+    SDL_mutex*    screenLock;
+    SDL_cond*     levelCond;
+    SDL_mutex*    levelLock;
+    SDL_cond*     levelLoadCond;
+    SDL_mutex*    levelLoadLock;
+    SDL_cond*     initialLevelLoadCond;
+    SDL_mutex*    initialLevelLoadLock;
+    RootLayer*    rootLayer;
+    PlayModel*    playModel;
 };
 
 #endif//KEYRUNNER_HPP

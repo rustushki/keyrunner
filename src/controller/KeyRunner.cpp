@@ -1,5 +1,5 @@
 #include <sstream>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "KeyRunner.hpp"
 #include "Options.hpp"
@@ -36,19 +36,24 @@ void KeyRunner::play() {
         KeyAnim    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
         PlayerAnim = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
 
-        SDL_Thread *ulThread = SDL_CreateThread(&updateLevel, this);
+        SDL_Thread *ulThread = SDL_CreateThread(&updateLevel, "updateLevel", this);
 
         SDL_LockMutex(initialLevelLoadLock);
         SDL_CondWait(initialLevelLoadCond, initialLevelLoadLock);
 
-        SDL_Thread *ctThread = SDL_CreateThread(&clockTick, this);
-        SDL_Thread *udThread = SDL_CreateThread(&updateDisplay, this);
-        SDL_Thread *cyThread = SDL_CreateThread(&convey, this);
+        SDL_Thread *ctThread = SDL_CreateThread(&clockTick, "clockTick",this);
+        SDL_Thread *cyThread = SDL_CreateThread(&convey, "convey",this);
+        SDL_Thread *phThread = SDL_CreateThread(&playHandleEvents, "playHandleEvents", this);
 
-        playHandleEvents();
+        while(playModel->getState() != QUIT) {
+            int fps = 25;
+            int delay = 1000/fps;
+
+            updateDisplay();
+            SDL_Delay(delay);
+        }
 
         SDL_WaitThread(cyThread, NULL);
-        SDL_WaitThread(udThread, NULL);
         SDL_WaitThread(ctThread, NULL);
         SDL_WaitThread(ulThread, NULL);
     } else {
@@ -93,11 +98,7 @@ void KeyRunner::edit() {
         // Mark all tiles as needing to be redrawn.
         GridLayer::GetInstance()->refreshTiles();
 
-        SDL_Thread *udThread = SDL_CreateThread(&updateDisplay, NULL);
-
         editHandleEvents();
-
-        SDL_WaitThread(udThread, NULL);
     } else {
         // TODO: What to do if we fail to initialize?
         // Need a system for handling failures.
@@ -128,7 +129,7 @@ void KeyRunner::exitGame() {
  * return false.
  */
 bool KeyRunner::init() {
-    if (SDL_Init(SDL_INIT_VIDEO) > 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "Couldn't initialize SDL: "<< SDL_GetError() << std::endl;
         return false;
     }
@@ -140,12 +141,24 @@ bool KeyRunner::init() {
     }
 
     SDL_Rect rlr = rootLayer->getRect();
-    screen = SDL_SetVideoMode(rlr.w, rlr.h, 16, SDL_SWSURFACE | SDL_DOUBLEBUF);
-    if (screen == NULL) {
-        std::cout << "Couldn't set video mode: "<< SDL_GetError() << std::endl;
+
+    std::stringstream title;
+    title << "Key Runner r" << VERSION;
+    window = SDL_CreateWindow(title.str().c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, rlr.w,
+        rlr.h, SDL_WINDOW_SHOWN);
+
+    if (window == nullptr) {
+        std::cout << "Couldn't create window: "<< SDL_GetError() << std::endl;
         return false;
     }
 
+    renderer = SDL_CreateRenderer(window, -1, 0);
+    if (renderer == nullptr) {
+        std::cout << "Couldn't create renderer: "<< SDL_GetError() << std::endl;
+        return false;
+    }
+
+    screen = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, rlr.w, rlr.h);
 
     // Initialize SDL_ttf
     if (TTF_Init() == -1) {
@@ -154,10 +167,6 @@ bool KeyRunner::init() {
     }
 
     atexit(SDL_Quit);
-
-    std::stringstream ss;
-    ss << "Key Runner r" << VERSION;
-    SDL_WM_SetCaption(ss.str().c_str(), "");
 
     playModel = PlayModel::GetInstance();
 
@@ -187,8 +196,7 @@ int KeyRunner::clockTick(void* game) {
  */
 void KeyRunner::moveDirection(Direction d) {
 
-    // Get the most recent keystate.
-    Uint8* keyState = SDL_GetKeyState(NULL);
+    const Uint8* keyState = SDL_GetKeyboardState(nullptr);
 
     // How long to wait in MS before assuming the user wishes to 'auto move'
     Uint16 holdDelayMs = 200;
@@ -210,13 +218,13 @@ void KeyRunner::moveDirection(Direction d) {
     // pressing.
     int sdlKey = 0;
     if (d == DIRECTION_DOWN) {
-        sdlKey = SDLK_DOWN;
+        sdlKey = SDL_SCANCODE_DOWN;
     } else if (d == DIRECTION_UP) {
-        sdlKey = SDLK_UP;
+        sdlKey = SDL_SCANCODE_UP;
     } else if (d == DIRECTION_LEFT) {
-        sdlKey = SDLK_LEFT;
+        sdlKey = SDL_SCANCODE_LEFT;
     } else if (d == DIRECTION_RIGHT) {
-        sdlKey = SDLK_RIGHT;
+        sdlKey = SDL_SCANCODE_RIGHT;
     }
 
     // Move the player in a given direction.  If break out of this movement
@@ -239,7 +247,6 @@ void KeyRunner::moveDirection(Direction d) {
         bool noHold = false;
         while (++x < holdDelayPollTries) {
             SDL_PumpEvents();
-            keyState = SDL_GetKeyState(NULL);
             if (!keyState[sdlKey]) {
                 noHold = true;
                 break;
@@ -252,39 +259,37 @@ void KeyRunner::moveDirection(Direction d) {
 
             // Update the state of the keys,
             SDL_PumpEvents();
-            keyState = SDL_GetKeyState(NULL);
 
             // While the user is still holding down the key for the provided direction...
             while (keyState[sdlKey]) {
 
                 // Update the state of the keys
                 SDL_PumpEvents();
-                keyState = SDL_GetKeyState(NULL);
 
                 // This series of conditionals will allow the player to change
                 // which key they are pressing without the holdDelayMs wait.
 
-                if (keyState[SDLK_DOWN] && sdlKey != SDLK_DOWN) {
+                if (keyState[SDL_SCANCODE_DOWN] && sdlKey != SDL_SCANCODE_DOWN) {
                     d = DIRECTION_DOWN;
-                    sdlKey = SDLK_DOWN;
+                    sdlKey = SDL_SCANCODE_DOWN;
                     break;
                 }
 
-                if (keyState[SDLK_UP] && sdlKey != SDLK_UP) {
+                if (keyState[SDL_SCANCODE_UP] && sdlKey != SDL_SCANCODE_UP) {
                     d = DIRECTION_UP;
-                    sdlKey = SDLK_UP;
+                    sdlKey = SDL_SCANCODE_UP;
                     break;
                 }
 
-                if (keyState[SDLK_LEFT] && sdlKey != SDLK_LEFT) {
+                if (keyState[SDL_SCANCODE_LEFT] && sdlKey != SDL_SCANCODE_LEFT) {
                     d = DIRECTION_LEFT;
-                    sdlKey = SDLK_LEFT;
+                    sdlKey = SDL_SCANCODE_LEFT;
                     break;
                 }
 
-                if (keyState[SDLK_RIGHT] && sdlKey != SDLK_RIGHT) {
+                if (keyState[SDL_SCANCODE_RIGHT] && sdlKey != SDL_SCANCODE_RIGHT) {
                     d = DIRECTION_RIGHT;
-                    sdlKey = SDLK_RIGHT;
+                    sdlKey = SDL_SCANCODE_RIGHT;
                     break;
                 }
 
@@ -363,37 +368,25 @@ int KeyRunner::convey(void* game) {
     return 0;
 }
 
-/* ------------------------------------------------------------------------------
- * updateDisplay - Thread.  Flip the screen 25 times per second.  Update any
- * and all animations.
+/**
+ * Flip the screen 25 times per second.  Update any and all animations.
  */
-int KeyRunner::updateDisplay(void* game) {
+void KeyRunner::updateDisplay() {
+    SDL_LockMutex(screenLock);
+    SDL_LockMutex(levelLoadLock);
 
-    KeyRunner* gameInstance = (KeyRunner*) game;
+    // TODO: The SDL Migration Guide strongly recommends clearing the buffer before redrawing.  The current design
+    // expects that only certain regions are redrawn.  I suspect that SDL_RenderClear() will be just as efficient, but
+    // will also resolve the periodic graphical glitches.
+    SDL_RenderClear(renderer);
 
-    int fps = 25;
-    int delay = 1000/fps;
+    // Update and Draw the RootLayer (and all nested layers beneath).
+    rootLayer->update();
+    rootLayer->draw(renderer, screen);
 
-    while(gameInstance->playModel->getState() != QUIT) {
-        SDL_LockMutex(gameInstance->screenLock);
-
-        SDL_LockMutex(gameInstance->levelLoadLock);
-
-        // Update and Draw the RootLayer (and all nested layers beneath).
-        gameInstance->rootLayer->update();
-        gameInstance->rootLayer->draw(gameInstance->screen);
-
-        SDL_UnlockMutex(gameInstance->levelLoadLock);
-
-        SDL_Flip(gameInstance->screen);
-
-        SDL_UnlockMutex(gameInstance->screenLock);
-
-        SDL_Delay(delay);
-    }
-
-    gameInstance->exitGame();
-    return 0;
+    SDL_UnlockMutex(levelLoadLock);
+    SDL_RenderPresent(renderer);
+    SDL_UnlockMutex(screenLock);
 }
 
 int KeyRunner::updateLevel(void* game) {
@@ -420,7 +413,7 @@ int KeyRunner::updateLevel(void* game) {
         SDL_LockMutex(gameInstance->levelLock);
         SDL_CondWait(gameInstance->levelCond, gameInstance->levelLock);
 
-        gameInstance->playModel->setLevelNum(gameInstance->playModel->getLevelNum() + 1);
+        gameInstance->playModel->setLevelNum(gameInstance->playModel->getLevelNum() + (uint16_t) 1);
 
         gameInstance->playModel->incrementTimeClock(6000);
     }
@@ -429,46 +422,49 @@ int KeyRunner::updateLevel(void* game) {
     return 0;
 }
 
-void KeyRunner::playHandleEvents() {
+int KeyRunner::playHandleEvents(void* game) {
+    KeyRunner* gameInstance = (KeyRunner*) game;
+
+    PlayModel* playModel = gameInstance->playModel;
+
     // Wait for an Event.
     SDL_Event event;
     while (playModel->getState() != QUIT) {
         SDL_WaitEvent(&event);
 
-        // Keydown.
         if (event.type == SDL_KEYDOWN) {
 
             // User Presses Q
             if (event.key.keysym.sym == SDLK_q) {
-                exitGame();
+                gameInstance->exitGame();
                 break;
 
             } else if (event.key.keysym.sym == SDLK_DOWN) {
-                moveDirection(DIRECTION_DOWN);
+                gameInstance->moveDirection(DIRECTION_DOWN);
 
             } else if (event.key.keysym.sym == SDLK_UP) {
-                moveDirection(DIRECTION_UP);
+                gameInstance->moveDirection(DIRECTION_UP);
 
             } else if (event.key.keysym.sym == SDLK_LEFT) {
-                moveDirection(DIRECTION_LEFT);
+                gameInstance->moveDirection(DIRECTION_LEFT);
 
             } else if (event.key.keysym.sym == SDLK_RIGHT) {
-                moveDirection(DIRECTION_RIGHT);
+                gameInstance->moveDirection(DIRECTION_RIGHT);
 
             }
 
             // If the prior movement causes the level to be complete,
             // signal that the new level may be loaded.
             if (playModel->isComplete()){
-                SDL_UnlockMutex(levelLock);
-                SDL_CondSignal(levelCond);
+                SDL_UnlockMutex(gameInstance->levelLock);
+                SDL_CondSignal(gameInstance->levelCond);
             }
 
         } else if (event.type == SDL_KEYUP) {
 
             // Handle Quit Event.
         } else if (event.type == SDL_QUIT) {
-            exitGame();
+            gameInstance->exitGame();
             break;
 
         }

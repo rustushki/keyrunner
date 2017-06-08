@@ -64,12 +64,12 @@ uint16_t Animation::getCurrentStill() const {
 /* ------------------------------------------------------------------------------
  * blit - Draw the current frame of the animation onto the screen.
  */
-void Animation::blit(SDL_Surface* srf) {
+void Animation::blit(SDL_Renderer* renderer, SDL_Texture* destination) {
 
     // Look into the frame list to determine the logical coordinates of the
-    // frame in the spritesheet.
-    uint16_t frameXc = this->currentStill*2 + 0;
-    uint16_t frameYc = this->currentStill*2 + 1;
+    // frame in the sprite sheet.
+    uint16_t frameXc = this->currentStill * 2 + 0;
+    uint16_t frameYc = this->currentStill * 2 + 1;
     uint16_t frameX  = this->frameList[frameXc];
     uint16_t frameY  = this->frameList[frameYc];
 
@@ -79,7 +79,7 @@ void Animation::blit(SDL_Surface* srf) {
     r.w = getWidth();
     r.h = getHeight();
 
-    this->sheet->blitFrame(frameX, frameY, srf, r);
+    this->sheet->blitFrame(renderer, frameX, frameY, r);
 
 }
 

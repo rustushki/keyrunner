@@ -23,7 +23,7 @@ public:
     ~GridLayer();
 
     // Required to derive from Layer.
-    virtual void draw(SDL_Surface* dst);
+    virtual void draw(SDL_Renderer* renderer, SDL_Texture* destination);
     virtual SDL_Rect getRect() const;
     virtual void update();
 

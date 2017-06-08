@@ -3,14 +3,14 @@
 
 #include <functional>
 #include <vector>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 class Layer {
 
 public:
     Layer();
 
-    virtual void draw(SDL_Surface* dst);
+    virtual void draw(SDL_Renderer* renderer, SDL_Texture* destination);
 
     virtual SDL_Rect getRect() const = 0;
 
@@ -18,7 +18,7 @@ public:
 
     virtual void onEnter();
 
-    virtual void onKeyDown(SDLKey key);
+    virtual void onKeyDown(SDL_Keycode key);
 
     void setOnEnter(std::function<void()> cb);
 

@@ -1,4 +1,4 @@
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 #include <iostream>
 #include "Layer.hpp"
@@ -11,11 +11,11 @@ Layer::Layer() {
     show();
 }
 
-void Layer::draw(SDL_Surface* dst) {
+void Layer::draw(SDL_Renderer* renderer, SDL_Texture* destination) {
     std::vector<Layer*>::iterator itr;
     for (itr = subLayers.begin(); itr < subLayers.end(); itr++) {
         if ((*itr)->isVisible()) {
-            (*itr)->draw(dst);
+            (*itr)->draw(renderer, destination);
         }
     }
 }
@@ -53,7 +53,7 @@ void Layer::onEnter() {
     }
 }
 
-void Layer::onKeyDown(SDLKey key) {
+void Layer::onKeyDown(SDL_Keycode key) {
     std::vector<Layer*>::iterator itr;
     for (itr = subLayers.begin(); itr < subLayers.end(); itr++) {
         (*itr)->onKeyDown(key);

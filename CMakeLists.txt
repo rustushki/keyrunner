@@ -4,6 +4,9 @@ cmake_minimum_required (VERSION 3.0.1)
 # Project Name.
 project (keyrunner)
 
+# Source the CMake scripts capable of finding SDL2.
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${keyrunner_SOURCE_DIR}/cmake")
+
 add_library(uitk STATIC
   src/uitk/Animation.cpp
   src/uitk/ButtonLayer.cpp
@@ -49,24 +52,24 @@ elseif(CMAKE_SYSTEM_NAME strequal "Windows")
 endif()
 
 # Include SDL.
-find_package(SDL 1.2.0 REQUIRED)
-if (SDL_FOUND)
-	include_directories(${SDL_INCLUDE_DIRS})
-	target_link_libraries (keyrunner ${SDL_LIBRARY})
+find_package(SDL2 REQUIRED)
+if (SDL2_FOUND)
+	include_directories(${SDL2_INCLUDE_DIRS})
+	target_link_libraries (keyrunner ${SDL2_LIBRARY})
 endif()
 
 # Include SDL Image.
-find_package(SDL_image REQUIRED)
-if (SDL_IMAGE_FOUND)
-	include_directories(${SDL_IMAGE_INCLUDE_DIRS})
-	target_link_libraries (keyrunner ${SDL_IMAGE_LIBRARIES})
+find_package(SDL2_image REQUIRED)
+if (SDL2_IMAGE_FOUND)
+	include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
+	target_link_libraries (keyrunner ${SDL2_IMAGE_LIBRARIES})
 endif()
 
 # Include SDL TTF.
-find_package(SDL_ttf REQUIRED)
-if (SDL_TTF_FOUND)
-	include_directories(${SDL_TTF_INCLUDE_DIRS})
-	target_link_libraries (keyrunner ${SDL_TTF_LIBRARIES})
+find_package(SDL2_ttf REQUIRED)
+if (SDL2_TTF_FOUND)
+	include_directories(${SDL2_TTF_INCLUDE_DIRS})
+	target_link_libraries (keyrunner ${SDL2_TTF_LIBRARIES})
 endif()
 
 # Require C++ 11 Support.

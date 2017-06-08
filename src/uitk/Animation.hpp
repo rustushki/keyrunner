@@ -9,7 +9,7 @@ class Animation {
 public:
     Animation(SpriteSheet* spriteSheet, std::vector<uint16_t> frameList, uint16_t stillsPerSecond);
     bool advance();
-    void blit(SDL_Surface* srf);
+    void blit(SDL_Renderer* renderer, SDL_Texture* destination);
     void move(uint16_t x, uint16_t y);
     bool isAnimating() const;
     void play();

@@ -1,4 +1,4 @@
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 #include "GridLayer.hpp"
 #include "InfoBarLayer.hpp"
@@ -13,8 +13,8 @@ RootLayer::RootLayer(InfoBarLayer* ibl) {
     this->ibl->setSelected();
 }
 
-void RootLayer::draw(SDL_Surface* dst) {
-    Layer::draw(dst);
+void RootLayer::draw(SDL_Renderer* renderer, SDL_Texture* dst) {
+    Layer::draw(renderer, dst);
 }
 
 SDL_Rect RootLayer::getRect() const {
