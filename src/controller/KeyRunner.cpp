@@ -39,7 +39,6 @@ void KeyRunner::play() {
         SDL_LockMutex(initialLevelLoadLock);
         SDL_CondWait(initialLevelLoadCond, initialLevelLoadLock);
 
-        SDL_Thread *ctThread = SDL_CreateThread(&clockTick, "clockTick",this);
         SDL_Thread *cyThread = SDL_CreateThread(&convey, "convey",this);
 
         uint32_t fps = 25;
@@ -61,10 +60,15 @@ void KeyRunner::play() {
                 SDL_Delay(remainingTime);
             }
 
+            // Check for winning/losing conditions
+            // If the clock runs down to 0; game over
+			playModel->decrementTimeClock(SDL_GetTicks() - workStart);
+            if (playModel->getTimeClock() <= 0) {
+                exitGame();
+            }
         }
 
         SDL_WaitThread(cyThread, NULL);
-        SDL_WaitThread(ctThread, NULL);
         SDL_WaitThread(ulThread, NULL);
     } else {
         // TODO: What to do if we fail to initialize?
@@ -174,20 +178,6 @@ bool KeyRunner::init() {
     playModel = PlayModel::GetInstance();
 
     return true;
-}
-
-int KeyRunner::clockTick(void* game) {
-    KeyRunner* gameInstance = (KeyRunner*) game;
-
-    while (gameInstance->playModel->getTimeClock() > 0 && gameInstance->playModel->getState() == PLAY) {
-        uint16_t step = 100;
-        SDL_Delay(step);
-        gameInstance->playModel->decrementTimeClock(step);
-    }
-
-    SDL_CondSignal(gameInstance->levelCond);
-    gameInstance->exitGame();
-    return 0;
 }
 
 /**

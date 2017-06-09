@@ -44,7 +44,7 @@ class PlayModel {
         bool tileCoordHasPlayer(TileCoord tileCoord) const;
         State getState() const;
         void setState(State state);
-        uint32_t getTimeClock();
+        long getTimeClock();
         void setTimeClock(uint16_t timeClockValue);
         void decrementTimeClock(uint16_t step);
         void incrementTimeClock(uint16_t step);
@@ -62,7 +62,7 @@ class PlayModel {
         bool playerHasKey;
         uint8_t level;
         State state;
-        uint32_t timeClock;
+        long timeClock;
 
         TileCoord keyCoord;
         TileCoord playerCoord;

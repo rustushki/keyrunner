@@ -42,7 +42,6 @@ private:
     void updateDisplay();
 
     // Thread functions.
-    static int clockTick(void* game);
     static int updateLevel(void* game);
     static int convey(void* game);
 
