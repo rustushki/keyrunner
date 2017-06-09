@@ -45,7 +45,6 @@ void KeyRunner::play() {
         uint32_t fps = 25;
         uint32_t maxDelay = 1000 / fps;
 
-        int x = 0;
         while(playModel->getState() != QUIT) {
             uint32_t workStart = SDL_GetTicks();
 
