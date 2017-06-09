@@ -37,7 +37,6 @@ void KeyRunner::play() {
         uint32_t fps = 25;
         uint32_t maxDelay = 1000 / fps;
 
-        std::cout << playModel->getLevelNum() << std::endl;
         LevelManager::Read(playModel->getLevelNum());
 
         while(playModel->getState() != QUIT) {
