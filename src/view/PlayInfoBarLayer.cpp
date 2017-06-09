@@ -110,8 +110,10 @@ void PlayInfoBarLayer::drawText(SDL_Renderer* renderer, std::string s, InfoBarPo
 
         // Blit the text to the screen.
         SDL_RenderCopy(renderer, textTexture, nullptr, &r);
-    }
 
+        SDL_FreeSurface(text_surface);
+        SDL_DestroyTexture(textTexture);
+    }
 }
 
 /**

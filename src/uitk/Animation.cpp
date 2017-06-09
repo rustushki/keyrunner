@@ -47,7 +47,8 @@ bool Animation::advance() {
             advanced = true;
             this->currentStill++;
 
-            if (this->currentStill >= this->frameList.size()/2) {
+
+            if (this->currentStill >= this->frameList.size() / 2) {
                 this->currentStill = 0;
             }
         }

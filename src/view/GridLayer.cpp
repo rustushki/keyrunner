@@ -49,7 +49,9 @@ void GridLayer::clearAnimatedTiles() {
 void GridLayer::animateTiles() {
     for (uint16_t x = 0; x < animatedTiles.size(); x++) {
         TileLayer* tile = animatedTiles[x];
-        tile->getAnimation()->advance();
+        if (tile->getAnimation()->isAnimating()) {
+            tile->getAnimation()->advance();
+        }
     }
 }
 
@@ -71,9 +73,8 @@ SDL_Rect GridLayer::getRect() const {
     return r;
 }
 
-/* ------------------------------------------------------------------------------
- * update - Update any data in the GridLayer which affects the pending display
- * of the GridLayer.
+/**
+ * Update any data in the GridLayer which affects the pending display of the GridLayer.
  */
 void GridLayer::update() {
     // Start any remaining conveyor tiles.
@@ -136,9 +137,9 @@ bool GridLayer::movePlayer(Direction d) {
     }
 
     TileLayer* newTile = getTile(newTileCoord.first, newTileCoord.second);
-    bool interruptMovement = movePlayerToTile(newTile);
 
-    return interruptMovement;
+    // Will interrupt movement if it returns true
+    return movePlayerToTile(newTile);
 }
 
 /* ------------------------------------------------------------------------------

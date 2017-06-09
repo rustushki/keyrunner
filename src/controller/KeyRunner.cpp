@@ -41,17 +41,29 @@ void KeyRunner::play() {
 
         SDL_Thread *ctThread = SDL_CreateThread(&clockTick, "clockTick",this);
         SDL_Thread *cyThread = SDL_CreateThread(&convey, "convey",this);
-        SDL_Thread *phThread = SDL_CreateThread(&playHandleEvents, "playHandleEvents", this);
 
+        uint32_t fps = 25;
+        uint32_t maxDelay = 1000 / fps;
+
+        int x = 0;
         while(playModel->getState() != QUIT) {
-            uint32_t fps = 25;
-            uint32_t delay = 1000 / fps;
+            uint32_t workStart = SDL_GetTicks();
 
+            //updateModel();
             updateDisplay();
-            SDL_Delay(delay);
+
+            processInput();
+
+            uint32_t workEnd = SDL_GetTicks();
+            long workDuration = (long) workEnd - (long) workStart;
+            long remainingTime = (long) maxDelay - workDuration;
+
+            if (remainingTime > 0) {
+                SDL_Delay(remainingTime);
+            }
+
         }
 
-        SDL_WaitThread(phThread, NULL);
         SDL_WaitThread(cyThread, NULL);
         SDL_WaitThread(ctThread, NULL);
         SDL_WaitThread(ulThread, NULL);
@@ -179,135 +191,13 @@ int KeyRunner::clockTick(void* game) {
     return 0;
 }
 
-/* ------------------------------------------------------------------------------
- * moveDirection - Move the player in the provided direction and pay close
- * attention to keyboard input while doing so.  This must run in the same
- * thread that initialized SDL.
- *
+/**
+ * Move the player in the provided direction.
  */
 void KeyRunner::moveDirection(Direction d) {
-
-    const Uint8* keyState = SDL_GetKeyboardState(nullptr);
-
-    // How long to wait in MS before assuming the user wishes to 'auto move'
-    uint16_t holdDelayMs = 200;
-
-    // How frequently to check to see if the user is holding down an arrow button.
-    uint16_t holdDelayPollCheck = 10;
-
-    // Count of poll attempts to check to see if the user is holding an arrow.
-    uint16_t holdDelayPollTries = holdDelayMs/holdDelayPollCheck;
-
-    // Number of atomic moves per second.  Each 'move' causes the player to
-    // traverse one tile.
-    uint16_t movesPerSecond = 10;
-
-    // The amount of delay between tile moves.
-    uint16_t autoMoveDelay = (uint16_t) (1000/movesPerSecond);
-
-    // Based on the provided direction, infer which key the player must be
-    // pressing.
-    int sdlKey = 0;
-    if (d == DIRECTION_DOWN) {
-        sdlKey = SDL_SCANCODE_DOWN;
-    } else if (d == DIRECTION_UP) {
-        sdlKey = SDL_SCANCODE_UP;
-    } else if (d == DIRECTION_LEFT) {
-        sdlKey = SDL_SCANCODE_LEFT;
-    } else if (d == DIRECTION_RIGHT) {
-        sdlKey = SDL_SCANCODE_RIGHT;
-    }
-
-    // Move the player in a given direction.  If break out of this movement
-    // loop if movePlayer returns true.  That implies that movement has been
-    // interrupted.
     SDL_LockMutex(levelLoadLock);
-    bool interrupt = GridLayer::GetInstance()->movePlayer(d);
+    GridLayer::GetInstance()->movePlayer(d);
     SDL_UnlockMutex(levelLoadLock);
-    if (interrupt) {
-        return;
-    }
-
-    // Continue moving the player as long as they are holding down an arrow
-    // key.
-    while (true) {
-
-        // Check for holdDelayMs milliseconds to see if the user wishes to
-        // continue moving automatically while they hold down a key.
-        int x = 0;
-        bool noHold = false;
-        while (++x < holdDelayPollTries) {
-            SDL_PumpEvents();
-            if (!keyState[sdlKey]) {
-                noHold = true;
-                break;
-            }
-            SDL_Delay(holdDelayPollCheck);
-        }
-
-        // If the user is holding down the key for the provided direction ...
-        if (!noHold) {
-
-            // Update the state of the keys,
-            SDL_PumpEvents();
-
-            // While the user is still holding down the key for the provided direction...
-            while (keyState[sdlKey]) {
-
-                // Update the state of the keys
-                SDL_PumpEvents();
-
-                // This series of conditionals will allow the player to change
-                // which key they are pressing without the holdDelayMs wait.
-
-                if (keyState[SDL_SCANCODE_DOWN] && sdlKey != SDL_SCANCODE_DOWN) {
-                    break;
-                }
-
-                if (keyState[SDL_SCANCODE_UP] && sdlKey != SDL_SCANCODE_UP) {
-                    break;
-                }
-
-                if (keyState[SDL_SCANCODE_LEFT] && sdlKey != SDL_SCANCODE_LEFT) {
-                    break;
-                }
-
-                if (keyState[SDL_SCANCODE_RIGHT] && sdlKey != SDL_SCANCODE_RIGHT) {
-                    break;
-                }
-
-                // Move the player.  Exit this movement loop if the player
-                // movement is interrupted (i.e. movePlayer returns true)
-                SDL_LockMutex(levelLoadLock);
-                bool interrupt = GridLayer::GetInstance()->movePlayer(d);
-                SDL_UnlockMutex(levelLoadLock);
-                if (interrupt) {
-                    return;
-                }
-
-
-                // Wait autoMoveDelay MS before allowing another tile move.
-                // This regulates player speed.
-                SDL_Delay(autoMoveDelay);
-            }
-
-            // The player is no longer holding down the key for the provided
-            // direction.  They have also not attempted to change directions.
-            // Exit the loop.
-            return;
-
-        } else {
-
-            // The player has chosen not to hold down the key for the provided
-            // direction.  Exit the player movement loop.
-            return;
-
-        }
-
-        // If we're here in execution, that probably means that the player has
-        // changed directions during a hold.
-
-    }
 }
 
 
@@ -401,55 +291,55 @@ int KeyRunner::updateLevel(void* game) {
     return 0;
 }
 
-int KeyRunner::playHandleEvents(void* game) {
-    KeyRunner* gameInstance = (KeyRunner*) game;
-
-    PlayModel* playModel = gameInstance->playModel;
-
-    // Wait for an Event.
+/**
+ * Process user input for the current frame.
+ * <p>
+ * Poll for events in a loop.  If the event is a directional key, process it as movement only once for the frame;
+ * discarding all other directional key presses.  Also handles Q key to quit, and the SDL_QUIT event type.
+ */
+void KeyRunner::processInput() {
     SDL_Event event;
-    while (playModel->getState() != QUIT) {
-        SDL_WaitEvent(&event);
-
+    bool alreadyMoved = false;
+    while (SDL_PollEvent(&event)) {
         if (event.type == SDL_KEYDOWN) {
-
             // User Presses Q
             if (event.key.keysym.sym == SDLK_q) {
-                gameInstance->exitGame();
+                exitGame();
                 break;
-
-            } else if (event.key.keysym.sym == SDLK_DOWN) {
-                gameInstance->moveDirection(DIRECTION_DOWN);
-
-            } else if (event.key.keysym.sym == SDLK_UP) {
-                gameInstance->moveDirection(DIRECTION_UP);
-
-            } else if (event.key.keysym.sym == SDLK_LEFT) {
-                gameInstance->moveDirection(DIRECTION_LEFT);
-
-            } else if (event.key.keysym.sym == SDLK_RIGHT) {
-                gameInstance->moveDirection(DIRECTION_RIGHT);
-
             }
 
-            // If the prior movement causes the level to be complete,
-            // signal that the new level may be loaded.
-            if (playModel->isComplete()){
-                SDL_UnlockMutex(gameInstance->levelLock);
-                SDL_CondSignal(gameInstance->levelCond);
+            // Limit movement to once per frame
+            if (!alreadyMoved) {
+                if (event.key.keysym.sym == SDLK_DOWN) {
+                    moveDirection(DIRECTION_DOWN);
+
+                } else if (event.key.keysym.sym == SDLK_UP) {
+                    moveDirection(DIRECTION_UP);
+
+                } else if (event.key.keysym.sym == SDLK_LEFT) {
+                    moveDirection(DIRECTION_LEFT);
+
+                } else if (event.key.keysym.sym == SDLK_RIGHT) {
+                    moveDirection(DIRECTION_RIGHT);
+
+                }
+                alreadyMoved = true;
+
+                // If the prior movement causes the level to be complete,
+                // signal that the new level may be loaded.
+                if (playModel->isComplete()){
+                    SDL_UnlockMutex(levelLock);
+                    SDL_CondSignal(levelCond);
+                    return;
+                }
             }
 
-        } else if (event.type == SDL_KEYUP) {
-
-            // Handle Quit Event.
+        // Handle Quit Event.
         } else if (event.type == SDL_QUIT) {
-            gameInstance->exitGame();
+            exitGame();
             break;
-
         }
     }
-
-    return 0;
 }
 
 void KeyRunner::editHandleEvents() {

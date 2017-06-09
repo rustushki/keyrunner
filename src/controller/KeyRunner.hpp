@@ -45,12 +45,12 @@ private:
     static int clockTick(void* game);
     static int updateLevel(void* game);
     static int convey(void* game);
-    static int playHandleEvents(void* game);
 
     // Helpers
     bool init();
     void moveDirection(Direction d);
     void editHandleEvents();
+    void processInput();
 
     SDL_Window*   window;
     SDL_Renderer* renderer;
