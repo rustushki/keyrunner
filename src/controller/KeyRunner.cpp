@@ -23,16 +23,10 @@ void KeyRunner::play() {
     playModel->setState(PLAY);
     playModel->setLevelNum(Options::getStartingLevel());
 
-    levelLock            = SDL_CreateMutex();
-    levelCond            = SDL_CreateCond();
-    levelLoadLock        = SDL_CreateMutex();
-
     if (init()) {
         // There's not a good place for these yet.  Putting them here for now.
         KeyAnimation    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
         PlayerAnimation = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
-
-        SDL_Thread *cyThread = SDL_CreateThread(&convey, "convey",this);
 
         uint32_t fps = 25;
         uint32_t maxDelay = 1000 / fps;
@@ -44,6 +38,8 @@ void KeyRunner::play() {
 
             //updateModel();
             updateDisplay();
+
+            conveyPlayer();
 
             if (playModel->isComplete()) {
                 playModel->setLevelNum(playModel->getLevelNum() + (uint16_t) 1);
@@ -67,9 +63,9 @@ void KeyRunner::play() {
             if (playModel->getTimeClock() <= 0) {
                 exitGame();
             }
+
         }
 
-        SDL_WaitThread(cyThread, NULL);
     } else {
         // TODO: What to do if we fail to initialize?
         // Need a system for handling failures.
@@ -82,14 +78,10 @@ void KeyRunner::edit() {
 
     playModel->setState(EDIT);
 
-    levelLoadLock        = SDL_CreateMutex();
-
     if (init()) {
         // There's not a good place for these yet.  Putting them here for now.
         KeyAnimation    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
         PlayerAnimation = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
-
-        SDL_LockMutex(levelLoadLock);
 
         // Create New Level for Edit
         if (Options::getCreateNewLevel()) {
@@ -101,9 +93,6 @@ void KeyRunner::edit() {
             playModel->setLevelNum(Options::getStartingLevel());
             LevelManager::Read(playModel->getLevelNum());
         }
-
-        // Signal that it's OK to observe level tiles now.
-        SDL_UnlockMutex(levelLoadLock);
 
         editHandleEvents();
     } else {
@@ -178,59 +167,36 @@ bool KeyRunner::init() {
  * Move the player in the provided direction.
  */
 void KeyRunner::moveDirection(Direction d) {
-    SDL_LockMutex(levelLoadLock);
     GridLayer::GetInstance()->movePlayer(d);
-    SDL_UnlockMutex(levelLoadLock);
 }
 
 
-/* ------------------------------------------------------------------------------
- * convey - Thread. Every 100 ms, check to see if the player is on a conveyor
- * tile.  If so, move them to the next conveyor tile on the belt.
+/**
+ * If it has been 100ms since the last time the player was conveyed, check to see if they're on a conveyor tile.  If so,
+ * convey them in the direction of the conveyor tile.
  */
-int KeyRunner::convey(void* game) {
+void KeyRunner::conveyPlayer() {
+    static uint32_t lastConveyance = 0;
+    const int ticksBetweenConveyance = 100;
 
-    KeyRunner* gameInstance = (KeyRunner*) game;
-
-    // Convey only while the game has not yet been quit.
-    while(gameInstance->playModel->getState() != QUIT) {
-
-        // Don't attempt to convey if the level is being loaded.
-        SDL_LockMutex(gameInstance->levelLoadLock);
+    if (SDL_GetTicks() - lastConveyance >= ticksBetweenConveyance || lastConveyance == 0) {
 
         // If the tile in a conveyor tile,
-        if (gameInstance->playModel->isConveyor(gameInstance->playModel->getPlayerCoord())) {
-
-            // Convey the player to the next tile.
-            TileCoord newTileCoord = gameInstance->playModel->getNextConveyorTileCoord(
-                    gameInstance->playModel->getPlayerCoord());
+        if (playModel->isConveyor(playModel->getPlayerCoord())) {
+            // Convey the player to the next tile
+            TileCoord newTileCoord = playModel->getNextConveyorTileCoord(playModel->getPlayerCoord());
             TileLayer* newTile = GridLayer::GetInstance()->getTile(newTileCoord.first, newTileCoord.second);
-            if (GridLayer::GetInstance()->movePlayerToTile(newTile)) {
-                if (gameInstance->playModel->isComplete()){
-                    SDL_UnlockMutex(gameInstance->levelLock);
-                    SDL_CondSignal(gameInstance->levelCond);
-                }
-            }
-
+            GridLayer::GetInstance()->movePlayerToTile(newTile);
         }
 
-        // Indicate that it's OK to load a new level.
-        SDL_UnlockMutex(gameInstance->levelLoadLock);
-
-        // Delay 100 ms before conveying the player again..
-        SDL_Delay(100);
+        lastConveyance = SDL_GetTicks();
     }
-
-    return 0;
 }
 
 /**
  * Clear the back frame, redraw everything onto it, then present it.
  */
 void KeyRunner::updateDisplay() {
-    // Do not allow level loading while the back frame is being prepared
-    SDL_LockMutex(levelLoadLock);
-
     // Clear the back frame
     SDL_RenderClear(renderer);
 
@@ -239,9 +205,6 @@ void KeyRunner::updateDisplay() {
     rootLayer->draw(renderer);
 
     SDL_RenderPresent(renderer);
-
-    // Allow level loading now that the back frame has been presented
-    SDL_UnlockMutex(levelLoadLock);
 }
 
 /**
@@ -281,8 +244,6 @@ void KeyRunner::processInput() {
                 // If the prior movement causes the level to be complete,
                 // signal that the new level may be loaded.
                 if (playModel->isComplete()){
-                    SDL_UnlockMutex(levelLock);
-                    SDL_CondSignal(levelCond);
                     return;
                 }
             }

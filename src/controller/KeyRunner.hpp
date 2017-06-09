@@ -39,22 +39,18 @@ public:
     RootLayer* getRootLayer();
 
 private:
-    void updateDisplay();
-
-    // Thread functions.
-    static int convey(void* game);
 
     // Helpers
     bool init();
     void moveDirection(Direction d);
     void editHandleEvents();
     void processInput();
+    void conveyPlayer();
+    void updateDisplay();
+
 
     SDL_Window*   window;
     SDL_Renderer* renderer;
-    SDL_cond*     levelCond;
-    SDL_mutex*    levelLock;
-    SDL_mutex*    levelLoadLock;
     RootLayer*    rootLayer;
     PlayModel*    playModel;
 };
