@@ -42,7 +42,6 @@ private:
     void updateDisplay();
 
     // Thread functions.
-    static int updateLevel(void* game);
     static int convey(void* game);
 
     // Helpers
@@ -56,8 +55,6 @@ private:
     SDL_cond*     levelCond;
     SDL_mutex*    levelLock;
     SDL_mutex*    levelLoadLock;
-    SDL_cond*     initialLevelLoadCond;
-    SDL_mutex*    initialLevelLoadLock;
     RootLayer*    rootLayer;
     PlayModel*    playModel;
 };

@@ -26,29 +26,31 @@ void KeyRunner::play() {
     levelLock            = SDL_CreateMutex();
     levelCond            = SDL_CreateCond();
     levelLoadLock        = SDL_CreateMutex();
-    initialLevelLoadLock = SDL_CreateMutex();
-    initialLevelLoadCond = SDL_CreateCond();
 
     if (init()) {
         // There's not a good place for these yet.  Putting them here for now.
         KeyAnimation    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
         PlayerAnimation = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
 
-        SDL_Thread *ulThread = SDL_CreateThread(&updateLevel, "updateLevel", this);
-
-        SDL_LockMutex(initialLevelLoadLock);
-        SDL_CondWait(initialLevelLoadCond, initialLevelLoadLock);
-
         SDL_Thread *cyThread = SDL_CreateThread(&convey, "convey",this);
 
         uint32_t fps = 25;
         uint32_t maxDelay = 1000 / fps;
+
+        std::cout << playModel->getLevelNum() << std::endl;
+        LevelManager::Read(playModel->getLevelNum());
 
         while(playModel->getState() != QUIT) {
             uint32_t workStart = SDL_GetTicks();
 
             //updateModel();
             updateDisplay();
+
+            if (playModel->isComplete()) {
+                playModel->setLevelNum(playModel->getLevelNum() + (uint16_t) 1);
+                LevelManager::Read(playModel->getLevelNum());
+                playModel->incrementTimeClock(6000);
+            }
 
             processInput();
 
@@ -69,7 +71,6 @@ void KeyRunner::play() {
         }
 
         SDL_WaitThread(cyThread, NULL);
-        SDL_WaitThread(ulThread, NULL);
     } else {
         // TODO: What to do if we fail to initialize?
         // Need a system for handling failures.
@@ -83,8 +84,6 @@ void KeyRunner::edit() {
     playModel->setState(EDIT);
 
     levelLoadLock        = SDL_CreateMutex();
-    initialLevelLoadLock = SDL_CreateMutex();
-    initialLevelLoadCond = SDL_CreateCond();
 
     if (init()) {
         // There's not a good place for these yet.  Putting them here for now.
@@ -119,10 +118,6 @@ RootLayer* KeyRunner::getRootLayer() {
 }
 
 void KeyRunner::exitGame() {
-    // Unblock the updateLevel thread so that it can free the Level's memory.
-    SDL_UnlockMutex(levelLock);
-    SDL_CondSignal(levelCond);
-
     // Signal the Event loop to exit.
     SDL_Event quitEvent;
     quitEvent.type = SDL_QUIT;
@@ -248,36 +243,6 @@ void KeyRunner::updateDisplay() {
 
     // Allow level loading now that the back frame has been presented
     SDL_UnlockMutex(levelLoadLock);
-}
-
-int KeyRunner::updateLevel(void* game) {
-
-    KeyRunner* gameInstance = (KeyRunner*) game;
-
-    while (gameInstance->playModel->getLevelNum() <= LevelManager::GetTotal() &&
-            gameInstance->playModel->getState() != QUIT) {
-
-        SDL_LockMutex(gameInstance->levelLoadLock);
-
-        LevelManager::Read(gameInstance->playModel->getLevelNum());
-
-        // Signal that it's OK to observe level tiles now.
-        SDL_UnlockMutex(gameInstance->levelLoadLock);
-
-        // Unrelated to the previous unlock, Signal every thread waiting on a
-        // level to load initially that a level has been loaded.
-        SDL_CondSignal(gameInstance->initialLevelLoadCond);
-
-        SDL_LockMutex(gameInstance->levelLock);
-        SDL_CondWait(gameInstance->levelCond, gameInstance->levelLock);
-
-        gameInstance->playModel->setLevelNum(gameInstance->playModel->getLevelNum() + (uint16_t) 1);
-
-        gameInstance->playModel->incrementTimeClock(6000);
-    }
-
-    gameInstance->exitGame();
-    return 0;
 }
 
 /**
