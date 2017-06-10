@@ -55,11 +55,20 @@ void KeyRunner::play() {
             // Move the player along the conveyor belts (if applicable)
             conveyPlayer();
 
-            // If the level is complete, move to the next level
+            // If the level is complete,
             if (playModel->isComplete()) {
-                playModel->setLevelNum(playModel->getLevelNum() + (uint16_t) 1);
-                LevelManager::Read(playModel->getLevelNum());
-                playModel->incrementTimeClock(6000);
+                // Check to see if the next level is beyond the maximum level; i.e. the WIN state
+                uint32_t nextLevel = playModel->getLevelNum() + (uint32_t) + 1;
+                if (nextLevel > LevelManager::GetTotal()) {
+                    playModel->setState(WIN);
+                    break;
+
+                // Otherwise, go to next level; adding some extra time to the clock
+                } else {
+                    playModel->setLevelNum(nextLevel);
+                    LevelManager::Read(playModel->getLevelNum());
+                    playModel->incrementTimeClock(6000);
+                }
             }
 
             // Handle supported system events
