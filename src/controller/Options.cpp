@@ -10,6 +10,15 @@ uint16_t Options::startingLevelNum = 1;
 State Options::initialState = PLAY;
 bool Options::createNewLevel = false;
 
+/**
+ * Parse the command line arguments provided.
+ * <p>
+ * Populates local static variables for this class scope with input obtained from the commandline.  This information is
+ * obtainable from accessors.
+ *
+ * @param argc count of arguments
+ * @param argv array of string arguments
+ */
 void Options::parse(int argc, char** argv) {
     bool isLevelNotSet = true;
 
@@ -62,6 +71,9 @@ void Options::parse(int argc, char** argv) {
 
 }
 
+/**
+ * Present the help text to the console.
+ */
 void Options::showHelp() {
     std::stringstream ss;
     ss << "usage: keyrunner [-v|--version] [-h|--help]" << std::endl;
@@ -87,27 +99,43 @@ void Options::showHelp() {
     exit(0);
 }
 
+/**
+ * Present the version number to the console.
+ */
 void Options::showVersion() {
     std::stringstream ss;
     ss << "keyrunner version " << VERSION;
     die(ss.str());
 }
 
+/**
+ * Fetch the starting level provided from the command line (default = 1).
+ * @return starting level
+ */
 uint16_t Options::getStartingLevel() {
     return startingLevelNum;
 }
 
+/**
+ * Fetch the state the game should start in (default = PLAY).
+ * @return PLAY or EDIT
+ */
 State Options::getInitialState() {
     return initialState;
 }
 
+/**
+ * Did the user indicate that they want to create a new level?
+ * @return did they?
+ */
 bool Options::getCreateNewLevel() {
     return createNewLevel;
 }
 
-/* ------------------------------------------------------------------------------
- * isPositiveInt - Return boolean indicating whether a string is a positive
- * integer or not.
+/**
+ * Return boolean indicating whether a string is a positive integer or not.
+ * @param str the string
+ * @return was this string a positive integer?
  */
 bool Options::isPositiveInt(char* str) {
     bool passes = true;
@@ -120,8 +148,9 @@ bool Options::isPositiveInt(char* str) {
     return passes;
 }
 
-/* ------------------------------------------------------------------------------
- * die - Exit the program with a message.
+/**
+ * Exit the program with a message.
+ * @param msg the message to die with
  */
 void Options::die(std::string msg) {
     std::cout << msg << std::endl;

@@ -15,55 +15,71 @@
 Animation* KeyAnimation;
 Animation* PlayerAnimation;
 
+/**
+ * Initializes the elements required for the 'play' mode.
+ *
+ * This includes initializing SDL, and kicking off the game loop.
+ */
 void KeyRunner::play() {
     // Initialize the PlayModel.
     playModel = PlayModel::GetInstance();
     playModel->setTimeClock(50000);
-
     playModel->setState(PLAY);
     playModel->setLevelNum(Options::getStartingLevel());
 
+    // Initialize SDL
     if (init()) {
         // There's not a good place for these yet.  Putting them here for now.
         KeyAnimation    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
         PlayerAnimation = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
 
+        // Limit to 25 frames per second
         uint32_t fps = 25;
         uint32_t maxDelay = 1000 / fps;
 
+        // Read in the starting level
         LevelManager::Read(playModel->getLevelNum());
 
-        while(playModel->getState() != QUIT) {
+        // Begin the game loop and continue while not in the quit state
+        while (playModel->getState() != QUIT) {
+            // Each iteration represents a frame
+
+            // Begin preparing the frame
             uint32_t workStart = SDL_GetTicks();
 
             //updateModel();
+
+            // Build and present the frame
             updateDisplay();
 
+            // Move the player along the conveyor belts (if applicable)
             conveyPlayer();
 
+            // If the level is complete, move to the next level
             if (playModel->isComplete()) {
                 playModel->setLevelNum(playModel->getLevelNum() + (uint16_t) 1);
                 LevelManager::Read(playModel->getLevelNum());
                 playModel->incrementTimeClock(6000);
             }
 
+            // Handle supported system events
             processInput();
 
+            // Determine how much time we have left after doing work
             uint32_t workEnd = SDL_GetTicks();
             long workDuration = (long) workEnd - (long) workStart;
             long remainingTime = (long) maxDelay - workDuration;
 
+            // Sleep any remaining time so that we don't hog the CPU
             if (remainingTime > 0) {
                 SDL_Delay(remainingTime);
             }
 
-            // Check for winning/losing conditions
-            // If the clock runs down to 0; game over
+            // Check for winning/losing conditions. If the clock runs down to 0; game over
 			playModel->decrementTimeClock(SDL_GetTicks() - workStart);
             if (playModel->getTimeClock() <= 0) {
                 exitGame();
             }
-
         }
 
     } else {
@@ -72,12 +88,15 @@ void KeyRunner::play() {
     }
 }
 
+/**
+ * Initialize the game elements for edit mode.
+ */
 void KeyRunner::edit() {
     // Initialize the PlayModel.
     playModel = PlayModel::GetInstance();
-
     playModel->setState(EDIT);
 
+    // Initialize SDL
     if (init()) {
         // There's not a good place for these yet.  Putting them here for now.
         KeyAnimation    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
@@ -101,10 +120,17 @@ void KeyRunner::edit() {
     }
 }
 
+/**
+ * Get the root layer of the view.
+ * @return root layer
+ */
 RootLayer* KeyRunner::getRootLayer() {
     return rootLayer;
 }
 
+/**
+ * Set the play model state to QUIT.  Causes the game loop to exit.
+ */
 void KeyRunner::exitGame() {
     // Signal the Event loop to exit.
     SDL_Event quitEvent;
@@ -115,10 +141,18 @@ void KeyRunner::exitGame() {
     playModel->setState(QUIT);
 }
 
-/* ------------------------------------------------------------------------------
- * init - Initialize the screen to 640x480x16.  Initialize the font system.
- * Set the window caption.  Initialize all layer objects.  Upon any failure,
- * return false.
+/**
+ * Initializes much of the game dependencies.
+ *
+ * <ul>
+ * <li>creates a window with dimensions of 640x480x16
+ * <li>set the window caption
+ * <li>creates the renderer
+ * <li>starts the font system
+ * <li>creates all layer objects
+ * </ul>
+ *
+ * If something fails, return false.
  */
 bool KeyRunner::init() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -165,9 +199,10 @@ bool KeyRunner::init() {
 
 /**
  * Move the player in the provided direction.
+ * @param direction
  */
-void KeyRunner::moveDirection(Direction d) {
-    GridLayer::GetInstance()->movePlayer(d);
+void KeyRunner::moveDirection(Direction direction) {
+    GridLayer::GetInstance()->movePlayer(direction);
 }
 
 
@@ -256,6 +291,9 @@ void KeyRunner::processInput() {
     }
 }
 
+/**
+ * Handle events for edit mode.
+ */
 void KeyRunner::editHandleEvents() {
     // Wait for an Event.
     SDL_Event event;

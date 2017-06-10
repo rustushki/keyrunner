@@ -42,7 +42,7 @@ private:
 
     // Helpers
     bool init();
-    void moveDirection(Direction d);
+    void moveDirection(Direction direction);
     void editHandleEvents();
     void processInput();
     void conveyPlayer();

@@ -3,6 +3,12 @@
 
 KeyRunner keyRunner;
 
+/**
+ * Entry point into KeyRunner.
+ * @param argc count of arguments
+ * @param argv array of string arguments
+ * @return exit code
+ */
 int main(int argc, char** argv) {
 
     Options::parse(argc, argv);
