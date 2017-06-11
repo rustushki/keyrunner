@@ -87,7 +87,9 @@ EditInfoBarLayer::~EditInfoBarLayer() {
 }
 
 void EditInfoBarLayer::onExitEnter() {
-    keyRunner.exitGame();
+    SDL_Event quitEvent;
+    quitEvent.type = SDL_QUIT;
+    SDL_PushEvent(&quitEvent);
 }
 
 void EditInfoBarLayer::onSaveEnter() {

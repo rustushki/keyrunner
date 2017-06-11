@@ -4,8 +4,6 @@
 
 #include "InfoBarLayer.hpp"
 
-extern KeyRunner keyRunner;
-
 class PlayInfoBarLayer : public InfoBarLayer {
 
 public:

@@ -87,7 +87,8 @@ void KeyRunner::play() {
             // Check for winning/losing conditions. If the clock runs down to 0; game over
 			playModel->decrementTimeClock(SDL_GetTicks() - workStart);
             if (playModel->getTimeClock() <= 0) {
-                exitGame();
+                playModel->setState(LOSE);
+                break;
             }
         }
 
@@ -135,19 +136,6 @@ void KeyRunner::edit() {
  */
 RootLayer* KeyRunner::getRootLayer() {
     return rootLayer;
-}
-
-/**
- * Set the play model state to QUIT.  Causes the game loop to exit.
- */
-void KeyRunner::exitGame() {
-    // Signal the Event loop to exit.
-    SDL_Event quitEvent;
-    quitEvent.type = SDL_QUIT;
-    SDL_PushEvent(&quitEvent);
-
-    // Let all other threads know that it's time to exit.
-    playModel->setState(QUIT);
 }
 
 /**
@@ -264,7 +252,7 @@ void KeyRunner::processInput() {
         if (event.type == SDL_KEYDOWN) {
             // User Presses Q
             if (event.key.keysym.sym == SDLK_q) {
-                exitGame();
+                playModel->setState(QUIT);
                 break;
             }
 
@@ -294,7 +282,7 @@ void KeyRunner::processInput() {
 
         // Handle Quit Event.
         } else if (event.type == SDL_QUIT) {
-            exitGame();
+            playModel->setState(QUIT);
             break;
         }
     }
@@ -314,7 +302,7 @@ void KeyRunner::editHandleEvents() {
 
             // User Presses Q
             if (event.key.keysym.sym == SDLK_q) {
-                exitGame();
+                playModel->setState(QUIT);
                 break;
 
             // Pass all other keys to the parent of the selected layer.  Or the
@@ -338,7 +326,7 @@ void KeyRunner::editHandleEvents() {
 
             // Handle Quit Event.
         } else if (event.type == SDL_QUIT) {
-            exitGame();
+            playModel->setState(QUIT);
             break;
 
         }

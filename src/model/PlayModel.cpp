@@ -1,3 +1,4 @@
+#include <sstream>
 #include "PlayModel.hpp"
 #include "../controller/KeyRunner.hpp"
 
@@ -165,23 +166,17 @@ Direction PlayModel::getConveyorDirection(TileCoord coord) const {
     TileType tt = tileType[coord.second][coord.first];
     if (tt == TILE_TYPE_CONVEY_UP) {
         return DIRECTION_UP;
-
     } else if (tt == TILE_TYPE_CONVEY_DOWN) {
         return DIRECTION_DOWN;
-
     } else if (tt == TILE_TYPE_CONVEY_RIGHT) {
         return DIRECTION_RIGHT;
-
     } else if (tt == TILE_TYPE_CONVEY_LEFT) {
         return DIRECTION_LEFT;
-
     }
 
-    std::cout << "Non-conveyor tile queried for direction." << std::endl;
-    keyRunner.exitGame();
-
-    // Should never execute.
-    return DIRECTION_UP;
+    std::stringstream errorMessage;
+    errorMessage << "Non-conveyor tile queried for direction.";
+    throw std::invalid_argument(errorMessage.str());
 }
 
 /* ------------------------------------------------------------------------------
@@ -198,8 +193,9 @@ Direction PlayModel::getConveyorDirection(TileCoord coord) const {
  */
 TileCoord PlayModel::getNextConveyorTileCoord(TileCoord current) const {
     if (!isConveyor(current)) {
-        std::cout << "Trying to get next conveyor tile from non conveyor tile." << std::endl;
-        keyRunner.exitGame();
+        std::stringstream errorMessage;
+        errorMessage << "Trying to get next conveyor tile from non conveyor tile.";
+        throw std::invalid_argument(errorMessage.str());
     }
 
     Direction dir = getConveyorDirection(current);

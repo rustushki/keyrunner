@@ -35,7 +35,6 @@ class KeyRunner {
 public:
     void play();
     void edit();
-    void exitGame();
     RootLayer* getRootLayer();
 
 private:

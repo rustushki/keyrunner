@@ -11,12 +11,19 @@
  * Add more Animations by modifying each of the private methods of this class.
  */
 Animation* AnimationFactory::Build(AnimationType animationType) {
-    std::string filename = GetSpriteSFN(animationType);
-    std::vector<uint16_t> frameList = GetFrameList(animationType);
-    std::vector<uint16_t> frameSize = GetFrameSize(animationType);
-    uint16_t stillsPerSecond = GetSPS(animationType);
+    try {
+        std::string filename = GetSpriteSFN(animationType);
+        std::vector<uint16_t> frameList = GetFrameList(animationType);
+        std::vector<uint16_t> frameSize = GetFrameSize(animationType);
+        uint16_t stillsPerSecond = GetSPS(animationType);
 
-    return new Animation(new SpriteSheet(filename, frameSize[0], frameSize[1]), frameList, stillsPerSecond);
+        return new Animation(new SpriteSheet(filename, frameSize[0], frameSize[1]), frameList, stillsPerSecond);
+
+    } catch (std::invalid_argument exception) {
+        std::stringstream errorMessage;
+        errorMessage << "Couldn't build Animation (type = " << animationType << ") reason: " << exception.what();
+        throw std::logic_error(errorMessage.str());
+    }
 }
 
 /* ------------------------------------------------------------------------------
@@ -69,11 +76,9 @@ std::string AnimationFactory::GetSpriteSFN(AnimationType at) {
             break;
 
         default:
-            std::cout << "Could not determine sprite sheet." << std::endl;
-            std::cout << "Invalid Animation Type:" << at << std::endl;
-            keyRunner.exitGame();
-            break;
-
+            std::stringstream errorMessage;
+            errorMessage << "Couldn't determine sprite sheet due to invalid AnimationType";
+            throw std::invalid_argument(errorMessage.str());
     }
 
 
@@ -131,10 +136,9 @@ std::vector<uint16_t> AnimationFactory::GetFrameList(AnimationType at) {
             break;
 
         default:
-            std::cout << "Could not determine frame list." << std::endl;
-            std::cout << "Invalid Animation Type." << std::endl;
-            keyRunner.exitGame();
-            break;
+            std::stringstream errorMessage;
+            errorMessage << "Couldn't build frame list due to invalid AnimationType";
+            throw std::invalid_argument(errorMessage.str());
 
     }
 
@@ -167,11 +171,9 @@ std::vector<uint16_t> AnimationFactory::GetFrameSize(AnimationType at) {
             break;
 
         default:
-            std::cout << "Could not determine frame size." << std::endl;
-            std::cout << "Invalid Animation Type." << std::endl;
-            keyRunner.exitGame();
-            break;
-
+            std::stringstream errorMessage;
+            errorMessage << "Couldn't determine frame size due to invalid AnimationType";
+            throw std::invalid_argument(errorMessage.str());
     }
 
     return frameSize;
@@ -206,11 +208,9 @@ uint16_t AnimationFactory::GetSPS(AnimationType at) {
             break;
 
         default:
-            std::cout << "Could not determine sps." << std::endl;
-            std::cout << "Invalid Animation Type." << std::endl;
-            keyRunner.exitGame();
-            break;
-
+            std::stringstream errorMessage;
+            errorMessage << "Couldn't determine stills per second due to invalid AnimationType";
+            throw std::invalid_argument(errorMessage.str());
     }
 
     return sps;

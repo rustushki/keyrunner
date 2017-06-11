@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 #include "ConveyorAnimation.hpp"
 #include "GridLayer.hpp"
@@ -113,8 +114,9 @@ void GridLayer::changeTileType(uint16_t x, uint16_t y, TileType tt) {
 bool GridLayer::movePlayer(Direction d) {
 
     if (d > DIRECTION_COUNT) {
-        std::cout << "Invalid direction." << std::endl;
-        keyRunner.exitGame();
+        std::stringstream errorMessage;
+        errorMessage << "Invalid direction passed to movePlayer (" << d << ")";
+        throw std::invalid_argument(errorMessage.str());
     }
 
     PlayModel* playModel = PlayModel::GetInstance();

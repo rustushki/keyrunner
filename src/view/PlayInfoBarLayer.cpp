@@ -1,6 +1,8 @@
 #include "PlayInfoBarLayer.hpp"
 #include "RootLayer.hpp"
 
+extern KeyRunner keyRunner;
+
 PlayInfoBarLayer* PlayInfoBarLayer::instance = 0;
 
 /**

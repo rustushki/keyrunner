@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 #include "TileType.hpp"
 #include "../controller/KeyRunner.hpp"
@@ -38,16 +39,8 @@ AnimationType TileType::toAnimationType() {
             return ANIMATION_TYPE_CONVEY_RIGHT;
 
         default:
-            std::cout << "Could not determine AnimationType." << std::endl;
-            std::cout << "Invalid TileType." << std::endl;
-            keyRunner.exitGame();
-            break;
+            std::stringstream errorMessage;
+            errorMessage << "Could not determine AnimationType because of invalid TileType";
+            throw std::invalid_argument(errorMessage.str());
     }
-
-    // Should not arrive here.
-    std::cout << "Logic error detected." << std::endl;
-    keyRunner.exitGame();
-
-    // Should certainly never arrive here.
-    return ANIMATION_TYPE_EMPTY;
 }
