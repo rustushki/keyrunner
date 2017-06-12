@@ -123,7 +123,31 @@ void KeyRunner::edit() {
             LevelManager::Read(playModel->getLevelNum());
         }
 
-        editHandleEvents();
+        // Limit to 25 frames per second
+        uint32_t fps = 25;
+        uint32_t maxDelay = 1000 / fps;
+
+        while (playModel->getState() != QUIT) {
+            // Each iteration represents a frame
+
+            // Begin preparing the frame
+            uint32_t workStart = SDL_GetTicks();
+
+            // Build and present the frame
+            updateDisplay();
+
+            editHandleEvents();
+
+            // Determine how much time we have left after doing work
+            uint32_t workEnd = SDL_GetTicks();
+            long workDuration = (long) workEnd - (long) workStart;
+            long remainingTime = (long) maxDelay - workDuration;
+
+            // Sleep any remaining time so that we don't hog the CPU
+            if (remainingTime > 0) {
+                SDL_Delay(remainingTime);
+            }
+        }
     } else {
         // TODO: What to do if we fail to initialize?
         // Need a system for handling failures.

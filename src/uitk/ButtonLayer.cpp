@@ -60,9 +60,9 @@ void ButtonLayer::draw(SDL_Renderer* renderer) {
     SDL_RenderDrawRect(renderer, &fillRect);
 
     // Draw Background
-    uint8_t rC = (uint8_t) (bgColor & 0xFF0000) >> 16;
-    uint8_t gC = (uint8_t) (bgColor & 0x00FF00) >>  8;
-    uint8_t bC = (uint8_t) (bgColor & 0x0000FF) >>  0;
+    uint8_t rC = (uint8_t) ((bgColor & 0xFF0000) >> 16);
+    uint8_t gC = (uint8_t) ((bgColor & 0x00FF00) >>  8);
+    uint8_t bC = (uint8_t) ((bgColor & 0x0000FF) >>  0);
     SDL_SetRenderDrawColor(renderer, rC, gC, bC, 0xFF);
     fillRect.h -= shadeWidth;
     fillRect.w -= shadeWidth;
@@ -77,13 +77,20 @@ void ButtonLayer::draw(SDL_Renderer* renderer) {
     // Draw the text centered within the button, obeying the margin.
     // A NULL textTexture implies the text is a 0-length string.
     if (textTexture != nullptr) {
-        SDL_Rect btRect = getRect();
+        // Determine width and height of the text
         int w;
         int h;
         SDL_QueryTexture(textTexture, nullptr, nullptr, &w, &h);
-        btRect.x += round((btRect.w - w) / 2.0) + shadeWidth;
-        btRect.y += round((btRect.h - h) / 2.0) + shadeWidth;
-        SDL_RenderCopy(renderer, textTexture, nullptr, &btRect);
+
+        // Determine the rectangle that the text will be drawn onto
+        SDL_Rect textDestination = getRect();
+        textDestination.x += round((textDestination.w - w) / 2.0) + shadeWidth;
+        textDestination.y += round((textDestination.h - h) / 2.0) + shadeWidth;
+        textDestination.h = h;
+        textDestination.w = w;
+
+        // Draw the text into that rectangle
+        SDL_RenderCopy(renderer, textTexture, nullptr, &textDestination);
 
     // OR,
     // Draw the Icon, centered.
@@ -93,7 +100,6 @@ void ButtonLayer::draw(SDL_Renderer* renderer) {
         icon->move(x, y);
         icon->blit(renderer);
     }
-
 }
 
 /* ------------------------------------------------------------------------------
@@ -222,11 +228,11 @@ SDL_Texture* ButtonLayer::sizeText(SDL_Renderer* renderer, std::string text) con
 
     // Render and return the text surface which fits in the ButtonLayer.
     TTF_Font* fnt = getFont(mi);
-    uint8_t rC = (uint8_t) (textColor & 0xFF0000) >> 16;
-    uint8_t gC = (uint8_t) (textColor & 0x00FF00) >>  8;
-    uint8_t bC = (uint8_t) (textColor & 0x0000FF) >>  0;
+    uint8_t rC = (uint8_t) ((textColor & 0xFF0000) >> 16);
+    uint8_t gC = (uint8_t) ((textColor & 0x00FF00) >>  8);
+    uint8_t bC = (uint8_t) ((textColor & 0x0000FF) >>  0);
     SDL_Color color = {rC, gC, bC};
-    SDL_Surface* textSurface = TTF_RenderText_Blended(fnt, text.c_str(), color);
+    SDL_Surface* textSurface = TTF_RenderText_Solid(fnt, text.c_str(), color);
     TTF_CloseFont(fnt);
 
     // Confirm that the text surface was created.  If not something is horribly
