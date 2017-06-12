@@ -43,11 +43,10 @@ void Layer::onEnter() {
         onEnterCb();
     }
 
-    // Iterate over the sub layers backwards so that the uppermost stacked are
-    // evaluated first.  The first layer from the top which contains the point
-    // will propagate the onEnter event.
-    std::vector<Layer*>::reverse_iterator itr;
-    (*itr)->onEnter();
+    // Get the layer on top and propagate the enter keypress to it
+    if (subLayers.size()) {
+        subLayers.back()->onEnter();
+    }
 }
 
 void Layer::onKeyDown(SDL_Keycode key) {
