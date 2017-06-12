@@ -253,13 +253,15 @@ void KeyRunner::conveyPlayer() {
  * Clear the back frame, redraw everything onto it, then present it.
  */
 void KeyRunner::updateDisplay() {
-    // Clear the back frame
+    // Clear the back frame to black
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
     SDL_RenderClear(renderer);
 
-    // Update and draw the RootLayer (and all nested layers beneath).
+    // Update and draw the RootLayer (and all nested layers beneath) onto the back frame
     rootLayer->update();
     rootLayer->draw(renderer);
 
+    // Present the back frame
     SDL_RenderPresent(renderer);
 }
 
