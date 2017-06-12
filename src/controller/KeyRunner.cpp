@@ -318,12 +318,9 @@ void KeyRunner::processInput() {
 void KeyRunner::editHandleEvents() {
     // Wait for an Event.
     SDL_Event event;
-    while (playModel->getState() != QUIT) {
-        SDL_WaitEvent(&event);
-
+    while (SDL_PollEvent(&event)) {
         // Key down.
         if (event.type == SDL_KEYDOWN) {
-
             // User Presses Q
             if (event.key.keysym.sym == SDLK_q) {
                 playModel->setState(QUIT);
@@ -346,9 +343,7 @@ void KeyRunner::editHandleEvents() {
                 }
             }
 
-        } else if (event.type == SDL_KEYUP) {
-
-            // Handle Quit Event.
+        // Handle Quit Event.
         } else if (event.type == SDL_QUIT) {
             playModel->setState(QUIT);
             break;
