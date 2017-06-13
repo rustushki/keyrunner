@@ -1,8 +1,6 @@
 #include "PlayInfoBarLayer.hpp"
 #include "RootLayer.hpp"
 
-extern KeyRunner keyRunner;
-
 PlayInfoBarLayer* PlayInfoBarLayer::instance = 0;
 
 /**
@@ -69,51 +67,49 @@ void PlayInfoBarLayer::drawLevel(SDL_Renderer* renderer, uint16_t level) const {
  * @param s string to draw
  * @param position location on information bar to draw
  */
-void PlayInfoBarLayer::drawText(SDL_Renderer* renderer, std::string s, InfoBarPos position)
-        const {
-
+void PlayInfoBarLayer::drawText(SDL_Renderer* renderer, std::string s, InfoBarPos position) const {
     // Gray
     SDL_Color color = {0xAA, 0xAA, 0xAA};
 
-    // Build the text surface containing the given string.
-    SDL_Surface* text_surface = TTF_RenderText_Solid(this->getFont(), s.c_str(), color);
+    // Build the text surface containing the given string
+    SDL_Surface* textSurface = TTF_RenderText_Solid(this->getFont(), s.c_str(), color);
 
-    // If the surface is not created successfully.
-    if (text_surface == NULL) {
+    // If the surface is not created successfully
+    if (textSurface == NULL) {
         std::cout << s.c_str() << std::endl;
         std::cout << "Error creating text: " << TTF_GetError() << std::endl;
         exit(2);
 
-        // Otherwise,
+    // Otherwise,
     } else {
         const uint16_t marginTop = 5;
 
-        // Create a destination rectangle based on the created text surface and
-        // the position parameter.
+        // Create a destination rectangle based on the created text surface and the position parameter
         SDL_Rect r;
-        r.w = (uint16_t) text_surface->w;
-        r.h = (uint16_t) text_surface->h;
+        r.w = (uint16_t) textSurface->w;
+        r.h = (uint16_t) textSurface->h;
         r.y = getRect().y + marginTop;
 
-        SDL_Rect rlr = keyRunner.getRootLayer()->getRect();
-
+        // Determine the x and y coordinates of the text based on the provided position
+        SDL_Rect rect = getRect();
         if (position == BOTTOM_LEFT) {
-            r.x = getRect().x;
+            r.x = rect.x;
         } else if (position == BOTTOM_RIGHT) {
-            r.x = rlr.w - text_surface->w;
+            r.x = rect.w - textSurface->w;
         } else if (position == BOTTOM_CENTER) {
-            r.x = (rlr.w - text_surface->w)/2;
+            r.x = (rect.w - textSurface->w) / 2;
         } else if (position == MIDDLE_CENTER) {
-            r.x = (rlr.w - text_surface->w)/2;
-            r.y = (rlr.h - text_surface->h)/2;
+            r.x = (rect.w - textSurface->w) / 2;
+            r.y = (rect.h - textSurface->h) / 2;
         }
 
-        SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, text_surface);
+        SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
 
-        // Blit the text to the screen.
+        // Draw the text to the screen
         SDL_RenderCopy(renderer, textTexture, nullptr, &r);
 
-        SDL_FreeSurface(text_surface);
+        // Free the text surface and texture
+        SDL_FreeSurface(textSurface);
         SDL_DestroyTexture(textTexture);
     }
 }

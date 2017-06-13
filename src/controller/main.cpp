@@ -1,8 +1,6 @@
 #include "KeyRunner.hpp"
 #include "Options.hpp"
 
-KeyRunner keyRunner;
-
 /**
  * Entry point into KeyRunner.
  * @param argc count of arguments
@@ -20,7 +18,9 @@ int main(int argc, char** argv) {
     // functions--depending on the initial state of the program.
     State startState = Options::getInitialState();
 
-    // Normal Gameplay Mode
+    KeyRunner keyRunner;
+
+    // Play Mode
     if (startState == PLAY) {
         keyRunner.play();
 
