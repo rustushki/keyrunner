@@ -1,14 +1,14 @@
-#include <iostream>
 #include <sstream>
 #include "AnimationFactory.hpp"
 #include "../uitk/Animation.hpp"
 
 #define FL(x,y) frameList.push_back(x);frameList.push_back(y);
 
-/* ------------------------------------------------------------------------------
+/**
  * Build an Animation from an AnimationType.
- *
+ * <p>
  * Add more Animations by modifying each of the private methods of this class.
+ * @param animationType
  */
 Animation* AnimationFactory::Build(AnimationType animationType) {
     try {
@@ -26,15 +26,15 @@ Animation* AnimationFactory::Build(AnimationType animationType) {
     }
 }
 
-/* ------------------------------------------------------------------------------
- * GetSpriteSFN - Given an animation type, determine the path to the
- * sprite sheet associated with that animation.
+/**
+ * Given an animation type, determine the path to the sprite sheet associated with that animation.
+ * @param animationType
  */
-std::string AnimationFactory::GetSpriteSFN(AnimationType at) {
+std::string AnimationFactory::GetSpriteSFN(AnimationType animationType) {
 
     std::string fn;
 
-    switch (at) {
+    switch (animationType) {
 
         case ANIMATION_TYPE_EMPTY:
             fn = "tile.png";
@@ -90,15 +90,15 @@ std::string AnimationFactory::GetSpriteSFN(AnimationType at) {
     return ss.str();
 }
 
-/* ------------------------------------------------------------------------------
- * GetFrameList - Given an AnimationType, return a vector of unsigned ints
- * which denote the list of frames within a SpriteSheet for that kind of
- * animation.
+/**
+ * Given an AnimationType, return a vector of unsigned ints which denote the list of frames within a SpriteSheet for
+ * that kind of animation.
+ * @param animationType
  */
-std::vector<uint16_t> AnimationFactory::GetFrameList(AnimationType at) {
+std::vector<uint16_t> AnimationFactory::GetFrameList(AnimationType animationType) {
     std::vector<uint16_t> frameList;
 
-    switch (at) {
+    switch (animationType) {
 
         case ANIMATION_TYPE_CONVEY_DOWN:
             FL(1,0)FL(1,1)FL(1,2)FL(1,3)
@@ -145,14 +145,14 @@ std::vector<uint16_t> AnimationFactory::GetFrameList(AnimationType at) {
     return frameList;
 }
 
-/* ------------------------------------------------------------------------------
- * GetFrameSize - Given an AnimationType, return the frame size of the
- * SpriteSheet associated with that Animation.
+/**
+ * Given an AnimationType, return the frame size of the SpriteSheet associated with that Animation.
+ * @param animationType
  */
-std::vector<uint16_t> AnimationFactory::GetFrameSize(AnimationType at) {
+std::vector<uint16_t> AnimationFactory::GetFrameSize(AnimationType animationType) {
     std::vector<uint16_t> frameSize;
 
-    switch (at) {
+    switch (animationType) {
 
         case ANIMATION_TYPE_EMPTY:
         case ANIMATION_TYPE_WALL:
@@ -179,15 +179,15 @@ std::vector<uint16_t> AnimationFactory::GetFrameSize(AnimationType at) {
     return frameSize;
 }
 
-/* ------------------------------------------------------------------------------
- * GetSPS - Given an animation type, return the stills per second count.  This
- * may go away in the future as objects are introduced for on screen elements.
- * Such objects might need to adjust and regulate sps.
+/**
+ * Given an animation type, return the stills per second count.  This may go away in the future as objects are
+ * introduced for on screen elements. Such objects might need to adjust and regulate SPS.
+ * @param animationType
  */
-uint16_t AnimationFactory::GetSPS(AnimationType at) {
+uint16_t AnimationFactory::GetSPS(AnimationType animationType) {
     uint16_t sps = 0;
 
-    switch (at) {
+    switch (animationType) {
 
         case ANIMATION_TYPE_EMPTY:
         case ANIMATION_TYPE_WALL:
