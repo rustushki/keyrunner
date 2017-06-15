@@ -1,3 +1,4 @@
+#include <sstream>
 #include "PlayInfoBarLayer.hpp"
 #include "RootLayer.hpp"
 
@@ -76,9 +77,9 @@ void PlayInfoBarLayer::drawText(SDL_Renderer* renderer, std::string s, InfoBarPo
 
     // If the surface is not created successfully
     if (textSurface == NULL) {
-        std::cout << s.c_str() << std::endl;
-        std::cout << "Error creating text: " << TTF_GetError() << std::endl;
-        exit(2);
+        std::stringstream errorMessage;
+        errorMessage << "Error creating text: " << TTF_GetError();
+        throw std::runtime_error(errorMessage.str());
 
     // Otherwise,
     } else {

@@ -1,5 +1,5 @@
-#include <iostream>
 #include <math.h>
+#include <sstream>
 
 #include "Animation.hpp"
 #include "ButtonLayer.hpp"
@@ -238,9 +238,9 @@ SDL_Texture* ButtonLayer::sizeText(SDL_Renderer* renderer, std::string text) con
     // Confirm that the text surface was created.  If not something is horribly
     // wrong, so die.
     if (textSurface == nullptr) {
-        std::cout << text << std::endl;
-        std::cout << "Error drawing text: " << TTF_GetError() << std::endl;
-        exit(2);
+        std::stringstream message;
+        message << "Error drawing text: " << TTF_GetError();
+        throw std::runtime_error(message.str());
     }
 
     return SDL_CreateTextureFromSurface(renderer, textSurface);
