@@ -6,7 +6,8 @@ InfoBarLayer::InfoBarLayer() {
 }
 
 /**
- * Draws the InfoBarLayer to the screen.  This includes the level and a time clock.
+ * Draws a black bar on the bottom of the screen.
+ * @param renderer
  */
 void InfoBarLayer::draw(SDL_Renderer* renderer) {
     // Build the black bar at the bottom.
@@ -18,9 +19,9 @@ void InfoBarLayer::draw(SDL_Renderer* renderer) {
 
 }
 
-/* ------------------------------------------------------------------------------
- * getRect - Get the region of the screen upon which this Layer will be drawn.
- * For InfoBarLayer, it will be at the bottom, vertically below the GridLayer.
+/**
+ * Get the region of the screen upon which this Layer will be drawn. For InfoBarLayer, it will be at the bottom,
+ * vertically below the GridLayer.
  */
 SDL_Rect InfoBarLayer::getRect() const {
     SDL_Rect r;
