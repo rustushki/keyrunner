@@ -79,7 +79,7 @@ void Animation::blit(SDL_Renderer* renderer) {
     r.w = getWidth();
     r.h = getHeight();
 
-    this->sheet->blitFrame(renderer, frameX, frameY, r);
+    this->sheet->drawStill(renderer, frameX, frameY, r);
 
 }
 
