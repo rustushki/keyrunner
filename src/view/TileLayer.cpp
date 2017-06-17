@@ -60,7 +60,7 @@ void TileLayer::setType(TileType tileType) {
     this->tileType = tileType;
 
     AnimationType at = tileType.toAnimationType();
-    this->animation = AnimationFactory::Build(at);
+    this->animation = animationFactory->build(at);
 
     if (this->animation->isAnimating()) {
         GridLayer::GetInstance()->pushAnimatedTile(this);

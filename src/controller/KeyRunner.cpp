@@ -11,9 +11,19 @@
 #include "../view/EditRootLayer.hpp"
 #include "../view/PlayRootLayer.hpp"
 
-// Items yet to be absorbed into KeyRunner static class.
+// Objects that don't have a home yet
+AnimationFactory* animationFactory;
 Animation* KeyAnimation;
 Animation* PlayerAnimation;
+
+/**
+ * Manually tear down allocated objects.
+ */
+KeyRunner::~KeyRunner() {
+    delete animationFactory;
+    delete KeyAnimation;
+    delete PlayerAnimation;
+}
 
 /**
  * Initializes the elements required for the 'play' mode.
@@ -30,8 +40,8 @@ void KeyRunner::play() {
     // Initialize SDL
     if (init()) {
         // There's not a good place for these yet.  Putting them here for now.
-        KeyAnimation    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
-        PlayerAnimation = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
+        KeyAnimation    = animationFactory->build(ANIMATION_TYPE_KEY);
+        PlayerAnimation = animationFactory->build(ANIMATION_TYPE_PUMPKIN);
 
         // Limit to 25 frames per second
         uint32_t fps = 25;
@@ -109,8 +119,8 @@ void KeyRunner::edit() {
     // Initialize SDL
     if (init()) {
         // There's not a good place for these yet.  Putting them here for now.
-        KeyAnimation    = AnimationFactory::Build(ANIMATION_TYPE_KEY);
-        PlayerAnimation = AnimationFactory::Build(ANIMATION_TYPE_PUMPKIN);
+        KeyAnimation    = animationFactory->build(ANIMATION_TYPE_KEY);
+        PlayerAnimation = animationFactory->build(ANIMATION_TYPE_PUMPKIN);
 
         // Create New Level for Edit
         if (Options::getCreateNewLevel()) {
@@ -212,6 +222,9 @@ bool KeyRunner::init() {
     }
 
     atexit(SDL_Quit);
+
+	// Build the single AnimationFactory instance; this needs a better home
+    animationFactory = new AnimationFactory();
 
     playModel = PlayModel::GetInstance();
 

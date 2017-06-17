@@ -32,7 +32,7 @@ TileSelectorLayer::TileSelectorLayer() {
             ->setHeight(blHeight)
             ->setX((uint16_t) (initOffset + ttIdx * blWidth + ttIdx * margin))
             ->setY((uint16_t) (getRect().y + (getRect().h - blHeight)/2))
-            ->setIcon(AnimationFactory::Build(at))
+            ->setIcon(animationFactory->build(at))
             ->build();
 
         addLayer(bl);

@@ -27,12 +27,16 @@
 
 class Animation;
 class RootLayer;
+class AnimationFactory;
 
 extern Animation* KeyAnimation;
 extern Animation* PlayerAnimation;
+extern AnimationFactory* animationFactory;
 
 class KeyRunner {
 public:
+    ~KeyRunner();
+
     void play();
     void edit();
     RootLayer* getRootLayer();
@@ -46,7 +50,6 @@ private:
     void processInput();
     void conveyPlayer();
     void updateDisplay();
-
 
     SDL_Window*   window;
     SDL_Renderer* renderer;

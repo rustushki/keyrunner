@@ -10,13 +10,13 @@ class Animation;
 
 class AnimationFactory {
     public:
-        static Animation* Build(AnimationType animationType);
+        Animation* build(AnimationType animationType);
 
     private:
-        static std::string GetSpriteSFN(AnimationType animationType);
-        static std::vector<uint16_t> GetFrameList(AnimationType animationType);
-        static std::vector<uint16_t> GetFrameSize(AnimationType animationType);
-        static uint16_t GetSPS(AnimationType animationType);
+        std::string getSpriteSFN(AnimationType animationType);
+        std::vector<uint16_t> getFrameList(AnimationType animationType);
+        std::vector<uint16_t> getFrameSize(AnimationType animationType);
+        uint16_t getSPS(AnimationType animationType);
 };
 
 #endif

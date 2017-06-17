@@ -10,12 +10,12 @@
  * Add more Animations by modifying each of the private methods of this class.
  * @param animationType
  */
-Animation* AnimationFactory::Build(AnimationType animationType) {
+Animation* AnimationFactory::build(AnimationType animationType) {
     try {
-        std::string filename = GetSpriteSFN(animationType);
-        std::vector<uint16_t> frameList = GetFrameList(animationType);
-        std::vector<uint16_t> frameSize = GetFrameSize(animationType);
-        uint16_t stillsPerSecond = GetSPS(animationType);
+        std::string filename = getSpriteSFN(animationType);
+        std::vector<uint16_t> frameList = getFrameList(animationType);
+        std::vector<uint16_t> frameSize = getFrameSize(animationType);
+        uint16_t stillsPerSecond = getSPS(animationType);
 
         return new Animation(new SpriteSheet(filename, frameSize[0], frameSize[1]), frameList, stillsPerSecond);
 
@@ -30,7 +30,7 @@ Animation* AnimationFactory::Build(AnimationType animationType) {
  * Given an animation type, determine the path to the sprite sheet associated with that animation.
  * @param animationType
  */
-std::string AnimationFactory::GetSpriteSFN(AnimationType animationType) {
+std::string AnimationFactory::getSpriteSFN(AnimationType animationType) {
 
     std::string fn;
 
@@ -95,7 +95,7 @@ std::string AnimationFactory::GetSpriteSFN(AnimationType animationType) {
  * that kind of animation.
  * @param animationType
  */
-std::vector<uint16_t> AnimationFactory::GetFrameList(AnimationType animationType) {
+std::vector<uint16_t> AnimationFactory::getFrameList(AnimationType animationType) {
     std::vector<uint16_t> frameList;
 
     switch (animationType) {
@@ -149,7 +149,7 @@ std::vector<uint16_t> AnimationFactory::GetFrameList(AnimationType animationType
  * Given an AnimationType, return the frame size of the SpriteSheet associated with that Animation.
  * @param animationType
  */
-std::vector<uint16_t> AnimationFactory::GetFrameSize(AnimationType animationType) {
+std::vector<uint16_t> AnimationFactory::getFrameSize(AnimationType animationType) {
     std::vector<uint16_t> frameSize;
 
     switch (animationType) {
@@ -184,7 +184,7 @@ std::vector<uint16_t> AnimationFactory::GetFrameSize(AnimationType animationType
  * introduced for on screen elements. Such objects might need to adjust and regulate SPS.
  * @param animationType
  */
-uint16_t AnimationFactory::GetSPS(AnimationType animationType) {
+uint16_t AnimationFactory::getSPS(AnimationType animationType) {
     uint16_t sps = 0;
 
     switch (animationType) {
