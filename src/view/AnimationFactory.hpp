@@ -2,24 +2,29 @@
 #define ANIMATION_FACTORY_HPP
 
 #include <vector>
+#include <map>
 
 #include "AnimationType.hpp"
 #include "../controller/KeyRunner.hpp"
 
 class Animation;
+class SpriteSheet;
 
 class AnimationFactory {
     public:
         AnimationFactory(SDL_Renderer* renderer);
+        ~AnimationFactory();
         Animation* build(AnimationType animationType);
 
     private:
-        std::string getSpriteSFN(AnimationType animationType);
+        SpriteSheet* getSpriteSheet(AnimationType animationType);
+        std::string getSpriteSheetFileName(AnimationType animationType);
         std::vector<uint16_t> getFrameList(AnimationType animationType);
         std::vector<uint16_t> getFrameSize(AnimationType animationType);
-        uint16_t getSPS(AnimationType animationType);
+        uint16_t getStillsPerSecond(AnimationType animationType);
 
         SDL_Renderer* renderer;
+        std::map<AnimationType, SpriteSheet*> spriteSheetMap;
 };
 
 #endif

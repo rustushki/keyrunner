@@ -191,24 +191,16 @@ bool KeyRunner::init() {
         return false;
     }
 
-    if (playModel->getState() == EDIT) {
-        rootLayer = EditRootLayer::GetInstance();
-    } else {
-        rootLayer = PlayRootLayer::GetInstance();
-    }
-
-    SDL_Rect rlr = rootLayer->getRect();
-
+	// Create the Window
     std::stringstream title;
     title << "Key Runner r" << VERSION;
-    window = SDL_CreateWindow(title.str().c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, rlr.w,
-        rlr.h, SDL_WINDOW_SHOWN);
-
+    window = SDL_CreateWindow(title.str().c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0, SDL_WINDOW_HIDDEN);
     if (window == nullptr) {
         std::cout << "Couldn't create window: "<< SDL_GetError() << std::endl;
         return false;
     }
 
+	// Create the Renderer
     renderer = SDL_CreateRenderer(window, -1, 0);
     if (renderer == nullptr) {
         std::cout << "Couldn't create renderer: "<< SDL_GetError() << std::endl;
@@ -223,10 +215,21 @@ bool KeyRunner::init() {
 
     atexit(SDL_Quit);
 
-	// Build the single AnimationFactory instance; this needs a better home
+	// Create the AnimationFactory; this needs a better home
     animationFactory = new AnimationFactory(renderer);
 
+	// Create the PlayModel
     playModel = PlayModel::GetInstance();
+    if (playModel->getState() == EDIT) {
+        rootLayer = EditRootLayer::GetInstance();
+    } else {
+        rootLayer = PlayRootLayer::GetInstance();
+    }
+
+	// Size the Window and Show It
+    SDL_Rect rlr = rootLayer->getRect();
+    SDL_SetWindowSize(window, rlr.w, rlr.h);
+    SDL_ShowWindow(window);
 
     return true;
 }

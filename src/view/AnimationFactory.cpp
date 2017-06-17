@@ -15,6 +15,17 @@ AnimationFactory::AnimationFactory(SDL_Renderer *renderer) {
 }
 
 /**
+ * Destructor.
+ * <p>
+ * Frees the values in internal sprite sheet cache.
+ */
+AnimationFactory::~AnimationFactory() {
+    for (auto iterator = spriteSheetMap.begin(); iterator != spriteSheetMap.end(); ++iterator) {
+        delete iterator->second;
+    }
+}
+
+/**
  * Build an Animation from an AnimationType.
  * <p>
  * Add more Animations by modifying each of the private methods of this class.
@@ -22,12 +33,10 @@ AnimationFactory::AnimationFactory(SDL_Renderer *renderer) {
  */
 Animation* AnimationFactory::build(AnimationType animationType) {
     try {
-        std::string filename = getSpriteSFN(animationType);
         std::vector<uint16_t> frameList = getFrameList(animationType);
-        std::vector<uint16_t> frameSize = getFrameSize(animationType);
-        uint16_t stillsPerSecond = getSPS(animationType);
+        uint16_t stillsPerSecond = getStillsPerSecond(animationType);
 
-        return new Animation(new SpriteSheet(filename, frameSize[0], frameSize[1]), frameList, stillsPerSecond);
+        return new Animation(getSpriteSheet(animationType), frameList, stillsPerSecond);
 
     } catch (std::invalid_argument exception) {
         std::stringstream errorMessage;
@@ -40,7 +49,7 @@ Animation* AnimationFactory::build(AnimationType animationType) {
  * Given an animation type, determine the path to the sprite sheet associated with that animation.
  * @param animationType
  */
-std::string AnimationFactory::getSpriteSFN(AnimationType animationType) {
+std::string AnimationFactory::getSpriteSheetFileName(AnimationType animationType) {
 
     std::string fn;
 
@@ -194,7 +203,7 @@ std::vector<uint16_t> AnimationFactory::getFrameSize(AnimationType animationType
  * introduced for on screen elements. Such objects might need to adjust and regulate SPS.
  * @param animationType
  */
-uint16_t AnimationFactory::getSPS(AnimationType animationType) {
+uint16_t AnimationFactory::getStillsPerSecond(AnimationType animationType) {
     uint16_t sps = 0;
 
     switch (animationType) {
@@ -224,4 +233,27 @@ uint16_t AnimationFactory::getSPS(AnimationType animationType) {
     }
 
     return sps;
+}
+
+/**
+ * Gets the SpriteSheet associated with the AnimationType.
+ * <p>
+ * Retrieves the SpriteSheet from the cache, or creates a new instance of the SpriteSheet and caches it if the sheet
+ * does not yet exist.
+ * @param animationType
+ * @return SpriteSheet*
+ */
+SpriteSheet* AnimationFactory::getSpriteSheet(AnimationType animationType) {
+    // Look for the SpriteSheet in the cache
+    auto spriteSheetIterator = spriteSheetMap.find(animationType);
+
+    // If the SpriteSheet doesn't exist, make one
+    if (spriteSheetIterator == spriteSheetMap.end()) {
+        std::string filename = getSpriteSheetFileName(animationType);
+        std::vector<uint16_t> frameSize = getFrameSize(animationType);
+        spriteSheetMap[animationType] = new SpriteSheet(filename, frameSize[0], frameSize[1]);
+    }
+
+    // Return the SpriteSheet for the given AnimationType
+    return spriteSheetMap[animationType];
 }
