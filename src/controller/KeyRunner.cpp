@@ -165,14 +165,6 @@ void KeyRunner::edit() {
 }
 
 /**
- * Get the root layer of the view.
- * @return root layer
- */
-RootLayer* KeyRunner::getRootLayer() {
-    return rootLayer;
-}
-
-/**
  * Initializes much of the game dependencies.
  *
  * <ul>

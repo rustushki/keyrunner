@@ -39,7 +39,6 @@ public:
 
     void play();
     void edit();
-    RootLayer* getRootLayer();
 
 private:
 
