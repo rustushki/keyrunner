@@ -10,6 +10,7 @@ class Animation;
 
 class AnimationFactory {
     public:
+        AnimationFactory(SDL_Renderer* renderer);
         Animation* build(AnimationType animationType);
 
     private:
@@ -17,6 +18,8 @@ class AnimationFactory {
         std::vector<uint16_t> getFrameList(AnimationType animationType);
         std::vector<uint16_t> getFrameSize(AnimationType animationType);
         uint16_t getSPS(AnimationType animationType);
+
+        SDL_Renderer* renderer;
 };
 
 #endif

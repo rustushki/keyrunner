@@ -224,7 +224,7 @@ bool KeyRunner::init() {
     atexit(SDL_Quit);
 
 	// Build the single AnimationFactory instance; this needs a better home
-    animationFactory = new AnimationFactory();
+    animationFactory = new AnimationFactory(renderer);
 
     playModel = PlayModel::GetInstance();
 

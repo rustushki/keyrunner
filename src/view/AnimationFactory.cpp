@@ -5,6 +5,16 @@
 #define FL(x,y) frameList.push_back(x);frameList.push_back(y);
 
 /**
+ * Constructor.
+ * <p>
+ * Builds an AnimationFactory instance and ensures that it has the SDL_Renderer for texture loading.
+ * @param renderer
+ */
+AnimationFactory::AnimationFactory(SDL_Renderer *renderer) {
+    this->renderer = renderer;
+}
+
+/**
  * Build an Animation from an AnimationType.
  * <p>
  * Add more Animations by modifying each of the private methods of this class.
