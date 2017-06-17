@@ -9,13 +9,22 @@
  * @param width width of sprite sheet
  * @param height height of sprite sheet
  */
-SpriteSheet::SpriteSheet(std::string filename, uint16_t width, uint16_t height) {
-    // TODO: Shouldn't there be an SDL_FreeSurface() for this?
-	// TODO: Shouldn't the texture be built here instead of drawStill()?
-    this->sheet = IMG_Load(filename.c_str());
+SpriteSheet::SpriteSheet(SDL_Renderer* renderer, std::string filename, uint16_t width, uint16_t height) {
+    SDL_Surface* surface = IMG_Load(filename.c_str());
+    this->texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+
     this->width  = width;
     this->height = height;
-    this->texture = nullptr;
+}
+
+/**
+ * Destructor.
+ * <p>
+ * Ensure the local texture is freed.
+ */
+SpriteSheet::~SpriteSheet() {
+    SDL_DestroyTexture(this->texture);
 }
 
 /**
@@ -41,11 +50,6 @@ uint16_t SpriteSheet::getHeight() const {
  * @param where draw still to this destination rectangle
  */
 void SpriteSheet::drawStill(SDL_Renderer *renderer, uint16_t stillX, uint16_t stillY, SDL_Rect &where) {
-    // TODO: If this were done in the constructor, drawStill() could be const
-    if (texture == nullptr) {
-        texture = SDL_CreateTextureFromSurface(renderer, sheet);
-    }
-
     // Source Rect
     SDL_Rect srcRect;
     srcRect.w = width;

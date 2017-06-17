@@ -251,7 +251,7 @@ SpriteSheet* AnimationFactory::getSpriteSheet(AnimationType animationType) {
     if (spriteSheetIterator == spriteSheetMap.end()) {
         std::string filename = getSpriteSheetFileName(animationType);
         std::vector<uint16_t> frameSize = getFrameSize(animationType);
-        spriteSheetMap[animationType] = new SpriteSheet(filename, frameSize[0], frameSize[1]);
+        spriteSheetMap[animationType] = new SpriteSheet(renderer, filename, frameSize[0], frameSize[1]);
     }
 
     // Return the SpriteSheet for the given AnimationType
