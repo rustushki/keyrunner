@@ -5,6 +5,8 @@
 #include "../uitk/ButtonLayer.hpp"
 #include "../uitk/ButtonLayerBuilder.hpp"
 
+extern AnimationFactory* animationFactory;
+
 /* ------------------------------------------------------------------------------
  * Constructor.
  *

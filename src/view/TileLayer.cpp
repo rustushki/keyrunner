@@ -2,6 +2,10 @@
 #include "AnimationFactory.hpp"
 #include "GridLayer.hpp"
 
+extern AnimationFactory* animationFactory;
+extern Animation* KeyAnimation;
+extern Animation* PlayerAnimation;
+
 /**
  * Constructor.
  * @param tileType

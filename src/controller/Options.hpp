@@ -1,6 +1,8 @@
 #ifndef OPTIONS_HPP
 #define OPTIONS_HPP
 
+#include "../model/State.hpp"
+
 class Options {
 public:
     // Parsers

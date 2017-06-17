@@ -1,5 +1,5 @@
-#include "KeyRunner.hpp"
-#include "Options.hpp"
+#include "../controller/Controller.hpp"
+#include "../controller/Options.hpp"
 
 /**
  * Entry point into KeyRunner.
@@ -18,15 +18,15 @@ int main(int argc, char** argv) {
     // functions--depending on the initial state of the program.
     State startState = Options::getInitialState();
 
-    KeyRunner keyRunner;
+    Controller controller;
 
     // Play Mode
     if (startState == PLAY) {
-        keyRunner.play();
+        controller.play();
 
     // Editor Mode
     } else if (startState == EDIT) {
-        keyRunner.edit();
+        controller.edit();
     }
 
     return 0;

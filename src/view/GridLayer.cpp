@@ -3,7 +3,6 @@
 
 #include "ConveyorAnimation.hpp"
 #include "GridLayer.hpp"
-#include "../controller/KeyRunner.hpp"
 
 GridLayer* GridLayer::instance = NULL;
 

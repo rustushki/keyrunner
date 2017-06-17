@@ -1,7 +1,6 @@
 #include <iostream>
 #include "ConveyorAnimation.hpp"
 #include "GridLayer.hpp"
-#include "../controller/KeyRunner.hpp"
 
 std::vector<ConveyorAnimation*> ConveyorAnimation::Conveyors;
 

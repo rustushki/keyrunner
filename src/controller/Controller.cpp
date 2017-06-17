@@ -1,8 +1,9 @@
 #include <sstream>
 #include <SDL2/SDL_ttf.h>
 
-#include "KeyRunner.hpp"
-#include "Options.hpp"
+#include "../controller/KeyRunner.hpp"
+#include "../controller/Controller.hpp"
+#include "../controller/Options.hpp"
 #include "../model/LevelManager.hpp"
 #include "../uitk/Animation.hpp"
 #include "../view/AnimationFactory.hpp"
@@ -19,7 +20,7 @@ Animation* PlayerAnimation;
 /**
  * Manually tear down allocated objects.
  */
-KeyRunner::~KeyRunner() {
+Controller::~Controller() {
     delete animationFactory;
     delete KeyAnimation;
     delete PlayerAnimation;
@@ -30,7 +31,7 @@ KeyRunner::~KeyRunner() {
  *
  * This includes initializing SDL, and kicking off the game loop.
  */
-void KeyRunner::play() {
+void Controller::play() {
     // Initialize the PlayModel.
     playModel = PlayModel::GetInstance();
     playModel->setTimeClock(50000);
@@ -111,7 +112,7 @@ void KeyRunner::play() {
 /**
  * Initialize the game elements for edit mode.
  */
-void KeyRunner::edit() {
+void Controller::edit() {
     // Initialize the PlayModel.
     playModel = PlayModel::GetInstance();
     playModel->setState(EDIT);
@@ -177,7 +178,7 @@ void KeyRunner::edit() {
  *
  * If something fails, return false.
  */
-bool KeyRunner::init() {
+bool Controller::init() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "Couldn't initialize SDL: "<< SDL_GetError() << std::endl;
         return false;
@@ -230,7 +231,7 @@ bool KeyRunner::init() {
  * Move the player in the provided direction.
  * @param direction
  */
-void KeyRunner::moveDirection(Direction direction) {
+void Controller::moveDirection(Direction direction) {
     GridLayer::GetInstance()->movePlayer(direction);
 }
 
@@ -239,7 +240,7 @@ void KeyRunner::moveDirection(Direction direction) {
  * If it has been 100ms since the last time the player was conveyed, check to see if they're on a conveyor tile.  If so,
  * convey them in the direction of the conveyor tile.
  */
-void KeyRunner::conveyPlayer() {
+void Controller::conveyPlayer() {
     static uint32_t lastConveyance = 0;
     const int ticksBetweenConveyance = 100;
 
@@ -260,7 +261,7 @@ void KeyRunner::conveyPlayer() {
 /**
  * Clear the back frame, redraw everything onto it, then present it.
  */
-void KeyRunner::updateDisplay() {
+void Controller::updateDisplay() {
     // Clear the back frame to black
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
     SDL_RenderClear(renderer);
@@ -279,7 +280,7 @@ void KeyRunner::updateDisplay() {
  * Poll for events in a loop.  If the event is a directional key, process it as movement only once for the frame;
  * discarding all other directional key presses.  Also handles Q key to quit, and the SDL_QUIT event type.
  */
-void KeyRunner::processInput() {
+void Controller::processInput() {
     SDL_Event event;
     bool alreadyMoved = false;
     while (SDL_PollEvent(&event)) {
@@ -325,7 +326,7 @@ void KeyRunner::processInput() {
 /**
  * Handle events for edit mode.
  */
-void KeyRunner::editHandleEvents() {
+void Controller::editHandleEvents() {
     // Wait for an Event.
     SDL_Event event;
     while (SDL_PollEvent(&event)) {

@@ -1,6 +1,7 @@
 #include <sstream>
-#include "PlayInfoBarLayer.hpp"
-#include "RootLayer.hpp"
+#include "../model/PlayModel.hpp"
+#include "../view/PlayInfoBarLayer.hpp"
+#include "../view/RootLayer.hpp"
 
 PlayInfoBarLayer* PlayInfoBarLayer::instance = 0;
 

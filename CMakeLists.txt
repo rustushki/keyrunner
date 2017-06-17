@@ -17,7 +17,7 @@ add_library(uitk STATIC
 
 # Source Files.
 set(SOURCES
-  src/controller/KeyRunner.cpp
+  src/controller/Controller.cpp
   src/controller/main.cpp
   src/controller/Options.cpp
   src/view/AnimationFactory.cpp
