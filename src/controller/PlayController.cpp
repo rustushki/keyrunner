@@ -2,21 +2,30 @@
 #include "../controller/Options.hpp"
 #include "../model/LevelManager.hpp"
 #include "../view/GridLayer.hpp"
+#include "../view/PlayInfoBarView.hpp"
 
 /**
  * Constructor.
  * <p>
- * Sets the initial value of the time clock and the starting level based on the provided command line options.
+ * Sets the initial value of the time clock and the starting level based on the provided command line options. Creates
+ * all Views used by the PlayController.
  * @param model
  * @param rootLayer
  * @param window
  * @param renderer
  */
-PlayController::PlayController(PlayModel *model, RootLayer* rootLayer, SDL_Window* window, SDL_Renderer* renderer) :
-        BaseController(model, rootLayer, window, renderer) {
-    // Initialize the PlayModel.
+PlayController::PlayController(PlayModel *model, Display* display) : BaseController(model, display) {
     getModel()->setTimeClock(50000);
     getModel()->setLevelNum(Options::getStartingLevel());
+
+    // Create and Add the PlayInfoBarView to the Display
+    SDL_Rect rect;
+    rect.x = 0;
+    rect.h = 40;
+    rect.y = display->getHeight() - rect.h;
+    rect.w = display->getWidth();
+    PlayInfoBarView* playInfoBarView = new PlayInfoBarView(getModel(), rect);
+    display->addView("play_info_bar", playInfoBarView);
 }
 
 /**
@@ -39,10 +48,8 @@ void PlayController::gameLoop() {
         // Begin preparing the frame
         uint32_t workStart = SDL_GetTicks();
 
-        //updateModel();
-
         // Build and present the frame
-        updateDisplay();
+        getDisplay()->draw();
 
         // Move the player along the conveyor belts (if applicable)
         conveyPlayer();

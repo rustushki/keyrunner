@@ -6,7 +6,7 @@
 
 class PlayController : public BaseController {
 public:
-    PlayController(PlayModel* model, RootLayer* rootLayer, SDL_Window* window, SDL_Renderer* renderer);
+    PlayController(PlayModel* model, Display* display);
 
     void gameLoop();
     void processInput();

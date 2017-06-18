@@ -5,7 +5,7 @@
 
 class EditController : public BaseController {
 public:
-    EditController(PlayModel* model, RootLayer* rootLayer, SDL_Window* window, SDL_Renderer* renderer);
+    EditController(PlayModel* model, Display* display);
     void gameLoop();
     void processInput();
 

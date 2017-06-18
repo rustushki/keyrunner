@@ -3,9 +3,7 @@
 #include "../controller/Options.hpp"
 #include "../controller/PlayController.hpp"
 #include "../controller/EditController.hpp"
-#include "../view/PlayRootLayer.hpp"
 #include "../view/AnimationFactory.hpp"
-#include "../view/EditRootLayer.hpp"
 #include "../uitk/Animation.hpp"
 
 // Objects that don't have a home yet
@@ -76,9 +74,8 @@ SDL_Renderer* createRenderer(SDL_Window* window) {
  * @param window
  * @param rootLayer
  */
-void sizeWindowAndShow(SDL_Window* window, RootLayer* rootLayer) {
-    SDL_Rect rlr = rootLayer->getRect();
-    SDL_SetWindowSize(window, rlr.w, rlr.h);
+void sizeWindowAndShow(SDL_Window* window) {
+    SDL_SetWindowSize(window, 625, 440);
     SDL_ShowWindow(window);
 }
 
@@ -106,21 +103,17 @@ int main(int argc, char** argv) {
     PlayModel* model = PlayModel::GetInstance();
     model->setState(Options::getInitialState());
 
-    // Build the RootLayer and size the Window
-    RootLayer* rootLayer = nullptr;
-    if (model->getState() == EDIT) {
-        rootLayer = EditRootLayer::GetInstance();
-    } else {
-        rootLayer = PlayRootLayer::GetInstance();
-    }
-    sizeWindowAndShow(window, rootLayer);
+    sizeWindowAndShow(window);
+
+    // Build the Display that will be used by the Controller
+    Display* display = new Display(window, renderer);
 
     // Start the Game Loop for the appropriate Controller
     Controller* controller = nullptr;
     if (model->getState() == PLAY) {
-        controller = new PlayController(model, rootLayer, window, renderer);
+        controller = new PlayController(model, display);
     } else {
-        controller = new EditController(model, rootLayer, window, renderer);
+        controller = new EditController(model, display);
     }
     controller->gameLoop();
 
@@ -129,7 +122,6 @@ int main(int argc, char** argv) {
     delete KeyAnimation;
     delete PlayerAnimation;
     delete controller;
-    delete rootLayer;
 
     return 0;
 }

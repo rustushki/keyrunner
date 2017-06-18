@@ -1,52 +1,43 @@
 #include <sstream>
-#include "../model/PlayModel.hpp"
-#include "../view/PlayInfoBarLayer.hpp"
-#include "../view/RootLayer.hpp"
-
-PlayInfoBarLayer* PlayInfoBarLayer::instance = 0;
-
-/**
- * Singleton getter.
- * @return the singleton instance of this information bar
- */
-PlayInfoBarLayer* PlayInfoBarLayer::GetInstance() {
-    if (PlayInfoBarLayer::instance == 0) {
-        PlayInfoBarLayer::instance = new PlayInfoBarLayer();
-    }
-
-    return PlayInfoBarLayer::instance;
-}
+#include "../controller/KeyRunner.hpp"
+#include "../view/PlayInfoBarView.hpp"
 
 /**
  * Constructor.
+ * @param model
+ * @param rect
  */
-PlayInfoBarLayer::PlayInfoBarLayer() {}
+PlayInfoBarView::PlayInfoBarView(PlayModel *model, SDL_Rect rect) : BaseView(model, rect) {
+
+}
 
 /**
- * Destructor.
+ * Draw a black bar, the level number and the timer to the bottom of the screen.
+ * @param renderer
  */
-PlayInfoBarLayer::~PlayInfoBarLayer() {}
-
-/**
- * Draws the timer and the level onto the Play Information Bar.
- * @param dst surface on which to draw
- */
-void PlayInfoBarLayer::draw(SDL_Renderer* renderer) {
-    InfoBarLayer::draw(renderer);
-
-    // As they say.
-    this->drawLevel(renderer, PlayModel::GetInstance()->getLevelNum());
+void PlayInfoBarView::draw(SDL_Renderer *renderer) {
+    this->drawBlackBar(renderer);
+    this->drawLevel(renderer, getModel()->getLevelNum());
     this->drawTimer(renderer);
+}
 
+/**
+ * Draws a black bar to the bottom of the screen.
+ * @param renderer
+ */
+void PlayInfoBarView::drawBlackBar(SDL_Renderer* renderer) const {
+    // Build the black bar at the bottom.
+    SDL_Rect r = getRect();
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    SDL_RenderDrawRect(renderer, &r);
 }
 
 /**
  * Draws the level at the bottom left of the screen.
- * @param dst the surface on which to draw
+ * @param renderer
  * @param level the current level
  */
-void PlayInfoBarLayer::drawLevel(SDL_Renderer* renderer, uint16_t level) const {
-
+void PlayInfoBarView::drawLevel(SDL_Renderer* renderer, uint16_t level) const {
     // Covert the level into a string.
     std::string levelStr = "";
     while (level >= 1) {
@@ -62,19 +53,19 @@ void PlayInfoBarLayer::drawLevel(SDL_Renderer* renderer, uint16_t level) const {
 }
 
 /**
- * Draws a string to a given position.  The positions where it may be drawn are simplified to the those described in the
- * InfoBarPos enum.  See it for details.  Uses SDL_ttf to create a surface containing text provided by the given string.
- * It then blits this surface to the screen at the given position.  Color is assumed gray for now.
- * @param destination surface on which to draw
- * @param s string to draw
+ * Draws a string to a given position. The positions where it may be drawn are simplified to the those described in the
+ * InfoBarPos enum. It uses SDL_ttf to create a surface containing text provided by the given string. It then draws this
+ * surface to the screen at the given position. The text color is gray.
+ * @param renderer surface on which to draw
+ * @param text string to draw
  * @param position location on information bar to draw
  */
-void PlayInfoBarLayer::drawText(SDL_Renderer* renderer, std::string s, InfoBarPos position) const {
+void PlayInfoBarView::drawText(SDL_Renderer* renderer, std::string text, InfoBarPos position) const {
     // Gray
     SDL_Color color = {0xAA, 0xAA, 0xAA};
 
     // Build the text surface containing the given string
-    SDL_Surface* textSurface = TTF_RenderText_Solid(this->getFont(), s.c_str(), color);
+    SDL_Surface* textSurface = TTF_RenderText_Solid(this->getFont(), text.c_str(), color);
 
     // If the surface is not created successfully
     if (textSurface == NULL) {
@@ -82,7 +73,7 @@ void PlayInfoBarLayer::drawText(SDL_Renderer* renderer, std::string s, InfoBarPo
         errorMessage << "Error creating text: " << TTF_GetError();
         throw std::runtime_error(errorMessage.str());
 
-    // Otherwise,
+        // Otherwise,
     } else {
         const uint16_t marginTop = 5;
 
@@ -120,8 +111,8 @@ void PlayInfoBarLayer::drawText(SDL_Renderer* renderer, std::string s, InfoBarPo
  * Draws the timer at the bottom right of the screen.
  * @param destination surface on which to draw
  */
-void PlayInfoBarLayer::drawTimer(SDL_Renderer* renderer) const {
-    uint32_t currentTimeClock = PlayModel::GetInstance()->getTimeClock();
+void PlayInfoBarView::drawTimer(SDL_Renderer* renderer) const {
+    long currentTimeClock = getModel()->getTimeClock();
 
     // Convert the timeout into a string.
     std::string timer = "";
@@ -140,7 +131,7 @@ void PlayInfoBarLayer::drawTimer(SDL_Renderer* renderer) const {
     timer += ".";
 
     // Get the tenths place.
-    int decimal = (currentTimeClock % 1000) / 100;
+    int decimal = (int) (currentTimeClock % 1000) / 100;
     timer += (char)decimal + 0x30;
 
     // Format the Timer String for Display
@@ -151,20 +142,18 @@ void PlayInfoBarLayer::drawTimer(SDL_Renderer* renderer) const {
 }
 
 /**
- * Load a font for usage.  Once the font is loaded, keep it statically within to eliminate a global and also prevent
+ * Load a font for usage. Once the font is loaded, keep it statically within to eliminate a global and also prevent
  * reloading the same font.
  * @return TTF_Font*
  */
-TTF_Font* PlayInfoBarLayer::getFont() const {
+TTF_Font* PlayInfoBarView::getFont() const {
     // Store loaded font here.
     static TTF_Font* font = NULL;
 
     // If the font hasn't been loaded, load it.
     if (font == NULL) {
-
         // Is there a way to find these fonts in the filesystem?
         font = TTF_OpenFont(FONT_PATH, 52);
-
     }
 
     // Return the font.

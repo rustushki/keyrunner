@@ -4,22 +4,17 @@
 #include "BaseController.hpp"
 #include "../view/ConveyorAnimation.hpp"
 #include "../view/GridLayer.hpp"
-#include "../view/EditRootLayer.hpp"
 
 /**
  * Constructor.
  * <p>
  * Sets the provided fields for subclasses.
  * @param model
- * @param rootLayer
- * @param window
- * @param renderer
+ * @param display
  */
-BaseController::BaseController(PlayModel *model, RootLayer *rootLayer, SDL_Window *window, SDL_Renderer *renderer) {
+BaseController::BaseController(PlayModel *model, Display* display) {
     this->model = model;
-    this->rootLayer = rootLayer;
-    this->window = window;
-    this->renderer = renderer;
+    this->display = display;
 }
 
 /**
@@ -45,22 +40,6 @@ void BaseController::conveyPlayer() {
 }
 
 /**
- * Clear the back frame, redraw everything onto it, then present it.
- */
-void BaseController::updateDisplay() {
-    // Clear the back frame to black
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
-    SDL_RenderClear(renderer);
-
-    // Update and draw the RootLayer (and all nested layers beneath) onto the back frame
-    rootLayer->update();
-    rootLayer->draw(renderer);
-
-    // Present the back frame
-    SDL_RenderPresent(renderer);
-}
-
-/**
  * Return the root model that the Controller addresses.
  * @return PlayModel*
  */
@@ -68,26 +47,7 @@ PlayModel* BaseController::getModel() {
     return model;
 }
 
-/**
- * Return the renderer that the Controller will draw to.
- * @return SDL_Renderer*
- */
-SDL_Renderer* BaseController::getRenderer() {
-    return renderer;
+Display *BaseController::getDisplay() {
+    return display;
 }
 
-/**
- * Return the window that the Controller's renderer presents to.
- * @return SDL_Window*
- */
-SDL_Window* BaseController::getWindow() {
-    return window;
-}
-
-/**
- * Return the root layer
- * @return RootLayer*
- */
-RootLayer* BaseController::getRootLayer() {
-    return rootLayer;
-}

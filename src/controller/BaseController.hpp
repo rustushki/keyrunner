@@ -6,28 +6,21 @@
 #include "../model/PlayModel.hpp"
 #include "Controller.hpp"
 
-class RootLayer;
-
 class BaseController : public Controller {
 public:
-    BaseController(PlayModel* model, RootLayer* rootLayer, SDL_Window* window, SDL_Renderer* renderer);
+    BaseController(PlayModel* model, Display* display);
     virtual void gameLoop() = 0;
     virtual void processInput() = 0;
 
 protected:
     virtual PlayModel* getModel();
-    virtual SDL_Renderer* getRenderer();
-    virtual SDL_Window* getWindow();
-    virtual RootLayer* getRootLayer();
-    virtual void updateDisplay();
+    virtual Display* getDisplay();
 
     void conveyPlayer();
 
 private:
-    PlayModel*    model;
-    SDL_Window*   window;
-    SDL_Renderer* renderer;
-    RootLayer*    rootLayer;
+    PlayModel* model;
+    Display* display;
 };
 
 #endif

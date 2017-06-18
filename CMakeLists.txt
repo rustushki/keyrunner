@@ -11,8 +11,10 @@ add_library(uitk STATIC
   src/uitk/Animation.cpp
   src/uitk/ButtonLayer.cpp
   src/uitk/ButtonLayerBuilder.cpp
+  src/uitk/Display.cpp
   src/uitk/Layer.cpp
   src/uitk/SpriteSheet.cpp
+  src/uitk/View.hpp
 )
 
 # Source Files.
@@ -27,15 +29,13 @@ set(SOURCES
   src/model/LevelManager.cpp
   src/model/PlayModel.cpp
   src/model/TileType.cpp
+  src/uitk/BaseView.cpp
   src/view/AnimationFactory.cpp
   src/view/ConveyorAnimation.cpp
   src/view/EditInfoBarLayer.cpp
-  src/view/EditRootLayer.cpp
   src/view/GridLayer.cpp
   src/view/InfoBarLayer.cpp
-  src/view/PlayInfoBarLayer.cpp
-  src/view/PlayRootLayer.cpp
-  src/view/RootLayer.cpp
+  src/view/PlayInfoBarView.cpp
   src/view/TileLayer.cpp
   src/view/TileSelectorLayer.cpp
 )

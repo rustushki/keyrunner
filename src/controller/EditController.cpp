@@ -8,12 +8,9 @@
  * <p>
  * Creates a new level or loads an existing one depending on the initial state of the model.
  * @param model
- * @param rootLayer
- * @param window
- * @param renderer
+ * @param display
  */
-EditController::EditController(PlayModel *model, RootLayer* rootLayer, SDL_Window* window, SDL_Renderer* renderer) :
-        BaseController(model, rootLayer, window, renderer) {
+EditController::EditController(PlayModel *model, Display* display) : BaseController(model, display) {
     // Create New Level for Edit
     if (Options::getCreateNewLevel()) {
         getModel()->setLevelNum((uint16_t) (LevelManager::GetTotal() + 1));
@@ -42,7 +39,7 @@ void EditController::gameLoop() {
         uint32_t workStart = SDL_GetTicks();
 
         // Build and present the frame
-        updateDisplay();
+        getDisplay()->draw();
 
         processInput();
 
