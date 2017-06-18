@@ -1,39 +1,21 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include "../controller/KeyRunner.hpp"
-#include "../model/Direction.hpp"
-#include "../model/PlayModel.hpp"
-
-class Animation;
-class RootLayer;
-class AnimationFactory;
-
-extern Animation* KeyAnimation;
-extern Animation* PlayerAnimation;
-extern AnimationFactory* animationFactory;
+#include "../view/RootLayer.hpp"
 
 class Controller {
 public:
-    ~Controller();
+    virtual void gameLoop() = 0;
+    virtual void processInput() = 0;
 
-    void play();
-    void edit();
+protected:
+    virtual PlayModel* getModel() = 0;
+    virtual SDL_Renderer* getRenderer() = 0;
+    virtual SDL_Window* getWindow() = 0;
+    virtual RootLayer* getRootLayer() = 0;
+    virtual void updateDisplay() = 0;
 
-private:
-
-    // Helpers
-    bool init();
-    void moveDirection(Direction direction);
-    void editHandleEvents();
-    void processInput();
-    void conveyPlayer();
-    void updateDisplay();
-
-    SDL_Window*   window;
-    SDL_Renderer* renderer;
-    RootLayer*    rootLayer;
-    PlayModel*    playModel;
 };
+
 
 #endif

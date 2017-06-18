@@ -10,7 +10,7 @@
  * Builds an AnimationFactory instance and ensures that it has the SDL_Renderer for texture loading.
  * @param renderer
  */
-AnimationFactory::AnimationFactory(SDL_Renderer *renderer) {
+AnimationFactory::AnimationFactory(SDL_Renderer* renderer) {
     this->renderer = renderer;
 }
 

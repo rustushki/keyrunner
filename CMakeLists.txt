@@ -17,24 +17,28 @@ add_library(uitk STATIC
 
 # Source Files.
 set(SOURCES
-  src/controller/Controller.cpp
-  src/controller/main.cpp
+  src/controller/BaseController.cpp
+  src/controller/Controller.hpp
+  src/controller/EditController.cpp
   src/controller/Options.cpp
-  src/view/AnimationFactory.cpp
-  src/view/EditInfoBarLayer.cpp
-  src/view/GridLayer.cpp
-  src/view/PlayInfoBarLayer.cpp
-  src/view/RootLayer.cpp
-  src/view/TileLayer.cpp
-  src/view/ConveyorAnimation.cpp
-  src/view/EditRootLayer.cpp
-  src/view/InfoBarLayer.cpp
-  src/view/PlayRootLayer.cpp
-  src/view/TileSelectorLayer.cpp
+  src/controller/PlayController.cpp
+  src/controller/main.cpp
   src/model/EditorModel.cpp
   src/model/LevelManager.cpp
   src/model/PlayModel.cpp
-  src/model/TileType.cpp)
+  src/model/TileType.cpp
+  src/view/AnimationFactory.cpp
+  src/view/ConveyorAnimation.cpp
+  src/view/EditInfoBarLayer.cpp
+  src/view/EditRootLayer.cpp
+  src/view/GridLayer.cpp
+  src/view/InfoBarLayer.cpp
+  src/view/PlayInfoBarLayer.cpp
+  src/view/PlayRootLayer.cpp
+  src/view/RootLayer.cpp
+  src/view/TileLayer.cpp
+  src/view/TileSelectorLayer.cpp
+)
 
 # Declare Executable.
 add_executable(keyrunner ${SOURCES})
