@@ -64,8 +64,26 @@ TileCoord PlayModel::getPlayerCoord() const {
     return playerCoord;
 }
 
+/**
+ * Assign a new coordinate to the player.
+ * <p>
+ * If the coordinate has the key, transfer ownership to the player. If the coordinate is a teleporter, move the player
+ * to the matching tile.
+ * @param tileCoord
+ */
 void PlayModel::setPlayerCoord(TileCoord tileCoord) {
-    playerCoord = tileCoord;
+    // Give the player the key if the tile has the key
+    if (tileCoordHasKey(tileCoord)) {
+        setPlayerHasKey(true);
+    }
+
+    // Handle Teleporter Tiles and Empty Tiles
+    if (isTeleporter(tileCoord)) {
+        TileCoord matching = getMatchingTeleporterTileCoord(tileCoord);
+        playerCoord = matching;
+    } else {
+        playerCoord = tileCoord;
+    }
 }
 
 /* ------------------------------------------------------------------------------
@@ -349,4 +367,37 @@ void PlayModel::decrementTimeClock(uint16_t step) {
 
 void PlayModel::incrementTimeClock(uint16_t step) {
     timeClock += step;
+}
+
+/**
+ * Move the player in the provided direction.
+ * @param direction
+ */
+void PlayModel::movePlayerInDirection(Direction direction) {
+    TileCoord oldTileCoord = getPlayerCoord();
+    TileCoord newTileCoord;
+    if (direction == DIRECTION_UP) {
+        newTileCoord = getTileCoordUp(oldTileCoord);
+    }
+
+    if (direction == DIRECTION_DOWN) {
+        newTileCoord = getTileCoordDown(oldTileCoord);
+    }
+
+    if (direction == DIRECTION_LEFT) {
+        newTileCoord = getTileCoordLeft(oldTileCoord);
+    }
+
+    if (direction == DIRECTION_RIGHT) {
+        newTileCoord = getTileCoordRight(oldTileCoord);
+    }
+
+    // Do not move player if the new tile is a wall. Do not continue evaluating criteria either, such as teleporters
+    // and wraparound. They do not apply since the player has attempt to walk into a wall
+    if (isWall(newTileCoord)) {
+        return;
+    }
+
+    // Move the player to the tile
+    setPlayerCoord(newTileCoord);
 }

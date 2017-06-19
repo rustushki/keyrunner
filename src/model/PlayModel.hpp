@@ -49,6 +49,7 @@ class PlayModel {
         TileCoord getTileCoordDown(TileCoord current) const;
         TileCoord getTileCoordLeft(TileCoord current) const;
         TileCoord getTileCoordRight(TileCoord current) const;
+        void movePlayerInDirection(Direction direction);
 
     private:
         // PlayMode is singleton.

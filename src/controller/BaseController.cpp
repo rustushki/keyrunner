@@ -27,12 +27,10 @@ void BaseController::conveyPlayer() {
 
     if (SDL_GetTicks() - lastConveyance >= ticksBetweenConveyance || lastConveyance == 0) {
 
-        // If the tile in a conveyor tile,
-        if (model->isConveyor(model->getPlayerCoord())) {
-            // Convey the player to the next tile
-            TileCoord newTileCoord = model->getNextConveyorTileCoord(model->getPlayerCoord());
-            TileLayer* newTile = GridLayer::GetInstance()->getTile(newTileCoord.first, newTileCoord.second);
-            GridLayer::GetInstance()->movePlayerToTile(newTile);
+        // If the player is on a conveyor tile, convey the player to the next tile on the belt
+        if (getModel()->isConveyor(getModel()->getPlayerCoord())) {
+            TileCoord newTileCoord = getModel()->getNextConveyorTileCoord(getModel()->getPlayerCoord());
+            getModel()->setPlayerCoord(newTileCoord);
         }
 
         lastConveyance = SDL_GetTicks();

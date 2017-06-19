@@ -31,6 +31,7 @@ set(SOURCES
   src/model/TileType.cpp
   src/uitk/BaseView.cpp
   src/view/AnimationFactory.cpp
+  src/view/BoardView.cpp
   src/view/ConveyorAnimation.cpp
   src/view/EditInfoBarLayer.cpp
   src/view/GridLayer.cpp

@@ -1,8 +1,8 @@
 #include "../controller/PlayController.hpp"
 #include "../controller/Options.hpp"
 #include "../model/LevelManager.hpp"
-#include "../view/GridLayer.hpp"
 #include "../view/PlayInfoBarView.hpp"
+#include "../view/BoardView.hpp"
 
 /**
  * Constructor.
@@ -18,8 +18,16 @@ PlayController::PlayController(PlayModel *model, Display* display) : BaseControl
     getModel()->setTimeClock(50000);
     getModel()->setLevelNum(Options::getStartingLevel());
 
-    // Create and Add the PlayInfoBarView to the Display
+    // Add the Board to the Display
     SDL_Rect rect;
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = display->getWidth();
+    rect.h = 400;
+    BoardView* boardView = new BoardView(getModel(), rect);
+    display->addView("board", boardView);
+
+    // Add the Info Bar to the Display
     rect.x = 0;
     rect.h = 40;
     rect.y = display->getHeight() - rect.h;
@@ -112,16 +120,16 @@ void PlayController::processInput() {
             // Limit movement to once per frame
             if (!alreadyMoved) {
                 if (event.key.keysym.sym == SDLK_DOWN) {
-                    moveDirection(DIRECTION_DOWN);
+                    getModel()->movePlayerInDirection(DIRECTION_DOWN);
 
                 } else if (event.key.keysym.sym == SDLK_UP) {
-                    moveDirection(DIRECTION_UP);
+                    getModel()->movePlayerInDirection(DIRECTION_UP);
 
                 } else if (event.key.keysym.sym == SDLK_LEFT) {
-                    moveDirection(DIRECTION_LEFT);
+                    getModel()->movePlayerInDirection(DIRECTION_LEFT);
 
                 } else if (event.key.keysym.sym == SDLK_RIGHT) {
-                    moveDirection(DIRECTION_RIGHT);
+                    getModel()->movePlayerInDirection(DIRECTION_RIGHT);
 
                 }
                 alreadyMoved = true;
@@ -141,10 +149,3 @@ void PlayController::processInput() {
     }
 }
 
-/**
- * Move the player in the provided direction.
- * @param direction
- */
-void PlayController::moveDirection(Direction direction) {
-    GridLayer::GetInstance()->movePlayer(direction);
-}

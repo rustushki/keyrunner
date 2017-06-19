@@ -1,8 +1,7 @@
 #include <sstream>
 
-#include "LevelManager.hpp"
+#include "../model/LevelManager.hpp"
 #include "../controller/KeyRunner.hpp"
-#include "../view/GridLayer.hpp"
 
 uint16_t LevelManager::w;
 uint16_t LevelManager::h;
@@ -220,11 +219,8 @@ void LevelManager::Reset() {
 }
 
 void LevelManager::Populate(uint8_t levelNum) {
-    // Get the GridLayer instance.
-    GridLayer* gl  = GridLayer::GetInstance();
     PlayModel* playModel  = PlayModel::GetInstance();
 
-    // Set the Level in the GridLayer.
     playModel->setLevelNum(levelNum);
 
     // Player does not have key at level start.
@@ -239,7 +235,6 @@ void LevelManager::Populate(uint8_t levelNum) {
 
             bool deviationMatch = false;
             if (deviations.find(curTileCoord) != deviations.end()) {
-                gl->changeTileType((uint16_t) tx, (uint16_t) ty, deviations[curTileCoord]);
                 playModel->changeTileType(curTileCoord, deviations[curTileCoord]);
                 curDevIdx++;
                 deviationMatch = true;
@@ -247,7 +242,6 @@ void LevelManager::Populate(uint8_t levelNum) {
 
             if (!deviationMatch) {
                 // Add the tile to the level.
-                gl->changeTileType((uint16_t) tx, (uint16_t) ty, defTT);
                 playModel->changeTileType(curTileCoord, defTT);
             }
 
@@ -266,5 +260,4 @@ void LevelManager::Populate(uint8_t levelNum) {
 
         }
     }
-    gl->init();
 }

@@ -8,8 +8,6 @@
 
 // Objects that don't have a home yet
 AnimationFactory* animationFactory;
-Animation* KeyAnimation;
-Animation* PlayerAnimation;
 
 /**
  * Initializes SDL and SDL_ttf. Ensure SDL_Quit is called on exit.
@@ -96,8 +94,6 @@ int main(int argc, char** argv) {
 
     // Create these view-related globals which don't have better homes
     animationFactory = new AnimationFactory(renderer);
-    KeyAnimation    = animationFactory->build(ANIMATION_TYPE_KEY);
-    PlayerAnimation = animationFactory->build(ANIMATION_TYPE_PUMPKIN);
 
     // Create the Model
     PlayModel* model = PlayModel::GetInstance();
@@ -119,8 +115,6 @@ int main(int argc, char** argv) {
 
     // Free some memory
     delete animationFactory;
-    delete KeyAnimation;
-    delete PlayerAnimation;
     delete controller;
 
     return 0;

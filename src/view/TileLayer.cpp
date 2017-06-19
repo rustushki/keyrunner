@@ -100,18 +100,4 @@ void TileLayer::draw(SDL_Renderer* renderer) {
 
     this->getAnimation()->move(xp, yp);
     this->getAnimation()->blit(renderer);
-
-    PlayModel* playModel = PlayModel::GetInstance();
-
-    // Redraw the Key.
-    if (playModel->tileCoordHasKey(TileCoord(this->x, this->y))) {
-        KeyAnimation->move(xp, yp);
-        KeyAnimation->blit(renderer);
-    }
-
-    // Redraw the Player.
-    if (playModel->tileCoordHasPlayer(TileCoord(this->x, this->y))) {
-        PlayerAnimation->move(xp, yp);
-        PlayerAnimation->blit(renderer);
-    }
 }
