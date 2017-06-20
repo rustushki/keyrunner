@@ -12,6 +12,13 @@ PlayInfoBarView::PlayInfoBarView(PlayModel *model, SDL_Rect rect) : BaseView(mod
 }
 
 /**
+ * Destructor.
+ */
+PlayInfoBarView::~PlayInfoBarView() {
+
+}
+
+/**
  * Draw a black bar, the level number and the timer to the bottom of the screen.
  * @param renderer
  */

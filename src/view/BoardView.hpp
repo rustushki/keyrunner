@@ -7,7 +7,7 @@
 class BoardView : public BaseView {
 public:
     BoardView(PlayModel* model, SDL_Rect rect);
-    ~BoardView();
+    virtual ~BoardView();
     void draw(SDL_Renderer* renderer);
 
 private:

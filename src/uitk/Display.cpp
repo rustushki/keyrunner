@@ -85,3 +85,15 @@ uint16_t Display::getWidth() const {
     SDL_GetWindowSize(window, &width, nullptr);
     return (uint16_t) width;
 }
+
+/**
+ * Iterate over the Views currently displayed and advance each of their Animations.
+ */
+void Display::advanceAnimations() {
+    for (auto viewPair : viewMap) {
+        View* view = viewPair.second;
+        for (Animation* animation : view->getAnimations()) {
+            animation->advance();
+        }
+    }
+}

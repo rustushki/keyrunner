@@ -16,6 +16,7 @@ public:
     void deleteViewIfExists(std::string name);
     uint16_t getHeight() const;
     uint16_t getWidth() const;
+    void advanceAnimations();
 
 private:
     SDL_Window* window;

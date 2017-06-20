@@ -13,6 +13,18 @@ BaseView::BaseView(PlayModel *model, SDL_Rect rect) {
 }
 
 /**
+ * Destructor.
+ * <p>
+ * Free all stored animations.
+ */
+BaseView::~BaseView() {
+    const std::vector<Animation*> animations = getAnimations();
+    for (Animation* animation : animations) {
+        delete animation;
+    }
+}
+
+/**
  * Get the model that contains the information to display.
  * @return PlayModel*
  */
@@ -48,4 +60,20 @@ void BaseView::hide() {
  */
 bool BaseView::isVisible() const {
     return this->visible;
+}
+
+/**
+ * Get the vector of Animations which need to be displayed in this View.
+ * @return std::vector<Animation*>
+ */
+const std::vector<Animation*> BaseView::getAnimations() const {
+    return animations;
+}
+
+/**
+ * Add an Animation to the vector of Animations that need to be displayed in this View.
+ * @param animation
+ */
+void BaseView::addAnimation(Animation* animation) {
+    animations.push_back(animation);
 }

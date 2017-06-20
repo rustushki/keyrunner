@@ -9,6 +9,7 @@
 class PlayInfoBarView : public BaseView {
 public:
     PlayInfoBarView(PlayModel* model, SDL_Rect rect);
+    virtual ~PlayInfoBarView();
     void draw(SDL_Renderer* renderer);
 
 private:

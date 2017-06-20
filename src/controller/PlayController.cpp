@@ -56,6 +56,9 @@ void PlayController::gameLoop() {
         // Begin preparing the frame
         uint32_t workStart = SDL_GetTicks();
 
+        // Advance the animations because we're about to compose the frame
+        getDisplay()->advanceAnimations();
+
         // Build and present the frame
         getDisplay()->draw();
 

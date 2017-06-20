@@ -12,17 +12,17 @@ extern AnimationFactory* animationFactory;
  */
 BoardView::BoardView(PlayModel* model, SDL_Rect rect) : BaseView(model, rect) {
     keyAnimation    = animationFactory->build(ANIMATION_TYPE_KEY);
+    addAnimation(keyAnimation);
+
     playerAnimation = animationFactory->build(ANIMATION_TYPE_PUMPKIN);
+    addAnimation(playerAnimation);
 }
 
 /**
  * Destructor.
- * <p>
- * Frees the key and player animations.
  */
 BoardView::~BoardView() {
-    delete keyAnimation;
-    delete playerAnimation;
+
 }
 
 /**

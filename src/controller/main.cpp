@@ -116,6 +116,7 @@ int main(int argc, char** argv) {
     // Free some memory
     delete animationFactory;
     delete controller;
+    delete display;
 
     return 0;
 }
