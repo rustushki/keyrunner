@@ -14,19 +14,27 @@ PlayModel* PlayModel::GetInstance() {
     return instance;
 }
 
+/**
+ * Constructor.
+ */
 PlayModel::PlayModel() {
     // Do nothing.
 }
 
-/* ------------------------------------------------------------------------------
- * Is the current PlayModel is a Complete State?
- *
+/**
+ * Is the currently loaded level finished?
+ * <p>
  * This happens when the player has the key and is standing at the door.
+ * @return boolean
  */
 bool PlayModel::isComplete() const {
     return (playerHasKey && isDoor(getPlayerCoord()));
 }
 
+/**
+ * Set if the player has the key.
+ * @param playerHasKey
+ */
 void PlayModel::setPlayerHasKey(bool playerHasKey) {
     this->playerHasKey = playerHasKey;
     if (this->playerHasKey) {
@@ -34,10 +42,18 @@ void PlayModel::setPlayerHasKey(bool playerHasKey) {
     }
 }
 
+/**
+ * Get the level number of the currently loaded level.
+ * @return uint8_t
+ */
 uint8_t PlayModel::getLevelNum() const {
     return level;
 }
 
+/**
+ * Set the number of the currently loaded level.
+ * @param level
+ */
 void PlayModel::setLevelNum(uint16_t level) {
     this->level = level;
 }
