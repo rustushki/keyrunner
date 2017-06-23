@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <stdint.h>
+#include <vector>
 
 #include "Direction.hpp"
 #include "TileType.hpp"
@@ -13,10 +14,6 @@ typedef std::pair<uint16_t, uint16_t> TileCoord;
 class PlayModel {
 
     public:
-        // Fixed Height and Width of the Grid.
-        static const uint16_t GRID_HEIGHT = 16;
-        static const uint16_t GRID_WIDTH = 25;
-
         static PlayModel* GetInstance();
         bool isComplete() const;
         void setPlayerHasKey(bool playerHasKey);
@@ -44,6 +41,8 @@ class PlayModel {
         void setTimeClock(uint16_t timeClockValue);
         void decrementTimeClock(uint16_t step);
         void incrementTimeClock(uint16_t step);
+        uint16_t getGridHeight() const;
+        uint16_t getGridWidth() const;
 
         TileCoord getTileCoordUp(TileCoord current) const;
         TileCoord getTileCoordDown(TileCoord current) const;
@@ -64,7 +63,7 @@ class PlayModel {
         TileCoord keyCoord;
         TileCoord playerCoord;
 
-        TileType tileType[PlayModel::GRID_HEIGHT][PlayModel::GRID_WIDTH];
+        std::vector< std::vector<TileType> > tileType;
 };
 
 #endif

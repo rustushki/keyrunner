@@ -34,8 +34,8 @@ BoardView::~BoardView() {
 void BoardView::draw(SDL_Renderer* renderer) {
     const uint16_t tileSize = 25;
 
-    for (uint16_t y = 0; y < PlayModel::GRID_HEIGHT; y++) {
-        for (uint16_t x = 0; x < PlayModel::GRID_WIDTH; x++) {
+    for (uint16_t y = 0; y < getModel()->getGridHeight(); y++) {
+        for (uint16_t x = 0; x < getModel()->getGridWidth(); x++) {
             TileCoord currentTileCoord = TileCoord(x, y);
 
             TileType tileType = getModel()->getTileType(currentTileCoord);

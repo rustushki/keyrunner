@@ -62,8 +62,8 @@ bool LevelManager::Write() {
     FILE* fp = fopen(levelFile.c_str(), "wb");
 
     // Write Width and Height.
-    uint16_t w = static_cast<uint16_t>(PlayModel::GRID_WIDTH);
-    uint16_t h = static_cast<uint16_t>(PlayModel::GRID_HEIGHT);
+    uint16_t w = static_cast<uint16_t>(playModel->getGridWidth());
+    uint16_t h = static_cast<uint16_t>(playModel->getGridHeight());
     fwrite(&w, sizeof(uint16_t), 1, fp);
     fwrite(&h, sizeof(uint16_t), 1, fp);
 
@@ -208,8 +208,9 @@ std::string LevelManager::GetPath(uint8_t levelNum, bool inCwd) {
 }
 
 void LevelManager::Reset() {
-    w = PlayModel::GRID_WIDTH;
-    h = PlayModel::GRID_HEIGHT;
+    PlayModel* playModel  = PlayModel::GetInstance();
+    w = playModel->getGridWidth();
+    h = playModel->getGridHeight();
     playerCoord.first = 0;
     playerCoord.second = 0;
     keyCoord.first = (uint16_t) (w - 1);

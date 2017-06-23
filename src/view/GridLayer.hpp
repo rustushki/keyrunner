@@ -44,7 +44,7 @@ private:
 
     // Various stateful variables which describe the current state of the
     // GridLayer.
-    TileLayer* tile[PlayModel::GRID_HEIGHT][PlayModel::GRID_WIDTH];
+    TileLayer* tile[25][16];
     std::vector<TileLayer*> animatedTiles;
 
     // Various methods which can change the state of the GridLayer.

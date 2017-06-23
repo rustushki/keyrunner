@@ -102,9 +102,9 @@ void ConveyorAnimation::BuildConveyorAnimations() {
 
     PlayModel* playModel = PlayModel::GetInstance();
 
-    for (int x = 0; x < PlayModel::GRID_WIDTH; x++) {
+    for (int x = 0; x < playModel->getGridWidth(); x++) {
 
-        for (int y = 0; y < PlayModel::GRID_HEIGHT; y++) {
+        for (int y = 0; y < playModel->getGridHeight(); y++) {
             TileCoord tileCoord = TileCoord(x, y);
 
             if (playModel->isConveyor(tileCoord)) {

@@ -1,10 +1,8 @@
 #include <sstream>
-#include "PlayModel.hpp"
+#include "../model/PlayModel.hpp"
 #include "../controller/KeyRunner.hpp"
 
 PlayModel* PlayModel::instance = NULL;
-const uint16_t PlayModel::GRID_HEIGHT;
-const uint16_t PlayModel::GRID_WIDTH;
 
 PlayModel* PlayModel::GetInstance() {
     if (instance == NULL) {
@@ -16,9 +14,17 @@ PlayModel* PlayModel::GetInstance() {
 
 /**
  * Constructor.
+ * <p>
+ * Initializes the tile type grid to be sized as getGridHeight() and getGridWidth() indicate.
  */
 PlayModel::PlayModel() {
-    // Do nothing.
+    for (int row = 0; row < getGridHeight(); row++) {
+        std::vector<TileType> tileRow;
+        for (int column = 0; column < getGridWidth(); column++) {
+            tileRow.push_back(TILE_TYPE_EMPTY);
+        }
+        this->tileType.push_back(tileRow);
+    }
 }
 
 /**
@@ -38,7 +44,7 @@ bool PlayModel::isComplete() const {
 void PlayModel::setPlayerHasKey(bool playerHasKey) {
     this->playerHasKey = playerHasKey;
     if (this->playerHasKey) {
-        this->keyCoord = TileCoord(GRID_WIDTH, GRID_HEIGHT);
+        this->keyCoord = TileCoord(getGridWidth(), getGridHeight());
     }
 }
 
@@ -149,7 +155,7 @@ TileCoord PlayModel::getTileCoordUp(TileCoord current) const {
     int x = current.first + 0;
     int y = current.second - 1;
     if (y < 0) {
-        y = GRID_HEIGHT-1;
+        y = getGridHeight() - 1;
     }
     return TileCoord(x, y);
 }
@@ -157,7 +163,7 @@ TileCoord PlayModel::getTileCoordUp(TileCoord current) const {
 TileCoord PlayModel::getTileCoordDown(TileCoord current) const {
     int x = current.first + 0;
     int y = current.second + 1;
-    if (y >= GRID_HEIGHT) {
+    if (y >= getGridHeight()) {
         y = 0;
     }
     return TileCoord(x, y);
@@ -167,7 +173,7 @@ TileCoord PlayModel::getTileCoordLeft(TileCoord current) const {
     int x = current.first - 1;
     int y = current.second + 0;
     if (x < 0) {
-        x = GRID_WIDTH-1;
+        x = getGridWidth() - 1;
     }
     return TileCoord(x, y);
 }
@@ -175,7 +181,7 @@ TileCoord PlayModel::getTileCoordLeft(TileCoord current) const {
 TileCoord PlayModel::getTileCoordRight(TileCoord current) const {
     int x = current.first + 1;
     int y = current.second + 0;
-    if (x >= GRID_WIDTH) {
+    if (x >= getGridWidth()) {
         x = 0;
     }
     return TileCoord(x, y);
@@ -249,14 +255,14 @@ TileCoord PlayModel::getNextConveyorTileCoord(TileCoord current) const {
     }
 
     TileCoord tryTileCoord;
-    TileCoord secondPlaceCoord(GRID_WIDTH, GRID_HEIGHT);
+    TileCoord secondPlaceCoord(getGridWidth(), getGridHeight());
     TileCoord thirdPlaceCoord = current;
 
     while (true) {
 
         tryTileCoord = getTileCoordInDirection(current, dir);
 
-        if (!isWall(tryTileCoord) && !isConveyor(tryTileCoord) && secondPlaceCoord.first != GRID_WIDTH) {
+        if (!isWall(tryTileCoord) && !isConveyor(tryTileCoord) && secondPlaceCoord.first != getGridWidth()) {
             secondPlaceCoord = tryTileCoord;
 
             // Prefer adjacent conveyor belt tiles.  Explicitly do not place the
@@ -295,7 +301,7 @@ TileCoord PlayModel::getNextConveyorTileCoord(TileCoord current) const {
 
     }
 
-    if (secondPlaceCoord.first != GRID_WIDTH && secondPlaceCoord.second != GRID_HEIGHT) {
+    if (secondPlaceCoord.first != getGridWidth() && secondPlaceCoord.second != getGridHeight()) {
         return secondPlaceCoord;
     }
 
@@ -321,8 +327,8 @@ TileCoord PlayModel::getMatchingTeleporterTileCoord(TileCoord t) const {
 
         // Search for the matching tile.
         bool found = false;
-        for (uint16_t x = 0; x < GRID_WIDTH; x++) {
-            for (uint16_t y = 0; y < GRID_HEIGHT; y++) {
+        for (uint16_t x = 0; x < getGridWidth(); x++) {
+            for (uint16_t y = 0; y < getGridHeight(); y++) {
 
                 if (x != t.first || y != t.second) {
 
@@ -416,4 +422,20 @@ void PlayModel::movePlayerInDirection(Direction direction) {
 
     // Move the player to the tile
     setPlayerCoord(newTileCoord);
+}
+
+/**
+ * Get the Grid Height.
+ * @return uint16_t
+ */
+uint16_t PlayModel::getGridHeight() const {
+    return 16;
+}
+
+/**
+ * Get the Grid Width.
+ * @return uint16_t
+ */
+uint16_t PlayModel::getGridWidth() const {
+    return 25;
 }

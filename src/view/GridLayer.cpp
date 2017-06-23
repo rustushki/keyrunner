@@ -15,8 +15,9 @@ GridLayer* GridLayer::GetInstance() {
 }
 
 GridLayer::GridLayer() {
-    for (uint16_t x = 0; x < PlayModel::GRID_WIDTH; x++) {
-        for (uint16_t y = 0; y < PlayModel::GRID_HEIGHT; y++) {
+    // GRID_WIDTH and GRID_HEIGHT have been hardcoded to 25 and 16 until GridLayer can be factored out
+    for (uint16_t x = 0; x < 25; x++) {
+        for (uint16_t y = 0; y < 16; y++) {
             tile[y][x] = new TileLayer(TILE_TYPE_EMPTY, x, y);
         }
     }
@@ -57,19 +58,21 @@ void GridLayer::animateTiles() {
 
 void GridLayer::draw(SDL_Renderer* renderer) {
     // Redraw the tile referenced by that pair.
-    for (int y = 0; y < PlayModel::GRID_HEIGHT; y++) {
-        for (int x = 0; x < PlayModel::GRID_WIDTH; x++) {
+    // GRID_WIDTH and GRID_HEIGHT have been hardcoded to 25 and 16 until GridLayer can be factored out
+    for (int y = 0; y < 16; y++) {
+        for (int x = 0; x < 25; x++) {
             tile[y][x]->draw(renderer);
         }
     }
 }
 
 SDL_Rect GridLayer::getRect() const {
+    // GRID_WIDTH and GRID_HEIGHT have been hardcoded to 25 and 16 until GridLayer can be factored out
     SDL_Rect r;
     r.x = 0;
     r.y = 0;
-    r.w = PlayModel::GRID_WIDTH * TileLayer::SIZE;
-    r.h = PlayModel::GRID_HEIGHT * TileLayer::SIZE;
+    r.w = 25 * TileLayer::SIZE;
+    r.h = 16 * TileLayer::SIZE;
     return r;
 }
 
@@ -85,15 +88,17 @@ void GridLayer::update() {
 }
 
 GridLayer::~GridLayer() {
-    for (int x = 0; x < PlayModel::GRID_WIDTH; x++) {
-        for (int y = 0; y < PlayModel::GRID_HEIGHT; y++) {
+    // GRID_WIDTH and GRID_HEIGHT have been hardcoded to 25 and 16 until GridLayer can be factored out
+    for (int x = 0; x < 25; x++) {
+        for (int y = 0; y < 16; y++) {
             delete tile[y][x];
         }
     }
 }
 
 TileLayer* GridLayer::getTile(uint16_t x, uint16_t y) const {
-    if (y >= PlayModel::GRID_HEIGHT || x >= PlayModel::GRID_WIDTH) {
+    // GRID_WIDTH and GRID_HEIGHT have been hardcoded to 25 and 16 until GridLayer can be factored out
+    if (y >= 16 || x >= 25) {
         return NULL;
     }
     return tile[y][x];
