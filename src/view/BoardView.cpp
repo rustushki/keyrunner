@@ -6,12 +6,14 @@ extern AnimationFactory* animationFactory;
 /**
  * Constructor.
  * <p>
- * Also creates and houses the key and player animations.
+ * Pre-build animations and begin animate the key and pumpkin.
  * @param model
  * @param rect
  */
 BoardView::BoardView(PlayModel* model, SDL_Rect rect) : BaseView(model, rect) {
-    keyAnimation    = animationFactory->build(ANIMATION_TYPE_KEY);
+    preBuildAnimations();
+
+    keyAnimation = animationFactory->build(ANIMATION_TYPE_KEY);
     addAnimation(keyAnimation);
 
     playerAnimation = animationFactory->build(ANIMATION_TYPE_PUMPKIN);
@@ -22,7 +24,7 @@ BoardView::BoardView(PlayModel* model, SDL_Rect rect) : BaseView(model, rect) {
  * Destructor.
  */
 BoardView::~BoardView() {
-
+    freeAnimations();
 }
 
 /**
@@ -40,7 +42,7 @@ void BoardView::draw(SDL_Renderer* renderer) {
 
             TileType tileType = getModel()->getTileType(currentTileCoord);
             AnimationType animationType = tileType.toAnimationType();
-            Animation* animation = animationFactory->build(animationType);
+            Animation* animation = preBuiltAnimations[animationType];
 
             // Determine the coordinate to draw the tile animation
             uint16_t xPosition = x * tileSize;
@@ -60,8 +62,27 @@ void BoardView::draw(SDL_Renderer* renderer) {
                 playerAnimation->move(xPosition, yPosition);
                 playerAnimation->blit(renderer);
             }
-
-            delete animation;
         }
+    }
+}
+
+/**
+ * Pre-build the animations so that we don't have to keep building them whenever we need them.
+ */
+void BoardView::preBuildAnimations() {
+    for (int index = 0; index < ANIMATION_TYPE_COUNT; index++) {
+        AnimationType animationType = (AnimationType) index;
+        preBuiltAnimations[animationType] = animationFactory->build(animationType);
+    }
+}
+
+/**
+ * Free the pre-built animations.
+ */
+void BoardView::freeAnimations() {
+    for (int index = 0; index < ANIMATION_TYPE_COUNT; index++) {
+        AnimationType animationType = (AnimationType) index;
+        Animation* animation = preBuiltAnimations[animationType];
+        delete animation;
     }
 }
