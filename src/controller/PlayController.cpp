@@ -24,16 +24,18 @@ PlayController::PlayController(PlayModel *model, Display* display, Options* opti
     rect.y = 0;
     rect.w = display->getWidth();
     rect.h = 400;
-    BoardView* boardView = new BoardView(getModel(), rect);
-    display->addView("board", boardView);
+    View* board = new BoardView(getModel(), rect);
+    board->show();
+    getDisplay()->addView("board", board);
 
     // Add the Info Bar to the Display
     rect.x = 0;
     rect.h = 40;
     rect.y = display->getHeight() - rect.h;
     rect.w = display->getWidth();
-    PlayInfoBarView* playInfoBarView = new PlayInfoBarView(getModel(), rect);
-    display->addView("play_info_bar", playInfoBarView);
+    View* playInfoBar = new PlayInfoBarView(getModel(), rect);
+    playInfoBar->show();
+    getDisplay()->addView("play_info_bar", playInfoBar);
 }
 
 /**

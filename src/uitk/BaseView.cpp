@@ -10,6 +10,7 @@
 BaseView::BaseView(PlayModel *model, SDL_Rect rect) {
     this->model = model;
     this->rect = rect;
+    this->visible = false;
 }
 
 /**
