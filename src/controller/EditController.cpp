@@ -1,7 +1,7 @@
 #include "../controller/EditController.hpp"
-#include "../controller/Options.hpp"
 #include "../model/LevelManager.hpp"
 #include "../uitk/Layer.hpp"
+#include "../view/BoardView.hpp"
 
 /**
  * Constructor.
@@ -22,6 +22,15 @@ EditController::EditController(PlayModel *model, Display* display, Options* opti
         LevelManager::Read(getModel()->getLevelNum());
     }
 
+    // Add the Board to the Display
+    SDL_Rect rect;
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = display->getWidth();
+    rect.h = 400;
+    View* board = new BoardView(getModel(), rect);
+    board->show();
+    getDisplay()->addView("board", board);
 }
 
 /**
