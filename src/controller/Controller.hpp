@@ -1,7 +1,7 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include "../uitk/Display.hpp"
+#include "../controller/Display.hpp"
 
 class Controller {
 public:

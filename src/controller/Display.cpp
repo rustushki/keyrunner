@@ -1,4 +1,4 @@
-#include "../uitk/Display.hpp"
+#include "../controller/Display.hpp"
 
 /**
  * Constructor.

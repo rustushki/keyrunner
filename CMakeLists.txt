@@ -11,7 +11,6 @@ add_library(uitk STATIC
   src/uitk/Animation.cpp
   src/uitk/ButtonLayer.cpp
   src/uitk/ButtonLayerBuilder.cpp
-  src/uitk/Display.cpp
   src/uitk/Layer.cpp
   src/uitk/SpriteSheet.cpp
   src/uitk/View.hpp
@@ -21,6 +20,7 @@ add_library(uitk STATIC
 set(SOURCES
   src/controller/BaseController.cpp
   src/controller/Controller.hpp
+  src/controller/Display.cpp
   src/controller/EditController.cpp
   src/controller/Options.cpp
   src/controller/PlayController.cpp
