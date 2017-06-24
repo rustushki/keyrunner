@@ -71,9 +71,10 @@ const std::vector<Animation*> BaseView::getAnimations() const {
 }
 
 /**
- * Add an Animation to the vector of Animations that need to be displayed in this View.
+ * Add and play an Animation to the vector of those that need to be animated in this View.
  * @param animation
  */
 void BaseView::addAnimation(Animation* animation) {
+    animation->play();
     animations.push_back(animation);
 }

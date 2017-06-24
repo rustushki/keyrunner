@@ -6,7 +6,7 @@ extern AnimationFactory* animationFactory;
 /**
  * Constructor.
  * <p>
- * Pre-build animations and begin animate the key and pumpkin.
+ * Pre-build animations and begin animating the key, pumpkin and conveyor animations.
  * @param model
  * @param rect
  */
@@ -18,6 +18,18 @@ BoardView::BoardView(PlayModel* model, SDL_Rect rect) : BaseView(model, rect) {
 
     playerAnimation = animationFactory->build(ANIMATION_TYPE_PUMPKIN);
     addAnimation(playerAnimation);
+
+    conveyDownAnimation = animationFactory->build(ANIMATION_TYPE_CONVEY_DOWN);
+    addAnimation(conveyDownAnimation);
+
+    conveyUpAnimation = animationFactory->build(ANIMATION_TYPE_CONVEY_UP);
+    addAnimation(conveyUpAnimation);
+
+    conveyLeftAnimation = animationFactory->build(ANIMATION_TYPE_CONVEY_LEFT);
+    addAnimation(conveyLeftAnimation);
+
+    conveyRightAnimation = animationFactory->build(ANIMATION_TYPE_CONVEY_RIGHT);
+    addAnimation(conveyRightAnimation);
 }
 
 /**
@@ -40,9 +52,26 @@ void BoardView::draw(SDL_Renderer* renderer) {
         for (uint16_t x = 0; x < getModel()->getGridWidth(); x++) {
             TileCoord currentTileCoord = TileCoord(x, y);
 
+            // Convert the current TileCoord's TileType to an AnimationType
             TileType tileType = getModel()->getTileType(currentTileCoord);
             AnimationType animationType = tileType.toAnimationType();
-            Animation* animation = preBuiltAnimations[animationType];
+
+            // Get the pre-built animation associated with AnimationType
+            Animation* animation;
+
+            // If the AnimationType is that of a conveyor, use the corresponding conveyor Animation (which is currently
+            // animating).  Otherwise, use a pre-built animation.
+            if (animationType == ANIMATION_TYPE_CONVEY_DOWN) {
+                animation = conveyDownAnimation;
+            } else if (animationType == ANIMATION_TYPE_CONVEY_UP) {
+                animation = conveyUpAnimation;
+            } else if (animationType == ANIMATION_TYPE_CONVEY_LEFT) {
+                animation = conveyLeftAnimation;
+            } else if (animationType == ANIMATION_TYPE_CONVEY_RIGHT) {
+                animation = conveyRightAnimation;
+            } else {
+                animation = preBuiltAnimations[animationType];
+            }
 
             // Determine the coordinate to draw the tile animation
             uint16_t xPosition = x * tileSize;

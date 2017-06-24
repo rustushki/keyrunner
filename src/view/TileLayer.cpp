@@ -3,8 +3,6 @@
 #include "GridLayer.hpp"
 
 extern AnimationFactory* animationFactory;
-extern Animation* KeyAnimation;
-extern Animation* PlayerAnimation;
 
 /**
  * Constructor.

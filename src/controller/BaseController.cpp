@@ -1,9 +1,7 @@
 #include <sstream>
 #include <SDL2/SDL_ttf.h>
 
-#include "BaseController.hpp"
-#include "../view/ConveyorAnimation.hpp"
-#include "../view/GridLayer.hpp"
+#include "../controller/BaseController.hpp"
 
 /**
  * Constructor.

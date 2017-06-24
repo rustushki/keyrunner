@@ -30,12 +30,6 @@ public:
     // Some state changing methods.  These are good candidates to make private later.
     void pushAnimatedTile(TileLayer* tile);
 
-    // Change Player position.
-    bool movePlayer(Direction d);
-    bool movePlayerToTile(TileLayer*);
-
-    TileLayer* getTile(uint16_t x, uint16_t y) const;
-
 private:
 
     // GridLayer is singleton.
@@ -48,10 +42,7 @@ private:
     std::vector<TileLayer*> animatedTiles;
 
     // Various methods which can change the state of the GridLayer.
-    void init();
     void animateTiles();
-    void clearAnimatedTiles();
-    void changeTileType(uint16_t x, uint16_t y, TileType tt);
 
     // LevelManager can Read and Write the GridLayer to / from Level files.
     friend class LevelManager;

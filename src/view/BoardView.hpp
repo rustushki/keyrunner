@@ -12,12 +12,17 @@ public:
     void draw(SDL_Renderer* renderer);
 
 private:
-    Animation *keyAnimation;
+    Animation* keyAnimation;
     Animation* playerAnimation;
     std::map<AnimationType, Animation*> preBuiltAnimations;
 
     void preBuildAnimations();
     void freeAnimations();
+
+    Animation* conveyDownAnimation;
+    Animation* conveyUpAnimation;
+    Animation* conveyLeftAnimation;
+    Animation* conveyRightAnimation;
 };
 
 #endif

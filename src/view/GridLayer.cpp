@@ -1,7 +1,5 @@
 #include <iostream>
-#include <sstream>
 
-#include "ConveyorAnimation.hpp"
 #include "GridLayer.hpp"
 
 GridLayer* GridLayer::instance = NULL;
@@ -23,25 +21,12 @@ GridLayer::GridLayer() {
     }
 }
 
-void GridLayer::init() {
-    clearAnimatedTiles();
-    ConveyorAnimation::BuildConveyorAnimations();
-}
-
 /* ------------------------------------------------------------------------------
  * PushAnimatedTile - Push the provided animated tile onto the vector of tiles
  * which have animations which require advancing.
  */
 void GridLayer::pushAnimatedTile(TileLayer* tile) {
     animatedTiles.push_back(tile);
-}
-
-/* ------------------------------------------------------------------------------
- * ClearAnimatedTiles - Empty the vector containing Tiles which have Animations
- * which would otherwise be rendered on screen updates.
- */
-void GridLayer::clearAnimatedTiles() {
-    animatedTiles.clear();
 }
 
 /**
@@ -80,9 +65,6 @@ SDL_Rect GridLayer::getRect() const {
  * Update any data in the GridLayer which affects the pending display of the GridLayer.
  */
 void GridLayer::update() {
-    // Start any remaining conveyor tiles.
-    ConveyorAnimation::StartConveyors();
-
     // Advance any animated tiles.
     animateTiles();
 }
@@ -94,100 +76,4 @@ GridLayer::~GridLayer() {
             delete tile[y][x];
         }
     }
-}
-
-TileLayer* GridLayer::getTile(uint16_t x, uint16_t y) const {
-    // GRID_WIDTH and GRID_HEIGHT have been hardcoded to 25 and 16 until GridLayer can be factored out
-    if (y >= 16 || x >= 25) {
-        return NULL;
-    }
-    return tile[y][x];
-}
-
-void GridLayer::changeTileType(uint16_t x, uint16_t y, TileType tt) {
-    TileLayer* tile = getTile(x, y);
-    if (tile->getType() != tt) {
-        tile->setType(tt);
-    }
-}
-
-/* ------------------------------------------------------------------------------
- * movePlayer - Move the player in the provided direction by one tile.  Handle
- * walls, teleporters, keys and other gameplay elements.
- */
-bool GridLayer::movePlayer(Direction d) {
-
-    if (d > DIRECTION_COUNT) {
-        std::stringstream errorMessage;
-        errorMessage << "Invalid direction passed to movePlayer (" << d << ")";
-        throw std::invalid_argument(errorMessage.str());
-    }
-
-    PlayModel* playModel = PlayModel::GetInstance();
-    TileCoord oldTileCoord = playModel->getPlayerCoord();
-    TileCoord newTileCoord;
-    if (d == DIRECTION_UP) {
-        newTileCoord = playModel->getTileCoordUp(oldTileCoord);
-    }
-
-    if (d == DIRECTION_DOWN) {
-        newTileCoord = playModel->getTileCoordDown(oldTileCoord);
-    }
-
-    if (d == DIRECTION_LEFT) {
-        newTileCoord = playModel->getTileCoordLeft(oldTileCoord);
-    }
-
-    if (d == DIRECTION_RIGHT) {
-        newTileCoord = playModel->getTileCoordRight(oldTileCoord);
-    }
-
-    TileLayer* newTile = getTile(newTileCoord.first, newTileCoord.second);
-
-    // Will interrupt movement if it returns true
-    return movePlayerToTile(newTile);
-}
-
-/* ------------------------------------------------------------------------------
- * movePlayerToTile - Given a tile, move a player to that tile.  Refuse to move
- * a player to a wall tile.  If the tile has the key, the player will take it.
- * If the tile is a lock/door and the player has the key then end the level.
- * If the tile is a teleporter, then actually move the player to the matching
- * tile.
- *
- * Return true if the player movement is to be interrupted.  It will do so if
- * the provided tile is a wall or a teleporter.
- */
-bool GridLayer::movePlayerToTile(TileLayer* newTile) {
-    PlayModel* playModel = PlayModel::GetInstance();
-
-    if (newTile == NULL) {
-        return true;
-    }
-
-    // Do not move player if the new tile is a wall.  Do not continue
-    // evaluating criteria either, such as teleporters and wraparound.  They do
-    // not apply since the player has attempt to walk into a wall.
-    if (playModel->isWall(TileCoord(newTile->getX(), newTile->getY()))) {
-        return true;
-    }
-
-    // Move the player to the tile.
-    playModel->setPlayerCoord(TileCoord(newTile->getX(), newTile->getY()));
-
-    // Give the player the key if the tile has the key.
-    if (playModel->tileCoordHasKey(TileCoord(newTile->getX(), newTile->getY()))) {
-        playModel->setPlayerHasKey(true);
-    }
-
-    // Handle Teleporter Tiles.
-    if (playModel->isTeleporter(playModel->getPlayerCoord())) {
-        TileCoord matching = playModel->getMatchingTeleporterTileCoord(playModel->getPlayerCoord());
-        playModel->setPlayerCoord(matching);
-        return true;
-    }
-
-    // This will interrupt movement if the level is over due to prior movement; otherwise movement will not be
-    // interrupted
-    return playModel->isComplete();
 }
