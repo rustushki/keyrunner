@@ -84,7 +84,8 @@ void sizeWindowAndShow(SDL_Window* window) {
  */
 int main(int argc, char** argv) {
     // Parse the command line options
-    Options::parse(argc, argv);
+    Options options;
+    options.parse(argc, argv);
 
     // Initialize SDL
     initializeSdl();
@@ -96,26 +97,25 @@ int main(int argc, char** argv) {
 
     // Create the Model
     PlayModel* model = PlayModel::GetInstance();
-    model->setState(Options::getInitialState());
+    model->setState(options.getInitialState());
 
     sizeWindowAndShow(window);
 
     // Build the Display that will be used by the Controller
-    Display* display = new Display(window, renderer);
+    Display display(window, renderer);
 
     // Start the Game Loop for the appropriate Controller
     Controller* controller = nullptr;
     if (model->getState() == PLAY) {
-        controller = new PlayController(model, display);
+        controller = new PlayController(model, &display, &options);
     } else {
-        controller = new EditController(model, display);
+        controller = new EditController(model, &display, &options);
     }
     controller->gameLoop();
 
     // Free some memory
     delete animationFactory;
     delete controller;
-    delete display;
 
     return 0;
 }

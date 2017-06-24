@@ -2,13 +2,18 @@
 #include <cstring>
 #include <sstream>
 
-#include "KeyRunner.hpp"
-#include "Options.hpp"
+#include "../controller/KeyRunner.hpp"
+#include "../controller/Options.hpp"
 #include "../model/LevelManager.hpp"
 
-uint16_t Options::startingLevelNum = 1;
-State Options::initialState = PLAY;
-bool Options::createNewLevel = false;
+/**
+ * Constructor.
+ */
+Options::Options() {
+    startingLevelNum = 1;
+    initialState = PLAY;
+    createNewLevel = false;
+}
 
 /**
  * Parse the command line arguments provided.
@@ -112,7 +117,7 @@ void Options::showVersion() {
  * Fetch the starting level provided from the command line (default = 1).
  * @return starting level
  */
-uint16_t Options::getStartingLevel() {
+uint8_t Options::getStartingLevel() {
     return startingLevelNum;
 }
 

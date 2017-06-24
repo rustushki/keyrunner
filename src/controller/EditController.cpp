@@ -10,15 +10,15 @@
  * @param model
  * @param display
  */
-EditController::EditController(PlayModel *model, Display* display) : BaseController(model, display) {
+EditController::EditController(PlayModel *model, Display* display, Options* options) : BaseController(model, display) {
     // Create New Level for Edit
-    if (Options::getCreateNewLevel()) {
-        getModel()->setLevelNum((uint16_t) (LevelManager::GetTotal() + 1));
+    if (options->getCreateNewLevel()) {
+        getModel()->setLevelNum((uint8_t) (LevelManager::GetTotal() + 1));
         LevelManager::New(getModel()->getLevelNum());
 
         // Load Existing Level for Edit
     } else {
-        getModel()->setLevelNum(Options::getStartingLevel());
+        getModel()->setLevelNum(options->getStartingLevel());
         LevelManager::Read(getModel()->getLevelNum());
     }
 

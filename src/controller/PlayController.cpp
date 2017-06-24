@@ -14,9 +14,9 @@
  * @param window
  * @param renderer
  */
-PlayController::PlayController(PlayModel *model, Display* display) : BaseController(model, display) {
+PlayController::PlayController(PlayModel *model, Display* display, Options* options) : BaseController(model, display) {
     getModel()->setTimeClock(50000);
-    getModel()->setLevelNum(Options::getStartingLevel());
+    getModel()->setLevelNum(options->getStartingLevel());
 
     // Add the Board to the Display
     SDL_Rect rect;

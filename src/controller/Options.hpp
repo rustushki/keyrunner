@@ -5,26 +5,27 @@
 
 class Options {
 public:
+    Options();
+
     // Parsers
-    static void parse(int argc, char** argv);
+    void parse(int argc, char** argv);
 
     // Output functions
-    static void showHelp();
-    static void showVersion();
+    void showHelp();
+    void showVersion();
 
     // Accessors
-    static uint16_t getStartingLevel();
-    static State getInitialState();
-    static bool getCreateNewLevel();
+    uint8_t getStartingLevel();
+    State getInitialState();
+    bool getCreateNewLevel();
 
 private:
 
-    static uint16_t startingLevelNum;
-    static State initialState;
-    static bool createNewLevel;
-    static bool isPositiveInt(char* str);
-    static void die(std::string msg);
-
+    uint8_t startingLevelNum;
+    State initialState;
+    bool createNewLevel;
+    bool isPositiveInt(char* str);
+    void die(std::string msg);
 };
 
 #endif
