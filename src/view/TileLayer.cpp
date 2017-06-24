@@ -97,5 +97,5 @@ void TileLayer::draw(SDL_Renderer* renderer) {
     uint16_t yp = this->y * tileSize;
 
     this->getAnimation()->move(xp, yp);
-    this->getAnimation()->blit(renderer);
+    this->getAnimation()->draw(renderer);
 }

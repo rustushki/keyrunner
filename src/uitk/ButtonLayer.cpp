@@ -98,7 +98,7 @@ void ButtonLayer::draw(SDL_Renderer* renderer) {
         uint16_t x = (uint16_t) (fillRect.x + (fillRect.w - icon->getWidth()) / 2);
         uint16_t y = (uint16_t) (fillRect.y + (fillRect.h - icon->getHeight()) / 2);
         icon->move(x, y);
-        icon->blit(renderer);
+        icon->draw(renderer);
     }
 }
 

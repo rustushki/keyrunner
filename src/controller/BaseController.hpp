@@ -4,7 +4,7 @@
 #include "../controller/KeyRunner.hpp"
 #include "../model/Direction.hpp"
 #include "../model/PlayModel.hpp"
-#include "Controller.hpp"
+#include "../controller/Controller.hpp"
 
 class BaseController : public Controller {
 public:

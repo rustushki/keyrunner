@@ -76,23 +76,23 @@ void Options::parse(int argc, char** argv) {
  */
 void Options::showHelp() {
     std::stringstream ss;
-    ss << "usage: keyrunner [-v|--version] [-h|--help]" << std::endl;
+    ss << "usage: KeyRunner [-v|--version] [-h|--help]" << std::endl;
     ss << "                 [-e|--editor] [-n|--new]" << std::endl;
     ss << "                 [-l|--level <args>]" << std::endl;
     ss << "" << std::endl;
     ss << "Hints:" << std::endl;
     ss << "" << std::endl;
     ss << "Start Game Normally:" << std::endl;
-    ss << "   keyrunner" << std::endl;
+    ss << "   KeyRunner" << std::endl;
     ss << "" << std::endl;
     ss << "Start in Editor Mode (editing a brand new level):" << std::endl;
-    ss << "   keyrunner --editor --new" << std::endl;
+    ss << "   KeyRunner --editor --new" << std::endl;
     ss << "" << std::endl;
     ss << "Start in Editor Mode (editing level 27):" << std::endl;
-    ss << "   keyrunner --editor --level 27" << std::endl;
+    ss << "   KeyRunner --editor --level 27" << std::endl;
     ss << "" << std::endl;
     ss << "Start at a Specific Level:" << std::endl;
-    ss << "   keyrunner --level 27" << std::endl;
+    ss << "   KeyRunner --level 27" << std::endl;
     ss << "" << std::endl;
     ss << "Enjoy!" << std::endl;
     die(ss.str());
@@ -104,7 +104,7 @@ void Options::showHelp() {
  */
 void Options::showVersion() {
     std::stringstream ss;
-    ss << "keyrunner version " << VERSION;
+    ss << "KeyRunner version " << VERSION;
     die(ss.str());
 }
 

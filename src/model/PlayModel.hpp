@@ -18,7 +18,7 @@ class PlayModel {
         bool isComplete() const;
         void setPlayerHasKey(bool playerHasKey);
         uint8_t getLevelNum() const;
-        void setLevelNum(uint16_t level);
+        void setLevelNum(uint8_t level);
         bool isWall(TileCoord coord) const;
         bool isTeleporter(TileCoord coord) const;
         TileCoord getKeyCoord() const;

@@ -4,7 +4,6 @@
 #include "../controller/PlayController.hpp"
 #include "../controller/EditController.hpp"
 #include "../view/AnimationFactory.hpp"
-#include "../uitk/Animation.hpp"
 
 // Objects that don't have a home yet
 AnimationFactory* animationFactory;

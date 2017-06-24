@@ -78,18 +78,18 @@ void BoardView::draw(SDL_Renderer* renderer) {
             uint16_t yPosition = y * tileSize;
 
             animation->move(xPosition, yPosition);
-            animation->blit(renderer);
+            animation->draw(renderer);
 
             // Redraw the Key.
             if (getModel()->tileCoordHasKey(currentTileCoord)) {
                 keyAnimation->move(xPosition, yPosition);
-                keyAnimation->blit(renderer);
+                keyAnimation->draw(renderer);
             }
 
             // Redraw the Player.
             if (getModel()->tileCoordHasPlayer(currentTileCoord)) {
                 playerAnimation->move(xPosition, yPosition);
-                playerAnimation->blit(renderer);
+                playerAnimation->draw(renderer);
             }
         }
     }

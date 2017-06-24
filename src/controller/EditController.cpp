@@ -48,12 +48,12 @@ void EditController::gameLoop() {
 
         // Determine how much time we have left after doing work
         uint32_t workEnd = SDL_GetTicks();
-        long workDuration = (long) workEnd - (long) workStart;
-        long remainingTime = (long) maxDelay - workDuration;
+        uint32_t workDuration = workEnd - workStart;
+        int remainingTime = maxDelay - workDuration;
 
         // Sleep any remaining time so that we don't hog the CPU
         if (remainingTime > 0) {
-            SDL_Delay(remainingTime);
+            SDL_Delay((uint32_t) remainingTime);
         }
     }
 }

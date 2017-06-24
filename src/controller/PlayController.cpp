@@ -86,16 +86,16 @@ void PlayController::gameLoop() {
 
         // Determine how much time we have left after doing work
         uint32_t workEnd = SDL_GetTicks();
-        long workDuration = (long) workEnd - (long) workStart;
-        long remainingTime = (long) maxDelay - workDuration;
+        uint32_t workDuration = workEnd - workStart;
+        int remainingTime = maxDelay - workDuration;
 
         // Sleep any remaining time so that we don't hog the CPU
         if (remainingTime > 0) {
-            SDL_Delay(remainingTime);
+            SDL_Delay((uint32_t) remainingTime);
         }
 
         // Check for winning/losing conditions. If the clock runs down to 0; game over
-        getModel()->decrementTimeClock(SDL_GetTicks() - workStart);
+        getModel()->decrementTimeClock((uint16_t) (SDL_GetTicks() - workStart));
         if (getModel()->getTimeClock() <= 0) {
             getModel()->setState(LOSE);
             break;

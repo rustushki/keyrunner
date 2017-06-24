@@ -60,7 +60,7 @@ uint8_t PlayModel::getLevelNum() const {
  * Set the number of the currently loaded level.
  * @param level
  */
-void PlayModel::setLevelNum(uint16_t level) {
+void PlayModel::setLevelNum(uint8_t level) {
     this->level = level;
 }
 
