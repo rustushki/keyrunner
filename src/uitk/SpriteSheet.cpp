@@ -1,6 +1,6 @@
 #include <SDL2/SDL_image.h>
 
-#include "SpriteSheet.hpp"
+#include "../uitk/SpriteSheet.hpp"
 
 /**
  * Constructor. Given a filename, a frame height and frame width, load a sprite sheet into memory with the assumed given

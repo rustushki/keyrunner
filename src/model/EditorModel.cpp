@@ -1,5 +1,5 @@
 #include <stddef.h>
-#include "EditorModel.hpp"
+#include "../model/EditorModel.hpp"
 
 /* ------------------------------------------------------------------------------
  * Singleton Instance of EditorModel.

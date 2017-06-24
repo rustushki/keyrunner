@@ -2,7 +2,7 @@
 #define TILE_HPP
 
 #include <vector>
-#include "AnimationType.hpp"
+#include "../view/AnimationType.hpp"
 #include "../model/Direction.hpp"
 #include "../model/TileType.hpp"
 #include "../uitk/Animation.hpp"

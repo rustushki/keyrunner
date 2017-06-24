@@ -2,8 +2,8 @@
 #define EDIT_INFO_BAR_LAYER_HPP
 #include <SDL2/SDL.h>
 
-#include "InfoBarLayer.hpp"
-#include "TileSelectorLayer.hpp"
+#include "../view/InfoBarLayer.hpp"
+#include "../view/TileSelectorLayer.hpp"
 #include "../uitk/ButtonLayer.hpp"
 
 class EditInfoBarLayer : public InfoBarLayer {

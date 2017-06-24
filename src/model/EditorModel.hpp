@@ -1,7 +1,7 @@
 #ifndef EDITOR_MODEL_HPP
 #define EDITOR_MODEL_HPP
 
-#include "TileType.hpp"
+#include "../model/TileType.hpp"
 
 class EditorModel {
     public:

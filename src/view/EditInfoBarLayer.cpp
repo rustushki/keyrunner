@@ -1,7 +1,7 @@
 #include <functional>
 
-#include "EditInfoBarLayer.hpp"
-#include "GridLayer.hpp"
+#include "../view/EditInfoBarLayer.hpp"
+#include "../view/GridLayer.hpp"
 #include "../model/LevelManager.hpp"
 #include "../uitk/ButtonLayerBuilder.hpp"
 

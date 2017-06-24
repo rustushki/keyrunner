@@ -2,7 +2,7 @@
 #define ANIMATION_HPP
 
 #include <vector>
-#include "SpriteSheet.hpp"
+#include "../uitk/SpriteSheet.hpp"
 
 class Animation {
 

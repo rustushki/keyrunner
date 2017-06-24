@@ -3,9 +3,9 @@
 
 #include <vector>
 
-#include "AnimationType.hpp"
-#include "GridLayer.hpp"
-#include "TileLayer.hpp"
+#include "../view/AnimationType.hpp"
+#include "../view/GridLayer.hpp"
+#include "../view/TileLayer.hpp"
 #include "../model/Direction.hpp"
 #include "../model/TileType.hpp"
 #include "../model/PlayModel.hpp"

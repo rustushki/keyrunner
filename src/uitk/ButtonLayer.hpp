@@ -5,8 +5,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-#include "Animation.hpp"
-#include "Layer.hpp"
+#include "../uitk/Animation.hpp"
+#include "../uitk/Layer.hpp"
 
 class ButtonLayer : public Layer {
 public:

@@ -1,5 +1,5 @@
-#include "ButtonLayer.hpp"
-#include "ButtonLayerBuilder.hpp"
+#include "../uitk/ButtonLayer.hpp"
+#include "../uitk/ButtonLayerBuilder.hpp"
 
 ButtonLayerBuilder::ButtonLayerBuilder() {
     buttonLayer = NULL;

@@ -1,5 +1,5 @@
-#include "InfoBarLayer.hpp"
-#include "GridLayer.hpp"
+#include "../view/InfoBarLayer.hpp"
+#include "../view/GridLayer.hpp"
 
 InfoBarLayer::InfoBarLayer() {
 }

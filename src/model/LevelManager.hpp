@@ -5,8 +5,8 @@
 #include <map>
 #include <vector>
 
-#include "PlayModel.hpp"
-#include "TileType.hpp"
+#include "../model/PlayModel.hpp"
+#include "../model/TileType.hpp"
 
 class Level;
 

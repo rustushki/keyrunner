@@ -1,6 +1,6 @@
 #include <iostream>
-#include "AnimationFactory.hpp"
-#include "GridLayer.hpp"
+#include "../view/AnimationFactory.hpp"
+#include "../view/GridLayer.hpp"
 
 extern AnimationFactory* animationFactory;
 

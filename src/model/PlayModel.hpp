@@ -5,9 +5,9 @@
 #include <stdint.h>
 #include <vector>
 
-#include "Direction.hpp"
-#include "TileType.hpp"
-#include "State.hpp"
+#include "../model/Direction.hpp"
+#include "../model/TileType.hpp"
+#include "../model/State.hpp"
 
 typedef std::pair<uint16_t, uint16_t> TileCoord;
 

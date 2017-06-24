@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "GridLayer.hpp"
+#include "../view/GridLayer.hpp"
 
 GridLayer* GridLayer::instance = NULL;
 

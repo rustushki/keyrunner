@@ -1,7 +1,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "TileType.hpp"
+#include "../model/TileType.hpp"
 #include "../controller/KeyRunner.hpp"
 
 TileType::TileType() {}

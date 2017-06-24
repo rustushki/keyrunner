@@ -1,8 +1,8 @@
 #include <math.h>
 #include <sstream>
 
-#include "Animation.hpp"
-#include "ButtonLayer.hpp"
+#include "../uitk/Animation.hpp"
+#include "../uitk/ButtonLayer.hpp"
 
 ButtonLayer::ButtonLayer() {
     horizontalMargin   = 20;
