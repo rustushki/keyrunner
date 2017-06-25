@@ -2,13 +2,13 @@
 #define VIEW_HPP
 
 #include <SDL_system.h>
-#include "../model/PlayModel.hpp"
 #include "../uitk/Animation.hpp"
+#include "../model/Model.hpp"
 
 class View {
 public:
     virtual ~View() {}
-    virtual PlayModel* getModel() const = 0;
+    virtual Model* getModel() const = 0;
     virtual void draw(SDL_Renderer* renderer) = 0;
     virtual SDL_Rect getRect() const = 0;
     virtual void show() = 0;

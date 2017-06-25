@@ -10,16 +10,17 @@
  * @param model
  * @param display
  */
-EditController::EditController(PlayModel *model, Display* display, Options* options) : BaseController(model, display) {
+EditController::EditController(EditorModel *model, Display* display, Options* options) : BaseController(model, display) {
+    Board* board = getModel()->getBoard();
     // Create New Level for Edit
     if (options->getCreateNewLevel()) {
-        getModel()->setLevelNum((uint8_t) (LevelManager::GetTotal() + 1));
-        LevelManager::New(getModel()->getLevelNum());
+        board->setLevelNum((uint8_t) (LevelManager::GetTotal() + 1));
+        LevelManager::New(board->getLevelNum());
 
         // Load Existing Level for Edit
     } else {
-        getModel()->setLevelNum(options->getStartingLevel());
-        LevelManager::Read(getModel()->getLevelNum());
+        board->setLevelNum(options->getStartingLevel());
+        LevelManager::Read(board->getLevelNum());
     }
 
     // Add the Board to the Display
@@ -28,9 +29,9 @@ EditController::EditController(PlayModel *model, Display* display, Options* opti
     rect.y = 0;
     rect.w = getDisplay()->getWidth();
     rect.h = 400;
-    View* board = new BoardView(getModel(), rect);
-    board->show();
-    getDisplay()->addView("board", board);
+    View* boardView = new BoardView(board, rect);
+    boardView->show();
+    getDisplay()->addView("board", boardView);
 }
 
 /**
@@ -105,4 +106,12 @@ void EditController::processInput() {
 
         }
     }
+}
+
+/**
+ * Fetch the sub-classed model for this controller.
+ * @return the model
+ */
+EditorModel *EditController::getModel() const {
+    return (EditorModel*) BaseController::getModel();
 }

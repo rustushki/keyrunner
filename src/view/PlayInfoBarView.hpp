@@ -5,12 +5,14 @@
 #include "../uitk/View.hpp"
 #include "../view/InfoBarPos.hpp"
 #include "../uitk/BaseView.hpp"
+#include "../model/PlayModel.hpp"
 
 class PlayInfoBarView : public BaseView {
 public:
     PlayInfoBarView(PlayModel* model, SDL_Rect rect);
     virtual ~PlayInfoBarView();
     void draw(SDL_Renderer* renderer);
+    PlayModel* getModel() const;
 
 private:
     TTF_Font* getFont() const;

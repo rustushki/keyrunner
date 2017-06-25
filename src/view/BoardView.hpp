@@ -4,12 +4,14 @@
 #include <map>
 #include "../uitk/BaseView.hpp"
 #include "../uitk/Animation.hpp"
+#include "../model/Board.hpp"
 
 class BoardView : public BaseView {
 public:
-    BoardView(PlayModel* model, SDL_Rect rect);
+    BoardView(Board* model, SDL_Rect rect);
     virtual ~BoardView();
     void draw(SDL_Renderer* renderer);
+    Board* getModel() const;
 
 private:
     Animation* keyAnimation;

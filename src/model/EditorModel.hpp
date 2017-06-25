@@ -2,11 +2,11 @@
 #define EDITOR_MODEL_HPP
 
 #include "../model/TileType.hpp"
-#include "ButtonModel.hpp"
+#include "../model/ButtonModel.hpp"
+#include "../model/BaseModel.hpp"
 
-class EditorModel {
+class EditorModel : public BaseModel {
     public:
-
         // Garbage
         static EditorModel* GetInstance();
         void setTileType(TileType tileType);

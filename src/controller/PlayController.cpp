@@ -1,5 +1,4 @@
 #include "../controller/PlayController.hpp"
-#include "../controller/Options.hpp"
 #include "../model/LevelManager.hpp"
 #include "../view/PlayInfoBarView.hpp"
 #include "../view/BoardView.hpp"
@@ -16,7 +15,7 @@
  */
 PlayController::PlayController(PlayModel *model, Display* display, Options* options) : BaseController(model, display) {
     getModel()->setTimeClock(50000);
-    getModel()->setLevelNum(options->getStartingLevel());
+    getModel()->getBoard()->setLevelNum(options->getStartingLevel());
 
     // Add the Board to the Display
     SDL_Rect rect;
@@ -24,7 +23,7 @@ PlayController::PlayController(PlayModel *model, Display* display, Options* opti
     rect.y = 0;
     rect.w = getDisplay()->getWidth();
     rect.h = 400;
-    View* board = new BoardView(getModel(), rect);
+    View* board = new BoardView(getModel()->getBoard(), rect);
     board->show();
     getDisplay()->addView("board", board);
 
@@ -49,7 +48,8 @@ void PlayController::gameLoop() {
     uint32_t maxDelay = 1000 / fps;
 
     // Read in the starting level
-    LevelManager::Read(getModel()->getLevelNum());
+	Board* board = getModel()->getBoard();
+    LevelManager::Read(board->getLevelNum());
 
     // Begin the game loop and continue while not in the quit state
     while (getModel()->getState() != QUIT) {
@@ -68,17 +68,17 @@ void PlayController::gameLoop() {
         conveyPlayer();
 
         // If the level is complete,
-        if (getModel()->isComplete()) {
+        if (board->isComplete()) {
             // Check to see if the next level is beyond the maximum level; i.e. the WIN state
-            uint32_t nextLevel = getModel()->getLevelNum() + (uint32_t) + 1;
+            uint32_t nextLevel = board->getLevelNum() + (uint32_t) + 1;
             if (nextLevel > LevelManager::GetTotal()) {
                 getModel()->setState(WIN);
                 break;
 
                 // Otherwise, go to next level; adding some extra time to the clock
             } else {
-                getModel()->setLevelNum(nextLevel);
-                LevelManager::Read(getModel()->getLevelNum());
+                board->setLevelNum(nextLevel);
+                LevelManager::Read(board->getLevelNum());
                 getModel()->incrementTimeClock(6000);
             }
         }
@@ -114,6 +114,7 @@ void PlayController::gameLoop() {
 void PlayController::processInput() {
     SDL_Event event;
     bool alreadyMoved = false;
+	Board* board = getModel()->getBoard();
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_KEYDOWN) {
             // User Presses Q
@@ -125,23 +126,23 @@ void PlayController::processInput() {
             // Limit movement to once per frame
             if (!alreadyMoved) {
                 if (event.key.keysym.sym == SDLK_DOWN) {
-                    getModel()->movePlayerInDirection(DIRECTION_DOWN);
+                    board->movePlayerInDirection(DIRECTION_DOWN);
 
                 } else if (event.key.keysym.sym == SDLK_UP) {
-                    getModel()->movePlayerInDirection(DIRECTION_UP);
+                    board->movePlayerInDirection(DIRECTION_UP);
 
                 } else if (event.key.keysym.sym == SDLK_LEFT) {
-                    getModel()->movePlayerInDirection(DIRECTION_LEFT);
+                    board->movePlayerInDirection(DIRECTION_LEFT);
 
                 } else if (event.key.keysym.sym == SDLK_RIGHT) {
-                    getModel()->movePlayerInDirection(DIRECTION_RIGHT);
+                    board->movePlayerInDirection(DIRECTION_RIGHT);
 
                 }
                 alreadyMoved = true;
 
                 // If the prior movement causes the level to be complete,
                 // signal that the new level may be loaded.
-                if (getModel()->isComplete()){
+                if (board->isComplete()){
                     return;
                 }
             }
@@ -154,3 +155,10 @@ void PlayController::processInput() {
     }
 }
 
+/**
+ * Fetch the sub-classed model for this controller.
+ * @return the model
+ */
+PlayModel *PlayController::getModel() const {
+    return (PlayModel*) BaseController::getModel();
+}

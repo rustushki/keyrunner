@@ -5,10 +5,10 @@
 
 class BaseView : public View {
 public:
-    BaseView(PlayModel* model, SDL_Rect rect);
+    BaseView(Model* model, SDL_Rect rect);
     virtual ~BaseView();
 
-    virtual PlayModel* getModel() const;
+    virtual Model* getModel() const;
     virtual void draw(SDL_Renderer* renderer) = 0;
     virtual SDL_Rect getRect() const;
     virtual void show();
@@ -20,7 +20,7 @@ protected:
     void addAnimation(Animation*);
 
 private:
-    PlayModel *model;
+    Model *model;
     SDL_Rect rect;
     bool visible;
     std::vector<Animation *> animations;

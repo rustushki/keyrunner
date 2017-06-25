@@ -10,7 +10,7 @@ extern AnimationFactory* animationFactory;
  * @param model
  * @param rect
  */
-BoardView::BoardView(PlayModel* model, SDL_Rect rect) : BaseView(model, rect) {
+BoardView::BoardView(Board* model, SDL_Rect rect) : BaseView(model, rect) {
     preBuildAnimations();
 
     keyAnimation = animationFactory->build(ANIMATION_TYPE_KEY);
@@ -48,8 +48,8 @@ BoardView::~BoardView() {
 void BoardView::draw(SDL_Renderer* renderer) {
     const uint16_t tileSize = 25;
 
-    for (uint16_t y = 0; y < getModel()->getGridHeight(); y++) {
-        for (uint16_t x = 0; x < getModel()->getGridWidth(); x++) {
+    for (uint16_t y = 0; y < getModel()->getHeight(); y++) {
+        for (uint16_t x = 0; x < getModel()->getWidth(); x++) {
             TileCoord currentTileCoord = TileCoord(x, y);
 
             // Convert the current TileCoord's TileType to an AnimationType
@@ -114,4 +114,12 @@ void BoardView::freeAnimations() {
         Animation* animation = preBuiltAnimations[animationType];
         delete animation;
     }
+}
+
+/**
+ * Fetch the sub-classed model for this view.
+ * @return the model
+ */
+Board* BoardView::getModel() const {
+    return (Board*) BaseView::getModel();
 }

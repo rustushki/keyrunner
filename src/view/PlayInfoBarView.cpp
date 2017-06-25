@@ -24,7 +24,7 @@ PlayInfoBarView::~PlayInfoBarView() {
  */
 void PlayInfoBarView::draw(SDL_Renderer *renderer) {
     this->drawBlackBar(renderer);
-    this->drawLevel(renderer, getModel()->getLevelNum());
+    this->drawLevel(renderer, getModel()->getBoard()->getLevelNum());
     this->drawTimer(renderer);
 }
 
@@ -165,4 +165,12 @@ TTF_Font* PlayInfoBarView::getFont() const {
 
     // Return the font.
     return font;
+}
+
+/**
+ * Fetch the sub-classed model for this View.
+ * @return the model
+ */
+PlayModel* PlayInfoBarView::getModel() const {
+    return (PlayModel*) BaseView::getModel();
 }

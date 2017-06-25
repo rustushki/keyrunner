@@ -95,10 +95,6 @@ int main(int argc, char** argv) {
     // Create these view-related globals which don't have better homes
     animationFactory = new AnimationFactory(renderer);
 
-    // Create the Model
-    PlayModel* model = PlayModel::GetInstance();
-    model->setState(options.getInitialState());
-
     sizeWindowAndShow(window);
 
     // Build the Display that will be used by the Controller
@@ -106,9 +102,15 @@ int main(int argc, char** argv) {
 
     // Start the Game Loop for the appropriate Controller
     Controller* controller = nullptr;
-    if (model->getState() == PLAY) {
+    if (options.getInitialState() == PLAY) {
+        // Create the Model
+        PlayModel* model = PlayModel::GetInstance();
+        model->setState(options.getInitialState());
         controller = new PlayController(model, &display, &options);
     } else {
+        // Create the Model
+        EditorModel* model = EditorModel::GetInstance();
+        model->setState(options.getInitialState());
         controller = new EditController(model, &display, &options);
     }
     controller->gameLoop();

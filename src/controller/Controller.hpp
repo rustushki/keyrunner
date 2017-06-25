@@ -9,7 +9,7 @@ public:
     virtual void processInput() = 0;
 
 protected:
-    virtual PlayModel* getModel() = 0;
+    virtual Model* getModel() const = 0;
     virtual Display* getDisplay() = 0;
 
 };

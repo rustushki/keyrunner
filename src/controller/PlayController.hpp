@@ -3,6 +3,7 @@
 
 #include "../controller/BaseController.hpp"
 #include "../controller/Options.hpp"
+#include "../model/PlayModel.hpp"
 
 class PlayController : public BaseController {
 public:
@@ -10,6 +11,7 @@ public:
 
     virtual void gameLoop();
     virtual void processInput();
+    PlayModel* getModel() const;
 };
 
 #endif

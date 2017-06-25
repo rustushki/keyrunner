@@ -2,6 +2,7 @@
 
 #include "../model/LevelManager.hpp"
 #include "../controller/KeyRunner.hpp"
+#include "../model/Board.hpp"
 
 uint16_t LevelManager::w;
 uint16_t LevelManager::h;
@@ -58,12 +59,12 @@ bool LevelManager::Write() {
     PlayModel* playModel = PlayModel::GetInstance();
 
     // Open the Level File.
-    std::string levelFile = GetPath(playModel->getLevelNum(), true);
+    std::string levelFile = GetPath(playModel->getBoard()->getLevelNum(), true);
     FILE* fp = fopen(levelFile.c_str(), "wb");
 
     // Write Width and Height.
-    uint16_t w = static_cast<uint16_t>(playModel->getGridWidth());
-    uint16_t h = static_cast<uint16_t>(playModel->getGridHeight());
+    uint16_t w = static_cast<uint16_t>(playModel->getBoard()->getWidth());
+    uint16_t h = static_cast<uint16_t>(playModel->getBoard()->getHeight());
     fwrite(&w, sizeof(uint16_t), 1, fp);
     fwrite(&h, sizeof(uint16_t), 1, fp);
 
@@ -76,7 +77,7 @@ bool LevelManager::Write() {
     for (int x = 0; x < w; x++) {
         for (int y = 0; y < h; y++) {
             TileCoord tileCoord(x, y);
-            if (playModel->getTileType(tileCoord) != tt) {
+            if (playModel->getBoard()->getTileType(tileCoord) != tt) {
                 deviatedTileCoordinates.push_back(tileCoord);
             }
         }
@@ -87,7 +88,7 @@ bool LevelManager::Write() {
     fwrite(&devCount, sizeof(uint16_t), 1, fp);
 
     // Write Initial Char Location.
-    TileCoord playerCoord = playModel->getPlayerCoord();
+    TileCoord playerCoord = playModel->getBoard()->getPlayerCoord();
     uint16_t x = playerCoord.first;
     uint16_t y = playerCoord.second;
     fwrite(&x, sizeof(uint16_t), 1, fp);
@@ -109,13 +110,13 @@ bool LevelManager::Write() {
         fwrite(&y, sizeof(uint16_t), 1, fp);
 
         // Write Deviation Tile Type
-        uint8_t tt = static_cast<uint8_t>(playModel->getTileType(tileCoord));
+        uint8_t tt = static_cast<uint8_t>(playModel->getBoard()->getTileType(tileCoord));
         fwrite(&tt, sizeof(uint8_t), 1, fp);
     }
 
     // Write Each Item Type
     // For now, we only need to record the location of the key.
-    TileCoord kCoord = PlayModel::GetInstance()->getKeyCoord();
+    TileCoord kCoord = PlayModel::GetInstance()->getBoard()->getKeyCoord();
     x = kCoord.first;
     y = kCoord.second;
     uint8_t it = 0;
@@ -209,8 +210,8 @@ std::string LevelManager::GetPath(uint8_t levelNum, bool inCwd) {
 
 void LevelManager::Reset() {
     PlayModel* playModel  = PlayModel::GetInstance();
-    w = playModel->getGridWidth();
-    h = playModel->getGridHeight();
+    w = playModel->getBoard()->getWidth();
+    h = playModel->getBoard()->getHeight();
     playerCoord.first = 0;
     playerCoord.second = 0;
     keyCoord.first = (uint16_t) (w - 1);
@@ -222,10 +223,10 @@ void LevelManager::Reset() {
 void LevelManager::Populate(uint8_t levelNum) {
     PlayModel* playModel  = PlayModel::GetInstance();
 
-    playModel->setLevelNum(levelNum);
+    playModel->getBoard()->setLevelNum(levelNum);
 
     // Player does not have key at level start.
-    playModel->setPlayerHasKey(false);
+    playModel->getBoard()->setPlayerHasKey(false);
 
     // Populate the remaining tiles with the default tile.  Also, not which
     // tiles have the key and the player.
@@ -236,14 +237,14 @@ void LevelManager::Populate(uint8_t levelNum) {
 
             bool deviationMatch = false;
             if (deviations.find(curTileCoord) != deviations.end()) {
-                playModel->changeTileType(curTileCoord, deviations[curTileCoord]);
+                playModel->getBoard()->changeTileType(curTileCoord, deviations[curTileCoord]);
                 curDevIdx++;
                 deviationMatch = true;
             }
 
             if (!deviationMatch) {
                 // Add the tile to the level.
-                playModel->changeTileType(curTileCoord, defTT);
+                playModel->getBoard()->changeTileType(curTileCoord, defTT);
             }
 
             // TODO: Support multiple items. (not just hard coded key and
@@ -251,12 +252,12 @@ void LevelManager::Populate(uint8_t levelNum) {
 
             // Does the current tile have the player?
             if (curTileCoord == playerCoord) {
-                playModel->setPlayerCoord(curTileCoord);
+                playModel->getBoard()->setPlayerCoord(curTileCoord);
             }
 
             // Does the current tile have the key?
             if (curTileCoord == keyCoord) {
-                playModel->setKeyCoord(curTileCoord);
+                playModel->getBoard()->setKeyCoord(curTileCoord);
             }
 
         }

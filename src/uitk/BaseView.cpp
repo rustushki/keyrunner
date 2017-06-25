@@ -7,7 +7,7 @@
  * @param model where to find data to display
  * @param rect where to display on the screen
  */
-BaseView::BaseView(PlayModel *model, SDL_Rect rect) {
+BaseView::BaseView(Model* model, SDL_Rect rect) {
     this->model = model;
     this->rect = rect;
     this->visible = false;
@@ -29,7 +29,7 @@ BaseView::~BaseView() {
  * Get the model that contains the information to display.
  * @return PlayModel*
  */
-PlayModel* BaseView::getModel() const {
+Model* BaseView::getModel() const {
     return this->model;
 }
 

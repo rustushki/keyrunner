@@ -3,12 +3,14 @@
 
 #include "../controller/BaseController.hpp"
 #include "../controller/Options.hpp"
+#include "../model/EditorModel.hpp"
 
 class EditController : public BaseController {
 public:
-    EditController(PlayModel* model, Display* display, Options* options);
+    EditController(EditorModel* model, Display* display, Options* options);
     void gameLoop();
     void processInput();
+    EditorModel* getModel() const;
 
 };
 

@@ -2,6 +2,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "../controller/BaseController.hpp"
+#include "../model/Board.hpp"
 
 /**
  * Constructor.
@@ -10,7 +11,7 @@
  * @param model
  * @param display
  */
-BaseController::BaseController(PlayModel *model, Display* display) {
+BaseController::BaseController(BaseModel* model, Display* display) {
     this->model = model;
     this->display = display;
 }
@@ -22,13 +23,14 @@ BaseController::BaseController(PlayModel *model, Display* display) {
 void BaseController::conveyPlayer() {
     static uint32_t lastConveyance = 0;
     const int ticksBetweenConveyance = 100;
+    Board* board = getModel()->getBoard();
 
     if (SDL_GetTicks() - lastConveyance >= ticksBetweenConveyance || lastConveyance == 0) {
 
         // If the player is on a conveyor tile, convey the player to the next tile on the belt
-        if (getModel()->isConveyor(getModel()->getPlayerCoord())) {
-            TileCoord newTileCoord = getModel()->getNextConveyorTileCoord(getModel()->getPlayerCoord());
-            getModel()->setPlayerCoord(newTileCoord);
+        if (board->isConveyor(board->getPlayerCoord())) {
+            TileCoord newTileCoord = board->getNextConveyorTileCoord(board->getPlayerCoord());
+            board->setPlayerCoord(newTileCoord);
         }
 
         lastConveyance = SDL_GetTicks();
@@ -37,9 +39,9 @@ void BaseController::conveyPlayer() {
 
 /**
  * Return the root model that the Controller addresses.
- * @return PlayModel*
+ * @return BaseModel*
  */
-PlayModel* BaseController::getModel() {
+BaseModel* BaseController::getModel() const {
     return model;
 }
 
