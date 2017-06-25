@@ -26,7 +26,7 @@ EditController::EditController(PlayModel *model, Display* display, Options* opti
     SDL_Rect rect;
     rect.x = 0;
     rect.y = 0;
-    rect.w = display->getWidth();
+    rect.w = getDisplay()->getWidth();
     rect.h = 400;
     View* board = new BoardView(getModel(), rect);
     board->show();

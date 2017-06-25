@@ -25,6 +25,7 @@ set(SOURCES
   src/controller/Options.cpp
   src/controller/PlayController.cpp
   src/controller/main.cpp
+  src/model/ButtonModel.cpp
   src/model/EditorModel.cpp
   src/model/LevelManager.cpp
   src/model/PlayModel.cpp
