@@ -9,9 +9,9 @@
 
 typedef std::pair<uint16_t, uint16_t> TileCoord;
 
-class Board : public Model {
+class BoardModel : public Model {
 public:
-    Board();
+    BoardModel();
     bool isComplete() const;
     void setPlayerHasKey(bool playerHasKey);
     uint8_t getLevelNum() const;

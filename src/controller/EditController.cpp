@@ -11,7 +11,7 @@
  * @param display
  */
 EditController::EditController(EditorModel *model, Display* display, Options* options) : BaseController(model, display) {
-    Board* board = getModel()->getBoard();
+    BoardModel* board = getModel()->getBoard();
     // Create New Level for Edit
     if (options->getCreateNewLevel()) {
         board->setLevelNum((uint8_t) (LevelManager::GetTotal() + 1));

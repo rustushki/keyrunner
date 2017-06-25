@@ -2,7 +2,7 @@
 
 #include "../model/LevelManager.hpp"
 #include "../controller/KeyRunner.hpp"
-#include "../model/Board.hpp"
+#include "../model/BoardModel.hpp"
 
 uint16_t LevelManager::w;
 uint16_t LevelManager::h;

@@ -10,7 +10,7 @@ extern AnimationFactory* animationFactory;
  * @param model
  * @param rect
  */
-BoardView::BoardView(Board* model, SDL_Rect rect) : BaseView(model, rect) {
+BoardView::BoardView(BoardModel* model, SDL_Rect rect) : BaseView(model, rect) {
     preBuildAnimations();
 
     keyAnimation = animationFactory->build(ANIMATION_TYPE_KEY);
@@ -120,6 +120,6 @@ void BoardView::freeAnimations() {
  * Fetch the sub-classed model for this view.
  * @return the model
  */
-Board* BoardView::getModel() const {
-    return (Board*) BaseView::getModel();
+BoardModel* BoardView::getModel() const {
+    return (BoardModel*) BaseView::getModel();
 }

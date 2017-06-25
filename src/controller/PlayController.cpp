@@ -48,7 +48,7 @@ void PlayController::gameLoop() {
     uint32_t maxDelay = 1000 / fps;
 
     // Read in the starting level
-	Board* board = getModel()->getBoard();
+	BoardModel* board = getModel()->getBoard();
     LevelManager::Read(board->getLevelNum());
 
     // Begin the game loop and continue while not in the quit state
@@ -114,7 +114,7 @@ void PlayController::gameLoop() {
 void PlayController::processInput() {
     SDL_Event event;
     bool alreadyMoved = false;
-	Board* board = getModel()->getBoard();
+	BoardModel* board = getModel()->getBoard();
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_KEYDOWN) {
             // User Presses Q

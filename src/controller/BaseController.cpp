@@ -2,7 +2,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "../controller/BaseController.hpp"
-#include "../model/Board.hpp"
+#include "../model/BoardModel.hpp"
 
 /**
  * Constructor.
@@ -23,7 +23,7 @@ BaseController::BaseController(BaseModel* model, Display* display) {
 void BaseController::conveyPlayer() {
     static uint32_t lastConveyance = 0;
     const int ticksBetweenConveyance = 100;
-    Board* board = getModel()->getBoard();
+    BoardModel* board = getModel()->getBoard();
 
     if (SDL_GetTicks() - lastConveyance >= ticksBetweenConveyance || lastConveyance == 0) {
 

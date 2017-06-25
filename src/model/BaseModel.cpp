@@ -6,7 +6,7 @@
  * Creates the board which is common to subclasses.
  */
 BaseModel::BaseModel() {
-    this->board = new Board();
+    this->board = new BoardModel();
 }
 
 /**
@@ -22,7 +22,7 @@ BaseModel::~BaseModel() {
  * Fetch the board.
  * @return the board
  */
-Board* BaseModel::getBoard() {
+BoardModel* BaseModel::getBoard() {
     return board;
 }
 

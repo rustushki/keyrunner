@@ -1,12 +1,12 @@
 #include <sstream>
-#include "../model/Board.hpp"
+#include "../model/BoardModel.hpp"
 
 /**
  * Constructor.
  * <p>
  * Initializes the tile type grid to be sized as getGridHeight() and getGridWidth() indicate.
  */
-Board::Board() {
+BoardModel::BoardModel() {
     for (int row = 0; row < getHeight(); row++) {
         std::vector<TileType> tileRow;
         for (int column = 0; column < getWidth(); column++) {
@@ -22,7 +22,7 @@ Board::Board() {
  * This happens when the player has the key and is standing at the door.
  * @return boolean
  */
-bool Board::isComplete() const {
+bool BoardModel::isComplete() const {
     return (playerHasKey && isDoor(getPlayerCoord()));
 }
 
@@ -30,7 +30,7 @@ bool Board::isComplete() const {
  * Set if the player has the key.
  * @param playerHasKey
  */
-void Board::setPlayerHasKey(bool playerHasKey) {
+void BoardModel::setPlayerHasKey(bool playerHasKey) {
     this->playerHasKey = playerHasKey;
     if (this->playerHasKey) {
         this->keyCoord = TileCoord(getWidth(), getHeight());
@@ -41,7 +41,7 @@ void Board::setPlayerHasKey(bool playerHasKey) {
  * Get the level number of the currently loaded level.
  * @return uint8_t
  */
-uint8_t Board::getLevelNum() const {
+uint8_t BoardModel::getLevelNum() const {
     return level;
 }
 
@@ -49,7 +49,7 @@ uint8_t Board::getLevelNum() const {
  * Set the number of the currently loaded level.
  * @param level
  */
-void Board::setLevelNum(uint8_t level) {
+void BoardModel::setLevelNum(uint8_t level) {
     this->level = level;
 }
 
@@ -58,7 +58,7 @@ void Board::setLevelNum(uint8_t level) {
  * @param coord
  * @return boolean
  */
-bool Board::isWall(TileCoord coord) const {
+bool BoardModel::isWall(TileCoord coord) const {
     return (tileType[coord.second][coord.first] == TILE_TYPE_WALL);
 }
 
@@ -66,7 +66,7 @@ bool Board::isWall(TileCoord coord) const {
  * Get the coordinate of the key.
  * @return TileCoord
  */
-TileCoord Board::getKeyCoord() const {
+TileCoord BoardModel::getKeyCoord() const {
     return keyCoord;
 }
 
@@ -74,7 +74,7 @@ TileCoord Board::getKeyCoord() const {
  * Set the coordinate of the key.
  * @param tileCoord
  */
-void Board::setKeyCoord(TileCoord tileCoord) {
+void BoardModel::setKeyCoord(TileCoord tileCoord) {
     keyCoord = tileCoord;
 }
 
@@ -82,7 +82,7 @@ void Board::setKeyCoord(TileCoord tileCoord) {
  * Get the current tile of the player.
  * @return TileCoord
  */
-TileCoord Board::getPlayerCoord() const {
+TileCoord BoardModel::getPlayerCoord() const {
     return playerCoord;
 }
 
@@ -93,7 +93,7 @@ TileCoord Board::getPlayerCoord() const {
  * to the matching tile.
  * @param tileCoord
  */
-void Board::setPlayerCoord(TileCoord tileCoord) {
+void BoardModel::setPlayerCoord(TileCoord tileCoord) {
     // Give the player the key if the tile has the key
     if (tileCoordHasKey(tileCoord)) {
         setPlayerHasKey(true);
@@ -113,7 +113,7 @@ void Board::setPlayerCoord(TileCoord tileCoord) {
  * @param TileCoord
  * @return boolean
  */
-bool Board::isTeleporter(TileCoord coord) const {
+bool BoardModel::isTeleporter(TileCoord coord) const {
     TileType tt = tileType[coord.second][coord.first];
 
     return (   tt == TILE_TYPE_TELEPORTER_RED
@@ -126,7 +126,7 @@ bool Board::isTeleporter(TileCoord coord) const {
  * @param coord
  * @param newTileType
  */
-void Board::changeTileType(TileCoord coord, TileType newTileType) {
+void BoardModel::changeTileType(TileCoord coord, TileType newTileType) {
     tileType[coord.second][coord.first] = newTileType;
 }
 
@@ -135,7 +135,7 @@ void Board::changeTileType(TileCoord coord, TileType newTileType) {
  * @param coord
  * @return TileType
  */
-TileType Board::getTileType(TileCoord coord) const {
+TileType BoardModel::getTileType(TileCoord coord) const {
     return tileType[coord.second][coord.first];
 }
 
@@ -144,7 +144,7 @@ TileType Board::getTileType(TileCoord coord) const {
  * @param coord
  * @return boolean
  */
-bool Board::isDoor(TileCoord coord) const {
+bool BoardModel::isDoor(TileCoord coord) const {
     return tileType[coord.second][coord.first] == TILE_TYPE_DOOR;
 }
 
@@ -154,7 +154,7 @@ bool Board::isDoor(TileCoord coord) const {
  * @param dir
  * @param TileCoord
  */
-TileCoord Board::getTileCoordInDirection(TileCoord coord, Direction dir) const {
+TileCoord BoardModel::getTileCoordInDirection(TileCoord coord, Direction dir) const {
     if (dir == DIRECTION_UP) {
         return getTileCoordUp(coord);
     } else if (dir == DIRECTION_DOWN) {
@@ -173,7 +173,7 @@ TileCoord Board::getTileCoordInDirection(TileCoord coord, Direction dir) const {
  * @param current
  * @return TileCoord
  */
-TileCoord Board::getTileCoordUp(TileCoord current) const {
+TileCoord BoardModel::getTileCoordUp(TileCoord current) const {
     int x = current.first + 0;
     int y = current.second - 1;
     if (y < 0) {
@@ -187,7 +187,7 @@ TileCoord Board::getTileCoordUp(TileCoord current) const {
  * @param current
  * @return TileCoord
  */
-TileCoord Board::getTileCoordDown(TileCoord current) const {
+TileCoord BoardModel::getTileCoordDown(TileCoord current) const {
     int x = current.first + 0;
     int y = current.second + 1;
     if (y >= getHeight()) {
@@ -201,7 +201,7 @@ TileCoord Board::getTileCoordDown(TileCoord current) const {
  * @param current
  * @return TileCoord
  */
-TileCoord Board::getTileCoordLeft(TileCoord current) const {
+TileCoord BoardModel::getTileCoordLeft(TileCoord current) const {
     int x = current.first - 1;
     int y = current.second + 0;
     if (x < 0) {
@@ -215,7 +215,7 @@ TileCoord Board::getTileCoordLeft(TileCoord current) const {
  * @param current
  * @return TileCoord
  */
-TileCoord Board::getTileCoordRight(TileCoord current) const {
+TileCoord BoardModel::getTileCoordRight(TileCoord current) const {
     int x = current.first + 1;
     int y = current.second + 0;
     if (x >= getWidth()) {
@@ -229,7 +229,7 @@ TileCoord Board::getTileCoordRight(TileCoord current) const {
  * @param coord
  * @return boolean
  */
-bool Board::isConveyor(TileCoord coord) const {
+bool BoardModel::isConveyor(TileCoord coord) const {
     TileType tt = tileType[coord.second][coord.first];
 
     return (   tt == TILE_TYPE_CONVEY_UP
@@ -244,7 +244,7 @@ bool Board::isConveyor(TileCoord coord) const {
  * @return Direction
  * @throws std::invalid_argument if tile coordinate is not for conveyor tile
  */
-Direction Board::getConveyorDirection(TileCoord coord) const {
+Direction BoardModel::getConveyorDirection(TileCoord coord) const {
     TileType tt = tileType[coord.second][coord.first];
     if (tt == TILE_TYPE_CONVEY_UP) {
         return DIRECTION_UP;
@@ -270,7 +270,7 @@ Direction Board::getConveyorDirection(TileCoord coord) const {
  * <li>If there is no suitable second place, return the current tile in the conveyor belt sequence</li>
  * </ol>
  */
-TileCoord Board::getNextConveyorTileCoord(TileCoord current) const {
+TileCoord BoardModel::getNextConveyorTileCoord(TileCoord current) const {
     if (!isConveyor(current)) {
         std::stringstream errorMessage;
         errorMessage << "Trying to get next conveyor tile from non conveyor tile.";
@@ -352,7 +352,7 @@ TileCoord Board::getNextConveyorTileCoord(TileCoord current) const {
  * @param coord
  * @return TileCoord
  */
-TileCoord Board::getMatchingTeleporterTileCoord(TileCoord coord) const {
+TileCoord BoardModel::getMatchingTeleporterTileCoord(TileCoord coord) const {
 
     TileCoord matching = coord;
 
@@ -401,7 +401,7 @@ TileCoord Board::getMatchingTeleporterTileCoord(TileCoord coord) const {
  * @param tileCoord
  * @return boolean
  */
-bool Board::tileCoordHasKey(TileCoord tileCoord) const {
+bool BoardModel::tileCoordHasKey(TileCoord tileCoord) const {
     return (keyCoord == tileCoord);
 }
 
@@ -410,7 +410,7 @@ bool Board::tileCoordHasKey(TileCoord tileCoord) const {
  * @param tileCoord
  * @return boolean
  */
-bool Board::tileCoordHasPlayer(TileCoord tileCoord) const {
+bool BoardModel::tileCoordHasPlayer(TileCoord tileCoord) const {
     return (playerCoord == tileCoord);
 }
 
@@ -418,7 +418,7 @@ bool Board::tileCoordHasPlayer(TileCoord tileCoord) const {
  * Move the player in the provided direction.
  * @param direction
  */
-void Board::movePlayerInDirection(Direction direction) {
+void BoardModel::movePlayerInDirection(Direction direction) {
     TileCoord oldTileCoord = getPlayerCoord();
     TileCoord newTileCoord;
     if (direction == DIRECTION_UP) {
@@ -451,7 +451,7 @@ void Board::movePlayerInDirection(Direction direction) {
  * Get the Board Height.
  * @return uint16_t
  */
-uint16_t Board::getHeight() const {
+uint16_t BoardModel::getHeight() const {
     return 16;
 }
 
@@ -459,6 +459,6 @@ uint16_t Board::getHeight() const {
  * Get the Board Width.
  * @return uint16_t
  */
-uint16_t Board::getWidth() const {
+uint16_t BoardModel::getWidth() const {
     return 25;
 }
