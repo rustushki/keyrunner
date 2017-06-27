@@ -12,24 +12,38 @@ class Level;
 
 class LevelManager {
 public:
-    static uint16_t GetTotal();
-    static bool Exists(uint8_t levelNum);
-    static void Read(uint8_t levelNum);
-    static bool Write();
-    static void New(uint8_t levelNum);
+    LevelManager(BoardModel* board);
+    uint8_t getLevelCount() const;
+    bool levelExists(uint8_t levelNumber) const;
+    void read();
+    void write() const;
+    void create();
 
 private:
-    static std::string GetPath(uint8_t levelNum, bool inCwd);
-    static void Reset();
+    std::string getPath(uint8_t levelNumber, bool inCurrentWorkingDirectory) const;
+    void resetLevelManager();
+    void populateBoard();
 
-    // Populate uses the data below to 'fill in' a Level object.
-    static void Populate(uint8_t levelNum);
-    static uint16_t w;
-    static uint16_t h;
-    static TileType defTT;
-    static std::map<TileCoord, TileType> deviations;
-    static TileCoord playerCoord;
-    static TileCoord keyCoord;
+    void readSize(FILE *fp);
+    void readDefaultTileType(FILE *fp);
+    void readInitialPlayerCoordinate(FILE *fp);
+    void readDeviations(FILE *fp);
+    void readItems(FILE *fp);
+
+    void writeSize(FILE* fp) const;
+    void writeDefaultTileType(FILE* fp) const;
+    void writeDeviations(FILE* fp) const;
+    void writeInitialPlayerCoordinate(FILE* fp) const;
+    void writeItems(FILE* fp) const;
+
+    uint16_t width;
+    uint16_t height;
+    TileType defaultTileType;
+    std::map<TileCoord, TileType> deviations;
+    TileCoord playerCoordinate;
+    TileCoord keyCoordinate;
+    BoardModel* board;
+
 };
 
 #endif

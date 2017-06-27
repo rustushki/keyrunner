@@ -2,49 +2,59 @@
 
 #include "../model/LevelManager.hpp"
 #include "../controller/KeyRunner.hpp"
-#include "../model/BoardModel.hpp"
 
-uint16_t LevelManager::w;
-uint16_t LevelManager::h;
-TileType LevelManager::defTT;
-std::map<TileCoord, TileType> LevelManager::deviations;
-TileCoord LevelManager::playerCoord;
-TileCoord LevelManager::keyCoord;
+/**
+ * Constructor.
+ * <p>
+ * Builds a LevelManager which is connected to the provided BoardModel.
+ * @param board
+ */
+LevelManager::LevelManager(BoardModel* board) {
+    this->board = board;
+}
 
-uint16_t LevelManager::GetTotal() {
-
+/**
+ * Get the total count of levels available for loading.
+ * @return uint8_t
+ */
+uint8_t LevelManager::getLevelCount() const {
+    // Compute and statically cache the maximum count of levels for loading
     static int levelCount = -1;
-
     if (levelCount == -1) {
+        // Perform a binary search to determine the maximum number of levels available for loading.
         uint8_t hiLevel = 255;
-        uint8_t loLevel =   0;
-        uint8_t miLevel =   0;
+        uint8_t loLevel = 0;
+        uint8_t miLevel = 0;
 
         while (hiLevel >= loLevel) {
-            miLevel = (uint8_t) ((hiLevel-loLevel)/2 + loLevel);
-
-            if (LevelManager::Exists(miLevel) && !LevelManager::Exists((uint8_t) (miLevel + 1))) {
+            miLevel = (uint8_t) ((hiLevel - loLevel) / 2 + loLevel);
+            if (levelExists(miLevel) && !levelExists((uint8_t) (miLevel + 1))) {
                 levelCount = miLevel;
                 break;
-            } else if (LevelManager::Exists(miLevel)) {
+            } else if (levelExists(miLevel)) {
                 loLevel = (uint8_t) (miLevel + 1);
             } else {
                 hiLevel = (uint8_t) (miLevel - 1);
             }
         }
+
         levelCount = miLevel;
     }
 
-    return (uint16_t) levelCount;
-
+    return (uint8_t) levelCount;
 }
 
-bool LevelManager::Exists(uint8_t levelNum) {
-    std::string levelFile = GetPath(levelNum, false);
+/**
+ * Return true if the given level number corresponds with a level file that actually exists.
+ * @param levelNumber
+ * @return boolean
+ */
+bool LevelManager::levelExists(uint8_t levelNumber) const {
+    std::string levelFile = getPath(levelNumber, false);
     FILE* fp = fopen(levelFile.c_str(), "rb");
 
     bool exists = false;
-    if (fp != NULL) {
+    if (fp != nullptr) {
         exists = true;
         fclose(fp);
     }
@@ -52,214 +62,286 @@ bool LevelManager::Exists(uint8_t levelNum) {
     return exists;
 }
 
-/* ------------------------------------------------------------------------------
- * Write - Writes the current state of the PlayModel into a static level file.
+/**
+ * Writes the current state of the board into a binary-packed, persistently stored level file.
  */
-bool LevelManager::Write() {
-    PlayModel* playModel = PlayModel::GetInstance();
-
-    // Open the Level File.
-    std::string levelFile = GetPath(playModel->getBoard()->getLevelNum(), true);
-    FILE* fp = fopen(levelFile.c_str(), "wb");
-
-    // Write Width and Height.
-    uint16_t w = static_cast<uint16_t>(playModel->getBoard()->getWidth());
-    uint16_t h = static_cast<uint16_t>(playModel->getBoard()->getHeight());
-    fwrite(&w, sizeof(uint16_t), 1, fp);
-    fwrite(&h, sizeof(uint16_t), 1, fp);
-
-    // Write Default Tile Type
-    uint8_t tt = static_cast<uint8_t>(TILE_TYPE_EMPTY);
-    fwrite(&tt, sizeof(uint8_t), 1, fp);
-
-    // Count and Collect the number of Tile Deviations
-    std::vector<TileCoord> deviatedTileCoordinates;
-    for (int x = 0; x < w; x++) {
-        for (int y = 0; y < h; y++) {
-            TileCoord tileCoord(x, y);
-            if (playModel->getBoard()->getTileType(tileCoord) != tt) {
-                deviatedTileCoordinates.push_back(tileCoord);
-            }
-        }
-    }
-
-    // Write Tile Deviation Count
-    uint16_t devCount = (uint16_t) deviatedTileCoordinates.size();
-    fwrite(&devCount, sizeof(uint16_t), 1, fp);
-
-    // Write Initial Char Location.
-    TileCoord playerCoord = playModel->getBoard()->getPlayerCoord();
-    uint16_t x = playerCoord.first;
-    uint16_t y = playerCoord.second;
-    fwrite(&x, sizeof(uint16_t), 1, fp);
-    fwrite(&y, sizeof(uint16_t), 1, fp);
-
-    // Write Count of Items.
-    // Hardcoded to 1 since there can only be a key in the puzzle for now.
-    uint16_t itemCount = 1;
-    fwrite(&itemCount, sizeof(uint16_t), 1, fp);
-
-    // Write Each Default Tile Type Deviation.
-    for (auto dtItr = deviatedTileCoordinates.begin(); dtItr < deviatedTileCoordinates.end(); dtItr++) {
-        TileCoord tileCoord = *dtItr;
-
-        // Write Deviation Tile Coordinate
-        uint16_t x = tileCoord.first;
-        uint16_t y = tileCoord.second;
-        fwrite(&x, sizeof(uint16_t), 1, fp);
-        fwrite(&y, sizeof(uint16_t), 1, fp);
-
-        // Write Deviation Tile Type
-        uint8_t tt = static_cast<uint8_t>(playModel->getBoard()->getTileType(tileCoord));
-        fwrite(&tt, sizeof(uint8_t), 1, fp);
-    }
-
-    // Write Each Item Type
-    // For now, we only need to record the location of the key.
-    TileCoord kCoord = PlayModel::GetInstance()->getBoard()->getKeyCoord();
-    x = kCoord.first;
-    y = kCoord.second;
-    uint8_t it = 0;
-    fwrite(&x, sizeof(uint16_t), 1, fp);
-    fwrite(&y, sizeof(uint16_t), 1, fp);
-    fwrite(&it, sizeof(uint8_t), 1, fp);
-
+void LevelManager::write() const {
+    std::string levelFile = getPath(board->getLevelNum(), true);
+    FILE *fp = fopen(levelFile.c_str(), "wb");
+    writeSize(fp);
+    writeDefaultTileType(fp);
+    writeInitialPlayerCoordinate(fp);
+    writeDeviations(fp);
+    writeItems(fp);
     fclose(fp);
-    return true;
 }
 
-void LevelManager::Read(uint8_t levelNum) {
-    Reset();
+/**
+ * Update the BoardModel with the level data associated with the BoardModel's currently set level number from the
+ * binary-packed, persistently stored level file.
+ */
+void LevelManager::read() {
+    // Reset the LevelManager's internal state
+    resetLevelManager();
 
-    // Open the Level File.
-    std::string levelFile = GetPath(levelNum, false);
+    // Read the level data and update LevelManager's internal state
+    std::string levelFile = getPath(board->getLevelNum(), false);
     FILE* fp = fopen(levelFile.c_str(), "rb");
+    readSize(fp);
+    readDefaultTileType(fp);
+    readInitialPlayerCoordinate(fp);
+    readDeviations(fp);
+    readItems(fp);
+    fclose(fp);
 
-    // Read Width and Height and discard the result.
-    // TODO: Currently the height and width are hard coded as GRID_HEIGHT and
-    // GRID_WIDTH.
-    fread(&w, sizeof(uint16_t), 1, fp);
-    fread(&h, sizeof(uint16_t), 1, fp);
+    // Populate the BoardModel from LevelManager's internal state
+    populateBoard();
+}
 
-    // Read Default Tile Type
-    uint8_t defTTint;
-    fread(&defTTint, sizeof(uint8_t), 1, fp);
-    defTT = (TileType) defTTint;
-
-    // Read Tile Deviation Count
-    uint16_t devCount;
-    fread(&devCount, sizeof(uint16_t), 1, fp);
-
-    // Read Initial Char Location.
-    fread(&playerCoord.first, sizeof(uint16_t), 1, fp);
-    fread(&playerCoord.second, sizeof(uint16_t), 1, fp);
-
+/**
+ * Read the level's items from the persistent storage.
+ * @param fp
+ */
+void LevelManager::readItems(FILE *fp) {
     // Read Count of Items.
     // Hardcoded to 1 since there can only be a key in the puzzle for now.
     uint16_t itemCount;
     fread(&itemCount, sizeof(uint16_t), 1, fp);
 
-    // Read Each Default Tile Type Deviation & populate each matching tile slot
-    // with the deviation.
-    for (int ttd = 0; ttd < devCount; ttd++) {
-        // Write Deviation Tile Coordinate
-        uint16_t x;
-        uint16_t y;
-        fread(&x, sizeof(uint16_t), 1, fp);
-        fread(&y, sizeof(uint16_t), 1, fp);
-
-        // Write Deviation Tile Type
-        uint8_t ttInt;
-        fread(&ttInt, sizeof(uint8_t), 1, fp);
-        TileType tt = static_cast<TileType>(ttInt);
-
-        deviations[TileCoord(x, y)] = tt;
-    }
-
     // Read the Key Location.
     // TODO: Add support for more items.
-    uint8_t it;
-    fread(&keyCoord.first, sizeof(uint16_t), 1, fp);
-    fread(&keyCoord.second, sizeof(uint16_t), 1, fp);
-    fread(&it, sizeof(uint8_t), 1, fp);
-    fclose(fp);
-
-    Populate(levelNum);
+    uint8_t itemIndex;
+    fread(&keyCoordinate.first, sizeof(uint16_t), 1, fp);
+    fread(&keyCoordinate.second, sizeof(uint16_t), 1, fp);
+    fread(&itemIndex, sizeof(uint8_t), 1, fp);
 }
 
-void LevelManager::New(uint8_t levelNum) {
-    Reset();
-    Populate(levelNum);
-}
-
-/* ------------------------------------------------------------------------------
- * GetPath - build a path to the level file.  if inCwd, then assume the path is
- * in the current working directory.
+/**
+ * Read the level's deviations to the default tile type from the persistent storage.
+ * @param fp
  */
-std::string LevelManager::GetPath(uint8_t levelNum, bool inCwd) {
+void LevelManager::readDeviations(FILE *fp) {
+    // Read Tile Deviation Count
+    uint16_t deviationCount;
+    fread(&deviationCount, sizeof(uint16_t), 1, fp);
+
+    // Read Each Default Tile Type Deviation & populate each matching tile slot
+    // with the deviation.
+    for (int currentDeviation = 0; currentDeviation < deviationCount; currentDeviation++) {
+        // Read Deviation Tile Coordinate
+        uint16_t tileX;
+        uint16_t tileY;
+        fread(&tileX, sizeof(uint16_t), 1, fp);
+        fread(&tileY, sizeof(uint16_t), 1, fp);
+
+        // Read Deviation Tile Type
+        uint8_t tileTypeInteger;
+        fread(&tileTypeInteger, sizeof(uint8_t), 1, fp);
+        TileType tileType = static_cast<TileType>(tileTypeInteger);
+        deviations[TileCoord(tileX, tileY)] = tileType;
+    }
+}
+
+/**
+ * Read the initial tile coordinate of the player.
+ * @param fp
+ */
+void LevelManager::readInitialPlayerCoordinate(FILE *fp) {
+    fread(&playerCoordinate.first, sizeof(uint16_t), 1, fp);
+    fread(&playerCoordinate.second, sizeof(uint16_t), 1, fp);
+}
+
+/**
+ * Read the default tile type.
+ * @param fp
+ */
+void LevelManager::readDefaultTileType(FILE *fp) {
+    // Read Default Tile Type
+    uint8_t defaultTileTypeInteger;
+    fread(&defaultTileTypeInteger, sizeof(uint8_t), 1, fp);
+    defaultTileType = static_cast<TileType>(defaultTileTypeInteger);
+}
+
+/**
+ * Read the size of the board.
+ * <p>
+ * This data is currently discarded because the BoardModel height and width are hardcoded. Due to 6/2017 refactoring,
+ * this can now be changed.
+ * @param fp
+ */
+void LevelManager::readSize(FILE *fp) {
+    // Read Width and Height and discard the result.
+    fread(&width, sizeof(uint16_t), 1, fp);
+    fread(&height, sizeof(uint16_t), 1, fp);
+}
+
+/**
+ * Create a new level whose number is determined by the BoardModel.
+ */
+void LevelManager::create() {
+    resetLevelManager();
+    populateBoard();
+}
+
+/**
+ * Build a path to the level file. If inCurrentWorkingDirectory, then assume the path is in the current working
+ * directory.
+ * @param levelNumber
+ * @param inCurrentWorkingDirectory
+ */
+std::string LevelManager::getPath(uint8_t levelNumber, bool inCurrentWorkingDirectory) const {
+    // Determine the prefix of the path.
     std::string prefix = LEVEL_PATH;
-    if (inCwd) {
-        prefix = "./";
+    if (inCurrentWorkingDirectory) {
+        prefix = "./level/";
     }
 
     // Build path to Level File.
     std::stringstream ss;
-    ss << prefix << (int) levelNum;
+    ss << prefix << (int) levelNumber;
     return ss.str();
 }
 
-void LevelManager::Reset() {
-    PlayModel* playModel  = PlayModel::GetInstance();
-    w = playModel->getBoard()->getWidth();
-    h = playModel->getBoard()->getHeight();
-    playerCoord.first = 0;
-    playerCoord.second = 0;
-    keyCoord.first = (uint16_t) (w - 1);
-    keyCoord.second = (uint16_t) (h - 1);
-    defTT = TILE_TYPE_EMPTY;
+/**
+ * Reset the internal state of the level manager back to defaults.
+ */
+void LevelManager::resetLevelManager() {
+    width = board->getWidth();
+    height = board->getHeight();
+    playerCoordinate.first = 0;
+    playerCoordinate.second = 0;
+    keyCoordinate.first = (uint16_t) (width - 1);
+    keyCoordinate.second = (uint16_t) (height - 1);
+    defaultTileType = TILE_TYPE_EMPTY;
     deviations.clear();
 }
 
-void LevelManager::Populate(uint8_t levelNum) {
-    PlayModel* playModel  = PlayModel::GetInstance();
-
-    playModel->getBoard()->setLevelNum(levelNum);
-
+/**
+ * Update the BoardModel with the data in the internal state of the LevelManager.
+ */
+void LevelManager::populateBoard() {
     // Player does not have key at level start.
-    playModel->getBoard()->setPlayerHasKey(false);
+    board->setPlayerHasKey(false);
 
     // Populate the remaining tiles with the default tile.  Also, not which
     // tiles have the key and the player.
-    uint16_t curDevIdx = 0;
-    for (int tx = 0; tx < w; tx++) {
-        for (int ty = 0; ty < h; ty++) {
-            TileCoord curTileCoord(tx, ty);
+    uint16_t currentDeviationIndex = 0;
+    for (int tileX = 0; tileX < width; tileX++) {
+        for (int tileY = 0; tileY < height; tileY++) {
+            TileCoord currentTileCoordinate(tileX, tileY);
 
-            bool deviationMatch = false;
-            if (deviations.find(curTileCoord) != deviations.end()) {
-                playModel->getBoard()->changeTileType(curTileCoord, deviations[curTileCoord]);
-                curDevIdx++;
-                deviationMatch = true;
-            }
+            // If the tile is a deviation, use the deviation tile type
+            if (deviations.find(currentTileCoordinate) != deviations.end()) {
+                board->changeTileType(currentTileCoordinate, deviations[currentTileCoordinate]);
+                currentDeviationIndex++;
 
-            if (!deviationMatch) {
-                // Add the tile to the level.
-                playModel->getBoard()->changeTileType(curTileCoord, defTT);
+            // Otherwise, use the default tile type
+            } else {
+                board->changeTileType(currentTileCoordinate, defaultTileType);
             }
 
             // TODO: Support multiple items. (not just hard coded key and
             // player)
 
             // Does the current tile have the player?
-            if (curTileCoord == playerCoord) {
-                playModel->getBoard()->setPlayerCoord(curTileCoord);
+            if (currentTileCoordinate == playerCoordinate) {
+                board->setPlayerCoord(currentTileCoordinate);
             }
 
             // Does the current tile have the key?
-            if (curTileCoord == keyCoord) {
-                playModel->getBoard()->setKeyCoord(curTileCoord);
+            if (currentTileCoordinate == keyCoordinate) {
+                board->setKeyCoord(currentTileCoordinate);
             }
-
         }
     }
+}
+
+/**
+ * Write the size of the BoardModel to persistent storage.
+ * @param fp
+ */
+void LevelManager::writeSize(FILE* fp) const {
+    // Write Width and Height.
+    uint16_t width = static_cast<uint16_t>(board->getWidth());
+    uint16_t height = static_cast<uint16_t>(board->getHeight());
+    fwrite(&width, sizeof(uint16_t), 1, fp);
+    fwrite(&height, sizeof(uint16_t), 1, fp);
+}
+
+/**
+ * Write the default tile type to persistent storage.
+ * @param fp
+ */
+void LevelManager::writeDefaultTileType(FILE* fp) const {
+    // Write Default Tile Type
+    uint8_t defaultTileType = static_cast<uint8_t>(TILE_TYPE_EMPTY);
+    fwrite(&defaultTileType, sizeof(uint8_t), 1, fp);
+}
+
+/**
+ * Write the tiles that deviate from the default tile type to persistent storage.
+ * @param fp
+ */
+void LevelManager::writeDeviations(FILE* fp) const {
+    // Count and Collect the number of Tile Deviations
+    std::vector<TileCoord> deviatedTileCoordinates;
+    for (int tileX = 0; tileX < board->getWidth(); tileX++) {
+        for (int tileY = 0; tileY < board->getHeight(); tileY++) {
+            TileCoord tileCoordinate(tileX, tileY);
+            if (board->getTileType(tileCoordinate) != defaultTileType) {
+                deviatedTileCoordinates.push_back(tileCoordinate);
+            }
+        }
+    }
+
+    // Write Tile Deviation Count
+    uint16_t deviationsCount = (uint16_t) deviatedTileCoordinates.size();
+    fwrite(&deviationsCount, sizeof(uint16_t), 1, fp);
+
+    // Write Each Default Tile Type Deviation.
+    for (TileCoord tileCoordinate : deviatedTileCoordinates) {
+        // Write Deviation Tile Coordinate
+        uint16_t x = tileCoordinate.first;
+        uint16_t y = tileCoordinate.second;
+        fwrite(&x, sizeof(uint16_t), 1, fp);
+        fwrite(&y, sizeof(uint16_t), 1, fp);
+
+        // Write Deviation Tile Type
+        uint8_t tileType = static_cast<uint8_t>(board->getTileType(tileCoordinate));
+        fwrite(&tileType, sizeof(uint8_t), 1, fp);
+    }
+}
+
+/**
+ * Write the initial player coordinate to persistent storage.
+ * @param fp
+ */
+void LevelManager::writeInitialPlayerCoordinate(FILE* fp) const {
+    // Write Initial Char Location.
+    TileCoord playerCoord = board->getPlayerCoord();
+    uint16_t x = playerCoord.first;
+    uint16_t y = playerCoord.second;
+    fwrite(&x, sizeof(uint16_t), 1, fp);
+    fwrite(&y, sizeof(uint16_t), 1, fp);
+}
+
+/**
+ * Write the items to persistent storage.
+ * @param fp
+ */
+void LevelManager::writeItems(FILE* fp) const {
+    // Write Count of Items.
+    // Hardcoded to 1 since there can only be a key in the puzzle for now.
+    uint16_t itemCount = 1;
+    fwrite(&itemCount, sizeof(uint16_t), 1, fp);
+
+    // Write Each Item Type
+    // For now, we only need to record the location of the key.
+    TileCoord keyCoordinate = board->getKeyCoord();
+    uint16_t x = keyCoordinate.first;
+    uint16_t y = keyCoordinate.second;
+    uint8_t itemIndex = 0;
+    fwrite(&x, sizeof(uint16_t), 1, fp);
+    fwrite(&y, sizeof(uint16_t), 1, fp);
+    fwrite(&itemIndex, sizeof(uint8_t), 1, fp);
 }

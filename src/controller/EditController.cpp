@@ -14,13 +14,13 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
     BoardModel* board = getModel()->getBoard();
     // Create New Level for Edit
     if (options->getCreateNewLevel()) {
-        board->setLevelNum((uint8_t) (LevelManager::GetTotal() + 1));
-        LevelManager::New(board->getLevelNum());
+        board->setLevelNum((uint8_t) (getLevelManager()->getLevelCount() + 1));
+        getLevelManager()->create();
 
         // Load Existing Level for Edit
     } else {
         board->setLevelNum(options->getStartingLevel());
-        LevelManager::Read(board->getLevelNum());
+        getLevelManager()->read();
     }
 
     // Add the Board to the Display

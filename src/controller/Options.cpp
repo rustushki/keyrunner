@@ -29,40 +29,34 @@ void Options::parse(int argc, char** argv) {
 
     for (int argumentX = 1; argumentX < argc; argumentX++) {
         // Handle Starting Level Option
-        if        (    strcmp(argv[argumentX], "--level") == 0
-                    || strcmp(argv[argumentX], "-l") == 0) {
+        if (strcmp(argv[argumentX], "--level") == 0 || strcmp(argv[argumentX], "-l") == 0) {
             // Confirm that a level number has been provided.
             if (argumentX + 1 >= argc || !isPositiveInt(argv[argumentX + 1])) {
                 die("You must provide a level number.");
             }
 
-            // Confirm that the provided level is within range and is thus
-            // valid.
-            startingLevelNum = (uint16_t) atoi(argv[++argumentX]);
-            if (startingLevelNum < 1 || startingLevelNum > LevelManager::GetTotal()) {
-                die("Invalid level.");
+            // Confirm that the provided level is within range and is thus valid.
+            startingLevelNum = (uint8_t) atoi(argv[++argumentX]);
+            if (startingLevelNum < 1 || startingLevelNum > 0xFF) {
+                die("Level out of range.");
             }
 
             isLevelNotSet = false;
 
         // Handle Help Flags.
-        } else if (    strcmp(argv[argumentX], "--help") == 0
-                    || strcmp(argv[argumentX], "-h") == 0) {
+        } else if (strcmp(argv[argumentX], "--help") == 0 || strcmp(argv[argumentX], "-h") == 0) {
             showHelp();
 
         // Handle Version Flags.
-        } else if (    strcmp(argv[argumentX], "--version") == 0
-                    || strcmp(argv[argumentX], "-v") == 0 ) {
+        } else if (strcmp(argv[argumentX], "--version") == 0 || strcmp(argv[argumentX], "-v") == 0 ) {
             showVersion();
 
         // Initial Mode will be the Editor.
-        } else if (    strcmp(argv[argumentX], "--editor") == 0
-                    || strcmp(argv[argumentX], "-e") == 0 ) {
+        } else if (strcmp(argv[argumentX], "--editor") == 0 || strcmp(argv[argumentX], "-e") == 0 ) {
             initialState = EDIT;
 
         // Initial Mode will be the Editor.
-        } else if (    strcmp(argv[argumentX], "--new") == 0
-                    || strcmp(argv[argumentX], "-n") == 0 ) {
+        } else if (strcmp(argv[argumentX], "--new") == 0 || strcmp(argv[argumentX], "-n") == 0 ) {
             createNewLevel = true;
 
         } else {

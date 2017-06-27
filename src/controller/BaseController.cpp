@@ -2,7 +2,6 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "../controller/BaseController.hpp"
-#include "../model/BoardModel.hpp"
 
 /**
  * Constructor.
@@ -14,6 +13,7 @@
 BaseController::BaseController(BaseModel* model, Display* display) {
     this->model = model;
     this->display = display;
+    this->levelManager = new LevelManager(model->getBoard());
 }
 
 /**
@@ -45,7 +45,19 @@ BaseModel* BaseController::getModel() const {
     return model;
 }
 
+/**
+ * Get the display where views are put onto the screen.
+ * @return Display*
+ */
 Display *BaseController::getDisplay() {
     return display;
+}
+
+/**
+ * Get the Level Manager which can load levels into the board or save levels to persistent storage from the board.
+ * @return LevelManager*
+ */
+LevelManager* BaseController::getLevelManager() const {
+    return levelManager;
 }
 

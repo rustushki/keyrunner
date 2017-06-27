@@ -5,6 +5,7 @@
 #include "../model/Direction.hpp"
 #include "../controller/Controller.hpp"
 #include "../model/BaseModel.hpp"
+#include "../model/LevelManager.hpp"
 
 class BaseController : public Controller {
 public:
@@ -17,10 +18,12 @@ protected:
     virtual Display* getDisplay();
 
     void conveyPlayer();
+    LevelManager* getLevelManager() const;
 
 private:
     BaseModel* model;
     Display* display;
+    LevelManager* levelManager;
 };
 
 #endif

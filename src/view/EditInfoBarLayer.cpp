@@ -93,7 +93,7 @@ void EditInfoBarLayer::onExitEnter() {
 }
 
 void EditInfoBarLayer::onSaveEnter() {
-    LevelManager::Write();
+    //LevelManager::write();
 }
 
 void EditInfoBarLayer::onTileEnter() {

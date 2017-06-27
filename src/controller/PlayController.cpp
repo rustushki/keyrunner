@@ -49,7 +49,7 @@ void PlayController::gameLoop() {
 
     // Read in the starting level
 	BoardModel* board = getModel()->getBoard();
-    LevelManager::Read(board->getLevelNum());
+    getLevelManager()->read();
 
     // Begin the game loop and continue while not in the quit state
     while (getModel()->getState() != QUIT) {
@@ -71,14 +71,14 @@ void PlayController::gameLoop() {
         if (board->isComplete()) {
             // Check to see if the next level is beyond the maximum level; i.e. the WIN state
             uint32_t nextLevel = board->getLevelNum() + (uint32_t) + 1;
-            if (nextLevel > LevelManager::GetTotal()) {
+            if (nextLevel > getLevelManager()->getLevelCount()) {
                 getModel()->setState(WIN);
                 break;
 
                 // Otherwise, go to next level; adding some extra time to the clock
             } else {
                 board->setLevelNum(nextLevel);
-                LevelManager::Read(board->getLevelNum());
+                getLevelManager()->read();
                 getModel()->incrementTimeClock(6000);
             }
         }
