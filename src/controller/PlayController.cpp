@@ -97,7 +97,7 @@ void PlayController::gameLoop() {
         }
 
         // Check for winning/losing conditions. If the clock runs down to 0; game over
-        getModel()->decrementTimeClock((uint16_t) (SDL_GetTicks() - workStart));
+        getModel()->decrementTimeClock(SDL_GetTicks() - workStart);
         if (getModel()->getTimeClock() <= 0) {
             getModel()->setState(LOSE);
             break;

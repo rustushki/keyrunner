@@ -35,7 +35,7 @@ long PlayModel::getTimeClock() {
  * Set the time remaining on the time clock.
  * @param uint16_t
  */
-void PlayModel::setTimeClock(uint16_t timeClockValue) {
+void PlayModel::setTimeClock(long timeClockValue) {
     timeClock = timeClockValue;
 }
 
@@ -43,7 +43,7 @@ void PlayModel::setTimeClock(uint16_t timeClockValue) {
  * Decrement the time clock by a certain amount.
  * @param step
  */
-void PlayModel::decrementTimeClock(uint16_t step) {
+void PlayModel::decrementTimeClock(long step) {
     timeClock -= step;
 }
 
@@ -51,7 +51,7 @@ void PlayModel::decrementTimeClock(uint16_t step) {
  * Increment the time clock by a certain amount.
  * @param step
  */
-void PlayModel::incrementTimeClock(uint16_t step) {
+void PlayModel::incrementTimeClock(long step) {
     timeClock += step;
 }
 
