@@ -1,11 +1,17 @@
-#include <iostream>
 #include <sstream>
 
 #include "../model/TileType.hpp"
 #include "../controller/KeyRunner.hpp"
 
+/**
+ * Constructor.
+ */
 TileType::TileType() {}
 
+/**
+ * Get the Animation type associated with this TileType.
+ * @return AnimationType
+ */
 AnimationType TileType::toAnimationType() {
     switch (*this) {
         case TILE_TYPE_EMPTY:

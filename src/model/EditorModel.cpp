@@ -1,16 +1,14 @@
-#include <stddef.h>
 #include "../model/EditorModel.hpp"
 
-/* ------------------------------------------------------------------------------
+/**
  * Singleton Instance of EditorModel.
  */
 EditorModel* EditorModel::instance = NULL;
 
-/* ------------------------------------------------------------------------------
+/**
  * Get Singleton Instance.
- *
- * Make the EditorModel singleton so that it can only be created once and so
- * that that instance may be accessed anywhere in the view or controller.
+ * <p>
+ * This should be removed soon.
  */
 EditorModel* EditorModel::GetInstance() {
     if (EditorModel::instance == NULL) {
@@ -20,18 +18,18 @@ EditorModel* EditorModel::GetInstance() {
     return EditorModel::instance;
 }
 
-/* ------------------------------------------------------------------------------
+/**
  * Constructor.
- *
+ * <p>
  * Initialize the Editor's fields.
  */
 EditorModel::EditorModel() : BaseModel() {
     this->tileType = TILE_TYPE_EMPTY;
 }
 
-/* ------------------------------------------------------------------------------
+/**
  * Set Tile Type.
- *
+ * <p>
  * This is the tile type which is used by the editor when the user presses
  * Enter on the grid.
  */
@@ -39,9 +37,9 @@ void EditorModel::setTileType(TileType tileType) {
     this->tileType = tileType;
 }
 
-/* ------------------------------------------------------------------------------
+/**
  * Get Tile Type.
- *
+ * <p>
  * This is the tile type which is used by the editor when the user presses
  * Enter on the grid.
  */
