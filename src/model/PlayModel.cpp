@@ -1,22 +1,5 @@
-#include <sstream>
 #include "../model/PlayModel.hpp"
 #include "../controller/KeyRunner.hpp"
-
-PlayModel* PlayModel::instance = NULL;
-
-/**
- * Get Singleton Instance.
- * <p>
- * This should be removed soon.
- * @return
- */
-PlayModel* PlayModel::GetInstance() {
-    if (instance == NULL) {
-        instance = new PlayModel();
-    }
-
-    return instance;
-}
 
 /**
  * Constructor.

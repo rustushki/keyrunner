@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
     Controller* controller = nullptr;
     if (options.getInitialState() == PLAY) {
         // Create the Model
-        PlayModel* model = PlayModel::GetInstance();
+        PlayModel* model = new PlayModel();
         model->setState(options.getInitialState());
         controller = new PlayController(model, &display, &options);
     } else {
