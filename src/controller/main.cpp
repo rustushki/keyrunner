@@ -101,21 +101,26 @@ int main(int argc, char** argv) {
     Display display(window, renderer);
 
     // Start the Game Loop for the appropriate Controller
+    Model* model = nullptr;
     Controller* controller = nullptr;
     if (options.getInitialState() == PLAY) {
         // Create the Model
-        PlayModel* model = new PlayModel();
-        model->setState(options.getInitialState());
-        controller = new PlayController(model, &display, &options);
+        model = new PlayModel();
+        controller = new PlayController((PlayModel*) model, &display, &options);
     } else {
         // Create the Model
-        EditorModel* model = EditorModel::GetInstance();
-        model->setState(options.getInitialState());
-        controller = new EditController(model, &display, &options);
+        model = EditorModel::GetInstance();
+        controller = new EditController((EditorModel*) model, &display, &options);
     }
+
+    // Set the initial state
+    ((BaseModel*) model)->setState(options.getInitialState());
+
+    // Begin the game loop
     controller->gameLoop();
 
     // Free some memory
+    delete model;
     delete animationFactory;
     delete controller;
 
