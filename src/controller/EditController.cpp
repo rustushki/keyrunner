@@ -1,5 +1,4 @@
 #include "../controller/EditController.hpp"
-#include "../model/LevelManager.hpp"
 #include "../uitk/Layer.hpp"
 #include "../view/BoardView.hpp"
 

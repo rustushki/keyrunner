@@ -277,10 +277,10 @@ TileCoord BoardModel::getNextConveyorTileCoord(TileCoord current) const {
         throw std::invalid_argument(errorMessage.str());
     }
 
-    Direction dir = getConveyorDirection(current);
-    Direction origDir = dir;
+    Direction direction = getConveyorDirection(current);
+    Direction origDir = direction;
 
-    // Initialize oppDir to pacify compiler.
+    // Initialize oppDir to pacify compiler
     Direction oppDir = DIRECTION_COUNT;
 
     if (origDir == DIRECTION_UP) {
@@ -299,20 +299,18 @@ TileCoord BoardModel::getNextConveyorTileCoord(TileCoord current) const {
 
     while (true) {
 
-        tryTileCoord = getTileCoordInDirection(current, dir);
+        tryTileCoord = getTileCoordInDirection(current, direction);
 
         if (!isWall(tryTileCoord) && !isConveyor(tryTileCoord) && secondPlaceCoord.first != getWidth()) {
             secondPlaceCoord = tryTileCoord;
 
-            // Prefer adjacent conveyor belt tiles.  Explicitly do not place the
-            // player on a conveyor belt tile in the exact opposite direction of
-            // current travel.
+        // Prefer adjacent conveyor belt tiles.  Explicitly do not place the player on a conveyor belt tile in the
+        // exact opposite direction of current travel
         } else if (isConveyor(tryTileCoord)) {
+            if (direction != oppDir) {
+                Direction newDirection = getConveyorDirection(tryTileCoord);
 
-            if (dir != oppDir) {
-                Direction dir = getConveyorDirection(tryTileCoord);
-
-                TileCoord check = getTileCoordInDirection(tryTileCoord, dir);
+                TileCoord check = getTileCoordInDirection(tryTileCoord, newDirection);
 
                 if (check.first != current.first || check.second != current.second) {
                     return tryTileCoord;
@@ -320,21 +318,21 @@ TileCoord BoardModel::getNextConveyorTileCoord(TileCoord current) const {
             }
         }
 
-        if (dir == DIRECTION_UP) {
-            dir = DIRECTION_RIGHT;
-        } else if (dir == DIRECTION_RIGHT) {
-            dir = DIRECTION_DOWN;
-        } else if (dir == DIRECTION_DOWN) {
-            dir = DIRECTION_LEFT;
-        } else if (dir == DIRECTION_LEFT) {
-            dir = DIRECTION_UP;
+        if (direction == DIRECTION_UP) {
+            direction = DIRECTION_RIGHT;
+        } else if (direction == DIRECTION_RIGHT) {
+            direction = DIRECTION_DOWN;
+        } else if (direction == DIRECTION_DOWN) {
+            direction = DIRECTION_LEFT;
+        } else if (direction == DIRECTION_LEFT) {
+            direction = DIRECTION_UP;
         }
 
-        if (dir == DIRECTION_COUNT) {
-            dir = DIRECTION_UP;
+        if (direction == DIRECTION_COUNT) {
+            direction = DIRECTION_UP;
         }
 
-        if (dir == origDir) {
+        if (direction == origDir) {
             break;
         }
 

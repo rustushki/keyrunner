@@ -1,5 +1,4 @@
 #include "../model/PlayModel.hpp"
-#include "../controller/KeyRunner.hpp"
 
 /**
  * Constructor.
