@@ -69,7 +69,7 @@ void PlayController::gameLoop() {
         // If the level is complete,
         if (board->isComplete()) {
             // Check to see if the next level is beyond the maximum level; i.e. the WIN state
-            uint32_t nextLevel = board->getLevelNum() + (uint32_t) + 1;
+            uint8_t nextLevel = board->getLevelNum() + (uint8_t) + 1;
             if (nextLevel > getLevelManager()->getLevelCount()) {
                 getModel()->setState(WIN);
                 break;
