@@ -4,6 +4,7 @@
 #include "../controller/BaseController.hpp"
 #include "../controller/Options.hpp"
 #include "../model/EditorModel.hpp"
+#include "../uitk/ButtonView.hpp"
 
 class EditController : public BaseController {
 public:
@@ -11,6 +12,9 @@ public:
     void gameLoop();
     void processInput();
     EditorModel* getModel() const;
+
+private:
+    ButtonView* exitButton;
 
 };
 

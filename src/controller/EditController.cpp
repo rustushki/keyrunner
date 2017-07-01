@@ -1,6 +1,7 @@
 #include "../controller/EditController.hpp"
 #include "../uitk/Layer.hpp"
 #include "../view/BoardView.hpp"
+#include "../uitk/ButtonView.hpp"
 
 /**
  * Constructor.
@@ -31,6 +32,22 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
     View* boardView = new BoardView(board, rect);
     boardView->show();
     getDisplay()->addView("board", boardView);
+
+    // Add the Exit Button to the Display
+    rect.x = 25;
+    rect.y = 25;
+    rect.w = 100;
+    rect.h = 50;
+    exitButton = new ButtonView(rect);
+    exitButton->setText("Exit");
+    exitButton->setBackgroundColor(0x333333);
+    exitButton->setTextColor(0xFF0000);
+    exitButton->setFontPath(FONT_PATH);
+    exitButton->setOnClickCallback([this] () {
+        getModel()->setState(QUIT);
+    });
+    exitButton->show();
+    getDisplay()->addView("exitButton", exitButton);
 }
 
 /**
@@ -71,18 +88,17 @@ void EditController::gameLoop() {
  * Handle events for edit mode.
  */
 void EditController::processInput() {
-    // Wait for an Event.
+    // Wait for an Event
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-        // Key down.
+        // Key down
         if (event.type == SDL_KEYDOWN) {
             // User Presses Q
             if (event.key.keysym.sym == SDLK_q) {
                 getModel()->setState(QUIT);
                 break;
 
-            // Pass all other keys to the parent of the selected layer.  Or the
-            // selected layer if it's a root layer.
+            // Pass all other keys to the parent of the selected layer.  Or the selected layer if it's a root layer.
             } else {
                 Layer* selected = Layer::getSelectedLayer();
                 if (selected != nullptr) {
@@ -98,11 +114,14 @@ void EditController::processInput() {
                 }
             }
 
-            // Handle Quit Event.
+        // Handle Mouse Down Events
+        } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+            exitButton->onClick();
+
+        // Handle Quit Event
         } else if (event.type == SDL_QUIT) {
             getModel()->setState(QUIT);
             break;
-
         }
     }
 }
