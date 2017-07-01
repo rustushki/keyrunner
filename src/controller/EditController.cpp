@@ -85,12 +85,12 @@ void EditController::processInput() {
             // selected layer if it's a root layer.
             } else {
                 Layer* selected = Layer::getSelectedLayer();
-                if (selected != NULL) {
+                if (selected != nullptr) {
                     // Find the Event Handling Layer.  It'll either be the
                     // selected layer's parent or the selected layer (depending
                     // on whether the selected layer has no parent).
                     Layer* handler = selected->getParent();
-                    if (handler == NULL) {
+                    if (handler == nullptr) {
                         handler = selected;
                     }
 

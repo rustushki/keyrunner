@@ -75,7 +75,7 @@ void PlayInfoBarView::drawText(SDL_Renderer* renderer, std::string text, InfoBar
     SDL_Surface* textSurface = TTF_RenderText_Solid(this->getFont(), text.c_str(), color);
 
     // If the surface is not created successfully
-    if (textSurface == NULL) {
+    if (textSurface == nullptr) {
         std::stringstream errorMessage;
         errorMessage << "Error creating text: " << TTF_GetError();
         throw std::runtime_error(errorMessage.str());
@@ -155,10 +155,10 @@ void PlayInfoBarView::drawTimer(SDL_Renderer* renderer) const {
  */
 TTF_Font* PlayInfoBarView::getFont() const {
     // Store loaded font here.
-    static TTF_Font* font = NULL;
+    static TTF_Font* font = nullptr;
 
     // If the font hasn't been loaded, load it.
-    if (font == NULL) {
+    if (font == nullptr) {
         // Is there a way to find these fonts in the filesystem?
         font = TTF_OpenFont(FONT_PATH, 52);
     }

@@ -2,10 +2,10 @@
 
 #include "../view/GridLayer.hpp"
 
-GridLayer* GridLayer::instance = NULL;
+GridLayer* GridLayer::instance = nullptr;
 
 GridLayer* GridLayer::GetInstance() {
-    if (instance == NULL) {
+    if (instance == nullptr) {
         instance = new GridLayer();
     }
 

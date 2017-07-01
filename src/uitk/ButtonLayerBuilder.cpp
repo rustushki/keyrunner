@@ -2,12 +2,12 @@
 #include "../uitk/ButtonLayerBuilder.hpp"
 
 ButtonLayerBuilder::ButtonLayerBuilder() {
-    buttonLayer = NULL;
+    buttonLayer = nullptr;
     resetIfNull();
 }
 
 void ButtonLayerBuilder::resetIfNull() {
-    if (buttonLayer == NULL) {
+    if (buttonLayer == nullptr) {
         buttonLayer = new ButtonLayer();
     }
 }
@@ -80,7 +80,7 @@ ButtonLayerBuilder* ButtonLayerBuilder::setFontPath(std::string fontPath) {
 
 ButtonLayer* ButtonLayerBuilder::build() {
     ButtonLayer* temp = buttonLayer;
-    buttonLayer = NULL;
+    buttonLayer = nullptr;
     return temp;
 }
 

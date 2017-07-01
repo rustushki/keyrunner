@@ -8,12 +8,12 @@ ButtonLayer::ButtonLayer() {
     horizontalMargin   = 20;
     verticalMargin   = 20;
     textDirty = true;
-    textTexture = NULL;
-    icon = NULL;
+    textTexture = nullptr;
+    icon = nullptr;
 }
 
 ButtonLayer::~ButtonLayer() {
-    if (icon != NULL) {
+    if (icon != nullptr) {
         delete icon;
     }
 }
@@ -75,7 +75,7 @@ void ButtonLayer::draw(SDL_Renderer* renderer) {
     }
 
     // Draw the text centered within the button, obeying the margin.
-    // A NULL textTexture implies the text is a 0-length string.
+    // A nullptr textTexture implies the text is a 0-length string.
     if (textTexture != nullptr) {
         // Determine width and height of the text
         int w;
@@ -94,7 +94,7 @@ void ButtonLayer::draw(SDL_Renderer* renderer) {
 
     // OR,
     // Draw the Icon, centered.
-    } else if (icon != NULL) {
+    } else if (icon != nullptr) {
         uint16_t x = (uint16_t) (fillRect.x + (fillRect.w - icon->getWidth()) / 2);
         uint16_t y = (uint16_t) (fillRect.y + (fillRect.h - icon->getHeight()) / 2);
         icon->move(x, y);
@@ -173,7 +173,7 @@ void ButtonLayer::setMarginVertical(uint16_t marginVertical) {
  */
 SDL_Texture* ButtonLayer::sizeText(SDL_Renderer* renderer, std::string text) const {
     if (text.empty()) {
-        return NULL;
+        return nullptr;
     }
 
     // Lo, Hi and Mid variables for the binary search.

@@ -3,11 +3,11 @@
 #include <iostream>
 #include "../uitk/Layer.hpp"
 
-Layer* Layer::selectedLayer = NULL;
+Layer* Layer::selectedLayer = nullptr;
 
 Layer::Layer() {
-    onEnterCb = NULL;
-    parent = NULL;
+    onEnterCb = nullptr;
+    parent = nullptr;
     show();
 }
 
@@ -39,7 +39,7 @@ std::function<void()> Layer::getOnEnterCb() const {
 void Layer::onEnter() {
     // Handle the enter press with the Layer's onEnter handler (if there is one).
     std::function<void()> onEnterCb = getOnEnterCb();
-    if (onEnterCb != NULL) {
+    if (onEnterCb != nullptr) {
         onEnterCb();
     }
 
@@ -96,13 +96,13 @@ void Layer::show() {
  */
 void Layer::hide() {
     visible = false;
-    if (getParent() != NULL) {
+    if (getParent() != nullptr) {
         getParent()->setSelected();
     }
 }
 
 /* ------------------------------------------------------------------------------
- * getChild - Get the Nth child layer of this layer.  Return NULL if there
+ * getChild - Get the Nth child layer of this layer.  Return nullptr if there
  * isn't one.
  */
 Layer* Layer::getChild(int i) {
