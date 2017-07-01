@@ -2,7 +2,6 @@
 #define EDITOR_MODEL_HPP
 
 #include "../model/TileType.hpp"
-#include "../model/ButtonModel.hpp"
 #include "../model/BaseModel.hpp"
 
 class EditorModel : public BaseModel {
@@ -13,8 +12,6 @@ class EditorModel : public BaseModel {
         TileType getTileType() const;
 
     private:
-        ButtonModel* exit;
-
         // Garbage
         static EditorModel* instance;
         EditorModel();

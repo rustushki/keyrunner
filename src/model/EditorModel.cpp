@@ -3,7 +3,7 @@
 /**
  * Singleton Instance of EditorModel.
  */
-EditorModel* EditorModel::instance = NULL;
+EditorModel* EditorModel::instance = nullptr;
 
 /**
  * Get Singleton Instance.
@@ -11,7 +11,7 @@ EditorModel* EditorModel::instance = NULL;
  * This should be removed soon.
  */
 EditorModel* EditorModel::GetInstance() {
-    if (EditorModel::instance == NULL) {
+    if (EditorModel::instance == nullptr) {
         EditorModel::instance = new EditorModel();
     }
 

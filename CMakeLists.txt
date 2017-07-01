@@ -27,7 +27,6 @@ set(SOURCES
   src/controller/main.cpp
   src/model/BaseModel.cpp
   src/model/BoardModel.cpp
-  src/model/ButtonModel.cpp
   src/model/EditorModel.cpp
   src/model/LevelManager.cpp
   src/model/PlayModel.cpp
