@@ -124,3 +124,20 @@ const View *Display::getClickedView(uint32_t x, uint32_t y) const {
 
     return matchingView;
 }
+
+/**
+ * Find the View on the display that has the given name and return it.
+ * @param name
+ * @return View*
+ */
+View* Display::getViewByName(std::string name) const {
+    View* matchingView = nullptr;
+    for (auto viewPair : viewMap) {
+        std::string viewName = viewPair.first;
+        if (viewName.compare(name) == 0) {
+            matchingView = viewPair.second;
+        }
+    }
+
+    return matchingView;
+}

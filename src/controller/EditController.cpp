@@ -39,11 +39,11 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
     rect.w = display->getWidth();
     View* editInfoBarView = new EditInfoBarView(rect);
     editInfoBarView->show();
-    getDisplay()->addView("edit_info_bar_view", editInfoBarView);
+    getDisplay()->addView("edit_info_bar", editInfoBarView);
 
     const uint8_t spaceBetweenButtons = 4;
 
-    // Add the Save Button to the Display
+    // Add the Tile Button to the Display
     rect.w = 50;
     rect.h = 30;
     rect.x = boardView->getRect().w - 3 * rect.w - 3 * spaceBetweenButtons;
@@ -53,6 +53,16 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
     tileButton->setBackgroundColor(0x333333);
     tileButton->setTextColor(0xFF0000);
     tileButton->setFontPath(FONT_PATH);
+    tileButton->setOnClickCallback([this] () {
+        View* view = getDisplay()->getViewByName("board");
+        if (view != nullptr) {
+            if (view->isVisible()) {
+                view->hide();
+            } else {
+                view->show();
+            }
+        }
+    });
     tileButton->show();
     getDisplay()->addView("tile_button", tileButton);
 
