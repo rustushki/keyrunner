@@ -67,6 +67,9 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
     saveButton->setBackgroundColor(0x333333);
     saveButton->setTextColor(0xFF0000);
     saveButton->setFontPath(FONT_PATH);
+    saveButton->setOnClickCallback([this] () {
+        getLevelManager()->write();
+    });
     saveButton->show();
     getDisplay()->addView("save_button", saveButton);
 
