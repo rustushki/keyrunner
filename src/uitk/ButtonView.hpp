@@ -1,7 +1,6 @@
 #ifndef BUTTON_VIEW_HPP
 #define BUTTON_VIEW_HPP
 
-#include <functional>
 #include <SDL_ttf.h>
 #include "../uitk/BaseView.hpp"
 
@@ -9,10 +8,6 @@ class ButtonView : public BaseView {
 public:
     ButtonView(const SDL_Rect &rect);
     virtual ~ButtonView() override;
-
-    void setOnClickCallback(const std::function <void ()>& newCallBack);
-    void onClick();
-    bool isPressed() const;
     void draw(SDL_Renderer* renderer) override;
 
     void setBackgroundColor(uint32_t color);
@@ -44,7 +39,6 @@ private:
     std::string fontPath;
     bool textDirty;
     SDL_Texture* textTexture;
-    std::function <void ()> onClickCallBack = [] () {};
 };
 
 #endif

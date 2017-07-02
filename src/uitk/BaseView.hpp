@@ -15,6 +15,9 @@ public:
     virtual void hide() override;
     virtual bool isVisible() const override;
     virtual const std::vector<Animation*> getAnimations() const override;
+    virtual void setOnClickCallback(const std::function <void ()>& newCallBack) override final;
+    virtual void onClick() override final;
+    virtual bool isPressed() const override final;
 
 protected:
     void addAnimation(Animation*);
@@ -24,6 +27,7 @@ private:
     SDL_Rect rect;
     bool visible;
     std::vector<Animation *> animations;
+    std::function <void ()> onClickCallBack = [] () {};
 };
 
 

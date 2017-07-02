@@ -2,6 +2,7 @@
 #define VIEW_HPP
 
 #include <SDL_system.h>
+#include <functional>
 #include "../uitk/Animation.hpp"
 #include "../model/Model.hpp"
 
@@ -15,6 +16,9 @@ public:
     virtual void hide() = 0;
     virtual bool isVisible() const = 0;
     virtual const std::vector<Animation*> getAnimations() const = 0;
+    virtual void setOnClickCallback(const std::function <void ()>& newCallBack) = 0;
+    virtual void onClick() = 0;
+    virtual bool isPressed() const = 0;
 };
 
 #endif

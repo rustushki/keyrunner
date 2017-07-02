@@ -79,3 +79,26 @@ void BaseView::addAnimation(Animation* animation) {
     animation->play();
     animations.push_back(animation);
 }
+
+/**
+ * Determine if the view is currently in a state of being pressed.
+ * @return boolean
+ */
+bool BaseView::isPressed() const {
+    return false;
+}
+
+/**
+ * Invoke the callback function which handles the mouse press.
+ */
+void BaseView::onClick() {
+    this->onClickCallBack();
+}
+
+/**
+ * Set the callback function which will handle the mouse press.
+ * @param newCallBack
+ */
+void BaseView::setOnClickCallback(const std::function<void()> &newCallBack) {
+    this->onClickCallBack = newCallBack;
+}

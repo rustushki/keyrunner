@@ -279,26 +279,3 @@ void ButtonView::setIcon(Animation* animation) {
 void ButtonView::setFontPath(std::string fontPath) {
     this->fontPath = fontPath;
 }
-
-/**
- * Determine if the button is currently in a state of being pressed.
- * @return boolean
- */
-bool ButtonView::isPressed() const {
-    return false;
-}
-
-/**
- * Invoke the callback function which handles the button press.
- */
-void ButtonView::onClick() {
-    this->onClickCallBack();
-}
-
-/**
- * Set the callback function which will handle the button press.
- * @param newCallBack
- */
-void ButtonView::setOnClickCallback(const std::function<void()> &newCallBack) {
-    this->onClickCallBack = newCallBack;
-}
