@@ -16,7 +16,7 @@ public:
     virtual bool isVisible() const override;
     virtual const std::vector<Animation*> getAnimations() const override;
     virtual void setOnClickCallback(const std::function <void ()>& newCallBack) override final;
-    virtual void onClick() override final;
+    virtual void onClick() const override final;
     virtual bool isPressed() const override final;
 
 protected:

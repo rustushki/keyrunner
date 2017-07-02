@@ -91,7 +91,7 @@ bool BaseView::isPressed() const {
 /**
  * Invoke the callback function which handles the mouse press.
  */
-void BaseView::onClick() {
+void BaseView::onClick() const {
     this->onClickCallBack();
 }
 

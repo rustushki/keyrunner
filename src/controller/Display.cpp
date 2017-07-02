@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "../controller/Display.hpp"
 
 /**
@@ -96,4 +97,30 @@ void Display::advanceAnimations() {
             animation->advance();
         }
     }
+}
+
+/**
+ * Given a coordinate pair, return view that was clicked, or nullptr if no view was clicked.
+ * <p>
+ * If views are stacked on top of each other, the uppermost view will be considered clicked. Any beneath will not be
+ * returned.
+ * @param x x coordinate
+ * @param y y coordinate
+ * @return View*
+ */
+const View *Display::getClickedView(uint32_t x, uint32_t y) const {
+    View* matchingView = nullptr;
+
+    for (auto viewIterator = viewMap.rbegin(); viewIterator != viewMap.rend(); viewIterator++) {
+        View* view = (*viewIterator).second;
+        SDL_Rect rect = view->getRect();
+        if (x >= rect.x && x < rect.x + rect.w) {
+            if (y >= rect.y && y < rect.y + rect.h) {
+                matchingView = view;
+                break;
+            }
+        }
+    }
+
+    return matchingView;
 }

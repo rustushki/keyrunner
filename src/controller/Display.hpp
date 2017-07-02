@@ -17,6 +17,7 @@ public:
     uint16_t getHeight() const;
     uint16_t getWidth() const;
     void advanceAnimations();
+    const View* getClickedView(uint32_t x, uint32_t y) const;
 
 private:
     SDL_Window* window;

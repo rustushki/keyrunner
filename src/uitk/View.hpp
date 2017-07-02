@@ -17,7 +17,7 @@ public:
     virtual bool isVisible() const = 0;
     virtual const std::vector<Animation*> getAnimations() const = 0;
     virtual void setOnClickCallback(const std::function <void ()>& newCallBack) = 0;
-    virtual void onClick() = 0;
+    virtual void onClick() const = 0;
     virtual bool isPressed() const = 0;
 };
 

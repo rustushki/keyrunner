@@ -116,7 +116,12 @@ void EditController::processInput() {
 
         // Handle Mouse Down Events
         } else if (event.type == SDL_MOUSEBUTTONDOWN) {
-            exitButton->onClick();
+            uint32_t x = (uint32_t) event.button.x;
+            uint32_t y = (uint32_t) event.button.y;
+            const View* view = getDisplay()->getClickedView(x, y);
+            if (view != nullptr) {
+                view->onClick();
+            }
 
         // Handle Quit Event
         } else if (event.type == SDL_QUIT) {
