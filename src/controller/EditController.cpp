@@ -1,6 +1,10 @@
+#include <sstream>
 #include "../controller/EditController.hpp"
 #include "../view/BoardView.hpp"
 #include "../view/EditInfoBarView.hpp"
+#include "../view/AnimationFactory.hpp"
+
+extern AnimationFactory* animationFactory;
 
 /**
  * Constructor.
@@ -43,29 +47,6 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
 
     const uint8_t spaceBetweenButtons = 4;
 
-    // Add the Tile Button to the Display
-    rect.w = 50;
-    rect.h = 30;
-    rect.x = boardView->getRect().w - 3 * rect.w - 3 * spaceBetweenButtons;
-    rect.y = boardView->getRect().h + spaceBetweenButtons;
-    ButtonView* tileButton = new ButtonView(rect);
-    tileButton->setText("Tile");
-    tileButton->setBackgroundColor(0x333333);
-    tileButton->setTextColor(0xFF0000);
-    tileButton->setFontPath(FONT_PATH);
-    tileButton->setOnClickCallback([this] () {
-        View* view = getDisplay()->getViewByName("board");
-        if (view != nullptr) {
-            if (view->isVisible()) {
-                view->hide();
-            } else {
-                view->show();
-            }
-        }
-    });
-    tileButton->show();
-    getDisplay()->addView("tile_button", tileButton);
-
     // Add the Save Button to the Display
     rect.w = 50;
     rect.h = 30;
@@ -97,6 +78,32 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
     });
     exitButton->show();
     getDisplay()->addView("exit_button", exitButton);
+
+    // Add the Tile Selector Buttons to the Display
+    const uint16_t buttonWidth  = 40;
+    const uint16_t buttonHeight = 27;
+    const uint8_t spaceInBetweenButtons = 4;
+    const uint8_t initialOffset = 10;
+
+    for (int tileTypeIndex = 0; tileTypeIndex < TileType::length(); tileTypeIndex++) {
+        TileType tt = (TileType) tileTypeIndex;
+        AnimationType at = tt.toAnimationType();
+
+        // Build the Button for the TileType.
+        rect.w = buttonWidth;
+        rect.h = buttonHeight;
+        rect.x = (uint16_t) (initialOffset + tileTypeIndex * buttonWidth + tileTypeIndex * spaceInBetweenButtons);
+        rect.y = (uint16_t) ((boardView->getRect().h + spaceBetweenButtons) + ((40 - spaceBetweenButtons * 2) - buttonHeight) / 2);
+        ButtonView* buttonView = new ButtonView(rect);
+        buttonView->setBackgroundColor(0x333333);
+        buttonView->setTextColor(0xFF0000);
+        buttonView->setIcon(animationFactory->build(at));
+        buttonView->show();
+
+        std::stringstream viewName;
+        viewName << "tile_selector_button_" << tileTypeIndex;
+        display->addView(viewName.str(), buttonView);
+    }
 }
 
 /**
