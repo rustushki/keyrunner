@@ -40,7 +40,7 @@ void ButtonLayer::draw(SDL_Renderer* renderer) {
     SDL_Rect fillRect = getRect();
 
     // Draw the Upper Shadow
-    if (isSelected()) {
+    if (false) {
         SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0x00, 0xFF);
 
     } else {
@@ -49,7 +49,7 @@ void ButtonLayer::draw(SDL_Renderer* renderer) {
     SDL_RenderDrawRect(renderer, &fillRect);
 
     // Draw the Lower Shadow
-    if (isSelected()) {
+    if (false) {
         SDL_SetRenderDrawColor(renderer, 0xAA, 0xAA, 0xAA, 0xFF);
 
     } else {

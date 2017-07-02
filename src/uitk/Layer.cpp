@@ -3,8 +3,6 @@
 #include <iostream>
 #include "../uitk/Layer.hpp"
 
-Layer* Layer::selectedLayer = nullptr;
-
 Layer::Layer() {
     onEnterCb = nullptr;
     parent = nullptr;
@@ -86,7 +84,7 @@ bool Layer::isVisible() {
  */
 void Layer::show() {
     visible = true;
-    setSelected();
+    //setSelected();
 }
 
 /* ------------------------------------------------------------------------------
@@ -97,7 +95,7 @@ void Layer::show() {
 void Layer::hide() {
     visible = false;
     if (getParent() != nullptr) {
-        getParent()->setSelected();
+        //getParent()->setSelected();
     }
 }
 
@@ -110,20 +108,6 @@ Layer* Layer::getChild(int i) {
 }
 
 /* ------------------------------------------------------------------------------
- * getSelectedChildIndex - Return the index of the child Layer which is
- * selected.  Returns negative number if there is not one selected.
- */
-int Layer::getSelectedChildIndex() {
-    for (uint16_t x = 0; x < getChildCount(); x++) {
-        if (getChild(x)->isSelected()) {
-            return x;
-        }
-    }
-
-    return -1;
-}
-
-/* ------------------------------------------------------------------------------
  * getChildCount - Return the total count of child layers.
  */
 uint16_t Layer::getChildCount() {
@@ -131,42 +115,10 @@ uint16_t Layer::getChildCount() {
 }
 
 /* ------------------------------------------------------------------------------
- * isSelected - Return whether or not this Layer is the one that is selected.
- */
-bool Layer::isSelected() const {
-    return (Layer::selectedLayer == this);
-}
-
-/* ------------------------------------------------------------------------------
- * setSelected - Makes this layer selected.
- */
-void Layer::setSelected() {
-    selectedLayer = this;
-    onSelected();
-}
-
-/* ------------------------------------------------------------------------------
- * getSelectedLayer - Return the selected layer.
- */
-Layer* Layer::getSelectedLayer() {
-    return Layer::selectedLayer;
-}
-
-/* ------------------------------------------------------------------------------
  * getParent - Return the parent layer.
  */
 Layer* Layer::getParent() const {
     return parent;
-}
-
-/* ------------------------------------------------------------------------------
- * onSelected - Called when selection is set to this Layer.  Default behavior
- * is to grant selection to the first child.  Override to change.
- */
-void Layer::onSelected() {
-    if (getChildCount() > 0) {
-        subLayers[0]->setSelected();
-    }
 }
 
 /* ------------------------------------------------------------------------------

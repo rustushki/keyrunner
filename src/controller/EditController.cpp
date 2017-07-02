@@ -1,7 +1,6 @@
 #include "../controller/EditController.hpp"
 #include "../uitk/Layer.hpp"
 #include "../view/BoardView.hpp"
-#include "../uitk/ButtonView.hpp"
 #include "../view/EditInfoBarView.hpp"
 
 /**
@@ -39,16 +38,44 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
     rect.h = 40;
     rect.y = display->getHeight() - rect.h;
     rect.w = display->getWidth();
-    View* editInfoBarView = new EditInfoBarView(nullptr, rect);
+    View* editInfoBarView = new EditInfoBarView(rect);
     editInfoBarView->show();
     getDisplay()->addView("edit_info_bar_view", editInfoBarView);
 
+    const uint8_t spaceBetweenButtons = 4;
+
+    // Add the Save Button to the Display
+    rect.w = 50;
+    rect.h = 30;
+    rect.x = boardView->getRect().w - 3 * rect.w - 3 * spaceBetweenButtons;
+    rect.y = boardView->getRect().h + spaceBetweenButtons;
+    ButtonView* tileButton = new ButtonView(rect);
+    tileButton->setText("Tile");
+    tileButton->setBackgroundColor(0x333333);
+    tileButton->setTextColor(0xFF0000);
+    tileButton->setFontPath(FONT_PATH);
+    tileButton->show();
+    getDisplay()->addView("tile_button", tileButton);
+
+    // Add the Save Button to the Display
+    rect.w = 50;
+    rect.h = 30;
+    rect.x = boardView->getRect().w - 2 * rect.w - 2 * spaceBetweenButtons;
+    rect.y = boardView->getRect().h + spaceBetweenButtons;
+    ButtonView* saveButton = new ButtonView(rect);
+    saveButton->setText("Save");
+    saveButton->setBackgroundColor(0x333333);
+    saveButton->setTextColor(0xFF0000);
+    saveButton->setFontPath(FONT_PATH);
+    saveButton->show();
+    getDisplay()->addView("save_button", saveButton);
+
     // Add the Exit Button to the Display
-    rect.x = 25;
-    rect.y = 25;
-    rect.w = 100;
-    rect.h = 50;
-    exitButton = new ButtonView(rect);
+    rect.w = 50;
+    rect.h = 30;
+    rect.x = boardView->getRect().w - 1 * rect.w - 1 * spaceBetweenButtons;
+    rect.y = boardView->getRect().h + spaceBetweenButtons;
+    ButtonView* exitButton = new ButtonView(rect);
     exitButton->setText("Exit");
     exitButton->setBackgroundColor(0x333333);
     exitButton->setTextColor(0xFF0000);
@@ -57,7 +84,7 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
         getModel()->setState(QUIT);
     });
     exitButton->show();
-    getDisplay()->addView("exitButton", exitButton);
+    getDisplay()->addView("exit_button", exitButton);
 }
 
 /**
@@ -107,21 +134,6 @@ void EditController::processInput() {
             if (event.key.keysym.sym == SDLK_q) {
                 getModel()->setState(QUIT);
                 break;
-
-            // Pass all other keys to the parent of the selected layer.  Or the selected layer if it's a root layer.
-            } else {
-                Layer* selected = Layer::getSelectedLayer();
-                if (selected != nullptr) {
-                    // Find the Event Handling Layer.  It'll either be the
-                    // selected layer's parent or the selected layer (depending
-                    // on whether the selected layer has no parent).
-                    Layer* handler = selected->getParent();
-                    if (handler == nullptr) {
-                        handler = selected;
-                    }
-
-                    handler->onKeyDown(event.key.keysym.sym);
-                }
             }
 
         // Handle Mouse Down Events

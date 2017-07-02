@@ -12,7 +12,6 @@ public:
     void gameLoop() override;
 
 private:
-    ButtonView* exitButton;
     void processInput() override;
     EditorModel* getModel() const override;
 

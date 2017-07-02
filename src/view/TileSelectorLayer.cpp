@@ -56,7 +56,7 @@ void TileSelectorLayer::onSelected() {
         ButtonLayer* buttonLayer = (ButtonLayer*) getChild(x);
         TileType tileType = (TileType) x;
         if (tileType == EditorModel::GetInstance()->getTileType()) {
-            buttonLayer->setSelected();
+            //buttonLayer->setSelected();
         }
     }
 }
@@ -121,7 +121,7 @@ void TileSelectorLayer::onKeyDown(SDL_Keycode key) {
     // Left and Right change the Tile Button selection.
     } else if (key == SDLK_LEFT || key == SDLK_RIGHT) {
         // Figure out which index gets selected next.
-        int selChild = getSelectedChildIndex();
+        int selChild = 0;//getSelectedChildIndex();
         if (selChild >= 0) {
             // Selected Child should go left or right
             if (key == SDLK_LEFT) {
@@ -138,10 +138,10 @@ void TileSelectorLayer::onKeyDown(SDL_Keycode key) {
             }
 
             // Change the selected layer.
-            getChild(selChild)->setSelected();
+            //getChild(selChild)->setSelected();
         }
     } else if (key == SDLK_RETURN) {
-        int selChild = getSelectedChildIndex();
+        int selChild = 0;//getSelectedChildIndex();
         if (selChild >= 0) {
             EditorModel::GetInstance()->setTileType((TileType) selChild);
             hide();

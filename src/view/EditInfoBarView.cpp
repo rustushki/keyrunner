@@ -5,7 +5,7 @@
  * @param model
  * @param rect
  */
-EditInfoBarView::EditInfoBarView(Model *model, const SDL_Rect &rect) : BaseView(model, rect) {}
+EditInfoBarView::EditInfoBarView(const SDL_Rect &rect) : BaseView(nullptr, rect) {}
 
 /**
  * Destructor.

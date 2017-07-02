@@ -28,12 +28,6 @@ public:
 
     virtual void hide();
 
-    bool isSelected() const;
-
-    void setSelected();
-
-    static Layer* getSelectedLayer();
-
     Layer* getParent() const;
 
 protected:
@@ -43,11 +37,7 @@ protected:
 
     Layer* getChild(int i);
 
-    int getSelectedChildIndex();
-
     uint16_t getChildCount();
-
-    virtual void onSelected();
 
     void setParent(Layer* parent);
 
@@ -59,8 +49,6 @@ private:
     std::function<void()> onEnterCb;
 
     bool visible;
-
-    static Layer* selectedLayer;
 
     Layer* parent;
 };

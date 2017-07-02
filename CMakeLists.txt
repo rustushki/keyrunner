@@ -19,6 +19,8 @@ add_library(uitk STATIC
 
 # Source Files.
 set(SOURCES
+	src/view/EditInfoBarView.cpp
+	src/view/PlayInfoBarView.cpp
     src/controller/BaseController.cpp
     src/controller/Controller.hpp
     src/controller/Display.cpp
@@ -35,11 +37,7 @@ set(SOURCES
     src/uitk/BaseView.cpp
     src/view/AnimationFactory.cpp
     src/view/BoardView.cpp
-    src/view/EditInfoBarLayer.cpp
-    src/view/EditInfoBarView.cpp
     src/view/GridLayer.cpp
-    src/view/InfoBarLayer.cpp
-    src/view/PlayInfoBarView.cpp
     src/view/TileLayer.cpp
     src/view/TileSelectorLayer.cpp
 )
