@@ -5,17 +5,16 @@
 #include "../model/BaseModel.hpp"
 
 class EditorModel : public BaseModel {
-    public:
-        // Garbage
-        static EditorModel* GetInstance();
-        void setTileType(TileType tileType);
-        TileType getTileType() const;
+public:
+    EditorModel();
 
-    private:
-        // Garbage
-        static EditorModel* instance;
-        EditorModel();
-        TileType tileType;
+    // Garbage
+    void setTileType(TileType tileType);
+    TileType getTileType() const;
+
+private:
+    // Garbage
+    TileType tileType;
 };
 
 #endif

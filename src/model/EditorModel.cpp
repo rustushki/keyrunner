@@ -1,24 +1,6 @@
 #include "../model/EditorModel.hpp"
 
 /**
- * Singleton Instance of EditorModel.
- */
-EditorModel* EditorModel::instance = nullptr;
-
-/**
- * Get Singleton Instance.
- * <p>
- * This should be removed soon.
- */
-EditorModel* EditorModel::GetInstance() {
-    if (EditorModel::instance == nullptr) {
-        EditorModel::instance = new EditorModel();
-    }
-
-    return EditorModel::instance;
-}
-
-/**
  * Constructor.
  * <p>
  * Initialize the Editor's fields.

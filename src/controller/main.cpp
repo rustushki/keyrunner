@@ -109,7 +109,7 @@ int main(int argc, char** argv) {
         controller = new PlayController((PlayModel*) model, &display, &options);
     } else {
         // Create the Model
-        model = EditorModel::GetInstance();
+        model = new EditorModel();
         controller = new EditController((EditorModel*) model, &display, &options);
     }
 
