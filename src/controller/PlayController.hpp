@@ -8,10 +8,11 @@
 class PlayController : public BaseController {
 public:
     PlayController(PlayModel* model, Display* display, Options* options);
+    virtual void gameLoop() override;
 
-    virtual void gameLoop();
-    virtual void processInput();
-    PlayModel* getModel() const;
+protected:
+    virtual void processInput() override;
+    PlayModel* getModel() const override;
 };
 
 #endif

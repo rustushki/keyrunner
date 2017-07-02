@@ -9,12 +9,12 @@
 class EditController : public BaseController {
 public:
     EditController(EditorModel* model, Display* display, Options* options);
-    void gameLoop();
-    void processInput();
-    EditorModel* getModel() const;
+    void gameLoop() override;
 
 private:
     ButtonView* exitButton;
+    void processInput() override;
+    EditorModel* getModel() const override;
 
 };
 

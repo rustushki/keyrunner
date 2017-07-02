@@ -10,12 +10,12 @@
 class BaseController : public Controller {
 public:
     BaseController(BaseModel* model, Display* display);
-    virtual void gameLoop() = 0;
-    virtual void processInput() = 0;
+    virtual void gameLoop() override = 0;
 
 protected:
-    virtual BaseModel* getModel() const;
-    virtual Display* getDisplay();
+    virtual BaseModel* getModel() const override;
+    virtual Display* getDisplay() override;
+    virtual void processInput() override = 0;
 
     void conveyPlayer();
     LevelManager* getLevelManager() const;

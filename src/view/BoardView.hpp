@@ -9,9 +9,9 @@
 class BoardView : public BaseView {
 public:
     BoardView(BoardModel* model, SDL_Rect rect);
-    virtual ~BoardView();
-    void draw(SDL_Renderer* renderer);
-    BoardModel* getModel() const;
+    virtual ~BoardView() override;
+    void draw(SDL_Renderer* renderer) override;
+    BoardModel* getModel() const override;
 
 private:
     Animation* keyAnimation;

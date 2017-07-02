@@ -8,12 +8,12 @@
 class ButtonView : public BaseView {
 public:
     ButtonView(const SDL_Rect &rect);
-    virtual ~ButtonView();
+    virtual ~ButtonView() override;
 
     void setOnClickCallback(const std::function <void ()>& newCallBack);
     void onClick();
     bool isPressed() const;
-    void draw(SDL_Renderer* renderer);
+    void draw(SDL_Renderer* renderer) override;
 
     void setBackgroundColor(uint32_t color);
     void setTextColor(uint32_t color);

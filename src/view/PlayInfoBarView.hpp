@@ -10,9 +10,9 @@
 class PlayInfoBarView : public BaseView {
 public:
     PlayInfoBarView(PlayModel* model, SDL_Rect rect);
-    virtual ~PlayInfoBarView();
-    void draw(SDL_Renderer* renderer);
-    PlayModel* getModel() const;
+    virtual ~PlayInfoBarView() override;
+    void draw(SDL_Renderer* renderer) override;
+    PlayModel* getModel() const override;
 
 private:
     TTF_Font* getFont() const;
