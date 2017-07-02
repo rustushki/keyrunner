@@ -33,10 +33,9 @@ void PlayInfoBarView::draw(SDL_Renderer *renderer) {
  * @param renderer
  */
 void PlayInfoBarView::drawBlackBar(SDL_Renderer* renderer) const {
-    // Build the black bar at the bottom.
-    SDL_Rect r = getRect();
+    SDL_Rect rect = getRect();
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-    SDL_RenderDrawRect(renderer, &r);
+    SDL_RenderFillRect(renderer, &rect);
 }
 
 /**

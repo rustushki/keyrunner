@@ -36,6 +36,7 @@ set(SOURCES
     src/view/AnimationFactory.cpp
     src/view/BoardView.cpp
     src/view/EditInfoBarLayer.cpp
+    src/view/EditInfoBarView.cpp
     src/view/GridLayer.cpp
     src/view/InfoBarLayer.cpp
     src/view/PlayInfoBarView.cpp

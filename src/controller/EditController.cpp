@@ -2,6 +2,7 @@
 #include "../uitk/Layer.hpp"
 #include "../view/BoardView.hpp"
 #include "../uitk/ButtonView.hpp"
+#include "../view/EditInfoBarView.hpp"
 
 /**
  * Constructor.
@@ -32,6 +33,15 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
     View* boardView = new BoardView(board, rect);
     boardView->show();
     getDisplay()->addView("board", boardView);
+
+    // Add the Edit Info Bar to the Display
+    rect.x = 0;
+    rect.h = 40;
+    rect.y = display->getHeight() - rect.h;
+    rect.w = display->getWidth();
+    View* editInfoBarView = new EditInfoBarView(nullptr, rect);
+    editInfoBarView->show();
+    getDisplay()->addView("edit_info_bar_view", editInfoBarView);
 
     // Add the Exit Button to the Display
     rect.x = 25;
