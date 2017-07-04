@@ -1,8 +1,8 @@
 #include <sstream>
 #include "../controller/EditController.hpp"
 #include "../view/BoardView.hpp"
-#include "../view/EditInfoBarView.hpp"
 #include "../view/AnimationFactory.hpp"
+#include "../uitk/RectangleView.hpp"
 
 extern AnimationFactory* animationFactory;
 
@@ -41,7 +41,8 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
     rect.h = 40;
     rect.y = display->getHeight() - rect.h;
     rect.w = display->getWidth();
-    View* editInfoBarView = new EditInfoBarView(rect);
+    RectangleView* editInfoBarView = new RectangleView(rect);
+    editInfoBarView->setColor(0x0);
     editInfoBarView->show();
     getDisplay()->addView("edit_info_bar", editInfoBarView);
 
