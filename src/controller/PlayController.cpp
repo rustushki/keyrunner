@@ -1,6 +1,10 @@
+#include <sstream>
 #include "../controller/PlayController.hpp"
-#include "../view/PlayInfoBarView.hpp"
 #include "../view/BoardView.hpp"
+#include "../uitk/RectangleView.hpp"
+#include "../uitk/LabelView.hpp"
+#include "../view/TimerView.hpp"
+#include "../view/LevelNumberView.hpp"
 
 /**
  * Constructor.
@@ -24,16 +28,41 @@ PlayController::PlayController(PlayModel *model, Display* display, Options* opti
     rect.h = 400;
     View* board = new BoardView(getModel()->getBoard(), rect);
     board->show();
-    getDisplay()->addView("board", board);
+    getDisplay()->addView("01_board", board);
 
     // Add the Info Bar to the Display
     rect.x = 0;
     rect.h = 40;
     rect.y = display->getHeight() - rect.h;
     rect.w = display->getWidth();
-    View* playInfoBar = new PlayInfoBarView(getModel(), rect);
+    RectangleView* playInfoBar = new RectangleView(nullptr, rect);
+    playInfoBar->setColor(0);
     playInfoBar->show();
-    getDisplay()->addView("play_info_bar", playInfoBar);
+    getDisplay()->addView("02_play_info_bar", playInfoBar);
+
+    // Add the Timer to the display
+    rect.w = 100;
+    rect.x = display->getWidth() - rect.w;
+    rect.h = 40;
+    rect.y = display->getHeight() - rect.h;
+    TimerView* timer = new TimerView(getModel(), rect);
+    timer->setFontPath(FONT_PATH);
+    timer->setColor(0x000000);
+    timer->setTextColor(0xEEEEEE);
+    timer->show();
+    getDisplay()->addView("03_timer", timer);
+
+    // Add the Level Number to the display
+    rect.w = 100;
+    rect.x = 0;
+    rect.h = 40;
+    rect.y = display->getHeight() - rect.h;
+    LevelNumberView* levelNumber = new LevelNumberView(getModel()->getBoard(), rect);
+    levelNumber->setFontPath(FONT_PATH);
+    levelNumber->setColor(0x000000);
+    levelNumber->setTextColor(0xEEEEEE);
+    levelNumber->show();
+    getDisplay()->addView("04_level_number", levelNumber);
 }
 
 /**
@@ -47,11 +76,10 @@ void PlayController::gameLoop() {
     uint32_t maxDelay = 1000 / fps;
 
     // Read in the starting level
-	BoardModel* board = getModel()->getBoard();
     getLevelManager()->read();
 
     // Begin the game loop and continue while not in the quit state
-    while (getModel()->getState() != QUIT) {
+    while (getModel()->getState() == PLAY) {
         // Each iteration represents a frame
 
         // Begin preparing the frame
@@ -66,22 +94,6 @@ void PlayController::gameLoop() {
         // Move the player along the conveyor belts (if applicable)
         conveyPlayer();
 
-        // If the level is complete,
-        if (board->isComplete()) {
-            // Check to see if the next level is beyond the maximum level; i.e. the WIN state
-            uint8_t nextLevel = board->getLevelNum() + (uint8_t) + 1;
-            if (nextLevel > getLevelManager()->getLevelCount()) {
-                getModel()->setState(WIN);
-                break;
-
-                // Otherwise, go to next level; adding some extra time to the clock
-            } else {
-                board->setLevelNum(nextLevel);
-                getLevelManager()->read();
-                getModel()->incrementTimeClock(6000);
-            }
-        }
-
         // Handle supported system events
         processInput();
 
@@ -95,11 +107,32 @@ void PlayController::gameLoop() {
             SDL_Delay((uint32_t) remainingTime);
         }
 
-        // Check for winning/losing conditions. If the clock runs down to 0; game over
-        getModel()->decrementTimeClock(SDL_GetTicks() - workStart);
+        updateLevel(SDL_GetTicks() - workStart);
+    }
+}
+
+void PlayController::updateLevel(long elapsedDuration) const {
+    BoardModel* board = getModel()->getBoard();
+
+    // If the level is complete,
+    if (board->isComplete()) {
+        // Check for winning conditions. If the next level is beyond the maximum level; win!
+        uint8_t nextLevel = board->getLevelNum() + (uint8_t) +1;
+        if (nextLevel > getLevelManager()->getLevelCount()) {
+            getModel()->setState(WIN);
+
+        // Otherwise, go to next level; adding some extra time to the clock
+        } else {
+            board->setLevelNum(nextLevel);
+            getLevelManager()->read();
+            getModel()->incrementTimeClock(6000);
+        }
+
+    // Check for losing conditions. If the clock runs down to 0; game over
+    } else {
+        getModel()->decrementTimeClock(elapsedDuration);
         if (getModel()->getTimeClock() <= 0) {
             getModel()->setState(LOSE);
-            break;
         }
     }
 }

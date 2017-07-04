@@ -4,7 +4,7 @@
  * Constructor.
  * @param rect
  */
-RectangleView::RectangleView(const SDL_Rect &rect) : BaseView(nullptr, rect) {}
+RectangleView::RectangleView(Model* model, const SDL_Rect &rect) : BaseView(model, rect) {}
 
 /**
  * Destructor.
@@ -30,5 +30,13 @@ void RectangleView::draw(SDL_Renderer *renderer) {
  */
 void RectangleView::setColor(uint32_t newColor) {
     this->color = newColor;
+}
+
+/**
+ * Get the rectangle's color.
+ * @return
+ */
+uint32_t RectangleView::getColor() const {
+    return this->color;
 }
 

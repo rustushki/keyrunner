@@ -2,7 +2,6 @@
 #include "../controller/EditController.hpp"
 #include "../view/BoardView.hpp"
 #include "../view/AnimationFactory.hpp"
-#include "../uitk/RectangleView.hpp"
 
 extern AnimationFactory* animationFactory;
 
@@ -41,7 +40,7 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
     rect.h = 40;
     rect.y = display->getHeight() - rect.h;
     rect.w = display->getWidth();
-    RectangleView* editInfoBarView = new RectangleView(rect);
+    RectangleView* editInfoBarView = new RectangleView(nullptr, rect);
     editInfoBarView->setColor(0x0);
     editInfoBarView->show();
     getDisplay()->addView("edit_info_bar", editInfoBarView);
@@ -53,9 +52,9 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
     rect.h = 30;
     rect.x = boardView->getRect().w - 2 * rect.w - 2 * spaceBetweenButtons;
     rect.y = boardView->getRect().h + spaceBetweenButtons;
-    ButtonView* saveButton = new ButtonView(rect);
+    ButtonView* saveButton = new ButtonView(nullptr, rect);
     saveButton->setText("Save");
-    saveButton->setBackgroundColor(0x333333);
+    saveButton->setColor(0x333333);
     saveButton->setTextColor(0xFF0000);
     saveButton->setFontPath(FONT_PATH);
     saveButton->setOnClickCallback([this] () {
@@ -69,9 +68,9 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
     rect.h = 30;
     rect.x = boardView->getRect().w - 1 * rect.w - 1 * spaceBetweenButtons;
     rect.y = boardView->getRect().h + spaceBetweenButtons;
-    ButtonView* exitButton = new ButtonView(rect);
+    ButtonView* exitButton = new ButtonView(nullptr, rect);
     exitButton->setText("Exit");
-    exitButton->setBackgroundColor(0x333333);
+    exitButton->setColor(0x333333);
     exitButton->setTextColor(0xFF0000);
     exitButton->setFontPath(FONT_PATH);
     exitButton->setOnClickCallback([this] () {
@@ -95,8 +94,8 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
         rect.h = buttonHeight;
         rect.x = (uint16_t) (initialOffset + tileTypeIndex * buttonWidth + tileTypeIndex * spaceInBetweenButtons);
         rect.y = (uint16_t) ((boardView->getRect().h + spaceBetweenButtons) + ((40 - spaceBetweenButtons * 2) - buttonHeight) / 2);
-        ButtonView* buttonView = new ButtonView(rect);
-        buttonView->setBackgroundColor(0x333333);
+        ButtonView* buttonView = new ButtonView(nullptr, rect);
+        buttonView->setColor(0x333333);
         buttonView->setTextColor(0xFF0000);
         buttonView->setIcon(animationFactory->build(at));
         buttonView->show();

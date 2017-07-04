@@ -5,10 +5,11 @@
 
 class RectangleView : public BaseView {
 public:
-    RectangleView(const SDL_Rect &rect);
+    RectangleView(Model* model, const SDL_Rect &rect);
     virtual ~RectangleView() override;
     void draw(SDL_Renderer* renderer) override;
     void setColor(uint32_t newColor);
+    uint32_t getColor() const;
 
 private:
     uint32_t color;

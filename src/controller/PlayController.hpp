@@ -13,6 +13,9 @@ public:
 protected:
     virtual void processInput() override;
     PlayModel* getModel() const override;
+
+private:
+    void updateLevel(long elapsedDuration) const;
 };
 
 #endif

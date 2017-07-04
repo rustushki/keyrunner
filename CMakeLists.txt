@@ -8,6 +8,7 @@ project (keyrunner)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${keyrunner_SOURCE_DIR}/cmake")
 
 add_library(uitk STATIC
+	src/uitk/LabelView.cpp
 	src/uitk/RectangleView.cpp
     src/uitk/Animation.cpp
     src/uitk/ButtonView.cpp
@@ -17,7 +18,6 @@ add_library(uitk STATIC
 
 # Source Files.
 set(SOURCES
-	src/view/PlayInfoBarView.cpp
     src/controller/BaseController.cpp
     src/controller/Controller.hpp
     src/controller/Display.cpp
@@ -34,6 +34,8 @@ set(SOURCES
     src/uitk/BaseView.cpp
     src/view/AnimationFactory.cpp
     src/view/BoardView.cpp
+    src/view/LevelNumberView.cpp
+    src/view/TimerView.cpp
 )
 
 # Declare Executable.
