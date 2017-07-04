@@ -13,14 +13,15 @@ public:
     void setBackgroundColor(uint32_t color);
     void setTextColor(uint32_t color);
     void setText(std::string text);
-    void setHeight(uint16_t height);
-    void setWidth(uint16_t newWidth);
-    void setX(uint16_t pX);
-    void setY(uint16_t pY);
     void setMarginHorizontal(uint16_t marginHorizontal);
     void setMarginVertical(uint16_t marginVertical);
     void setIcon(Animation* animation);
     void setFontPath(std::string fontPath);
+
+    virtual void setHeight(uint16_t newHeight) override;
+    virtual void setWidth(uint16_t newWidth) override;
+    virtual void setX(uint16_t newX) override;
+    virtual void setY(uint16_t newY) override;
 
 private:
     TTF_Font* getFont(uint8_t size) const;
@@ -31,10 +32,6 @@ private:
     uint32_t textColor;
     uint16_t horizontalMargin;
     uint16_t verticalMargin;
-    uint16_t x;
-    uint16_t y;
-    uint16_t height;
-    uint16_t width;
     Animation* icon;
     std::string fontPath;
     bool textDirty;

@@ -102,3 +102,35 @@ void BaseView::onClick() const {
 void BaseView::setOnClickCallback(const std::function<void()> &newCallBack) {
     this->onClickCallBack = newCallBack;
 }
+
+/**
+ * Set the new height of the View.
+ * @param newHeight
+ */
+void BaseView::setHeight(uint16_t newHeight) {
+    rect.h = newHeight;
+}
+
+/**
+ * Set the new width of the View.
+ * @param newHeight
+ */
+void BaseView::setWidth(uint16_t newWidth) {
+    rect.w = newWidth;
+}
+
+/**
+ * Set the new x coordinate of the View.
+ * @param newHeight
+ */
+void BaseView::setX(uint16_t newX) {
+    rect.x = newX;
+}
+
+/**
+ * Set the new y coordinate of the View.
+ * @param newHeight
+ */
+void BaseView::setY(uint16_t newY) {
+    rect.x = newY;
+}

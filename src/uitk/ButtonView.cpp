@@ -136,7 +136,7 @@ void ButtonView::setText(std::string text) {
  */
 void ButtonView::setHeight(uint16_t newHeight) {
     textDirty = true;
-    height = newHeight;
+    BaseView::setHeight(newHeight);
 }
 
 /**
@@ -144,25 +144,25 @@ void ButtonView::setHeight(uint16_t newHeight) {
  */
 void ButtonView::setWidth(uint16_t newWidth) {
     textDirty = true;
-    width = newWidth;
+    BaseView::setWidth(newWidth);
 }
 
 /**
  * Move the button to a new X coordinate.
  * @param pX
  */
-void ButtonView::setX(uint16_t pX) {
+void ButtonView::setX(uint16_t newX) {
     textDirty = true;
-    x = pX;
+    BaseView::setX(newX);
 }
 
 /**
  * Move the button to a new Y coordinate.
  * @param pX
  */
-void ButtonView::setY(uint16_t pY) {
+void ButtonView::setY(uint16_t newY) {
     textDirty = true;
-    y = pY;
+    BaseView::setY(newY);
 }
 
 /**

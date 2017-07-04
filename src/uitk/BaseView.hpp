@@ -18,6 +18,10 @@ public:
     virtual void setOnClickCallback(const std::function <void ()>& newCallBack) override final;
     virtual void onClick() const override final;
     virtual bool isPressed() const override final;
+    virtual void setHeight(uint16_t newHeight) override;
+    virtual void setWidth(uint16_t newWidth) override;
+    virtual void setX(uint16_t newX) override;
+    virtual void setY(uint16_t newY) override;
 
 protected:
     void addAnimation(Animation*);
