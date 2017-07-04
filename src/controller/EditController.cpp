@@ -86,7 +86,7 @@ EditController::EditController(EditorModel *model, Display* display, Options* op
     const uint8_t initialOffset = 10;
 
     for (int tileTypeIndex = 0; tileTypeIndex < TileType::length(); tileTypeIndex++) {
-        TileType tt = (TileType) tileTypeIndex;
+        TileType tt = TileType(tileTypeIndex);
         AnimationType at = tt.toAnimationType();
 
         // Build the Button for the TileType.

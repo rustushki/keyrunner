@@ -137,7 +137,7 @@ void LevelManager::readDeviations(FILE *fp) {
         // Read Deviation Tile Type
         uint8_t tileTypeInteger;
         fread(&tileTypeInteger, sizeof(uint8_t), 1, fp);
-        TileType tileType = static_cast<TileType>(tileTypeInteger);
+        TileType tileType = TileType(tileTypeInteger);
         deviations[TileCoord(tileX, tileY)] = tileType;
     }
 }
@@ -159,7 +159,7 @@ void LevelManager::readDefaultTileType(FILE *fp) {
     // Read Default Tile Type
     uint8_t defaultTileTypeInteger;
     fread(&defaultTileTypeInteger, sizeof(uint8_t), 1, fp);
-    defaultTileType = static_cast<TileType>(defaultTileTypeInteger);
+    defaultTileType = TileType(defaultTileTypeInteger);
 }
 
 /**
