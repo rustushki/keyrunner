@@ -28,7 +28,7 @@ PlayController::PlayController(PlayModel *model, Display* display, Options* opti
     rect.h = 400;
     View* board = new BoardView(getModel()->getBoard(), rect);
     board->show();
-    getDisplay()->addView("01_board", board);
+    getDisplay()->addView("board", board);
 
     // Add the Info Bar to the Display
     rect.x = 0;
@@ -38,7 +38,7 @@ PlayController::PlayController(PlayModel *model, Display* display, Options* opti
     RectangleView* playInfoBar = new RectangleView(nullptr, rect);
     playInfoBar->setColor(0);
     playInfoBar->show();
-    getDisplay()->addView("02_play_info_bar", playInfoBar);
+    getDisplay()->addView("play_info_bar", playInfoBar);
 
     // Add the Timer to the display
     rect.w = 100;
@@ -50,7 +50,7 @@ PlayController::PlayController(PlayModel *model, Display* display, Options* opti
     timer->setColor(0x000000);
     timer->setTextColor(0xEEEEEE);
     timer->show();
-    getDisplay()->addView("03_timer", timer);
+    getDisplay()->addView("timer", timer);
 
     // Add the Level Number to the display
     rect.w = 100;
@@ -62,7 +62,7 @@ PlayController::PlayController(PlayModel *model, Display* display, Options* opti
     levelNumber->setColor(0x000000);
     levelNumber->setTextColor(0xEEEEEE);
     levelNumber->show();
-    getDisplay()->addView("04_level_number", levelNumber);
+    getDisplay()->addView("level_number", levelNumber);
 }
 
 /**

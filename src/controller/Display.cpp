@@ -34,8 +34,8 @@ void Display::draw() const {
     SDL_RenderClear(renderer);
 
     // Redraw each View
-    for (auto viewPair : viewMap) {
-        View* view = viewPair.second;
+    for (auto viewName : viewNameStack) {
+        View* view = getViewByName(viewName);
         if (view->isVisible()) {
             view->draw(renderer);
         }
@@ -53,6 +53,7 @@ void Display::draw() const {
 void Display::addView(std::string name, View *view) {
     deleteViewIfExists(name);
     viewMap[name] = view;
+    viewNameStack.push_back(name);
 }
 
 /**
@@ -60,6 +61,11 @@ void Display::addView(std::string name, View *view) {
  * @param name
  */
 void Display::deleteViewIfExists(std::string name) {
+    // Erase the name from the viewNameStack
+    auto positionToRemove = std::remove(viewNameStack.begin(), viewNameStack.end(), name);
+    viewNameStack.erase(positionToRemove, viewNameStack.end());
+
+    // Erase (and free) the view from the viewMap
     auto viewIterator = viewMap.find(name);
     if (viewIterator != viewMap.end()) {
         delete viewIterator->second;
@@ -91,8 +97,8 @@ uint16_t Display::getWidth() const {
  * Iterate over the Views currently displayed and advance each of their Animations.
  */
 void Display::advanceAnimations() {
-    for (auto viewPair : viewMap) {
-        View* view = viewPair.second;
+    for (auto viewName : viewNameStack) {
+        View* view = getViewByName(viewName);
         for (Animation* animation : view->getAnimations()) {
             animation->advance();
         }
@@ -111,8 +117,8 @@ void Display::advanceAnimations() {
 const View *Display::getClickedView(uint32_t x, uint32_t y) const {
     View* matchingView = nullptr;
 
-    for (auto viewIterator = viewMap.rbegin(); viewIterator != viewMap.rend(); viewIterator++) {
-        View* view = (*viewIterator).second;
+    for (auto viewNameIterator = viewNameStack.rbegin(); viewNameIterator != viewNameStack.rend(); viewNameIterator++) {
+        View* view = getViewByName(*viewNameIterator);
         SDL_Rect rect = view->getRect();
         if (x >= rect.x && x < rect.x + rect.w) {
             if (y >= rect.y && y < rect.y + rect.h) {

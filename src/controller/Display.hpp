@@ -24,6 +24,7 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     std::map<std::string, View*> viewMap;
+    std::vector<std::string> viewNameStack;
 };
 
 #endif
