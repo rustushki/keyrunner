@@ -2,7 +2,7 @@
 #define LABEL_VIEW_HPP
 
 #include <SDL_ttf.h>
-#include "RectangleView.hpp"
+#include "../uitk/RectangleView.hpp"
 
 class LabelView : public RectangleView {
 public:
@@ -12,6 +12,7 @@ public:
     virtual void draw(SDL_Renderer* renderer) override;
 
     virtual std::string getText();
+    virtual uint32_t getFontSize() const;
 
     virtual void setTextColor(uint32_t color);
     virtual void setText(std::string text);
@@ -19,6 +20,7 @@ public:
     virtual void setMarginVertical(uint16_t marginVertical);
     virtual void setIcon(Animation* animation);
     virtual void setFontPath(std::string fontPath);
+    virtual void setFontSize(uint32_t fontSize);
 
     virtual void setHeight(uint16_t newHeight) override;
     virtual void setWidth(uint16_t newWidth) override;
@@ -27,7 +29,8 @@ public:
 
 private:
     TTF_Font* getFont(uint8_t size) const;
-    SDL_Texture* sizeText(SDL_Renderer* renderer, std::string text) const;
+    SDL_Texture* makeTextTexture(SDL_Renderer *renderer) const;
+    uint32_t chooseFontSizeToFit() const;
 
     std::string text;
     uint32_t textColor;
@@ -37,6 +40,7 @@ private:
     std::string fontPath;
     bool textDirty;
     SDL_Texture* textTexture;
+    uint32_t fontSize;
 };
 
 #endif

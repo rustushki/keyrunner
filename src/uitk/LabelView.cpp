@@ -7,11 +7,12 @@
  * @param rect
  */
 LabelView::LabelView(Model* model, const SDL_Rect &rect) : RectangleView(model, rect) {
-    horizontalMargin   = 20;
-    verticalMargin   = 20;
+    horizontalMargin = 20;
+    verticalMargin = 20;
     textDirty = true;
     textTexture = nullptr;
     icon = nullptr;
+    fontSize = 0;
 }
 
 /**
@@ -100,36 +101,68 @@ void LabelView::setMarginVertical(uint16_t marginVertical) {
 }
 
 /**
- * Perform binary searches to build a text texture which will fit into the label horizontally and vertically.
+ * Builds a texture for the text.
+ * <p>
+ * When fontSize is 0, fit the text to the label's region. Otherwise, treat the font size as a fixed number.
  * <p>
  * Maintenance note: If implementing a mutator which affects text appearance, be sure to set textDirty = true.
  * @param renderer
  * @param text
  * @return SDL_Texture*
  */
-SDL_Texture* LabelView::sizeText(SDL_Renderer* renderer, std::string text) const {
+SDL_Texture* LabelView::makeTextTexture(SDL_Renderer* renderer) const {
     if (text.empty()) {
         return nullptr;
     }
 
-    // Lo, Hi and Mid variables for the binary search.
+    uint32_t fontSize = this->getFontSize();
+    if (fontSize == 0) {
+        fontSize = this->chooseFontSizeToFit();
+    }
+
+    // Render and return the text surface which fits in the LabelView
+    TTF_Font* fnt = getFont(fontSize);
+    uint8_t rC = (uint8_t) ((textColor & 0xFF0000) >> 16);
+    uint8_t gC = (uint8_t) ((textColor & 0x00FF00) >>  8);
+    uint8_t bC = (uint8_t) ((textColor & 0x0000FF) >>  0);
+    SDL_Color color = {rC, gC, bC};
+    SDL_Surface* textSurface = TTF_RenderText_Solid(fnt, text.c_str(), color);
+    TTF_CloseFont(fnt);
+
+    // Confirm that the text surface was created.  If not something is horribly wrong, so die
+    if (textSurface == nullptr) {
+        std::stringstream message;
+        message << "Error drawing text: " << TTF_GetError();
+        throw std::runtime_error(message.str());
+    }
+
+    // Create and return a texture for this surface
+    return SDL_CreateTextureFromSurface(renderer, textSurface);
+}
+
+/**
+ * Choose a font size that will cause the label's text to fit horizontally and vertically within the center of the
+ * label's viewable area.
+ * <p>
+ * This sizing is implemented as a binary search for efficiency.
+ * @return uint32_t
+ */
+uint32_t LabelView::chooseFontSizeToFit() const {
+    // Lo, Hi and Mid variables for the binary search
     uint8_t lo = 1;
     uint8_t hi = 255;
     uint8_t mi = lo;
 
-    // Width and Height vars which will store the calculated width and height
-    // of rendered text surfaces.
+    // Width and Height vars which will store the calculated width and height of rendered text surfaces
     int w = 0;
     int h = 1;
 
-    // Determine the region of the button to fill with text based on the margin
-    // and button height/width.
+    // Determine the region of the button to fill with text based on the margin and button height/width
     SDL_Rect r = getRect();
     int fillH = r.w - horizontalMargin;
     int fillV = r.h - verticalMargin;
 
-    // Calculate the largest font size which will fit the LabelView surface
-    // height-wise.
+    // Calculate the largest font size which will fit the LabelView surface height-wise
     while (lo < hi && h != fillV) {
         mi = (uint8_t) ((hi - lo) / 2) + lo;
 
@@ -144,8 +177,7 @@ SDL_Texture* LabelView::sizeText(SDL_Renderer* renderer, std::string text) const
         }
     }
 
-    // Calculate the largest font size which will fit the LabelView surface
-    // width-wise.
+    // Calculate the largest font size which will fit the LabelView surface width-wise
     lo = 1;
     hi = mi;
     while (lo < hi && w != fillH) {
@@ -162,24 +194,7 @@ SDL_Texture* LabelView::sizeText(SDL_Renderer* renderer, std::string text) const
         }
     }
 
-    // Render and return the text surface which fits in the LabelView.
-    TTF_Font* fnt = getFont(mi);
-    uint8_t rC = (uint8_t) ((textColor & 0xFF0000) >> 16);
-    uint8_t gC = (uint8_t) ((textColor & 0x00FF00) >>  8);
-    uint8_t bC = (uint8_t) ((textColor & 0x0000FF) >>  0);
-    SDL_Color color = {rC, gC, bC};
-    SDL_Surface* textSurface = TTF_RenderText_Solid(fnt, text.c_str(), color);
-    TTF_CloseFont(fnt);
-
-    // Confirm that the text surface was created.  If not something is horribly
-    // wrong, so die.
-    if (textSurface == nullptr) {
-        std::stringstream message;
-        message << "Error drawing text: " << TTF_GetError();
-        throw std::runtime_error(message.str());
-    }
-
-    return SDL_CreateTextureFromSurface(renderer, textSurface);
+    return mi;
 }
 
 /**
@@ -203,7 +218,6 @@ void LabelView::setFontPath(std::string fontPath) {
  * @param renderer
  */
 void LabelView::draw(SDL_Renderer *renderer) {
-
     RectangleView::draw(renderer);
 
     // Fetch the text. Subclasses are allowed to have set textDirty by indirectly calling setText()
@@ -211,7 +225,7 @@ void LabelView::draw(SDL_Renderer *renderer) {
 
     if (textDirty) {
         // Build the text surface containing the given string.
-        textTexture = sizeText(renderer, text);
+        textTexture = makeTextTexture(renderer);
         textDirty = false;
     }
 
@@ -249,4 +263,25 @@ void LabelView::draw(SDL_Renderer *renderer) {
  */
 std::string LabelView::getText() {
     return this->text;
+}
+
+/**
+ * Set the font size.
+ * <p>
+ * A font size of 0 will cause the text to be automatically sized to fit within the label.
+ * @param fontSize
+ */
+void LabelView::setFontSize(uint32_t fontSize) {
+    this->textDirty = true;
+    this->fontSize = fontSize;
+}
+
+/**
+ * Get the font size.
+ * <p>
+ * A font size of 0 indicates that the text will be automatically sized to fit within the label.
+ * @return uint32_t
+ */
+uint32_t LabelView::getFontSize() const {
+    return fontSize;
 }

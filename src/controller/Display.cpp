@@ -46,7 +46,10 @@ void Display::draw() const {
 }
 
 /**
- * Add a new View to the Display with a given name.
+ * Add a new view to the Display with a given name.
+ * <p>
+ * The added view will be at the top of the stack and will cause the removal and freeing of any view that already has
+ * the provided name.
  * @param name
  * @param view
  */

@@ -30,7 +30,7 @@ PlayController::PlayController(PlayModel *model, Display* display, Options* opti
     board->show();
     getDisplay()->addView("board", board);
 
-    // Add the Info Bar to the Display
+    // Add the Info Bar to the display
     rect.x = 0;
     rect.h = 40;
     rect.y = display->getHeight() - rect.h;
@@ -47,6 +47,7 @@ PlayController::PlayController(PlayModel *model, Display* display, Options* opti
     rect.y = display->getHeight() - rect.h;
     TimerView* timer = new TimerView(getModel(), rect);
     timer->setFontPath(FONT_PATH);
+    timer->setFontSize(25);
     timer->setColor(0x000000);
     timer->setTextColor(0xEEEEEE);
     timer->show();
@@ -54,11 +55,12 @@ PlayController::PlayController(PlayModel *model, Display* display, Options* opti
 
     // Add the Level Number to the display
     rect.w = 100;
-    rect.x = 0;
+    rect.x = 20;
     rect.h = 40;
     rect.y = display->getHeight() - rect.h;
     LevelNumberView* levelNumber = new LevelNumberView(getModel()->getBoard(), rect);
     levelNumber->setFontPath(FONT_PATH);
+    levelNumber->setFontSize(25);
     levelNumber->setColor(0x000000);
     levelNumber->setTextColor(0xEEEEEE);
     levelNumber->show();
