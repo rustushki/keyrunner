@@ -16,6 +16,11 @@ protected:
 
 private:
     void updateLevel(long elapsedDuration) const;
+
+    View* createRectangle() const;
+    View* createBoard() const;
+    View* createTimer() const;
+    View* createLevelLabel() const;
 };
 
 #endif

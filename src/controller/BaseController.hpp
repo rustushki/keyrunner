@@ -14,7 +14,7 @@ public:
 
 protected:
     virtual BaseModel* getModel() const override;
-    virtual Display* getDisplay() override;
+    virtual Display* getDisplay() const override;
     virtual void processInput() override = 0;
 
     void conveyPlayer();

@@ -13,96 +13,41 @@ extern AnimationFactory* animationFactory;
  * @param display
  */
 EditController::EditController(EditorModel *model, Display* display, Options* options) : BaseController(model, display) {
-    BoardModel* board = getModel()->getBoard();
     // Create New Level for Edit
     if (options->getCreateNewLevel()) {
-        board->setLevelNum((uint8_t) (getLevelManager()->getLevelCount() + 1));
+        getModel()->getBoard()->setLevelNum((uint8_t) (getLevelManager()->getLevelCount() + 1));
         getLevelManager()->create();
 
         // Load Existing Level for Edit
     } else {
-        board->setLevelNum(options->getStartingLevel());
+        getModel()->getBoard()->setLevelNum(options->getStartingLevel());
         getLevelManager()->read();
     }
 
-    // Add the Board to the Display
-    SDL_Rect rect;
-    rect.x = 0;
-    rect.y = 0;
-    rect.w = getDisplay()->getWidth();
-    rect.h = 400;
-    View* boardView = new BoardView(board, rect);
-    boardView->show();
-    getDisplay()->addView("board", boardView);
+    // Editor Board
+    View* board = createBoard();
+    getDisplay()->addView("board", board);
 
-    // Add the Edit Info Bar to the Display
-    rect.x = 0;
-    rect.h = 40;
-    rect.y = display->getHeight() - rect.h;
-    rect.w = display->getWidth();
-    RectangleView* editInfoBarView = new RectangleView(nullptr, rect);
-    editInfoBarView->setColor(0x0);
-    editInfoBarView->show();
-    getDisplay()->addView("edit_info_bar", editInfoBarView);
+    // Black Bar at the Bottom
+    View* editInfoBar = createRectangle();
+    getDisplay()->addView("edit_info_bar", editInfoBar);
 
-    const uint8_t spaceBetweenButtons = 4;
+    const uint8_t buttonSpacing = 4;
 
-    // Add the Save Button to the Display
-    rect.w = 50;
-    rect.h = 30;
-    rect.x = boardView->getRect().w - 2 * rect.w - 2 * spaceBetweenButtons;
-    rect.y = boardView->getRect().h + spaceBetweenButtons;
-    ButtonView* saveButton = new ButtonView(nullptr, rect);
-    saveButton->setText("Save");
-    saveButton->setColor(0x333333);
-    saveButton->setTextColor(0xFF0000);
-    saveButton->setFontPath(FONT_PATH);
-    saveButton->setOnClickCallback([this] () {
-        getLevelManager()->write();
-    });
-    saveButton->show();
+    // Save Button
+    View* saveButton = createSaveButton(board, buttonSpacing);
     getDisplay()->addView("save_button", saveButton);
 
-    // Add the Exit Button to the Display
-    rect.w = 50;
-    rect.h = 30;
-    rect.x = boardView->getRect().w - 1 * rect.w - 1 * spaceBetweenButtons;
-    rect.y = boardView->getRect().h + spaceBetweenButtons;
-    ButtonView* exitButton = new ButtonView(nullptr, rect);
-    exitButton->setText("Exit");
-    exitButton->setColor(0x333333);
-    exitButton->setTextColor(0xFF0000);
-    exitButton->setFontPath(FONT_PATH);
-    exitButton->setOnClickCallback([this] () {
-        getModel()->setState(QUIT);
-    });
-    exitButton->show();
+    // Exit Button
+    View* exitButton = createExitButton(board, buttonSpacing);
     getDisplay()->addView("exit_button", exitButton);
 
-    // Add the Tile Selector Buttons to the Display
-    const uint16_t buttonWidth  = 40;
-    const uint16_t buttonHeight = 27;
-    const uint8_t spaceInBetweenButtons = 4;
-    const uint8_t initialOffset = 10;
-
+    // Tile Selector Buttons
     for (int tileTypeIndex = 0; tileTypeIndex < TileType::length(); tileTypeIndex++) {
-        TileType tt = TileType(tileTypeIndex);
-        AnimationType at = tt.toAnimationType();
-
-        // Build the Button for the TileType.
-        rect.w = buttonWidth;
-        rect.h = buttonHeight;
-        rect.x = (uint16_t) (initialOffset + tileTypeIndex * buttonWidth + tileTypeIndex * spaceInBetweenButtons);
-        rect.y = (uint16_t) ((boardView->getRect().h + spaceBetweenButtons) + ((40 - spaceBetweenButtons * 2) - buttonHeight) / 2);
-        ButtonView* buttonView = new ButtonView(nullptr, rect);
-        buttonView->setColor(0x333333);
-        buttonView->setTextColor(0xFF0000);
-        buttonView->setIcon(animationFactory->build(at));
-        buttonView->show();
-
+        View* tileTypeButton = createTileTypeButton(board, TileType(tileTypeIndex), buttonSpacing);
         std::stringstream viewName;
         viewName << "tile_selector_button_" << tileTypeIndex;
-        display->addView(viewName.str(), buttonView);
+        display->addView(viewName.str(), tileTypeButton);
     }
 }
 
@@ -179,3 +124,110 @@ void EditController::processInput() {
 EditorModel *EditController::getModel() const {
     return (EditorModel*) BaseController::getModel();
 }
+
+/**
+ * Creates a black rectangle.
+ * @return View*
+ */
+View *EditController::createRectangle() const {
+    SDL_Rect rect;
+    rect.x = 0;
+    rect.h = 40;
+    rect.y = getDisplay()->getHeight() - rect.h;
+    rect.w = getDisplay()->getWidth();
+    RectangleView* editInfoBar = new RectangleView(nullptr, rect);
+    editInfoBar->setColor(0x0);
+    editInfoBar->show();
+    return editInfoBar;
+}
+
+/**
+ * Creates the Editor's BoardView.
+ * @return View*
+ */
+View* EditController::createBoard() const {
+    SDL_Rect rect;
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = getDisplay()->getWidth();
+    rect.h = 400;
+    View * board = new BoardView(getModel()->getBoard(), rect);
+    board->show();
+    return board;
+}
+
+/**
+ * Creates a Save Button.
+ * @param board
+ * @param buttonSpacing horizontal pixel distance between neighboring buttons
+ * @return
+ */
+View* EditController::createSaveButton(View* board, uint8_t buttonSpacing) const {
+    SDL_Rect rect;
+    rect.w = 50;
+    rect.h = 30;
+    rect.x = board->getRect().w - 2 * rect.w - 2 * buttonSpacing;
+    rect.y = board->getRect().h + buttonSpacing;
+    ButtonView* save = new ButtonView(nullptr, rect);
+    save->setText("Save");
+    save->setColor(0x333333);
+    save->setTextColor(0xFF0000);
+    save->setFontPath(FONT_PATH);
+    save->setOnClickCallback([this] () {
+        getLevelManager()->write();
+    });
+    save->show();
+    return save;
+}
+
+/**
+ * Creates the Exit button.
+ * @param board
+ * @param buttonSpacing horizontal pixel distance between neighboring buttons
+ * @return
+ */
+View *EditController::createExitButton(View *board, int buttonSpacing) const {
+    SDL_Rect rect;
+    rect.w = 50;
+    rect.h = 30;
+    rect.x = board->getRect().w - 1 * rect.w - 1 * buttonSpacing;
+    rect.y = board->getRect().h + buttonSpacing;
+    ButtonView* exit = new ButtonView(nullptr, rect);
+    exit->setText("Exit");
+    exit->setColor(0x333333);
+    exit->setTextColor(0xFF0000);
+    exit->setFontPath(FONT_PATH);
+    exit->setOnClickCallback([this] () {
+        getModel()->setState(QUIT);
+    });
+    exit->show();
+    return exit;
+}
+
+/**
+ * Creates a button for the provided tile type and places it horizontally at the bottom of the editor.
+ * @param board
+ * @param tileType
+ * @param buttonSpacing
+ * @return
+ */
+View *EditController::createTileTypeButton(View* board, TileType tileType, uint8_t buttonSpacing) const {
+    const uint16_t width  = 40;
+    const uint16_t height = 27;
+    const uint8_t initialOffset = 10;
+
+    AnimationType animationType = tileType.toAnimationType();
+    SDL_Rect rect;
+    rect.w = width;
+    rect.h = height;
+    rect.x = (uint16_t) (initialOffset + ((int) tileType) * width + ((int) tileType) * buttonSpacing);
+    rect.y = (uint16_t) ((board->getRect().h + buttonSpacing) + ((40 - buttonSpacing * 2) - height) / 2);
+    ButtonView* button = new ButtonView(nullptr, rect);
+    button->setColor(0x333333);
+    button->setTextColor(0xFF0000);
+    button->setIcon(animationFactory->build(animationType));
+    button->show();
+
+    return button;
+}
+

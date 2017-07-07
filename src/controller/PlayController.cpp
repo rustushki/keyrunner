@@ -12,59 +12,26 @@
  * Sets the initial value of the time clock and the starting level based on the provided command line options. Creates
  * all Views used by the PlayController.
  * @param model
- * @param rootLayer
  * @param window
  * @param renderer
  */
 PlayController::PlayController(PlayModel *model, Display* display, Options* options) : BaseController(model, display) {
+    // Initialize the model
     getModel()->setTimeClock(50000);
     getModel()->getBoard()->setLevelNum(options->getStartingLevel());
 
-    // Add the Board to the Display
-    SDL_Rect rect;
-    rect.x = 0;
-    rect.y = 0;
-    rect.w = getDisplay()->getWidth();
-    rect.h = 400;
-    View* board = new BoardView(getModel()->getBoard(), rect);
-    board->show();
+    // Create each of the views for this controller
+    View* board = createBoard();
     getDisplay()->addView("board", board);
 
-    // Add the Info Bar to the display
-    rect.x = 0;
-    rect.h = 40;
-    rect.y = display->getHeight() - rect.h;
-    rect.w = display->getWidth();
-    RectangleView* playInfoBar = new RectangleView(nullptr, rect);
-    playInfoBar->setColor(0);
-    playInfoBar->show();
-    getDisplay()->addView("play_info_bar", playInfoBar);
+    View* rectangle = createRectangle();
+    getDisplay()->addView("rectangle", rectangle);
 
-    // Add the Timer to the display
-    rect.w = 100;
-    rect.x = display->getWidth() - rect.w;
-    rect.h = 40;
-    rect.y = display->getHeight() - rect.h;
-    TimerView* timer = new TimerView(getModel(), rect);
-    timer->setFontPath(FONT_PATH);
-    timer->setFontSize(25);
-    timer->setColor(0x000000);
-    timer->setTextColor(0xEEEEEE);
-    timer->show();
+    View* timer = createTimer();
     getDisplay()->addView("timer", timer);
 
-    // Add the Level Number to the display
-    rect.w = 100;
-    rect.x = 20;
-    rect.h = 40;
-    rect.y = display->getHeight() - rect.h;
-    LevelNumberView* levelNumber = new LevelNumberView(getModel()->getBoard(), rect);
-    levelNumber->setFontPath(FONT_PATH);
-    levelNumber->setFontSize(25);
-    levelNumber->setColor(0x000000);
-    levelNumber->setTextColor(0xEEEEEE);
-    levelNumber->show();
-    getDisplay()->addView("level_number", levelNumber);
+    View* levelLabel = createLevelLabel();
+    getDisplay()->addView("level_number", levelLabel);
 }
 
 /**
@@ -195,4 +162,69 @@ void PlayController::processInput() {
  */
 PlayModel *PlayController::getModel() const {
     return (PlayModel*) BaseController::getModel();
+}
+
+/**
+ * Create a level label for the informational bar.
+ */
+View* PlayController::createLevelLabel() const {
+    SDL_Rect rect;
+    rect.w = 100;
+    rect.x = 20;
+    rect.h = 40;
+    rect.y = getDisplay()->getHeight() - rect.h;
+    LevelNumberView* levelNumber = new LevelNumberView(getModel()->getBoard(), rect);
+    levelNumber->setFontPath(FONT_PATH);
+    levelNumber->setFontSize(25);
+    levelNumber->setColor(0x000000);
+    levelNumber->setTextColor(0xEEEEEE);
+    levelNumber->show();
+    return levelNumber;
+}
+
+/**
+ * Create a timer for the informational bar.
+ */
+View* PlayController::createTimer() const {
+    SDL_Rect rect;
+    rect.w = 100;
+    rect.x = getDisplay()->getWidth() - rect.w;
+    rect.h = 40;
+    rect.y = getDisplay()->getHeight() - rect.h;
+    TimerView* timer = new TimerView(getModel(), rect);
+    timer->setFontPath(FONT_PATH);
+    timer->setFontSize(25);
+    timer->setColor(0x000000);
+    timer->setTextColor(0xEEEEEE);
+    timer->show();
+    return timer;
+}
+
+/**
+ * Create a black rectangle for the informational bar.
+ */
+View* PlayController::createRectangle() const {
+    SDL_Rect rect;
+    rect.x = 0;
+    rect.h = 40;
+    rect.y = getDisplay()->getHeight() - rect.h;
+    rect.w = getDisplay()->getWidth();
+    RectangleView* rectangle = new RectangleView(nullptr, rect);
+    rectangle->setColor(0);
+    rectangle->show();
+    return rectangle;
+}
+
+/**
+ * Create the playing board.
+ */
+View* PlayController::createBoard() const {
+    SDL_Rect rect;
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = getDisplay()->getWidth();
+    rect.h = 400;
+    View* board = new BoardView(getModel()->getBoard(), rect);
+    board->show();
+    return board;
 }

@@ -9,7 +9,7 @@ public:
 
 protected:
     virtual Model* getModel() const = 0;
-    virtual Display* getDisplay() = 0;
+    virtual Display* getDisplay() const = 0;
     virtual void processInput() = 0;
 
 };

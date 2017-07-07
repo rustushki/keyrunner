@@ -15,6 +15,11 @@ private:
     void processInput() override;
     EditorModel* getModel() const override;
 
+    View* createRectangle() const;
+    View* createBoard() const;
+    View* createSaveButton(View* board, uint8_t buttonSpacing) const;
+    View* createExitButton(View* board, int buttonSpacing) const;
+    View* createTileTypeButton(View* board, TileType tileType, uint8_t buttonSpacing) const;
 };
 
 #endif

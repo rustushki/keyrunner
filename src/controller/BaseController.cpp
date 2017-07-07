@@ -49,7 +49,7 @@ BaseModel* BaseController::getModel() const {
  * Get the display where views are put onto the screen.
  * @return Display*
  */
-Display *BaseController::getDisplay() {
+Display *BaseController::getDisplay() const {
     return display;
 }
 
