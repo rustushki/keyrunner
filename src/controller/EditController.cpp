@@ -159,8 +159,8 @@ View* EditController::createBoard() const {
     rect.w = getDisplay()->getWidth();
     rect.h = 400;
     View * board = new BoardView(getModel(), rect);
-    board->setOnMouseHoverCallback([] (SDL_Event event) {
-        std::cout << event.motion.x << ", " << event.motion.y << std::endl;
+    board->setOnMouseHoverCallback([this] (SDL_Event event) {
+        std::cout << event.motion.x << ", " << event.motion.y << "; tileType: " << getModel()->getTileType() << std::endl;
     });
     board->show();
     return board;
@@ -236,6 +236,9 @@ View *EditController::createTileTypeButton(View* board, TileType tileType, uint8
     button->setColor(0x333333);
     button->setTextColor(0xFF0000);
     button->setIcon(animationFactory->build(animationType));
+    button->setOnMouseUpCallback([this, tileType] (SDL_Event event) {
+        getModel()->setTileType(tileType);
+    });
     button->show();
 
     return button;
