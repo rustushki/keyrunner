@@ -18,6 +18,10 @@ add_library(uitk STATIC
 
 # Source Files.
 set(SOURCES
+	src/model/BoardModel.cpp
+	src/model/EditorBoardModel.cpp
+	src/model/LevelManager.cpp
+	src/model/TileType.cpp
     src/controller/BaseController.cpp
     src/controller/Controller.hpp
     src/controller/Display.cpp
@@ -25,12 +29,7 @@ set(SOURCES
     src/controller/Options.cpp
     src/controller/PlayController.cpp
     src/controller/main.cpp
-    src/model/BaseModel.cpp
-    src/model/BoardModel.cpp
-    src/model/EditorModel.cpp
-    src/model/LevelManager.cpp
-    src/model/PlayModel.cpp
-    src/model/TileType.cpp
+    src/model/PlayBoardModel.cpp
     src/uitk/BaseView.cpp
     src/view/AnimationFactory.cpp
     src/view/BoardView.cpp

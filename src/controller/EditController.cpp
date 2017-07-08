@@ -12,15 +12,15 @@ extern AnimationFactory* animationFactory;
  * @param model
  * @param display
  */
-EditController::EditController(EditorModel *model, Display* display, Options* options) : BaseController(model, display) {
+EditController::EditController(EditorBoardModel* model, Display* display, Options* options) : BaseController(model, display) {
     // Create New Level for Edit
     if (options->getCreateNewLevel()) {
-        getModel()->getBoard()->setLevelNum((uint8_t) (getLevelManager()->getLevelCount() + 1));
+        getModel()->setLevelNum((uint8_t) (getLevelManager()->getLevelCount() + 1));
         getLevelManager()->create();
 
         // Load Existing Level for Edit
     } else {
-        getModel()->getBoard()->setLevelNum(options->getStartingLevel());
+        getModel()->setLevelNum(options->getStartingLevel());
         getLevelManager()->read();
     }
 
@@ -128,8 +128,8 @@ void EditController::processInput() {
  * Fetch the sub-classed model for this controller.
  * @return the model
  */
-EditorModel *EditController::getModel() const {
-    return (EditorModel*) BaseController::getModel();
+EditorBoardModel *EditController::getModel() const {
+    return (EditorBoardModel*) BaseController::getModel();
 }
 
 /**
@@ -158,7 +158,7 @@ View* EditController::createBoard() const {
     rect.y = 0;
     rect.w = getDisplay()->getWidth();
     rect.h = 400;
-    View * board = new BoardView(getModel()->getBoard(), rect);
+    View * board = new BoardView(getModel(), rect);
     board->setOnMouseHoverCallback([] (SDL_Event event) {
         std::cout << event.motion.x << ", " << event.motion.y << std::endl;
     });

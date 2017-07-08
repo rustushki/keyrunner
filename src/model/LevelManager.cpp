@@ -220,9 +220,6 @@ void LevelManager::resetLevelManager() {
  * Update the BoardModel with the data in the internal state of the LevelManager.
  */
 void LevelManager::populateBoard() {
-    // Player does not have key at level start.
-    board->setPlayerHasKey(false);
-
     // Populate the remaining tiles with the default tile.  Also, not which
     // tiles have the key and the player.
     uint16_t currentDeviationIndex = 0;

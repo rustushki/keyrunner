@@ -17,27 +17,6 @@ BoardModel::BoardModel() {
 }
 
 /**
- * Is the currently loaded level finished?
- * <p>
- * This happens when the player has the key and is standing at the door.
- * @return boolean
- */
-bool BoardModel::isComplete() const {
-    return (playerHasKey && isDoor(getPlayerCoord()));
-}
-
-/**
- * Set if the player has the key.
- * @param playerHasKey
- */
-void BoardModel::setPlayerHasKey(bool playerHasKey) {
-    this->playerHasKey = playerHasKey;
-    if (this->playerHasKey) {
-        this->keyCoord = TileCoord(getWidth(), getHeight());
-    }
-}
-
-/**
  * Get the level number of the currently loaded level.
  * @return uint8_t
  */
@@ -94,11 +73,6 @@ TileCoord BoardModel::getPlayerCoord() const {
  * @param tileCoord
  */
 void BoardModel::setPlayerCoord(TileCoord tileCoord) {
-    // Give the player the key if the tile has the key
-    if (tileCoordHasKey(tileCoord)) {
-        setPlayerHasKey(true);
-    }
-
     // Handle Teleporter Tiles and Empty Tiles
     if (isTeleporter(tileCoord)) {
         TileCoord matching = getMatchingTeleporterTileCoord(tileCoord);
@@ -413,39 +387,6 @@ bool BoardModel::tileCoordHasPlayer(TileCoord tileCoord) const {
 }
 
 /**
- * Move the player in the provided direction.
- * @param direction
- */
-void BoardModel::movePlayerInDirection(Direction direction) {
-    TileCoord oldTileCoord = getPlayerCoord();
-    TileCoord newTileCoord;
-    if (direction == DIRECTION_UP) {
-        newTileCoord = getTileCoordUp(oldTileCoord);
-    }
-
-    if (direction == DIRECTION_DOWN) {
-        newTileCoord = getTileCoordDown(oldTileCoord);
-    }
-
-    if (direction == DIRECTION_LEFT) {
-        newTileCoord = getTileCoordLeft(oldTileCoord);
-    }
-
-    if (direction == DIRECTION_RIGHT) {
-        newTileCoord = getTileCoordRight(oldTileCoord);
-    }
-
-    // Do not move player if the new tile is a wall. Do not continue evaluating criteria either, such as teleporters
-    // and wraparound. They do not apply since the player has attempt to walk into a wall
-    if (isWall(newTileCoord)) {
-        return;
-    }
-
-    // Move the player to the tile
-    setPlayerCoord(newTileCoord);
-}
-
-/**
  * Get the Board Height.
  * @return uint16_t
  */
@@ -460,3 +401,20 @@ uint16_t BoardModel::getHeight() const {
 uint16_t BoardModel::getWidth() const {
     return 25;
 }
+
+/**
+ * Get the state of the game.
+ * @return State
+ */
+State BoardModel::getState() const {
+    return state;
+}
+
+/**
+ * Set the state of the game.
+ * @param State
+ */
+void BoardModel::setState(State state) {
+    this->state = state;
+}
+

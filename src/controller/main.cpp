@@ -105,16 +105,16 @@ int main(int argc, char** argv) {
     Controller* controller = nullptr;
     if (options.getInitialState() == PLAY) {
         // Create the Model
-        model = new PlayModel();
-        controller = new PlayController((PlayModel*) model, &display, &options);
+        model = new PlayBoardModel();
+        controller = new PlayController((PlayBoardModel*) model, &display, &options);
     } else {
         // Create the Model
-        model = new EditorModel();
-        controller = new EditController((EditorModel*) model, &display, &options);
+        model = new EditorBoardModel();
+        controller = new EditController((EditorBoardModel*) model, &display, &options);
     }
 
     // Set the initial state
-    ((BaseModel*) model)->setState(options.getInitialState());
+    ((BoardModel*) model)->setState(options.getInitialState());
 
     // Begin the game loop
     controller->gameLoop();

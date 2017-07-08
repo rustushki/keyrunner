@@ -6,7 +6,7 @@
  * @param model
  * @param rect
  */
-TimerView::TimerView(PlayModel* model, const SDL_Rect &rect) : LabelView(model, rect) {}
+TimerView::TimerView(PlayBoardModel* model, const SDL_Rect &rect) : LabelView(model, rect) {}
 
 /**
  * Return the text that appears on this label.
@@ -27,6 +27,6 @@ std::string TimerView::getText() {
  * Get the model to which this label is bound.
  * @return PlayModel*
  */
-PlayModel *TimerView::getModel() const {
-    return (PlayModel*) LabelView::getModel();
+PlayBoardModel *TimerView::getModel() const {
+    return (PlayBoardModel*) LabelView::getModel();
 }

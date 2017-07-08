@@ -3,17 +3,17 @@
 
 #include "../controller/BaseController.hpp"
 #include "../controller/Options.hpp"
-#include "../model/EditorModel.hpp"
 #include "../uitk/ButtonView.hpp"
+#include "../model/EditorBoardModel.hpp"
 
 class EditController : public BaseController {
 public:
-    EditController(EditorModel* model, Display* display, Options* options);
+    EditController(EditorBoardModel* model, Display* display, Options* options);
     void gameLoop() override;
 
 private:
     void processInput() override;
-    EditorModel* getModel() const override;
+    EditorBoardModel* getModel() const override;
 
     View* createRectangle() const;
     View* createBoard() const;

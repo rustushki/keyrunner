@@ -1,4 +1,3 @@
-#include <sstream>
 #include "../controller/PlayController.hpp"
 #include "../view/BoardView.hpp"
 #include "../uitk/RectangleView.hpp"
@@ -15,10 +14,10 @@
  * @param window
  * @param renderer
  */
-PlayController::PlayController(PlayModel *model, Display* display, Options* options) : BaseController(model, display) {
+PlayController::PlayController(PlayBoardModel *model, Display* display, Options* options) : BaseController(model, display) {
     // Initialize the model
     getModel()->setTimeClock(50000);
-    getModel()->getBoard()->setLevelNum(options->getStartingLevel());
+    getModel()->setLevelNum(options->getStartingLevel());
 
     // Create each of the views for this controller
     View* board = createBoard();
@@ -81,7 +80,7 @@ void PlayController::gameLoop() {
 }
 
 void PlayController::updateLevel(long elapsedDuration) const {
-    BoardModel* board = getModel()->getBoard();
+    PlayBoardModel* board = getModel();
 
     // If the level is complete,
     if (board->isComplete()) {
@@ -92,6 +91,7 @@ void PlayController::updateLevel(long elapsedDuration) const {
 
         // Otherwise, go to next level; adding some extra time to the clock
         } else {
+            board->setPlayerHasKey(false);
             board->setLevelNum(nextLevel);
             getLevelManager()->read();
             getModel()->incrementTimeClock(6000);
@@ -115,7 +115,7 @@ void PlayController::updateLevel(long elapsedDuration) const {
 void PlayController::processInput() {
     SDL_Event event;
     bool alreadyMoved = false;
-	BoardModel* board = getModel()->getBoard();
+	PlayBoardModel* board = getModel();
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_KEYDOWN) {
             // User Presses Q
@@ -160,8 +160,8 @@ void PlayController::processInput() {
  * Fetch the sub-classed model for this controller.
  * @return the model
  */
-PlayModel *PlayController::getModel() const {
-    return (PlayModel*) BaseController::getModel();
+PlayBoardModel *PlayController::getModel() const {
+    return (PlayBoardModel*) BaseController::getModel();
 }
 
 /**
@@ -173,7 +173,7 @@ View* PlayController::createLevelLabel() const {
     rect.x = 20;
     rect.h = 40;
     rect.y = getDisplay()->getHeight() - rect.h;
-    LevelNumberView* levelNumber = new LevelNumberView(getModel()->getBoard(), rect);
+    LevelNumberView* levelNumber = new LevelNumberView(getModel(), rect);
     levelNumber->setFontPath(FONT_PATH);
     levelNumber->setFontSize(25);
     levelNumber->setColor(0x000000);
@@ -224,7 +224,20 @@ View* PlayController::createBoard() const {
     rect.y = 0;
     rect.w = getDisplay()->getWidth();
     rect.h = 400;
-    View* board = new BoardView(getModel()->getBoard(), rect);
+    View* board = new BoardView(getModel(), rect);
     board->show();
     return board;
+}
+
+/**
+ * If it has been 100ms since the last time the player was conveyed, check to see if they're on a conveyor tile.  If so,
+ * convey them in the direction of the conveyor tile.
+ */
+void PlayController::conveyPlayer() const {
+    static uint32_t lastConveyance = 0;
+    const int ticksBetweenConveyance = 100;
+    if (SDL_GetTicks() - lastConveyance >= ticksBetweenConveyance || lastConveyance == 0) {
+        getModel()->conveyPlayer();
+        lastConveyance = SDL_GetTicks();
+    }
 }

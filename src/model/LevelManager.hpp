@@ -5,7 +5,7 @@
 #include <map>
 #include <vector>
 
-#include "../model/PlayModel.hpp"
+#include "../model/BoardModel.hpp"
 #include "../model/TileType.hpp"
 
 class Level;

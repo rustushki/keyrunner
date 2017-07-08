@@ -3,19 +3,20 @@
 
 #include "../controller/BaseController.hpp"
 #include "../controller/Options.hpp"
-#include "../model/PlayModel.hpp"
+#include "../model/PlayBoardModel.hpp"
 
 class PlayController : public BaseController {
 public:
-    PlayController(PlayModel* model, Display* display, Options* options);
+    PlayController(PlayBoardModel* model, Display* display, Options* options);
     virtual void gameLoop() override;
 
 protected:
     virtual void processInput() override;
-    PlayModel* getModel() const override;
+    PlayBoardModel* getModel() const override;
 
 private:
     void updateLevel(long elapsedDuration) const;
+    void conveyPlayer() const;
 
     View* createRectangle() const;
     View* createBoard() const;
