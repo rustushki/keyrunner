@@ -97,7 +97,7 @@ void BaseView::setOnMouseUpCallback(const std::function<void(SDL_Event)> &newCal
 }
 
 /**
- * Set the callback function which will handle the mouse down event.
+ * Invoke the callback function which handles the mouse down event.
  * @param event
  */
 void BaseView::onMouseDown(SDL_Event event) const {
@@ -112,6 +112,21 @@ void BaseView::setOnMouseDownCallback(const std::function<void(SDL_Event)> &newC
     this->onMouseDownCallBack = newCallBack;
 }
 
+/**
+ * Set the callback function which will handle the mouse hover event.
+ * @param newCallBack
+ */
+void BaseView::setOnMouseHoverCallback(const std::function<void(SDL_Event)> &newCallBack) {
+    this->onMouseHoverCallBack = newCallBack;
+}
+
+/**
+ * Invoke the callback function which handles the mouse hover event.
+ * @param event
+ */
+void BaseView::onMouseHover(SDL_Event event) const {
+    this->onMouseHoverCallBack(event);
+}
 
 /**
  * Set the new height of the View.

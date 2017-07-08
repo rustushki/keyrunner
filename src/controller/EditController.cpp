@@ -100,22 +100,20 @@ void EditController::processInput() {
                 break;
             }
 
-        // Handle Mouse Up Events
-        } else if (event.type == SDL_MOUSEBUTTONUP) {
+        // Handle Mouse Events
+        } else if (event.type == SDL_MOUSEBUTTONUP || event.type == SDL_MOUSEBUTTONDOWN ||
+                event.type == SDL_MOUSEMOTION) {
             uint32_t x = (uint32_t) event.button.x;
             uint32_t y = (uint32_t) event.button.y;
             const View* view = getDisplay()->getClickedView(x, y);
             if (view != nullptr) {
-                view->onMouseUp(event);
-            }
-
-        // Handle Mouse Down Events
-        } else if (event.type == SDL_MOUSEBUTTONDOWN) {
-            uint32_t x = (uint32_t) event.button.x;
-            uint32_t y = (uint32_t) event.button.y;
-            const View* view = getDisplay()->getClickedView(x, y);
-            if (view != nullptr) {
-                view->onMouseDown(event);
+                if (event.type == SDL_MOUSEBUTTONUP) {
+                    view->onMouseUp(event);
+                } else if (event.type == SDL_MOUSEBUTTONDOWN){
+                    view->onMouseDown(event);
+                } else if (event.type == SDL_MOUSEMOTION){
+                    view->onMouseHover(event);
+                }
             }
 
         // Handle Quit Event
@@ -161,6 +159,9 @@ View* EditController::createBoard() const {
     rect.w = getDisplay()->getWidth();
     rect.h = 400;
     View * board = new BoardView(getModel()->getBoard(), rect);
+    board->setOnMouseHoverCallback([] (SDL_Event event) {
+        std::cout << event.motion.x << ", " << event.motion.y << std::endl;
+    });
     board->show();
     return board;
 }
