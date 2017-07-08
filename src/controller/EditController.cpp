@@ -159,6 +159,7 @@ View* EditController::createBoard() const {
     rect.w = getDisplay()->getWidth();
     rect.h = 400;
     BoardView* board = new EditorBoardView(getModel(), rect);
+
     board->setOnMouseHoverCallback([this, board] (SDL_Event event) {
         // Convert the mouse hover coordinates into a tile coordinate
         uint16_t tileX = static_cast<uint16_t>(event.motion.x / board->getTileWidth());
@@ -168,6 +169,17 @@ View* EditController::createBoard() const {
         // Update the model with this new coordinate
         getModel()->setHoverTileCoordinate(hoverCoordinate);
     });
+
+    board->setOnMouseUpCallback([this, board] (SDL_Event event) {
+        // Convert the mouse hover coordinates into a tile coordinate
+        uint16_t tileX = static_cast<uint16_t>(event.button.x / board->getTileWidth());
+        uint16_t tileY = static_cast<uint16_t>(event.button.y / board->getTileHeight());
+        TileCoord mouseCoordinate(tileX, tileY);
+
+        // Change the tile at that coordinate with the current selected tile type
+        getModel()->changeTileType(mouseCoordinate, getModel()->getTileType());
+    });
+
     board->show();
     return board;
 }
