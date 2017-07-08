@@ -20,8 +20,8 @@ void EditorBoardView::draw(SDL_Renderer *renderer) {
     // Determine if we should draw just the highlight, or if we should include the tile type, too
     TileCoord hoverTileCoord = getModel()->getHoverTileCoordinate();
     bool justHighlight = false;
-    justHighlight |= (getModel()->getKeyCoord() != hoverTileCoord);
-    justHighlight |= (getModel()->getPlayerCoord() != hoverTileCoord);
+    justHighlight |= (getModel()->getKeyCoord() == hoverTileCoord);
+    justHighlight |= (getModel()->getPlayerCoord() == hoverTileCoord);
 
     // Draw the highlight and maybe the cursor tile
     drawCursorTile(renderer, justHighlight);

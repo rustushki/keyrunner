@@ -195,10 +195,12 @@ View* EditController::createBoard() const {
         // If the key is at the mouse coordinate, hover will now move the key
         if (getModel()->getKeyCoord() == mouseCoordinate) {
             getModel()->setHoverBehavior(HoverBehavior::MOVE_KEY);
+            getModel()->setHoverTileCoordinate(TileCoord(getModel()->getWidth(), getModel()->getHeight()));
 
         // If the key is at the mouse coordinate, hover will now move the key
         } else if (getModel()->getPlayerCoord() == mouseCoordinate) {
             getModel()->setHoverBehavior(HoverBehavior::MOVE_PLAYER);
+            getModel()->setHoverTileCoordinate(TileCoord(getModel()->getWidth(), getModel()->getHeight()));
 
         // Otherwise, hover will now replace tiles, and go ahead and replace the current tile so that a mouse move is
         // not required to affect change
