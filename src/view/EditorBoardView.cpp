@@ -17,6 +17,16 @@ void EditorBoardView::draw(SDL_Renderer *renderer) {
     // Draw the board first
     BoardView::draw(renderer);
 
+    // Overlay the cursor's tile + a highlight
+    drawCursorTile(renderer);
+}
+
+/**
+ * Draws the currently selected tile type where the mouse is currently hovering plus a color highlight to help
+ * distinguish that tile from neighboring tiles of the same type.
+ * @param renderer
+ */
+void EditorBoardView::drawCursorTile(SDL_Renderer* renderer) {
     // Get the pre built animations
     std::map<AnimationType, Animation*> preBuiltAnimations = getPreBuiltAnimations();
 
@@ -32,12 +42,24 @@ void EditorBoardView::draw(SDL_Renderer *renderer) {
     // Draw the animation on top of the hover coordinate
     animation->move(xPosition, yPosition);
     animation->draw(renderer);
-}
+
+    // Draw Highlight
+    SDL_Rect highlightRectangle;
+    highlightRectangle.x = xPosition;
+    highlightRectangle.y = yPosition;
+    highlightRectangle.w = animation->getWidth();
+    highlightRectangle.h = animation->getHeight();
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0xFF, 0xFF);
+    SDL_RenderDrawRect(renderer, &highlightRectangle);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_ADD);
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0x00, 0x33);
+    SDL_RenderFillRect(renderer, &highlightRectangle);
+};
 
 /**
  * Fetch the EditorBoardModel for this EditorBoardView.
  * @return EditorBoardModel*
  */
-EditorBoardModel *EditorBoardView::getModel() const {
+EditorBoardModel* EditorBoardView::getModel() const {
     return static_cast<EditorBoardModel*>(BoardView::getModel());
 }

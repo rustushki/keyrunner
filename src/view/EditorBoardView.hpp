@@ -10,6 +10,8 @@ public:
     void draw(SDL_Renderer* renderer) override;
     EditorBoardModel* getModel() const override;
 
+private:
+    void drawCursorTile(SDL_Renderer *renderer);
 };
 
 #endif
