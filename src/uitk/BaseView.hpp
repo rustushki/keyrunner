@@ -14,8 +14,10 @@ public:
     virtual void hide() override;
     virtual bool isVisible() const override;
     virtual const std::vector<Animation*> getAnimations() const override;
-    virtual void setOnClickCallback(const std::function <void ()>& newCallBack) override final;
-    virtual void onClick() const override final;
+    virtual void setOnMouseUpCallback(const std::function<void(SDL_Event)> &newCallBack) override final;
+    virtual void setOnMouseDownCallback(const std::function<void(SDL_Event)> &newCallBack) override final;
+    virtual void onMouseUp(SDL_Event event) const override final;
+    virtual void onMouseDown(SDL_Event event) const override final;
     virtual bool isPressed() const override final;
     virtual void setHeight(uint16_t newHeight) override;
     virtual void setWidth(uint16_t newWidth) override;
@@ -35,7 +37,8 @@ private:
     SDL_Rect rect;
     bool visible;
     std::vector<Animation *> animations;
-    std::function <void ()> onClickCallBack = [] () {};
+    std::function <void (SDL_Event)> onMouseUpCallBack = [] (SDL_Event event) {};
+    std::function <void (SDL_Event)> onMouseDownCallBack = [] (SDL_Event event) {};
 };
 
 

@@ -100,13 +100,22 @@ void EditController::processInput() {
                 break;
             }
 
+        // Handle Mouse Up Events
+        } else if (event.type == SDL_MOUSEBUTTONUP) {
+            uint32_t x = (uint32_t) event.button.x;
+            uint32_t y = (uint32_t) event.button.y;
+            const View* view = getDisplay()->getClickedView(x, y);
+            if (view != nullptr) {
+                view->onMouseUp(event);
+            }
+
         // Handle Mouse Down Events
         } else if (event.type == SDL_MOUSEBUTTONDOWN) {
             uint32_t x = (uint32_t) event.button.x;
             uint32_t y = (uint32_t) event.button.y;
             const View* view = getDisplay()->getClickedView(x, y);
             if (view != nullptr) {
-                view->onClick();
+                view->onMouseDown(event);
             }
 
         // Handle Quit Event
@@ -173,7 +182,7 @@ View* EditController::createSaveButton(View* board, uint8_t buttonSpacing) const
     save->setColor(0x333333);
     save->setTextColor(0xFF0000);
     save->setFontPath(FONT_PATH);
-    save->setOnClickCallback([this] () {
+    save->setOnMouseUpCallback([this](SDL_Event event) {
         getLevelManager()->write();
     });
     save->show();
@@ -197,7 +206,7 @@ View *EditController::createExitButton(View *board, int buttonSpacing) const {
     exit->setColor(0x333333);
     exit->setTextColor(0xFF0000);
     exit->setFontPath(FONT_PATH);
-    exit->setOnClickCallback([this] () {
+    exit->setOnMouseUpCallback([this](SDL_Event event) {
         getModel()->setState(QUIT);
     });
     exit->show();

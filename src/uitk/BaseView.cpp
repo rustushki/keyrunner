@@ -81,19 +81,37 @@ bool BaseView::isPressed() const {
 }
 
 /**
- * Invoke the callback function which handles the mouse press.
+ * Invoke the callback function which handles the mouse up event.
+ * @param event
  */
-void BaseView::onClick() const {
-    this->onClickCallBack();
+void BaseView::onMouseUp(SDL_Event event) const {
+    this->onMouseUpCallBack(event);
 }
 
 /**
- * Set the callback function which will handle the mouse press.
+ * Set the callback function which will handle the mouse up event.
  * @param newCallBack
  */
-void BaseView::setOnClickCallback(const std::function<void()> &newCallBack) {
-    this->onClickCallBack = newCallBack;
+void BaseView::setOnMouseUpCallback(const std::function<void(SDL_Event)> &newCallBack) {
+    this->onMouseUpCallBack = newCallBack;
 }
+
+/**
+ * Set the callback function which will handle the mouse down event.
+ * @param event
+ */
+void BaseView::onMouseDown(SDL_Event event) const {
+    this->onMouseDownCallBack(event);
+}
+
+/**
+ * Set the callback function which will handle the mouse down event.
+ * @param newCallBack
+ */
+void BaseView::setOnMouseDownCallback(const std::function<void(SDL_Event)> &newCallBack) {
+    this->onMouseDownCallBack = newCallBack;
+}
+
 
 /**
  * Set the new height of the View.
