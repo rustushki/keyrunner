@@ -1,5 +1,10 @@
 #include "../view/EditorBoardView.hpp"
 
+/**
+ * Constructor.
+ * @param model
+ * @param rect
+ */
 EditorBoardView::EditorBoardView(EditorBoardModel *model, const SDL_Rect &rect) : BoardView(model, rect) {}
 
 /**
