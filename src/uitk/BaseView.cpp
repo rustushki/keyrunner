@@ -34,14 +34,6 @@ Model* BaseView::getModel() const {
 }
 
 /**
- * Get the rectangular region that this View will be drawn to.
- * @return
- */
-SDL_Rect BaseView::getRect() const {
-    return rect;
-}
-
-/**
  * Make this view visible.
  */
 void BaseView::show() {
@@ -133,4 +125,52 @@ void BaseView::setX(uint16_t newX) {
  */
 void BaseView::setY(uint16_t newY) {
     rect.x = newY;
+}
+
+/**
+ * Get the height of the view.
+ * @return uint16_t
+ */
+uint16_t BaseView::getHeight() const {
+    return (uint16_t) rect.h;
+}
+
+/**
+ * Get the width of the view.
+ * @return uint16_t
+ */
+uint16_t BaseView::getWidth() const {
+    return (uint16_t) rect.w;
+}
+
+/**
+ * Get the x coordinate of the view.
+ * @return uint16_t
+ */
+uint16_t BaseView::getX() const {
+    return (uint16_t) rect.x;
+}
+
+/**
+ * Get the y coordinate of the view.
+ * @return uint16_t
+ */
+uint16_t BaseView::getY() const {
+    return (uint16_t) rect.y;
+}
+
+/**
+ * Determine is the provided x and y coordinate pair falls within the rectangular region of this view.
+ * @param x
+ * @param y
+ * @return boolean
+ */
+bool BaseView::containsPoint(uint32_t x, uint32_t y) const {
+    bool containsPoint = false;
+    if (x >= getX() && x < getX() + getWidth()) {
+        if (y >= getY() && y < getY() + getHeight()) {
+            containsPoint = true;
+        }
+    }
+    return containsPoint;
 }

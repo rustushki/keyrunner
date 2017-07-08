@@ -10,7 +10,6 @@ public:
 
     virtual Model* getModel() const override;
     virtual void draw(SDL_Renderer* renderer) override = 0;
-    virtual SDL_Rect getRect() const override;
     virtual void show() override;
     virtual void hide() override;
     virtual bool isVisible() const override;
@@ -22,6 +21,11 @@ public:
     virtual void setWidth(uint16_t newWidth) override;
     virtual void setX(uint16_t newX) override;
     virtual void setY(uint16_t newY) override;
+    virtual uint16_t getHeight() const override;
+    virtual uint16_t getWidth() const override;
+    virtual uint16_t getX() const override;
+    virtual uint16_t getY() const override;
+    virtual bool containsPoint(uint32_t x, uint32_t y) const override;
 
 protected:
     void addAnimation(Animation*);

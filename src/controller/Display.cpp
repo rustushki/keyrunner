@@ -122,12 +122,9 @@ const View *Display::getClickedView(uint32_t x, uint32_t y) const {
 
     for (auto viewNameIterator = viewNameStack.rbegin(); viewNameIterator != viewNameStack.rend(); viewNameIterator++) {
         View* view = getViewByName(*viewNameIterator);
-        SDL_Rect rect = view->getRect();
-        if (x >= rect.x && x < rect.x + rect.w) {
-            if (y >= rect.y && y < rect.y + rect.h) {
-                matchingView = view;
-                break;
-            }
+        if (view->containsPoint(x, y)) {
+            matchingView = view;
+            break;
         }
     }
 

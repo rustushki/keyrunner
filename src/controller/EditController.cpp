@@ -166,8 +166,8 @@ View* EditController::createSaveButton(View* board, uint8_t buttonSpacing) const
     SDL_Rect rect;
     rect.w = 50;
     rect.h = 30;
-    rect.x = board->getRect().w - 2 * rect.w - 2 * buttonSpacing;
-    rect.y = board->getRect().h + buttonSpacing;
+    rect.x = board->getWidth() - 2 * rect.w - 2 * buttonSpacing;
+    rect.y = board->getHeight() + buttonSpacing;
     ButtonView* save = new ButtonView(nullptr, rect);
     save->setText("Save");
     save->setColor(0x333333);
@@ -190,8 +190,8 @@ View *EditController::createExitButton(View *board, int buttonSpacing) const {
     SDL_Rect rect;
     rect.w = 50;
     rect.h = 30;
-    rect.x = board->getRect().w - 1 * rect.w - 1 * buttonSpacing;
-    rect.y = board->getRect().h + buttonSpacing;
+    rect.x = board->getWidth() - 1 * rect.w - 1 * buttonSpacing;
+    rect.y = board->getHeight() + buttonSpacing;
     ButtonView* exit = new ButtonView(nullptr, rect);
     exit->setText("Exit");
     exit->setColor(0x333333);
@@ -221,7 +221,7 @@ View *EditController::createTileTypeButton(View* board, TileType tileType, uint8
     rect.w = width;
     rect.h = height;
     rect.x = (uint16_t) (initialOffset + ((int) tileType) * width + ((int) tileType) * buttonSpacing);
-    rect.y = (uint16_t) ((board->getRect().h + buttonSpacing) + ((40 - buttonSpacing * 2) - height) / 2);
+    rect.y = (uint16_t) ((board->getHeight() + buttonSpacing) + ((40 - buttonSpacing * 2) - height) / 2);
     ButtonView* button = new ButtonView(nullptr, rect);
     button->setColor(0x333333);
     button->setTextColor(0xFF0000);

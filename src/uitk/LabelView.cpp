@@ -158,9 +158,8 @@ uint32_t LabelView::chooseFontSizeToFit() const {
     int h = 1;
 
     // Determine the region of the button to fill with text based on the margin and button height/width
-    SDL_Rect r = getRect();
-    int fillH = r.w - horizontalMargin;
-    int fillV = r.h - verticalMargin;
+    int fillH = getWidth() - horizontalMargin;
+    int fillV = getHeight() - verticalMargin;
 
     // Calculate the largest font size which will fit the LabelView surface height-wise
     while (lo < hi && h != fillV) {
@@ -238,9 +237,9 @@ void LabelView::draw(SDL_Renderer *renderer) {
         SDL_QueryTexture(textTexture, nullptr, nullptr, &w, &h);
 
         // Determine the rectangle that the text will be drawn onto
-        SDL_Rect textDestination = getRect();
-        textDestination.x += round((textDestination.w - w) / 2.0);
-        textDestination.y += round((textDestination.h - h) / 2.0);
+        SDL_Rect textDestination;
+        textDestination.x = getX() + (uint32_t) round((getWidth() - w) / 2.0);
+        textDestination.y = getY() + (uint32_t) round((getHeight() - h) / 2.0);
         textDestination.h = h;
         textDestination.w = w;
 
@@ -250,8 +249,8 @@ void LabelView::draw(SDL_Renderer *renderer) {
         // OR,
         // Draw the Icon, centered.
     } else if (icon != nullptr) {
-        uint16_t x = (uint16_t) (getRect().x + (getRect().w - icon->getWidth()) / 2);
-        uint16_t y = (uint16_t) (getRect().y + (getRect().h - icon->getHeight()) / 2);
+        uint16_t x = (uint16_t) (getX() + (getWidth() - icon->getWidth()) / 2);
+        uint16_t y = (uint16_t) (getY() + (getHeight() - icon->getHeight()) / 2);
         icon->move(x, y);
         icon->draw(renderer);
     }
