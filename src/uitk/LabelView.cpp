@@ -121,7 +121,7 @@ SDL_Texture* LabelView::makeTextTexture(SDL_Renderer* renderer) const {
     }
 
     // Render and return the text surface which fits in the LabelView
-    TTF_Font* fnt = getFont(fontSize);
+    TTF_Font* fnt = getFont(static_cast<uint8_t>(fontSize));
     uint8_t rC = (uint8_t) ((textColor & 0xFF0000) >> 16);
     uint8_t gC = (uint8_t) ((textColor & 0x00FF00) >>  8);
     uint8_t bC = (uint8_t) ((textColor & 0x0000FF) >>  0);
