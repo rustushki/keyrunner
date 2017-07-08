@@ -2,6 +2,7 @@
 #include "../controller/EditController.hpp"
 #include "../view/EditorBoardView.hpp"
 #include "../view/AnimationFactory.hpp"
+#include "../model/HoverBehavior.hpp"
 
 extern AnimationFactory* animationFactory;
 
@@ -166,18 +167,32 @@ View* EditController::createBoard() const {
         uint16_t tileY = static_cast<uint16_t>(event.motion.y / board->getTileHeight());
         TileCoord hoverCoordinate(tileX, tileY);
 
-        // Update the model with this new coordinate
-        getModel()->setHoverTileCoordinate(hoverCoordinate);
+        // If replacing, the selected tile type will overwrite the hovered over tile
+        HoverBehavior hoverBehavior = getModel()->getHoverBehavior();
+        if (hoverBehavior == HoverBehavior::REPLACE) {
+            getModel()->changeTileType(hoverCoordinate, getModel()->getTileType());
+            getModel()->setHoverTileCoordinate(TileCoord(getModel()->getWidth(), getModel()->getHeight()));
+
+        // If pointing, the selected tile type will hover with the mouse
+        } else if (hoverBehavior == HoverBehavior::POINT) {
+            getModel()->setHoverTileCoordinate(hoverCoordinate);
+        }
     });
 
-    board->setOnMouseUpCallback([this, board] (SDL_Event event) {
-        // Convert the mouse hover coordinates into a tile coordinate
+    board->setOnMouseDownCallback([this, board] (SDL_Event event) {
+        // Hover will now replace tiles
+        getModel()->setHoverBehavior(HoverBehavior::REPLACE);
+
+        // Also, go ahead and replace the current tile so that a mouse move is not required to affect change
         uint16_t tileX = static_cast<uint16_t>(event.button.x / board->getTileWidth());
         uint16_t tileY = static_cast<uint16_t>(event.button.y / board->getTileHeight());
         TileCoord mouseCoordinate(tileX, tileY);
-
-        // Change the tile at that coordinate with the current selected tile type
         getModel()->changeTileType(mouseCoordinate, getModel()->getTileType());
+    });
+
+    board->setOnMouseUpCallback([this, board] (SDL_Event event) {
+        // Hover will no longer replace tile; only show the selected tile type
+        getModel()->setHoverBehavior(HoverBehavior::POINT);
     });
 
     board->show();

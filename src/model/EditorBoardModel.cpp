@@ -5,6 +5,7 @@
  */
 EditorBoardModel::EditorBoardModel() {
     this->tileType = TILE_TYPE_EMPTY;
+    setHoverBehavior(HoverBehavior::POINT);
 }
 
 /**
@@ -37,4 +38,20 @@ TileCoord EditorBoardModel::getHoverTileCoordinate() const {
  */
 void EditorBoardModel::setHoverTileCoordinate(TileCoord newHoverCoordinate) {
     this->hoverCoordinate = newHoverCoordinate;
+}
+
+/**
+ * Get the editor's current mouse hover behavior.
+ * @return HoverBehavior
+ */
+HoverBehavior EditorBoardModel::getHoverBehavior() {
+    return hoverBehavior;
+}
+
+/**
+ * Set the editor's current mouse hover behavior.
+ * @param newBehavior
+ */
+void EditorBoardModel::setHoverBehavior(HoverBehavior newBehavior) {
+    this->hoverBehavior = newBehavior;
 }
