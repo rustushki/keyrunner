@@ -284,3 +284,11 @@ void LabelView::setFontSize(uint32_t fontSize) {
 uint32_t LabelView::getFontSize() const {
     return fontSize;
 }
+
+/**
+ * Get the color of the text.
+ * @return uint32_t
+ */
+uint32_t LabelView::getTextColor() const {
+    return textColor;
+}

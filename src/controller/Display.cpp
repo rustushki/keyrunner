@@ -117,7 +117,7 @@ void Display::advanceAnimations() {
  * @param y y coordinate
  * @return View*
  */
-const View *Display::getClickedView(uint32_t x, uint32_t y) const {
+View *Display::getClickedView(uint32_t x, uint32_t y) const {
     View* matchingView = nullptr;
 
     for (auto viewNameIterator = viewNameStack.rbegin(); viewNameIterator != viewNameStack.rend(); viewNameIterator++) {

@@ -17,10 +17,9 @@ public:
     virtual void setOnMouseUpCallback(const std::function<void(SDL_Event)> &newCallBack) override final;
     virtual void setOnMouseDownCallback(const std::function<void(SDL_Event)> &newCallBack) override final;
     virtual void setOnMouseHoverCallback(const std::function<void(SDL_Event)> &newCallBack) override final;
-    virtual void onMouseUp(SDL_Event event) const override final;
-    virtual void onMouseDown(SDL_Event event) const override final;
-    virtual void onMouseHover(SDL_Event event) const override final;
-    virtual bool isPressed() const override final;
+    virtual void onMouseUp(SDL_Event event) override;
+    virtual void onMouseDown(SDL_Event event) override;
+    virtual void onMouseHover(SDL_Event event) override;
     virtual void setHeight(uint16_t newHeight) override;
     virtual void setWidth(uint16_t newWidth) override;
     virtual void setX(uint16_t newX) override;

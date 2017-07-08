@@ -73,18 +73,10 @@ void BaseView::addAnimation(Animation* animation) {
 }
 
 /**
- * Determine if the view is currently in a state of being pressed.
- * @return boolean
- */
-bool BaseView::isPressed() const {
-    return false;
-}
-
-/**
  * Invoke the callback function which handles the mouse up event.
  * @param event
  */
-void BaseView::onMouseUp(SDL_Event event) const {
+void BaseView::onMouseUp(SDL_Event event) {
     this->onMouseUpCallBack(event);
 }
 
@@ -100,7 +92,7 @@ void BaseView::setOnMouseUpCallback(const std::function<void(SDL_Event)> &newCal
  * Invoke the callback function which handles the mouse down event.
  * @param event
  */
-void BaseView::onMouseDown(SDL_Event event) const {
+void BaseView::onMouseDown(SDL_Event event) {
     this->onMouseDownCallBack(event);
 }
 
@@ -124,7 +116,7 @@ void BaseView::setOnMouseHoverCallback(const std::function<void(SDL_Event)> &new
  * Invoke the callback function which handles the mouse hover event.
  * @param event
  */
-void BaseView::onMouseHover(SDL_Event event) const {
+void BaseView::onMouseHover(SDL_Event event) {
     this->onMouseHoverCallBack(event);
 }
 

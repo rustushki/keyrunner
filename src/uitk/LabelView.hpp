@@ -13,6 +13,7 @@ public:
 
     virtual std::string getText();
     virtual uint32_t getFontSize() const;
+    virtual uint32_t getTextColor() const;
 
     virtual void setTextColor(uint32_t color);
     virtual void setText(std::string text);

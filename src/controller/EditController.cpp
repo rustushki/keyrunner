@@ -106,7 +106,7 @@ void EditController::processInput() {
                 event.type == SDL_MOUSEMOTION) {
             uint32_t x = (uint32_t) event.button.x;
             uint32_t y = (uint32_t) event.button.y;
-            const View* view = getDisplay()->getClickedView(x, y);
+            View* view = getDisplay()->getClickedView(x, y);
             if (view != nullptr) {
                 if (event.type == SDL_MOUSEBUTTONUP) {
                     view->onMouseUp(event);
