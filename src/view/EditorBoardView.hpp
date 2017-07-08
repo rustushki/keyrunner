@@ -11,7 +11,7 @@ public:
     EditorBoardModel* getModel() const override;
 
 private:
-    void drawCursorTile(SDL_Renderer *renderer);
+    void drawCursorTile(SDL_Renderer *renderer, bool justHighlight);
 };
 
 #endif

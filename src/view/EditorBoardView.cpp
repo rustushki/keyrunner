@@ -17,8 +17,14 @@ void EditorBoardView::draw(SDL_Renderer *renderer) {
     // Draw the board first
     BoardView::draw(renderer);
 
-    // Overlay the cursor's tile + a highlight
-    drawCursorTile(renderer);
+    // Determine if we should draw just the highlight, or if we should include the tile type, too
+    TileCoord hoverTileCoord = getModel()->getHoverTileCoordinate();
+    bool justHighlight = false;
+    justHighlight |= (getModel()->getKeyCoord() != hoverTileCoord);
+    justHighlight |= (getModel()->getPlayerCoord() != hoverTileCoord);
+
+    // Draw the highlight and maybe the cursor tile
+    drawCursorTile(renderer, justHighlight);
 }
 
 /**
@@ -26,7 +32,7 @@ void EditorBoardView::draw(SDL_Renderer *renderer) {
  * distinguish that tile from neighboring tiles of the same type.
  * @param renderer
  */
-void EditorBoardView::drawCursorTile(SDL_Renderer* renderer) {
+void EditorBoardView::drawCursorTile(SDL_Renderer* renderer, bool justHighlight) {
     // Get the pre built animations
     std::map<AnimationType, Animation*> preBuiltAnimations = getPreBuiltAnimations();
 
@@ -39,21 +45,23 @@ void EditorBoardView::drawCursorTile(SDL_Renderer* renderer) {
     uint16_t xPosition = getModel()->getHoverTileCoordinate().first * animation->getWidth();
     uint16_t yPosition = getModel()->getHoverTileCoordinate().second * animation->getHeight();
 
-    // Draw the animation on top of the hover coordinate
-    animation->move(xPosition, yPosition);
-    animation->draw(renderer);
+    // Draw the animation on top of the hover coordinate, unless we're just going to draw the highlight
+    if (!justHighlight) {
+        animation->move(xPosition, yPosition);
+        animation->draw(renderer);
+    }
 
     // Draw Highlight
-    SDL_Rect highlightRectangle;
-    highlightRectangle.x = xPosition;
-    highlightRectangle.y = yPosition;
-    highlightRectangle.w = animation->getWidth();
-    highlightRectangle.h = animation->getHeight();
+    SDL_Rect where;
+    where.x = xPosition;
+    where.y = yPosition;
+    where.w = animation->getWidth();
+    where.h = animation->getHeight();
     SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0xFF, 0xFF);
-    SDL_RenderDrawRect(renderer, &highlightRectangle);
+    SDL_RenderDrawRect(renderer, &where);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_ADD);
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0x00, 0x33);
-    SDL_RenderFillRect(renderer, &highlightRectangle);
+    SDL_RenderFillRect(renderer, &where);
 };
 
 /**
