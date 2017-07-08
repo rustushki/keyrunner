@@ -33,6 +33,7 @@ set(SOURCES
     src/uitk/BaseView.cpp
     src/view/AnimationFactory.cpp
     src/view/BoardView.cpp
+    src/view/EditorBoardView.cpp
     src/view/LevelNumberView.cpp
     src/view/TimerView.cpp
 )

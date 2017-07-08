@@ -46,8 +46,6 @@ BoardView::~BoardView() {
  * @param renderer
  */
 void BoardView::draw(SDL_Renderer* renderer) {
-    const uint16_t tileSize = 25;
-
     for (uint16_t y = 0; y < getModel()->getHeight(); y++) {
         for (uint16_t x = 0; x < getModel()->getWidth(); x++) {
             TileCoord currentTileCoord = TileCoord(x, y);
@@ -70,12 +68,12 @@ void BoardView::draw(SDL_Renderer* renderer) {
             } else if (animationType == ANIMATION_TYPE_CONVEY_RIGHT) {
                 animation = conveyRightAnimation;
             } else {
-                animation = preBuiltAnimations[animationType];
+                animation = getPreBuiltAnimations()[animationType];
             }
 
             // Determine the coordinate to draw the tile animation
-            uint16_t xPosition = x * tileSize;
-            uint16_t yPosition = y * tileSize;
+            uint16_t xPosition = x * animation->getWidth();
+            uint16_t yPosition = y * animation->getHeight();
 
             animation->move(xPosition, yPosition);
             animation->draw(renderer);
@@ -121,5 +119,31 @@ void BoardView::freeAnimations() {
  * @return the model
  */
 BoardModel* BoardView::getModel() const {
-    return (BoardModel*) BaseView::getModel();
+    return static_cast<BoardModel*>(BaseView::getModel());
+}
+
+/**
+ * Fetch the map of pre-built animations.
+ * <p>
+ * This is here so that subclasses can have access to the pre-built animations.
+ * @return std::map
+ */
+std::map<AnimationType, Animation *> BoardView::getPreBuiltAnimations() const {
+    return preBuiltAnimations;
+}
+
+/**
+ * Get the tile width in pixels.
+ * @return uint32_t
+ */
+uint32_t BoardView::getTileWidth() const {
+    return getPreBuiltAnimations()[ANIMATION_TYPE_EMPTY]->getWidth();
+}
+
+/**
+ * Get the tile height in pixels.
+ * @return uint32_t
+ */
+uint32_t BoardView::getTileHeight() const {
+    return getPreBuiltAnimations()[ANIMATION_TYPE_EMPTY]->getHeight();
 }

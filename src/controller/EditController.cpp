@@ -1,6 +1,6 @@
 #include <sstream>
 #include "../controller/EditController.hpp"
-#include "../view/BoardView.hpp"
+#include "../view/EditorBoardView.hpp"
 #include "../view/AnimationFactory.hpp"
 
 extern AnimationFactory* animationFactory;
@@ -158,9 +158,15 @@ View* EditController::createBoard() const {
     rect.y = 0;
     rect.w = getDisplay()->getWidth();
     rect.h = 400;
-    View * board = new BoardView(getModel(), rect);
-    board->setOnMouseHoverCallback([this] (SDL_Event event) {
-        std::cout << event.motion.x << ", " << event.motion.y << "; tileType: " << getModel()->getTileType() << std::endl;
+    BoardView* board = new EditorBoardView(getModel(), rect);
+    board->setOnMouseHoverCallback([this, board] (SDL_Event event) {
+        // Convert the mouse hover coordinates into a tile coordinate
+        uint16_t tileX = static_cast<uint16_t>(event.motion.x / board->getTileWidth());
+        uint16_t tileY = static_cast<uint16_t>(event.motion.y / board->getTileHeight());
+        TileCoord hoverCoordinate(tileX, tileY);
+
+        // Update the model with this new coordinate
+        getModel()->setHoverTileCoordinate(hoverCoordinate);
     });
     board->show();
     return board;

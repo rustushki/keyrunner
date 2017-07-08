@@ -8,9 +8,12 @@ public:
     EditorBoardModel();
     void setTileType(TileType tileType);
     TileType getTileType() const;
+    TileCoord getHoverTileCoordinate() const;
+    void setHoverTileCoordinate(TileCoord newHoverCoordinate);
 
 private:
     TileType tileType;
+    TileCoord hoverCoordinate;
 };
 
 #endif

@@ -12,6 +12,11 @@ public:
     virtual ~BoardView() override;
     void draw(SDL_Renderer* renderer) override;
     BoardModel* getModel() const override;
+    uint32_t getTileWidth() const;
+    uint32_t getTileHeight() const;
+
+protected:
+    std::map<AnimationType, Animation*> getPreBuiltAnimations() const;
 
 private:
     Animation* keyAnimation;
