@@ -137,7 +137,7 @@ EditorBoardModel *EditController::getModel() const {
  * Creates a black rectangle.
  * @return View*
  */
-View *EditController::createRectangle() const {
+View* EditController::createRectangle() const {
     SDL_Rect rect;
     rect.x = 0;
     rect.h = 40;
@@ -176,22 +176,40 @@ View* EditController::createBoard() const {
         // If pointing, the selected tile type will hover with the mouse
         } else if (hoverBehavior == HoverBehavior::POINT) {
             getModel()->setHoverTileCoordinate(hoverCoordinate);
+
+        // If moving key, move the key to the current hover coordinate
+        } else if (hoverBehavior == HoverBehavior::MOVE_KEY) {
+            getModel()->setKeyCoord(hoverCoordinate);
+
+        // If moving player, move the key to the current hover coordinate
+        } else if (hoverBehavior == HoverBehavior::MOVE_PLAYER) {
+            getModel()->setPlayerCoord(hoverCoordinate);
         }
     });
 
     board->setOnMouseDownCallback([this, board] (SDL_Event event) {
-        // Hover will now replace tiles
-        getModel()->setHoverBehavior(HoverBehavior::REPLACE);
-
-        // Also, go ahead and replace the current tile so that a mouse move is not required to affect change
         uint16_t tileX = static_cast<uint16_t>(event.button.x / board->getTileWidth());
         uint16_t tileY = static_cast<uint16_t>(event.button.y / board->getTileHeight());
         TileCoord mouseCoordinate(tileX, tileY);
-        getModel()->changeTileType(mouseCoordinate, getModel()->getTileType());
+
+        // If the key is at the mouse coordinate, hover will now move the key
+        if (getModel()->getKeyCoord() == mouseCoordinate) {
+            getModel()->setHoverBehavior(HoverBehavior::MOVE_KEY);
+
+        // If the key is at the mouse coordinate, hover will now move the key
+        } else if (getModel()->getPlayerCoord() == mouseCoordinate) {
+            getModel()->setHoverBehavior(HoverBehavior::MOVE_PLAYER);
+
+        // Otherwise, hover will now replace tiles, and go ahead and replace the current tile so that a mouse move is
+        // not required to affect change
+        } else {
+            getModel()->setHoverBehavior(HoverBehavior::REPLACE);
+            getModel()->changeTileType(mouseCoordinate, getModel()->getTileType());
+        }
     });
 
     board->setOnMouseUpCallback([this, board] (SDL_Event event) {
-        // Hover will no longer replace tile; only show the selected tile type
+        // Hover will go back to only showing the selected tile type
         getModel()->setHoverBehavior(HoverBehavior::POINT);
     });
 
