@@ -2,7 +2,6 @@
 #include "../controller/EditController.hpp"
 #include "../view/EditorBoardView.hpp"
 #include "../view/AnimationFactory.hpp"
-#include "../model/HoverBehavior.hpp"
 
 extern AnimationFactory* animationFactory;
 
