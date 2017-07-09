@@ -20,6 +20,6 @@
 #define LEVEL_PATH _ROOT_ PATHSEP "level" PATHSEP
 #define IMAGE_PATH _ROOT_ PATHSEP "img" PATHSEP
 
-#define VERSION 3
+#define VERSION 1.4
 
 #endif

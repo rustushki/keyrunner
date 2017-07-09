@@ -36,7 +36,7 @@ void initializeSdl() {
  */
 SDL_Window* createWindow() {
     std::stringstream title;
-    title << "Key Runner r" << VERSION;
+    title << "Key Runner v" << VERSION;
     SDL_Window* window = SDL_CreateWindow(title.str().c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0,
           SDL_WINDOW_HIDDEN);
 
