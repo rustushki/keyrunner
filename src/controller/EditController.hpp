@@ -9,6 +9,7 @@
 class EditController : public BaseController {
 public:
     EditController(EditorBoardModel* model, Display* display, Options* options);
+    virtual ~EditController() override;
     void gameLoop() override;
 
 private:

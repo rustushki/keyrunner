@@ -8,6 +8,7 @@
 class PlayController : public BaseController {
 public:
     PlayController(PlayBoardModel* model, Display* display, Options* options);
+    virtual ~PlayController() override;
     virtual void gameLoop() override;
 
 protected:

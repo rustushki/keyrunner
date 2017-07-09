@@ -9,6 +9,7 @@
 class BaseController : public Controller {
 public:
     BaseController(BoardModel* model, Display* display);
+    virtual ~BaseController();
     virtual void gameLoop() override = 0;
 
 protected:
