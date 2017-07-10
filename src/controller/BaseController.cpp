@@ -15,6 +15,11 @@ BaseController::BaseController(BoardModel* model, Display* display) {
 }
 
 /**
+ * Destructor.
+ */
+BaseController::~BaseController() {}
+
+/**
  * Return the root model that the Controller addresses.
  * @return BaseModel*
  */

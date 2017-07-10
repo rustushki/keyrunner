@@ -34,6 +34,11 @@ PlayController::PlayController(PlayBoardModel *model, Display* display, Options*
 }
 
 /**
+ * Destructor.
+ */
+PlayController::~PlayController() {}
+
+/**
  * Initializes the elements required for the 'play' mode.
  *
  * This includes initializing SDL, and kicking off the game loop.

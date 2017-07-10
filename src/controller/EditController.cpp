@@ -52,6 +52,11 @@ EditController::EditController(EditorBoardModel* model, Display* display, Option
 }
 
 /**
+ * Destructor.
+ */
+EditController::~EditController() {}
+
+/**
  * Initialize the game elements for edit mode.
  */
 void EditController::gameLoop() {

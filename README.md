@@ -2,9 +2,9 @@
 
 # Summary
 
-Help Moschata escape certain doom. The clock is ticking and she must reach the door with the key before it's too late.
-
-KeyRunner is a free game, available in source code with the GPLv2 License. I wrote this game as the first in a series of smallish games.
+Help Moschata escape certain doom. The clock is ticking and she must reach the
+door with the key before it's too late. KeyRunner is a free game, available in
+source code with the GPLv2 License.
 
 ![KeyRunner](https://raw.githubusercontent.com/rustushki/keyrunner/master/screenshots/keyrunner.png)
 
@@ -14,19 +14,13 @@ KeyRunner is a free game, available in source code with the GPLv2 License. I wro
 * Doors require keys
 * Colored teleporter tiles
 * Wrap around edges
-* Conveyor Belts
-* Push-Hold and Rapid-Fire movement
-* Level Editor
+* Conveyor belts
+* Push-hold and rapid-fire movement
+* 35 built in levels and a Level Editor
 
-# Downloads
+# Ubuntu Build Instructions
 
-Unfortunately, downloads are not available. I hope to have this setup soon.
-
-# Build Instructions
-
-## Ubuntu Linux
-
-    $ sudo apt install libsdl-ttf2.0-dev libsdl-image1.2-dev libsdl1.2-dev cmake
+    $ sudo apt install libsdl2-ttf-dev libsdl2-image-dev libsdl2-dev cmake
     $ git clone https://github.com/rustushki/keyrunner.git
     $ cd keyrunner
     $ cmake .

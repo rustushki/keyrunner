@@ -1,5 +1,5 @@
+#include <stdexcept>
 #include <sstream>
-
 #include "../model/TileType.hpp"
 #include "../controller/KeyRunner.hpp"
 

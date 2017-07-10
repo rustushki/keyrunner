@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include <sstream>
 #include "../view/AnimationFactory.hpp"
 #include "../uitk/Animation.hpp"

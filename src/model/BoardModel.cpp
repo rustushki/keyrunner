@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include <sstream>
 #include "../model/BoardModel.hpp"
 
