@@ -3,11 +3,12 @@
 
 // Game State.
 enum State {
-      PLAY     // User is playing.
-    , QUIT     // User has indicated he wants to quit.
-    , LOSE     // User has lost.  Display lose animation.
-    , WIN      // User has won the game.
-    , EDIT     // User wants to edit levels
+    TITLE, // User sees the title screen
+    PLAY,  // User is playing
+    QUIT,  // User wants to quit
+    LOSE,  // User has lost
+    WIN,   // User has won the game
+    EDIT,  // User wants to edit levels
 };
 
 #endif

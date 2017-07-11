@@ -11,7 +11,7 @@
  */
 Options::Options() {
     startingLevelNum = 1;
-    initialState = PLAY;
+    initialState = TITLE;
     createNewLevel = false;
 }
 
@@ -68,6 +68,10 @@ void Options::parse(int argc, char** argv) {
         die("You must provide a level number to edit or specify -n.");
     }
 
+	// If user sets a level, and the mode isn't EDIT, assume they want to play immediately
+    if (initialState != EDIT && !isLevelNotSet) {
+        initialState = PLAY;
+    }
 }
 
 /**

@@ -18,6 +18,7 @@ add_library(uitk STATIC
 
 # Source Files.
 set(SOURCES
+	src/controller/TitleScreenController.cpp
 	src/model/BoardModel.cpp
 	src/model/EditorBoardModel.cpp
 	src/model/LevelManager.cpp

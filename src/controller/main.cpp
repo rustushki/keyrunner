@@ -3,6 +3,7 @@
 #include "../controller/Options.hpp"
 #include "../controller/PlayController.hpp"
 #include "../controller/EditController.hpp"
+#include "../controller/TitleScreenController.hpp"
 #include "../view/AnimationFactory.hpp"
 
 // Objects that don't have a home yet
@@ -104,13 +105,16 @@ int main(int argc, char** argv) {
     Model* model = nullptr;
     Controller* controller = nullptr;
     if (options.getInitialState() == PLAY) {
-        // Create the Model
         model = new PlayBoardModel();
         controller = new PlayController((PlayBoardModel*) model, &display, &options);
-    } else {
-        // Create the Model
+
+    } else if (options.getInitialState() == EDIT) {
         model = new EditorBoardModel();
         controller = new EditController((EditorBoardModel*) model, &display, &options);
+
+    } else if (options.getInitialState() == TITLE) {
+        model = new PlayBoardModel();
+        controller = new TitleScreenController((PlayBoardModel*) model, &display);
     }
 
     // Set the initial state
