@@ -10,11 +10,12 @@ class EditController : public BaseController {
 public:
     EditController(EditorBoardModel* model, Display* display, Options* options);
     virtual ~EditController() override;
-    void gameLoop() override;
 
 private:
-    void processInput() override;
+    virtual void updateModel(long frameDuration) override;
+    virtual void processInput() override;
     EditorBoardModel* getModel() const override;
+    virtual bool checkExitConditions() const override;
 
     View* createRectangle() const;
     View* createBoard() const;

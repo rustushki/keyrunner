@@ -19,6 +19,9 @@ PlayController::PlayController(PlayBoardModel *model, Display* display, Options*
     getModel()->setTimeClock(50000);
     getModel()->setLevelNum(options->getStartingLevel());
 
+    // Read in the starting level
+    getLevelManager()->read();
+
     // Create each of the views for this controller
     View* board = createBoard();
     getDisplay()->addView("board", board);
@@ -37,52 +40,6 @@ PlayController::PlayController(PlayBoardModel *model, Display* display, Options*
  * Destructor.
  */
 PlayController::~PlayController() {}
-
-/**
- * Initializes the elements required for the 'play' mode.
- *
- * This includes initializing SDL, and kicking off the game loop.
- */
-void PlayController::gameLoop() {
-    // Limit to 25 frames per second
-    uint32_t fps = 25;
-    uint32_t maxDelay = 1000 / fps;
-
-    // Read in the starting level
-    getLevelManager()->read();
-
-    // Begin the game loop and continue while not in the quit state
-    while (getModel()->getState() == PLAY) {
-        // Each iteration represents a frame
-
-        // Begin preparing the frame
-        uint32_t workStart = SDL_GetTicks();
-
-        // Advance the animations because we're about to compose the frame
-        getDisplay()->advanceAnimations();
-
-        // Build and present the frame
-        getDisplay()->draw();
-
-        // Move the player along the conveyor belts (if applicable)
-        conveyPlayer();
-
-        // Handle supported system events
-        processInput();
-
-        // Determine how much time we have left after doing work
-        uint32_t workEnd = SDL_GetTicks();
-        uint32_t workDuration = workEnd - workStart;
-        int remainingTime = maxDelay - workDuration;
-
-        // Sleep any remaining time so that we don't hog the CPU
-        if (remainingTime > 0) {
-            SDL_Delay((uint32_t) remainingTime);
-        }
-
-        updateLevel(SDL_GetTicks() - workStart);
-    }
-}
 
 void PlayController::updateLevel(long elapsedDuration) const {
     PlayBoardModel* board = getModel();
@@ -245,4 +202,26 @@ void PlayController::conveyPlayer() const {
         getModel()->conveyPlayer();
         lastConveyance = SDL_GetTicks();
     }
+}
+
+/**
+ * Update the PlayBoardModel.
+ * <p>
+ * This will convey the player, update the level and check for winning conditions.
+ * @param frameDuration
+ */
+void PlayController::updateModel(long frameDuration) {
+    // Move the player along the conveyor belts (if applicable)
+    conveyPlayer();
+
+    // Check for level change and winning conditions
+    updateLevel(frameDuration);
+}
+
+/**
+ * Returns true if the model state is PLAY.
+ * @return
+ */
+bool PlayController::checkExitConditions() const {
+    return getModel()->getState() == PLAY;
 }

@@ -57,40 +57,6 @@ EditController::EditController(EditorBoardModel* model, Display* display, Option
 EditController::~EditController() {}
 
 /**
- * Initialize the game elements for edit mode.
- */
-void EditController::gameLoop() {
-    // Limit to 25 frames per second
-    uint32_t fps = 25;
-    uint32_t maxDelay = 1000 / fps;
-
-    while (getModel()->getState() != QUIT) {
-        // Each iteration represents a frame
-
-        // Begin preparing the frame
-        uint32_t workStart = SDL_GetTicks();
-
-        // Advance the animations because we're about to compose the frame
-        getDisplay()->advanceAnimations();
-
-        // Build and present the frame
-        getDisplay()->draw();
-
-        processInput();
-
-        // Determine how much time we have left after doing work
-        uint32_t workEnd = SDL_GetTicks();
-        uint32_t workDuration = workEnd - workStart;
-        int remainingTime = maxDelay - workDuration;
-
-        // Sleep any remaining time so that we don't hog the CPU
-        if (remainingTime > 0) {
-            SDL_Delay((uint32_t) remainingTime);
-        }
-    }
-}
-
-/**
  * Handle events for edit mode.
  */
 void EditController::processInput() {
@@ -301,3 +267,16 @@ View *EditController::createTileTypeButton(View* board, TileType tileType, uint8
     return button;
 }
 
+/**
+ * Update the EditorBoardModel.
+ * @param frameDuration
+ */
+void EditController::updateModel(long frameDuration) {}
+
+/**
+ * Returns true if the state is QUIT.
+ * @return
+ */
+bool EditController::checkExitConditions() const {
+    return getModel()->getState() != QUIT;
+}
