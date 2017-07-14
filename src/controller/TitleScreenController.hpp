@@ -12,6 +12,9 @@ protected:
     virtual void processInput() override;
     virtual void updateModel(long frameDuration) override;
     virtual bool checkExitConditions() const override;
+
+private:
+    void createKeyImage();
 };
 
 #endif
