@@ -69,9 +69,7 @@ void TitleScreenController::processInput() {
  * Update the TitleScreenModel.
  * @param frameDuration
  */
-void TitleScreenController::updateModel(long frameDuration) {
-    BaseController::updateModel(frameDuration);
-}
+void TitleScreenController::updateModel(long frameDuration) {}
 
 /**
  * Doesn't return false until in the QUIT state.
