@@ -115,15 +115,26 @@ void TitleScreenController::createPressEnterText() {
 }
 
 /**
- * Create the main menu which is not visible by default.
+ * Create the main menu which is centered and not visible by default.
  */
 void TitleScreenController::createMainMenu() {
     SDL_Rect rect;
-    rect.x = 100;
-    rect.y = 100;
-    rect.w = 100;
-    rect.h = 100;
-    RectangleView* mainMenu = new MenuView(nullptr, rect);
-    mainMenu->setColor(0x333333);
+    rect.w = 200;
+    rect.h = 200;
+    rect.x = (getDisplay()->getWidth() - rect.w) / 2;
+    rect.y = 240;
+    MenuView* mainMenu = new MenuView(nullptr, rect);
+    mainMenu->setColor(0x000000);
+    mainMenu->setOptionBackgroundColor(0x000000);
+    mainMenu->setOptionTextColor(0xFF0000);
+    mainMenu->addOption("Play", [](SDL_Event event) {
+        std::cout << "Play" << std::endl;
+    });
+    mainMenu->addOption("Edit", [](SDL_Event event) {
+        std::cout << "Edit" << std::endl;
+    });
+    mainMenu->addOption("Quit", [](SDL_Event event) {
+        std::cout << "Quit" << std::endl;
+    });
     getDisplay()->addView("main_menu", mainMenu);
 }

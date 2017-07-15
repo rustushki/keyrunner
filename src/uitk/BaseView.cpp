@@ -149,7 +149,7 @@ void BaseView::setX(uint16_t newX) {
  * @param newHeight
  */
 void BaseView::setY(uint16_t newY) {
-    rect.x = newY;
+    rect.y = newY;
 }
 
 /**
