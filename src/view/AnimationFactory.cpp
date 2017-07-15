@@ -95,6 +95,10 @@ std::string AnimationFactory::getSpriteSheetFileName(AnimationType animationType
             fn = "pumpkin.png";
             break;
 
+        case ANIMATION_TYPE_TITLE_SCREEN_KEY:
+            fn = "title_screen_key.png";
+            break;
+
         default:
             std::stringstream errorMessage;
             errorMessage << "Couldn't determine sprite sheet due to invalid AnimationType";
@@ -148,6 +152,7 @@ std::vector<uint16_t> AnimationFactory::getFrameList(AnimationType animationType
         case ANIMATION_TYPE_TELEPORTER_BLUE:
         case ANIMATION_TYPE_KEY:
         case ANIMATION_TYPE_PUMPKIN:
+        case ANIMATION_TYPE_TITLE_SCREEN_KEY:
             FL(0,0);
             break;
 
@@ -186,6 +191,11 @@ std::vector<uint16_t> AnimationFactory::getFrameSize(AnimationType animationType
             frameSize.push_back(25);
             break;
 
+        case ANIMATION_TYPE_TITLE_SCREEN_KEY:
+            frameSize.push_back(350);
+            frameSize.push_back(127);
+            break;
+
         default:
             std::stringstream errorMessage;
             errorMessage << "Couldn't determine frame size due to invalid AnimationType";
@@ -213,6 +223,7 @@ uint16_t AnimationFactory::getStillsPerSecond(AnimationType animationType) {
         case ANIMATION_TYPE_TELEPORTER_BLUE:
         case ANIMATION_TYPE_KEY:
         case ANIMATION_TYPE_PUMPKIN:
+        case ANIMATION_TYPE_TITLE_SCREEN_KEY:
             sps = 0;
             break;
 

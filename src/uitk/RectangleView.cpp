@@ -4,7 +4,10 @@
  * Constructor.
  * @param rect
  */
-RectangleView::RectangleView(Model* model, const SDL_Rect &rect) : BaseView(model, rect) {}
+RectangleView::RectangleView(Model* model, const SDL_Rect &rect) : BaseView(model, rect) {
+    // Ensure default background color is initialized to black
+    setColor(0);
+}
 
 /**
  * Destructor.

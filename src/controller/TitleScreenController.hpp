@@ -15,6 +15,8 @@ protected:
 
 private:
     void createKeyImage();
+    void createKeyRunnerText();
+    void createPressEnterText();
 };
 
 #endif
