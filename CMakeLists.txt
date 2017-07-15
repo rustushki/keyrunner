@@ -10,10 +10,11 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${keyrunner_SOURCE_DIR}/cmake")
 add_library(uitk STATIC
 	src/uitk/ImageView.cpp
 	src/uitk/LabelView.cpp
+	src/uitk/MenuView.cpp
 	src/uitk/RectangleView.cpp
+	src/uitk/SpriteSheet.cpp
     src/uitk/Animation.cpp
     src/uitk/ButtonView.cpp
-    src/uitk/SpriteSheet.cpp
 )
 
 # Source Files.

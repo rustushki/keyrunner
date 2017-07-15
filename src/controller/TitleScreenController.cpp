@@ -1,6 +1,7 @@
 #include "../controller/TitleScreenController.hpp"
 #include "../uitk/ImageView.hpp"
 #include "../uitk/LabelView.hpp"
+#include "../uitk/MenuView.hpp"
 
 /**
  * Constructor.
@@ -11,6 +12,7 @@ TitleScreenController::TitleScreenController(BoardModel *model, Display *display
     createKeyImage();
     createKeyRunnerText();
     createPressEnterText();
+    createMainMenu();
 }
 
 /**
@@ -110,4 +112,18 @@ void TitleScreenController::createPressEnterText() {
     pressEnterText->show();
     getDisplay()->addView("press_enter_text", pressEnterText);
 
+}
+
+/**
+ * Create the main menu which is not visible by default.
+ */
+void TitleScreenController::createMainMenu() {
+    SDL_Rect rect;
+    rect.x = 100;
+    rect.y = 100;
+    rect.w = 100;
+    rect.h = 100;
+    RectangleView* mainMenu = new MenuView(nullptr, rect);
+    mainMenu->setColor(0x333333);
+    getDisplay()->addView("main_menu", mainMenu);
 }
