@@ -28,13 +28,19 @@ TitleScreenController::~TitleScreenController() {}
 void TitleScreenController::processInput() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
+        // Key Down Events
         if (event.type == SDL_KEYDOWN) {
-            // User Presses Q
+            // Q quits the game
             if (event.key.keysym.sym == SDLK_q) {
                 getModel()->setState(QUIT);
                 break;
+
+            // Return will show the main menu
+            } else if (event.key.keysym.sym == SDLK_RETURN) {
+                getDisplay()->getViewByName("press_enter_text")->hide();
+                getDisplay()->getViewByName("main_menu")->show();
             }
-        // Handle Quit Event.
+        // Quit Events will cause the game to exit
         } else if (event.type == SDL_QUIT) {
             getModel()->setState(QUIT);
             break;
