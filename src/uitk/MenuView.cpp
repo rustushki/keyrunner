@@ -6,7 +6,10 @@
  * @param model
  * @param rect
  */
-MenuView::MenuView(Model *model, const SDL_Rect &rect) : RectangleView(model, rect) {}
+MenuView::MenuView(Model *model, const SDL_Rect &rect) : RectangleView(model, rect) {
+    setCursorIndex(0);
+    cursorTextColor = 0;
+}
 
 void MenuView::addOption(std::string optionText, const std::function<void(SDL_Event)> &callBack) {
     SDL_Rect rect;
@@ -25,6 +28,7 @@ void MenuView::addOption(std::string optionText, const std::function<void(SDL_Ev
     buttons.push_back(button);
 
     sizeButtons();
+    setCursorIndex(getCursorIndex());
 
 }
 
@@ -88,4 +92,62 @@ uint32_t MenuView::getOptionBackgroundColor() {
  */
 uint32_t MenuView::getOptionTextColor() {
     return optionTextColor;
+}
+
+/**
+ * Set the cursor when the mouse hovers over an option.
+ * <p>
+ * Afterwards, perform any user defined hover actions.
+ * @param event
+ */
+void MenuView::onMouseHover(SDL_Event event) {
+    uint16_t buttonIndex = 0;
+    uint16_t x = static_cast<uint16_t>(event.motion.x);
+    uint16_t y = static_cast<uint16_t>(event.motion.y);
+    for (ButtonView* button : buttons) {
+        if (button->containsPoint(x, y)) {
+            setCursorIndex(buttonIndex);
+            break;
+        }
+
+        buttonIndex++;
+    }
+
+    BaseView::onMouseHover(event);
+}
+
+/**
+ * Set the cursor index, changing the color of that option and resetting the previously set option's color.
+ * <p>
+ * The option list starts at index 0.
+ * @param newCursorIndex
+ */
+void MenuView::setCursorIndex(uint16_t newCursorIndex) {
+    if (buttons.size() > 0) {
+        buttons[getCursorIndex()]->setTextColor(getOptionTextColor());
+    }
+
+    this->cursorIndex = newCursorIndex;
+
+    if (buttons.size() > 0) {
+        buttons[getCursorIndex()]->setTextColor(cursorTextColor);
+    }
+}
+
+/**
+ * Get the cursor index.
+ * <p>
+ * The option list starts at index 0.
+ * @return
+ */
+uint16_t MenuView::getCursorIndex() const {
+    return cursorIndex;
+}
+
+/**
+ * Set the color of the option on which the cursor is currently pointing.
+ * @param color
+ */
+void MenuView::setOptionCursorTextColor(uint32_t color) {
+    cursorTextColor = color;
 }

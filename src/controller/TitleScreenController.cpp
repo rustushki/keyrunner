@@ -35,15 +35,32 @@ void TitleScreenController::processInput() {
                 getModel()->setState(QUIT);
                 break;
 
-            // Return will show the main menu
+                // Return will show the main menu
             } else if (event.key.keysym.sym == SDLK_RETURN) {
                 getDisplay()->getViewByName("press_enter_text")->hide();
                 getDisplay()->getViewByName("main_menu")->show();
             }
+
         // Quit Events will cause the game to exit
         } else if (event.type == SDL_QUIT) {
             getModel()->setState(QUIT);
             break;
+
+        // Delegate Mouse Up, Down, and Hover to the views as they apply
+        } else if (event.type == SDL_MOUSEBUTTONUP || event.type == SDL_MOUSEBUTTONDOWN ||
+                   event.type == SDL_MOUSEMOTION) {
+            uint32_t x = (uint32_t) event.button.x;
+            uint32_t y = (uint32_t) event.button.y;
+            View *view = getDisplay()->getClickedView(x, y);
+            if (view != nullptr) {
+                if (event.type == SDL_MOUSEBUTTONUP) {
+                    view->onMouseUp(event);
+                } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+                    view->onMouseDown(event);
+                } else if (event.type == SDL_MOUSEMOTION) {
+                    view->onMouseHover(event);
+                }
+            }
         }
     }
 }
@@ -52,7 +69,9 @@ void TitleScreenController::processInput() {
  * Update the TitleScreenModel.
  * @param frameDuration
  */
-void TitleScreenController::updateModel(long frameDuration) {}
+void TitleScreenController::updateModel(long frameDuration) {
+    BaseController::updateModel(frameDuration);
+}
 
 /**
  * Doesn't return false until in the QUIT state.
@@ -132,7 +151,8 @@ void TitleScreenController::createMainMenu() {
     MenuView* mainMenu = new MenuView(nullptr, rect);
     mainMenu->setColor(0x000000);
     mainMenu->setOptionBackgroundColor(0x000000);
-    mainMenu->setOptionTextColor(0xFF0000);
+    mainMenu->setOptionTextColor(0xBBBBBB);
+    mainMenu->setOptionCursorTextColor(0xAA3333);
     mainMenu->addOption("Play", [](SDL_Event event) {
         std::cout << "Play" << std::endl;
     });
