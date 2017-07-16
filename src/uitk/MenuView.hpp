@@ -16,6 +16,8 @@ public:
     void setOptionTextColor(uint32_t color);
     void setOptionCursorTextColor(uint32_t color);
     void setCursorIndex(uint16_t index);
+    void incrementCursor();
+    void decrementCursor();
     uint16_t getCursorIndex() const;
 
 private:

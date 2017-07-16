@@ -151,3 +151,25 @@ uint16_t MenuView::getCursorIndex() const {
 void MenuView::setOptionCursorTextColor(uint32_t color) {
     cursorTextColor = color;
 }
+
+/**
+ * Move the cursor to the next option, wrapping around if on last.
+ */
+void MenuView::incrementCursor() {
+    long newCursorIndex = getCursorIndex() + 1;
+    if (newCursorIndex >= buttons.size()) {
+        newCursorIndex = 0;
+    }
+    setCursorIndex(static_cast<uint16_t>(newCursorIndex));
+}
+
+/**
+ * Move the cursor to the previous option, wrapping around if on first.
+ */
+void MenuView::decrementCursor() {
+    long newCursorIndex = getCursorIndex() - 1;
+    if (newCursorIndex < 0) {
+        newCursorIndex = buttons.size() - 1;
+    }
+    setCursorIndex(static_cast<uint16_t>(newCursorIndex));
+}
