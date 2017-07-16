@@ -13,7 +13,7 @@ public:
 protected:
     virtual void processInput() override;
     PlayBoardModel* getModel() const override;
-    virtual void updateModel(long frameDuration);
+    virtual void updateModel(long frameDuration) override;
 
 private:
     void updateLevel(long elapsedDuration) const;
