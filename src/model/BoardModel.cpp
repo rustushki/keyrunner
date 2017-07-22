@@ -11,7 +11,7 @@ BoardModel::BoardModel() {
     for (int row = 0; row < getHeight(); row++) {
         std::vector<TileType> tileRow;
         for (int column = 0; column < getWidth(); column++) {
-            tileRow.push_back(TILE_TYPE_EMPTY);
+            tileRow.push_back(TileType::Empty);
         }
         this->tileType.push_back(tileRow);
     }
@@ -39,7 +39,7 @@ void BoardModel::setLevelNum(uint8_t level) {
  * @return boolean
  */
 bool BoardModel::isWall(TileCoord coord) const {
-    return (tileType[coord.second][coord.first] == TILE_TYPE_WALL);
+    return (tileType[coord.second][coord.first] == TileType::Wall);
 }
 
 /**
@@ -91,9 +91,9 @@ void BoardModel::setPlayerCoord(TileCoord tileCoord) {
 bool BoardModel::isTeleporter(TileCoord coord) const {
     TileType tt = tileType[coord.second][coord.first];
 
-    return (   tt == TILE_TYPE_TELEPORTER_RED
-            || tt == TILE_TYPE_TELEPORTER_GREEN
-            || tt == TILE_TYPE_TELEPORTER_BLUE);
+    return (   tt == TileType::TeleporterRed
+            || tt == TileType::TeleporterGreen
+            || tt == TileType::TeleporterBlue);
 }
 
 /**
@@ -120,7 +120,7 @@ TileType BoardModel::getTileType(TileCoord coord) const {
  * @return boolean
  */
 bool BoardModel::isDoor(TileCoord coord) const {
-    return tileType[coord.second][coord.first] == TILE_TYPE_DOOR;
+    return tileType[coord.second][coord.first] == TileType::Door;
 }
 
 /**
@@ -207,10 +207,10 @@ TileCoord BoardModel::getTileCoordRight(TileCoord current) const {
 bool BoardModel::isConveyor(TileCoord coord) const {
     TileType tt = tileType[coord.second][coord.first];
 
-    return (   tt == TILE_TYPE_CONVEY_UP
-            || tt == TILE_TYPE_CONVEY_DOWN
-            || tt == TILE_TYPE_CONVEY_RIGHT
-            || tt == TILE_TYPE_CONVEY_LEFT);
+    return (   tt == TileType::ConveyorUp
+            || tt == TileType::ConveyorDown
+            || tt == TileType::ConveyorRight
+            || tt == TileType::ConveyorLeft);
 }
 
 /**
@@ -221,13 +221,13 @@ bool BoardModel::isConveyor(TileCoord coord) const {
  */
 Direction BoardModel::getConveyorDirection(TileCoord coord) const {
     TileType tt = tileType[coord.second][coord.first];
-    if (tt == TILE_TYPE_CONVEY_UP) {
+    if (tt == TileType::ConveyorUp) {
         return DIRECTION_UP;
-    } else if (tt == TILE_TYPE_CONVEY_DOWN) {
+    } else if (tt == TileType::ConveyorDown) {
         return DIRECTION_DOWN;
-    } else if (tt == TILE_TYPE_CONVEY_RIGHT) {
+    } else if (tt == TileType::ConveyorRight) {
         return DIRECTION_RIGHT;
-    } else if (tt == TILE_TYPE_CONVEY_LEFT) {
+    } else if (tt == TileType::ConveyorLeft) {
         return DIRECTION_LEFT;
     }
 

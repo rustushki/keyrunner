@@ -12,7 +12,7 @@ class SpriteSheet;
 
 class AnimationFactory {
     public:
-        AnimationFactory(SDL_Renderer* renderer);
+        explicit AnimationFactory(SDL_Renderer* renderer);
         ~AnimationFactory();
         Animation* build(AnimationType animationType);
 

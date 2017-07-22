@@ -212,7 +212,7 @@ void LevelManager::resetLevelManager() {
     playerCoordinate.second = 0;
     keyCoordinate.first = (uint16_t) (width - 1);
     keyCoordinate.second = (uint16_t) (height - 1);
-    defaultTileType = TILE_TYPE_EMPTY;
+    defaultTileType = TileType::Empty;
     deviations.clear();
 }
 
@@ -271,7 +271,7 @@ void LevelManager::writeSize(FILE* fp) const {
  */
 void LevelManager::writeDefaultTileType(FILE* fp) const {
     // Write Default Tile Type
-    uint8_t defaultTileType = static_cast<uint8_t>(TILE_TYPE_EMPTY);
+    uint8_t defaultTileType = static_cast<uint8_t>(TileType::Empty);
     fwrite(&defaultTileType, sizeof(uint8_t), 1, fp);
 }
 

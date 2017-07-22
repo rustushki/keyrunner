@@ -8,29 +8,29 @@ project (keyrunner)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${keyrunner_SOURCE_DIR}/cmake")
 
 add_library(uitk STATIC
+	src/uitk/Animation.cpp
+	src/uitk/ButtonView.cpp
 	src/uitk/ImageView.cpp
 	src/uitk/LabelView.cpp
 	src/uitk/MenuView.cpp
 	src/uitk/RectangleView.cpp
 	src/uitk/SpriteSheet.cpp
-    src/uitk/Animation.cpp
-    src/uitk/ButtonView.cpp
 )
 
 # Source Files.
 set(SOURCES
-	src/controller/TitleScreenController.cpp
-	src/model/BoardModel.cpp
-	src/model/EditorBoardModel.cpp
-	src/model/LevelManager.cpp
-	src/model/TileType.cpp
+    src/model/AnimationTypeFactory.cpp
     src/controller/BaseController.cpp
     src/controller/Controller.hpp
     src/controller/Display.cpp
     src/controller/EditController.cpp
     src/controller/Options.cpp
     src/controller/PlayController.cpp
+    src/controller/TitleScreenController.cpp
     src/controller/main.cpp
+    src/model/BoardModel.cpp
+    src/model/EditorBoardModel.cpp
+    src/model/LevelManager.cpp
     src/model/PlayBoardModel.cpp
     src/uitk/BaseView.cpp
     src/view/AnimationFactory.cpp

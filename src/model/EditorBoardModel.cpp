@@ -4,7 +4,7 @@
  * Constructor.
  */
 EditorBoardModel::EditorBoardModel() {
-    this->tileType = TILE_TYPE_EMPTY;
+    this->tileType = TileType::Empty;
     setHoverBehavior(HoverBehavior::POINT);
 }
 

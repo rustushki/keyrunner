@@ -1,4 +1,5 @@
 #include "../view/EditorBoardView.hpp"
+#include "../model/AnimationTypeFactory.hpp"
 
 /**
  * Constructor.
@@ -38,7 +39,8 @@ void EditorBoardView::drawCursorTile(SDL_Renderer* renderer, bool justHighlight)
 
     // Convert the Editor's selected tile type into an animation
     TileType selectedTileType = getModel()->getTileType();
-    AnimationType animationType = selectedTileType.toAnimationType();
+    AnimationTypeFactory animationTypeFactory;
+    AnimationType animationType = animationTypeFactory.build(selectedTileType);
     Animation* animation = preBuiltAnimations[animationType];
 
     // Convert the Hovered Tile Coordinate into a screen coordinate

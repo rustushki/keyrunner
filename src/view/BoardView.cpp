@@ -1,5 +1,6 @@
 #include "../view/BoardView.hpp"
 #include "../view/AnimationFactory.hpp"
+#include "../model/AnimationTypeFactory.hpp"
 
 extern AnimationFactory* animationFactory;
 
@@ -52,7 +53,8 @@ void BoardView::draw(SDL_Renderer* renderer) {
 
             // Convert the current TileCoord's TileType to an AnimationType
             TileType tileType = getModel()->getTileType(currentTileCoord);
-            AnimationType animationType = tileType.toAnimationType();
+            AnimationTypeFactory animationTypeFactory;
+            AnimationType animationType = animationTypeFactory.build(tileType);
 
             // Get the pre-built animation associated with AnimationType
             Animation* animation;

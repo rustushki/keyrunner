@@ -2,6 +2,7 @@
 #include "../controller/EditController.hpp"
 #include "../view/EditorBoardView.hpp"
 #include "../view/AnimationFactory.hpp"
+#include "../model/AnimationTypeFactory.hpp"
 
 extern AnimationFactory* animationFactory;
 
@@ -43,7 +44,7 @@ EditController::EditController(EditorBoardModel* model, Display* display, Option
     getDisplay()->addView("exit_button", exitButton);
 
     // Tile Selector Buttons
-    for (int tileTypeIndex = 0; tileTypeIndex < TileType::length(); tileTypeIndex++) {
+    for (int tileTypeIndex = 0; tileTypeIndex < static_cast<int>(TileType::Count); tileTypeIndex++) {
         View* tileTypeButton = createTileTypeButton(board, TileType(tileTypeIndex), buttonSpacing);
         std::stringstream viewName;
         viewName << "tile_selector_button_" << tileTypeIndex;
@@ -249,7 +250,8 @@ View *EditController::createTileTypeButton(View* board, TileType tileType, uint8
     const uint16_t height = 27;
     const uint8_t initialOffset = 10;
 
-    AnimationType animationType = tileType.toAnimationType();
+    AnimationTypeFactory animationTypeFactory;
+    AnimationType animationType = animationTypeFactory.build(tileType);
     SDL_Rect rect;
     rect.w = width;
     rect.h = height;
