@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
-#include <stdint.h>
+#include <cstdint>
 
 #ifndef _ROOT_
 #define _ROOT_ "."

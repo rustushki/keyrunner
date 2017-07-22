@@ -8,8 +8,8 @@
 class MenuView : public RectangleView {
 public:
     MenuView(Model *model, const SDL_Rect &rect);
-    virtual void draw(SDL_Renderer* renderer) override;
-    virtual void onMouseHover(SDL_Event event) override;
+    void draw(SDL_Renderer* renderer) override;
+    void onMouseHover(SDL_Event event) override;
 
     void addOption(std::string optionText, const std::function<void(SDL_Event)> &callBack);
     void setOptionBackgroundColor(uint32_t color);

@@ -8,7 +8,7 @@
 
 class View {
 public:
-    virtual ~View() {}
+    virtual ~View() = default;
     virtual Model* getModel() const = 0;
     virtual void draw(SDL_Renderer* renderer) = 0;
     virtual void show() = 0;

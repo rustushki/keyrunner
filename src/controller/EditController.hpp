@@ -9,13 +9,13 @@
 class EditController : public BaseController {
 public:
     EditController(EditorBoardModel* model, Display* display, Options* options);
-    virtual ~EditController() override;
+    ~EditController() override;
 
 private:
-    virtual void updateModel(long frameDuration) override;
-    virtual void processInput() override;
+    void updateModel(long frameDuration) override;
+    void processInput() override;
     EditorBoardModel* getModel() const override;
-    virtual bool checkExitConditions() const override;
+    bool checkExitConditions() const override;
 
     View* createRectangle() const;
     View* createBoard() const;

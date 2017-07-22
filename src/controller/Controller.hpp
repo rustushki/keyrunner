@@ -5,7 +5,7 @@
 
 class Controller {
 public:
-    virtual ~Controller() {}
+    virtual ~Controller() = default;
     virtual void gameLoop() = 0;
 
 protected:

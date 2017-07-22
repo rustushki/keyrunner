@@ -8,17 +8,17 @@
 class PlayController : public BaseController {
 public:
     PlayController(PlayBoardModel* model, Display* display, Options* options);
-    virtual ~PlayController() override;
+    ~PlayController() override;
 
 protected:
-    virtual void processInput() override;
+    void processInput() override;
     PlayBoardModel* getModel() const override;
-    virtual void updateModel(long frameDuration) override;
+    void updateModel(long frameDuration) override;
 
 private:
     void updateLevel(long elapsedDuration) const;
     void conveyPlayer() const;
-    virtual bool checkExitConditions() const override;
+    bool checkExitConditions() const override;
 
     View* createRectangle() const;
     View* createBoard() const;

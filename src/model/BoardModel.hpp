@@ -1,7 +1,7 @@
 #ifndef BOARD_HPP
 #define BOARD_HPP
 
-#include <stdint.h>
+#include <cstdint>
 #include <vector>
 #include "../model/Direction.hpp"
 #include "../model/TileType.hpp"
