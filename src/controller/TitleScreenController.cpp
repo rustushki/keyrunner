@@ -145,8 +145,8 @@ void TitleScreenController::createMainMenu() {
     mainMenu->addOption("Play", [this](SDL_Event event) {
         getModel()->setState(PLAY);
     });
-    mainMenu->addOption("Edit", [](SDL_Event event) {
-        std::cout << "Edit" << std::endl;
+    mainMenu->addOption("Edit", [this](SDL_Event event) {
+        getModel()->setState(EDIT);
     });
     mainMenu->addOption("Quit", [this](SDL_Event event) {
         getModel()->setState(QUIT);
