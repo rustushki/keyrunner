@@ -18,9 +18,11 @@ public:
     virtual void setOnMouseUpCallback(const std::function<void(SDL_Event)> &newCallBack) = 0;
     virtual void setOnMouseDownCallback(const std::function<void(SDL_Event)> &newCallBack) = 0;
     virtual void setOnMouseHoverCallback(const std::function<void(SDL_Event)> &newCallBack) = 0;
+    virtual void setOnKeyUpCallback(const std::function<void(SDL_Event)> &newCallBack) = 0;
     virtual void onMouseUp(SDL_Event event) = 0;
     virtual void onMouseDown(SDL_Event event) = 0;
     virtual void onMouseHover(SDL_Event event) = 0;
+    virtual void onKeyUp(SDL_Event event) = 0;
     virtual void setHeight(uint16_t height) = 0;
     virtual void setWidth(uint16_t newWidth) = 0;
     virtual void setX(uint16_t pX) = 0;

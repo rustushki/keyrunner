@@ -30,21 +30,35 @@ void TitleScreenController::processInput() {
             if (event.key.keysym.sym == SDLK_q) {
                 getModel()->setState(QUIT);
 
-            // Return will show the main menu
-            } else if (event.key.keysym.sym == SDLK_RETURN) {
-                getDisplay()->getViewByName("press_enter_text")->hide();
-                getDisplay()->getViewByName("main_menu")->show();
-
-            // Decrement the Main Menu Cursor on UP
+                // Decrement the Main Menu Cursor on UP
             } else if (event.key.keysym.sym == SDLK_UP) {
-                MenuView* mainMenu = dynamic_cast<MenuView*>(getDisplay()->getViewByName("main_menu"));
+                auto mainMenu = dynamic_cast<MenuView *>(getDisplay()->getViewByName("main_menu"));
                 mainMenu->decrementCursor();
 
-            // Increment the Main Menu Cursor on DOWN
+                // Increment the Main Menu Cursor on DOWN
             } else if (event.key.keysym.sym == SDLK_DOWN) {
-                MenuView* mainMenu = dynamic_cast<MenuView*>(getDisplay()->getViewByName("main_menu"));
+                auto mainMenu = dynamic_cast<MenuView *>(getDisplay()->getViewByName("main_menu"));
                 mainMenu->incrementCursor();
             }
+
+        // Key Up Events
+        } else if (event.type == SDL_KEYUP) {
+            // Return
+            if (event.key.keysym.sym == SDLK_RETURN) {
+                auto mainMenu = dynamic_cast<MenuView *>(getDisplay()->getViewByName("main_menu"));
+                auto pressEnterText = getDisplay()->getViewByName("press_enter_text");
+
+                // If the main menu is already visible, pass the key press event to it
+                if (mainMenu->isVisible()) {
+                    mainMenu->onKeyUp(event);
+
+                // Otherwise, show the main menu
+                } else {
+                    pressEnterText->hide();
+                    mainMenu->show();
+                }
+            }
+
 
         // Quit Events will cause the game to exit
         } else if (event.type == SDL_QUIT) {

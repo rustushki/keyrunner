@@ -192,3 +192,17 @@ void MenuView::onMouseUp(SDL_Event event) {
 
     BaseView::onMouseUp(event);
 }
+
+/**
+ * Delegates the key up event to the buttons that represent the options of the menu.
+ * <p>
+ * Internally, this invokes the mouse up callback for the button that is the current cursor position.
+ * @param event
+ */
+void MenuView::onKeyUp(SDL_Event event) {
+    if (event.key.keysym.sym == SDLK_RETURN) {
+        buttons[getCursorIndex()]->onMouseUp(event);
+    }
+
+    BaseView::onKeyUp(event);
+}
