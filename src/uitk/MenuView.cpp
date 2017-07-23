@@ -17,7 +17,7 @@ void MenuView::addOption(std::string optionText, const std::function<void(SDL_Ev
     rect.y = 0;
     rect.w = 0;
     rect.h = 0;
-    ButtonView* button = new ButtonView(nullptr, rect);
+    auto button = new ButtonView(nullptr, rect);
     button->setText(optionText);
     button->setFontPath(FONT_PATH);
     button->setFontSize(0);
@@ -102,8 +102,8 @@ uint32_t MenuView::getOptionTextColor() {
  */
 void MenuView::onMouseHover(SDL_Event event) {
     uint16_t buttonIndex = 0;
-    uint16_t x = static_cast<uint16_t>(event.motion.x);
-    uint16_t y = static_cast<uint16_t>(event.motion.y);
+    auto x = static_cast<uint16_t>(event.motion.x);
+    auto y = static_cast<uint16_t>(event.motion.y);
     for (ButtonView* button : buttons) {
         if (button->containsPoint(x, y)) {
             setCursorIndex(buttonIndex);
@@ -123,13 +123,13 @@ void MenuView::onMouseHover(SDL_Event event) {
  * @param newCursorIndex
  */
 void MenuView::setCursorIndex(uint16_t newCursorIndex) {
-    if (buttons.size() > 0) {
+    if (!buttons.empty()) {
         buttons[getCursorIndex()]->setTextColor(getOptionTextColor());
     }
 
     this->cursorIndex = newCursorIndex;
 
-    if (buttons.size() > 0) {
+    if (!buttons.empty()) {
         buttons[getCursorIndex()]->setTextColor(cursorTextColor);
     }
 }
