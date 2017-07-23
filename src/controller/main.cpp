@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
     // Start the Game Loop for the appropriate Controller
     State state = options.getInitialState();
 
-    while (state != QUIT) {
+    while (state != QUIT && state != WIN && state != LOSE) {
         Model *model = nullptr;
         Controller *controller = nullptr;
 
