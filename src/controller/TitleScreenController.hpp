@@ -6,7 +6,7 @@
 class TitleScreenController : public BaseController {
 public:
     TitleScreenController(BoardModel* model, Display* display);
-    ~TitleScreenController() override;
+    ~TitleScreenController() override = default;
 
 protected:
     void processInput() override;

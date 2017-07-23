@@ -16,24 +16,18 @@ TitleScreenController::TitleScreenController(BoardModel *model, Display *display
 }
 
 /**
- * Destructor.
- */
-TitleScreenController::~TitleScreenController() {}
-
-/**
  * Title Screen input.
  * <p>
  * Handles Q key press and the QUIT event.
  */
 void TitleScreenController::processInput() {
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
+    SDL_Event event = {};
+    while (SDL_PollEvent(&event) == 1 && getModel()->getState() != QUIT) {
         // Key Down Events
         if (event.type == SDL_KEYDOWN) {
             // Q quits the game
             if (event.key.keysym.sym == SDLK_q) {
                 getModel()->setState(QUIT);
-                break;
 
             // Return will show the main menu
             } else if (event.key.keysym.sym == SDLK_RETURN) {
@@ -54,13 +48,12 @@ void TitleScreenController::processInput() {
         // Quit Events will cause the game to exit
         } else if (event.type == SDL_QUIT) {
             getModel()->setState(QUIT);
-            break;
 
         // Delegate Mouse Up, Down, and Hover to the views as they apply
         } else if (event.type == SDL_MOUSEBUTTONUP || event.type == SDL_MOUSEBUTTONDOWN ||
                    event.type == SDL_MOUSEMOTION) {
-            uint32_t x = (uint32_t) event.button.x;
-            uint32_t y = (uint32_t) event.button.y;
+            auto x = (uint32_t) event.button.x;
+            auto y = (uint32_t) event.button.y;
             View *view = getDisplay()->getClickedView(x, y);
             if (view != nullptr) {
                 if (event.type == SDL_MOUSEBUTTONUP) {
@@ -76,10 +69,12 @@ void TitleScreenController::processInput() {
 }
 
 /**
- * Update the TitleScreenModel.
+ * Update the model.
  * @param frameDuration
  */
-void TitleScreenController::updateModel(long frameDuration) {}
+void TitleScreenController::updateModel(long frameDuration) {
+    static_cast<void>(frameDuration);
+}
 
 /**
  * Doesn't return false until in the QUIT state.
@@ -93,11 +88,7 @@ bool TitleScreenController::checkExitConditions() const {
  * Create an image view of a large key centered on the title screen.
  */
 void TitleScreenController::createKeyImage() {
-    SDL_Rect rect;
-    rect.x = 30;
-    rect.y = 30;
-    rect.w = 350;
-    rect.h = 127;
+    SDL_Rect rect = {30, 30, 350, 127};
     View* keyImage = new ImageView(nullptr, rect, AnimationType::ANIMATION_TYPE_TITLE_SCREEN_KEY);
     keyImage->show();
     getDisplay()->addView("title_screen_key", keyImage);
@@ -107,12 +98,8 @@ void TitleScreenController::createKeyImage() {
  * Create the text that says Key Runner.
  */
 void TitleScreenController::createKeyRunnerText() {
-    SDL_Rect rect;
-    rect.x = 155;
-    rect.y = 40;
-    rect.w = 225;
-    rect.h = 40;
-    LabelView* keyRunner = new LabelView(nullptr, rect);
+    SDL_Rect rect = {155, 40, 225, 40};
+    auto keyRunner = new LabelView(nullptr, rect);
     keyRunner->setText("Key Runner");
     keyRunner->setFontSize(0);
     keyRunner->setFontPath(FONT_PATH);
@@ -129,12 +116,8 @@ void TitleScreenController::createKeyRunnerText() {
  * Create the text that instructs the user to press enter.
  */
 void TitleScreenController::createPressEnterText() {
-    SDL_Rect rect;
-    rect.x = 130;
-    rect.y = 270;
-    rect.w = 370;
-    rect.h = 80;
-    LabelView* pressEnterText = new LabelView(nullptr, rect);
+    SDL_Rect rect = {130, 270, 370, 80};
+    auto pressEnterText = new LabelView(nullptr, rect);
     pressEnterText->setText("Press Enter to Continue");
     pressEnterText->setFontSize(0);
     pressEnterText->setFontPath(FONT_PATH);
@@ -151,12 +134,9 @@ void TitleScreenController::createPressEnterText() {
  * Create the main menu which is centered and not visible by default.
  */
 void TitleScreenController::createMainMenu() {
-    SDL_Rect rect;
-    rect.w = 200;
-    rect.h = 200;
+    SDL_Rect rect = {0, 240, 200, 200};
     rect.x = (getDisplay()->getWidth() - rect.w) / 2;
-    rect.y = 240;
-    MenuView* mainMenu = new MenuView(nullptr, rect);
+    auto mainMenu = new MenuView(nullptr, rect);
     mainMenu->setColor(0x000000);
     mainMenu->setOptionBackgroundColor(0x000000);
     mainMenu->setOptionTextColor(0xBBBBBB);
