@@ -1,12 +1,12 @@
 #ifndef EDIT_CONTROLLER_HPP
 #define EDIT_CONTROLLER_HPP
 
-#include "../controller/BaseController.hpp"
+#include "../controller/BoardController.hpp"
 #include "../controller/Options.hpp"
 #include "../uitk/ButtonView.hpp"
 #include "../model/EditorBoardModel.hpp"
 
-class EditController : public BaseController {
+class EditController : public BoardController {
 public:
     EditController(EditorBoardModel* model, Display* display, Options* options);
     ~EditController() override;

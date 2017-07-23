@@ -4,6 +4,7 @@
 #include "../controller/PlayController.hpp"
 #include "../controller/EditController.hpp"
 #include "../controller/TitleScreenController.hpp"
+#include "../model/TitleScreenModel.hpp"
 #include "../view/AnimationFactory.hpp"
 
 // Objects that don't have a home yet
@@ -102,31 +103,40 @@ int main(int argc, char** argv) {
     Display display(window, renderer);
 
     // Start the Game Loop for the appropriate Controller
-    Model* model = nullptr;
-    Controller* controller = nullptr;
-    if (options.getInitialState() == PLAY) {
-        model = new PlayBoardModel();
-        controller = new PlayController((PlayBoardModel*) model, &display, &options);
+    State state = options.getInitialState();
 
-    } else if (options.getInitialState() == EDIT) {
-        model = new EditorBoardModel();
-        controller = new EditController((EditorBoardModel*) model, &display, &options);
+    while (state != QUIT) {
+        Model *model = nullptr;
+        Controller *controller = nullptr;
 
-    } else if (options.getInitialState() == TITLE) {
-        model = new PlayBoardModel();
-        controller = new TitleScreenController((PlayBoardModel*) model, &display);
+        if (state == PLAY) {
+            model = new PlayBoardModel();
+            controller = new PlayController(dynamic_cast<PlayBoardModel*>(model), &display, &options);
+
+        } else if (state == EDIT) {
+            model = new EditorBoardModel();
+            controller = new EditController(dynamic_cast<EditorBoardModel*>(model), &display, &options);
+
+        } else if (state == TITLE) {
+            model = new TitleScreenModel();
+            controller = new TitleScreenController(dynamic_cast<TitleScreenModel*>(model), &display);
+        }
+
+        // Set the initial state
+        model->setState(state);
+
+        // Begin the game loop
+        controller->gameLoop();
+
+        // Obtain the exit state
+        state = model->getState();
+
+        // Free some memory
+        delete model;
+        delete controller;
     }
 
-    // Set the initial state
-    ((BoardModel*) model)->setState(options.getInitialState());
-
-    // Begin the game loop
-    controller->gameLoop();
-
-    // Free some memory
-    delete model;
     delete animationFactory;
-    delete controller;
 
     return 0;
 }

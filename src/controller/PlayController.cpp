@@ -14,7 +14,9 @@
  * @param window
  * @param renderer
  */
-PlayController::PlayController(PlayBoardModel *model, Display* display, Options* options) : BaseController(model, display) {
+PlayController::PlayController(PlayBoardModel *model, Display* display, Options* options) : BoardController(model,
+        display) {
+
     // Initialize the model
     getModel()->setTimeClock(50000);
     getModel()->setLevelNum(options->getStartingLevel());

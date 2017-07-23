@@ -8,23 +8,20 @@
 
 class BaseController : public Controller {
 public:
-    BaseController(BoardModel* model, Display* display);
+    BaseController(BaseModel* model, Display* display);
     ~BaseController() override;
     void gameLoop() override;
 
 protected:
-    BoardModel* getModel() const override;
+    BaseModel* getModel() const override;
     Display* getDisplay() const override;
     void processInput() override = 0;
     void updateModel(long frameDuration) override = 0;
     bool checkExitConditions() const override = 0;
 
-    LevelManager* getLevelManager() const;
-
 private:
-    BoardModel* model;
+    BaseModel* model;
     Display* display;
-    LevelManager* levelManager;
 };
 
 #endif

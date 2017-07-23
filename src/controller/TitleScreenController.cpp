@@ -8,7 +8,8 @@
  * @param model
  * @param display
  */
-TitleScreenController::TitleScreenController(BoardModel *model, Display *display) : BaseController(model, display) {
+TitleScreenController::TitleScreenController(TitleScreenModel* model, Display *display) : BaseController(model,
+        display) {
     createKeyImage();
     createKeyRunnerText();
     createPressEnterText();
@@ -81,7 +82,7 @@ void TitleScreenController::updateModel(long frameDuration) {
  * @return
  */
 bool TitleScreenController::checkExitConditions() const {
-    return getModel()->getState() != QUIT;
+    return getModel()->getState() == TITLE;
 }
 
 /**
@@ -141,8 +142,8 @@ void TitleScreenController::createMainMenu() {
     mainMenu->setOptionBackgroundColor(0x000000);
     mainMenu->setOptionTextColor(0xBBBBBB);
     mainMenu->setOptionCursorTextColor(0xAA3333);
-    mainMenu->addOption("Play", [](SDL_Event event) {
-        std::cout << "Play" << std::endl;
+    mainMenu->addOption("Play", [this](SDL_Event event) {
+        getModel()->setState(PLAY);
     });
     mainMenu->addOption("Edit", [](SDL_Event event) {
         std::cout << "Edit" << std::endl;

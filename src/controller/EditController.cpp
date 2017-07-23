@@ -13,7 +13,9 @@ extern AnimationFactory* animationFactory;
  * @param model
  * @param display
  */
-EditController::EditController(EditorBoardModel* model, Display* display, Options* options) : BaseController(model, display) {
+EditController::EditController(EditorBoardModel* model, Display* display, Options* options) : BoardController(model,
+        display) {
+
     // Create New Level for Edit
     if (options->getCreateNewLevel()) {
         getModel()->setLevelNum((uint8_t) (getLevelManager()->getLevelCount() + 1));

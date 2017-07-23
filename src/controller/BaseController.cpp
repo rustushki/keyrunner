@@ -8,10 +8,9 @@
  * @param model
  * @param display
  */
-BaseController::BaseController(BoardModel* model, Display* display) {
+BaseController::BaseController(BaseModel* model, Display* display) {
     this->model = model;
     this->display = display;
-    this->levelManager = new LevelManager(model);
 }
 
 /**
@@ -23,7 +22,7 @@ BaseController::~BaseController() {}
  * Return the root model that the Controller addresses.
  * @return BaseModel*
  */
-BoardModel* BaseController::getModel() const {
+BaseModel* BaseController::getModel() const {
     return model;
 }
 
@@ -33,14 +32,6 @@ BoardModel* BaseController::getModel() const {
  */
 Display *BaseController::getDisplay() const {
     return display;
-}
-
-/**
- * Get the Level Manager which can load levels into the board or save levels to persistent storage from the board.
- * @return LevelManager*
- */
-LevelManager* BaseController::getLevelManager() const {
-    return levelManager;
 }
 
 /**

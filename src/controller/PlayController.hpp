@@ -1,11 +1,11 @@
 #ifndef PLAY_CONTROLLER_HPP
 #define PLAY_CONTROLLER_HPP
 
-#include "../controller/BaseController.hpp"
+#include "../controller/BoardController.hpp"
 #include "../controller/Options.hpp"
 #include "../model/PlayBoardModel.hpp"
 
-class PlayController : public BaseController {
+class PlayController : public BoardController {
 public:
     PlayController(PlayBoardModel* model, Display* display, Options* options);
     ~PlayController() override;

@@ -403,19 +403,3 @@ uint16_t BoardModel::getWidth() const {
     return 25;
 }
 
-/**
- * Get the state of the game.
- * @return State
- */
-State BoardModel::getState() const {
-    return state;
-}
-
-/**
- * Set the state of the game.
- * @param State
- */
-void BoardModel::setState(State state) {
-    this->state = state;
-}
-
