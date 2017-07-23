@@ -21,7 +21,7 @@ void MenuView::addOption(std::string optionText, const std::function<void(SDL_Ev
     button->setText(optionText);
     button->setFontPath(FONT_PATH);
     button->setFontSize(0);
-    button->setOnMouseDownCallback(callBack);
+    button->setOnMouseUpCallback(callBack);
     button->setColor(getOptionBackgroundColor());
     button->setTextColor(getOptionTextColor());
     button->show();
@@ -172,4 +172,23 @@ void MenuView::decrementCursor() {
         newCursorIndex = buttons.size() - 1;
     }
     setCursorIndex(static_cast<uint16_t>(newCursorIndex));
+}
+
+/**
+ * Delegates the mouse up event to the buttons that represent the options of the menu.
+ * <p>
+ * Searches for a button that contains the mouse click coordinate. Will then call that button's mouse up callback.
+ * @param event
+ */
+void MenuView::onMouseUp(SDL_Event event) {
+    auto x = static_cast<uint32_t>(event.button.x);
+    auto y = static_cast<uint32_t>(event.button.y);
+
+    for (ButtonView* buttonView : buttons) {
+        if (buttonView->containsPoint(x, y)) {
+            buttonView->onMouseUp(event);
+        }
+    }
+
+    BaseView::onMouseUp(event);
 }
