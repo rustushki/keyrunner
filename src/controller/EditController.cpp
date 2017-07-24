@@ -59,8 +59,8 @@ EditController::EditController(EditorBoardModel* model, Display* display, Option
  */
 void EditController::processInput() {
     // Wait for an Event
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
+    SDL_Event event = {};
+    while (SDL_PollEvent(&event) == 1) {
         // Key down
         if (event.type == SDL_KEYDOWN) {
             // User Presses Q
@@ -106,7 +106,7 @@ EditorBoardModel *EditController::getModel() const {
  * @return View*
  */
 View* EditController::createRectangle() const {
-    SDL_Rect rect;
+    SDL_Rect rect = {};
     rect.x = 0;
     rect.h = 40;
     rect.y = getDisplay()->getHeight() - rect.h;
@@ -122,11 +122,7 @@ View* EditController::createRectangle() const {
  * @return View*
  */
 View* EditController::createBoard() const {
-    SDL_Rect rect;
-    rect.x = 0;
-    rect.y = 0;
-    rect.w = getDisplay()->getWidth();
-    rect.h = 400;
+    SDL_Rect rect = {0, 0, getDisplay()->getWidth(), 400};
     BoardView* board = new EditorBoardView(getModel(), rect);
 
     board->setOnMouseHoverCallback([this, board] (SDL_Event event) {
@@ -194,9 +190,7 @@ View* EditController::createBoard() const {
  * @return
  */
 View* EditController::createSaveButton(View* board, uint8_t buttonSpacing) const {
-    SDL_Rect rect;
-    rect.w = 50;
-    rect.h = 30;
+    SDL_Rect rect = {0, 0, 50, 30};
     rect.x = board->getWidth() - 2 * rect.w - 2 * buttonSpacing;
     rect.y = board->getHeight() + buttonSpacing;
     auto save = new ButtonView(nullptr, rect);
@@ -218,9 +212,7 @@ View* EditController::createSaveButton(View* board, uint8_t buttonSpacing) const
  * @return
  */
 View *EditController::createExitButton(View *board, int buttonSpacing) const {
-    SDL_Rect rect;
-    rect.w = 50;
-    rect.h = 30;
+    SDL_Rect rect = {0, 0, 50, 30};
     rect.x = board->getWidth() - 1 * rect.w - 1 * buttonSpacing;
     rect.y = board->getHeight() + buttonSpacing;
     auto exit = new ButtonView(nullptr, rect);
@@ -249,9 +241,7 @@ View *EditController::createTileTypeButton(View* board, TileType tileType, uint8
 
     AnimationTypeFactory animationTypeFactory;
     AnimationType animationType = animationTypeFactory.build(tileType);
-    SDL_Rect rect;
-    rect.w = width;
-    rect.h = height;
+    SDL_Rect rect = {0, 0, width, height};
     rect.x = (uint16_t) (initialOffset + ((int) tileType) * width + ((int) tileType) * buttonSpacing);
     rect.y = (uint16_t) ((board->getHeight() + buttonSpacing) + ((40 - buttonSpacing * 2) - height) / 2);
     auto button = new ButtonView(nullptr, rect);

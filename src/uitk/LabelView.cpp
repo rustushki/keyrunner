@@ -19,9 +19,7 @@ LabelView::LabelView(Model* model, const SDL_Rect &rect) : RectangleView(model, 
  * Destructor.
  */
 LabelView::~LabelView() {
-    if (icon != nullptr) {
-        delete icon;
-    }
+    delete icon;
 }
 
 /**

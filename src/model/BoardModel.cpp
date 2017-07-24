@@ -154,7 +154,7 @@ TileCoord BoardModel::getTileCoordUp(TileCoord current) const {
     if (y < 0) {
         y = getHeight() - 1;
     }
-    return TileCoord(x, y);
+    return {x, y};
 }
 
 /**
@@ -168,7 +168,7 @@ TileCoord BoardModel::getTileCoordDown(TileCoord current) const {
     if (y >= getHeight()) {
         y = 0;
     }
-    return TileCoord(x, y);
+    return {x, y};
 }
 
 /**
@@ -182,7 +182,7 @@ TileCoord BoardModel::getTileCoordLeft(TileCoord current) const {
     if (x < 0) {
         x = getWidth() - 1;
     }
-    return TileCoord(x, y);
+    return {x, y};
 }
 
 /**
@@ -196,7 +196,7 @@ TileCoord BoardModel::getTileCoordRight(TileCoord current) const {
     if (x >= getWidth()) {
         x = 0;
     }
-    return TileCoord(x, y);
+    return {x, y};
 }
 
 /**

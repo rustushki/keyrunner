@@ -54,11 +54,7 @@ void EditorBoardView::drawCursorTile(SDL_Renderer* renderer, bool justHighlight)
     }
 
     // Draw Highlight
-    SDL_Rect where;
-    where.x = xPosition;
-    where.y = yPosition;
-    where.w = animation->getWidth();
-    where.h = animation->getHeight();
+    SDL_Rect where = {xPosition, yPosition, animation->getWidth(), animation->getHeight()};
     SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0xFF, 0xFF);
     SDL_RenderDrawRect(renderer, &where);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_ADD);

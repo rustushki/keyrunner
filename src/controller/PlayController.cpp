@@ -72,10 +72,10 @@ void PlayController::updateLevel(long elapsedDuration) const {
  * discarding all other directional key presses.  Also handles Q key to quit, and the SDL_QUIT event type.
  */
 void PlayController::processInput() {
-    SDL_Event event;
+    SDL_Event event = {};
     bool alreadyMoved = false;
 	PlayBoardModel* board = getModel();
-    while (SDL_PollEvent(&event)) {
+    while (SDL_PollEvent(&event) == 1) {
         if (event.type == SDL_KEYDOWN) {
             // User Presses Q
             if (event.key.keysym.sym == SDLK_q) {
@@ -127,10 +127,7 @@ PlayBoardModel *PlayController::getModel() const {
  * Create a level label for the informational bar.
  */
 View* PlayController::createLevelLabel() const {
-    SDL_Rect rect;
-    rect.w = 100;
-    rect.x = 20;
-    rect.h = 40;
+    SDL_Rect rect = {20, 0, 100, 40};
     rect.y = getDisplay()->getHeight() - rect.h;
     auto levelNumber = new LevelNumberView(getModel(), rect);
     levelNumber->setFontPath(FONT_PATH);
@@ -145,10 +142,8 @@ View* PlayController::createLevelLabel() const {
  * Create a timer for the informational bar.
  */
 View* PlayController::createTimer() const {
-    SDL_Rect rect;
-    rect.w = 100;
+    SDL_Rect rect = {0, 0, 100, 40};
     rect.x = getDisplay()->getWidth() - rect.w;
-    rect.h = 40;
     rect.y = getDisplay()->getHeight() - rect.h;
     auto timer = new TimerView(getModel(), rect);
     timer->setFontPath(FONT_PATH);
@@ -163,11 +158,8 @@ View* PlayController::createTimer() const {
  * Create a black rectangle for the informational bar.
  */
 View* PlayController::createRectangle() const {
-    SDL_Rect rect;
-    rect.x = 0;
-    rect.h = 40;
+    SDL_Rect rect = {0, 0, getDisplay()->getWidth(), 40};
     rect.y = getDisplay()->getHeight() - rect.h;
-    rect.w = getDisplay()->getWidth();
     auto rectangle = new RectangleView(nullptr, rect);
     rectangle->setColor(0);
     rectangle->show();
@@ -178,11 +170,7 @@ View* PlayController::createRectangle() const {
  * Create the playing board.
  */
 View* PlayController::createBoard() const {
-    SDL_Rect rect;
-    rect.x = 0;
-    rect.y = 0;
-    rect.w = getDisplay()->getWidth();
-    rect.h = 400;
+    SDL_Rect rect = {0, 0, getDisplay()->getWidth(), 400};
     View* board = new BoardView(getModel(), rect);
     board->show();
     return board;
