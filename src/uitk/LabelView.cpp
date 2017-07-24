@@ -122,9 +122,9 @@ SDL_Texture* LabelView::makeTextTexture(SDL_Renderer* renderer) const {
 
     // Render and return the text surface which fits in the LabelView
     TTF_Font* fnt = getFont(static_cast<uint8_t>(fontSize));
-    uint8_t rC = (uint8_t) ((textColor & 0xFF0000) >> 16);
-    uint8_t gC = (uint8_t) ((textColor & 0x00FF00) >>  8);
-    uint8_t bC = (uint8_t) ((textColor & 0x0000FF) >>  0);
+    auto rC = static_cast<uint8_t>((textColor & 0xFF0000) >> 16);
+    auto gC = static_cast<uint8_t>((textColor & 0x00FF00) >>  8);
+    auto bC = static_cast<uint8_t>((textColor & 0x0000FF) >>  0);
     SDL_Color color = {rC, gC, bC};
     SDL_Surface* textSurface = TTF_RenderText_Solid(fnt, text.c_str(), color);
     TTF_CloseFont(fnt);
@@ -247,8 +247,8 @@ void LabelView::draw(SDL_Renderer *renderer) {
         // OR,
         // Draw the Icon, centered.
     } else if (icon != nullptr) {
-        uint16_t x = (uint16_t) (getX() + (getWidth() - icon->getWidth()) / 2);
-        uint16_t y = (uint16_t) (getY() + (getHeight() - icon->getHeight()) / 2);
+        auto x = static_cast<uint16_t>(getX() + (getWidth() - icon->getWidth()) / 2);
+        auto y = static_cast<uint16_t>(getY() + (getHeight() - icon->getHeight()) / 2);
         icon->move(x, y);
         icon->draw(renderer);
     }

@@ -100,7 +100,7 @@ void BoardView::draw(SDL_Renderer* renderer) {
  */
 void BoardView::preBuildAnimations() {
     for (int index = 0; index < ANIMATION_TYPE_COUNT; index++) {
-        AnimationType animationType = (AnimationType) index;
+        auto animationType = static_cast<AnimationType>(index);
         preBuiltAnimations[animationType] = animationFactory->build(animationType);
     }
 }
@@ -110,7 +110,7 @@ void BoardView::preBuildAnimations() {
  */
 void BoardView::freeAnimations() {
     for (int index = 0; index < ANIMATION_TYPE_COUNT; index++) {
-        AnimationType animationType = (AnimationType) index;
+        auto animationType = static_cast<AnimationType>(index);
         Animation* animation = preBuiltAnimations[animationType];
         delete animation;
     }
@@ -121,7 +121,7 @@ void BoardView::freeAnimations() {
  * @return the model
  */
 BoardModel* BoardView::getModel() const {
-    return static_cast<BoardModel*>(BaseView::getModel());
+    return dynamic_cast<BoardModel*>(BaseView::getModel());
 }
 
 /**

@@ -132,7 +132,7 @@ View* PlayController::createLevelLabel() const {
     rect.x = 20;
     rect.h = 40;
     rect.y = getDisplay()->getHeight() - rect.h;
-    LevelNumberView* levelNumber = new LevelNumberView(getModel(), rect);
+    auto levelNumber = new LevelNumberView(getModel(), rect);
     levelNumber->setFontPath(FONT_PATH);
     levelNumber->setFontSize(25);
     levelNumber->setColor(0x000000);
@@ -150,7 +150,7 @@ View* PlayController::createTimer() const {
     rect.x = getDisplay()->getWidth() - rect.w;
     rect.h = 40;
     rect.y = getDisplay()->getHeight() - rect.h;
-    TimerView* timer = new TimerView(getModel(), rect);
+    auto timer = new TimerView(getModel(), rect);
     timer->setFontPath(FONT_PATH);
     timer->setFontSize(25);
     timer->setColor(0x000000);
@@ -168,7 +168,7 @@ View* PlayController::createRectangle() const {
     rect.h = 40;
     rect.y = getDisplay()->getHeight() - rect.h;
     rect.w = getDisplay()->getWidth();
-    RectangleView* rectangle = new RectangleView(nullptr, rect);
+    auto rectangle = new RectangleView(nullptr, rect);
     rectangle->setColor(0);
     rectangle->show();
     return rectangle;

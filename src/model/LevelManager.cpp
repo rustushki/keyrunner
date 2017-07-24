@@ -137,7 +137,7 @@ void LevelManager::readDeviations(FILE *fp) {
         // Read Deviation Tile Type
         uint8_t tileTypeInteger;
         fread(&tileTypeInteger, sizeof(uint8_t), 1, fp);
-        TileType tileType = TileType(tileTypeInteger);
+        auto tileType = TileType(tileTypeInteger);
         deviations[TileCoord(tileX, tileY)] = tileType;
     }
 }
@@ -259,8 +259,8 @@ void LevelManager::populateBoard() {
  */
 void LevelManager::writeSize(FILE* fp) const {
     // Write Width and Height.
-    uint16_t width = static_cast<uint16_t>(board->getWidth());
-    uint16_t height = static_cast<uint16_t>(board->getHeight());
+    auto width = static_cast<uint16_t>(board->getWidth());
+    auto height = static_cast<uint16_t>(board->getHeight());
     fwrite(&width, sizeof(uint16_t), 1, fp);
     fwrite(&height, sizeof(uint16_t), 1, fp);
 }
@@ -271,7 +271,7 @@ void LevelManager::writeSize(FILE* fp) const {
  */
 void LevelManager::writeDefaultTileType(FILE* fp) const {
     // Write Default Tile Type
-    uint8_t defaultTileType = static_cast<uint8_t>(TileType::Empty);
+    auto defaultTileType = static_cast<uint8_t>(TileType::Empty);
     fwrite(&defaultTileType, sizeof(uint8_t), 1, fp);
 }
 
@@ -292,7 +292,7 @@ void LevelManager::writeDeviations(FILE* fp) const {
     }
 
     // Write Tile Deviation Count
-    uint16_t deviationsCount = (uint16_t) deviatedTileCoordinates.size();
+    auto deviationsCount = static_cast<uint16_t>(deviatedTileCoordinates.size());
     fwrite(&deviationsCount, sizeof(uint16_t), 1, fp);
 
     // Write Each Default Tile Type Deviation.
@@ -304,7 +304,7 @@ void LevelManager::writeDeviations(FILE* fp) const {
         fwrite(&y, sizeof(uint16_t), 1, fp);
 
         // Write Deviation Tile Type
-        uint8_t tileType = static_cast<uint8_t>(board->getTileType(tileCoordinate));
+        auto tileType = static_cast<uint8_t>(board->getTileType(tileCoordinate));
         fwrite(&tileType, sizeof(uint8_t), 1, fp);
     }
 }

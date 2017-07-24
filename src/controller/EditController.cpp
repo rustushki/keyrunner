@@ -72,8 +72,8 @@ void EditController::processInput() {
         // Handle Mouse Events
         } else if (event.type == SDL_MOUSEBUTTONUP || event.type == SDL_MOUSEBUTTONDOWN ||
                 event.type == SDL_MOUSEMOTION) {
-            uint32_t x = (uint32_t) event.button.x;
-            uint32_t y = (uint32_t) event.button.y;
+            auto x = static_cast<uint32_t>(event.button.x);
+            auto y = static_cast<uint32_t>(event.button.y);
             View* view = getDisplay()->getClickedView(x, y);
             if (view != nullptr) {
                 if (event.type == SDL_MOUSEBUTTONUP) {
@@ -111,7 +111,7 @@ View* EditController::createRectangle() const {
     rect.h = 40;
     rect.y = getDisplay()->getHeight() - rect.h;
     rect.w = getDisplay()->getWidth();
-    RectangleView* editInfoBar = new RectangleView(nullptr, rect);
+    auto editInfoBar = new RectangleView(nullptr, rect);
     editInfoBar->setColor(0x0);
     editInfoBar->show();
     return editInfoBar;
@@ -131,8 +131,8 @@ View* EditController::createBoard() const {
 
     board->setOnMouseHoverCallback([this, board] (SDL_Event event) {
         // Convert the mouse hover coordinates into a tile coordinate
-        uint16_t tileX = static_cast<uint16_t>(event.motion.x / board->getTileWidth());
-        uint16_t tileY = static_cast<uint16_t>(event.motion.y / board->getTileHeight());
+        auto tileX = static_cast<uint16_t>(event.motion.x / board->getTileWidth());
+        auto tileY = static_cast<uint16_t>(event.motion.y / board->getTileHeight());
         TileCoord hoverCoordinate(tileX, tileY);
 
         // If replacing, the selected tile type will overwrite the hovered over tile
@@ -156,8 +156,8 @@ View* EditController::createBoard() const {
     });
 
     board->setOnMouseDownCallback([this, board] (SDL_Event event) {
-        uint16_t tileX = static_cast<uint16_t>(event.button.x / board->getTileWidth());
-        uint16_t tileY = static_cast<uint16_t>(event.button.y / board->getTileHeight());
+        auto tileX = static_cast<uint16_t>(event.button.x / board->getTileWidth());
+        auto tileY = static_cast<uint16_t>(event.button.y / board->getTileHeight());
         TileCoord mouseCoordinate(tileX, tileY);
 
         // If the key is at the mouse coordinate, hover will now move the key
@@ -199,7 +199,7 @@ View* EditController::createSaveButton(View* board, uint8_t buttonSpacing) const
     rect.h = 30;
     rect.x = board->getWidth() - 2 * rect.w - 2 * buttonSpacing;
     rect.y = board->getHeight() + buttonSpacing;
-    ButtonView* save = new ButtonView(nullptr, rect);
+    auto save = new ButtonView(nullptr, rect);
     save->setText("Save");
     save->setColor(0x333333);
     save->setTextColor(0xFF0000);
@@ -223,7 +223,7 @@ View *EditController::createExitButton(View *board, int buttonSpacing) const {
     rect.h = 30;
     rect.x = board->getWidth() - 1 * rect.w - 1 * buttonSpacing;
     rect.y = board->getHeight() + buttonSpacing;
-    ButtonView* exit = new ButtonView(nullptr, rect);
+    auto exit = new ButtonView(nullptr, rect);
     exit->setText("Exit");
     exit->setColor(0x333333);
     exit->setTextColor(0xFF0000);
@@ -254,7 +254,7 @@ View *EditController::createTileTypeButton(View* board, TileType tileType, uint8
     rect.h = height;
     rect.x = (uint16_t) (initialOffset + ((int) tileType) * width + ((int) tileType) * buttonSpacing);
     rect.y = (uint16_t) ((board->getHeight() + buttonSpacing) + ((40 - buttonSpacing * 2) - height) / 2);
-    ButtonView* button = new ButtonView(nullptr, rect);
+    auto button = new ButtonView(nullptr, rect);
     button->setColor(0x333333);
     button->setTextColor(0xFF0000);
     button->setIcon(animationFactory->build(animationType));

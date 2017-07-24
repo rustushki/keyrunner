@@ -71,5 +71,5 @@ void EditorBoardView::drawCursorTile(SDL_Renderer* renderer, bool justHighlight)
  * @return EditorBoardModel*
  */
 EditorBoardModel* EditorBoardView::getModel() const {
-    return static_cast<EditorBoardModel*>(BoardView::getModel());
+    return dynamic_cast<EditorBoardModel*>(BoardView::getModel());
 }
