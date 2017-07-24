@@ -7,7 +7,7 @@
 class ButtonView : public LabelView {
 public:
     ButtonView(Model* model, const SDL_Rect &rect);
-    ~ButtonView() override;
+    ~ButtonView() override = default;
     void draw(SDL_Renderer* renderer) override;
     void onMouseDown(SDL_Event event) final;
     void onMouseUp(SDL_Event event) final;

@@ -120,6 +120,9 @@ int main(int argc, char** argv) {
         } else if (state == TITLE) {
             model = new TitleScreenModel();
             controller = new TitleScreenController(dynamic_cast<TitleScreenModel*>(model), &display);
+
+        } else {
+            break;
         }
 
         // Set the initial state

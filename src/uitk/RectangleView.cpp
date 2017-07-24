@@ -10,11 +10,6 @@ RectangleView::RectangleView(Model* model, const SDL_Rect &rect) : BaseView(mode
 }
 
 /**
- * Destructor.
- */
-RectangleView::~RectangleView() {}
-
-/**
  * Draws a rectangle to the screen using the color field.
  * @param renderer
  */

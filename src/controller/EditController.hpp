@@ -9,7 +9,7 @@
 class EditController : public BoardController {
 public:
     EditController(EditorBoardModel* model, Display* display, Options* options);
-    ~EditController() override;
+    ~EditController() override = default;
 
 private:
     void updateModel(long frameDuration) override;

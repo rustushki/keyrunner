@@ -8,7 +8,7 @@
 class PlayController : public BoardController {
 public:
     PlayController(PlayBoardModel* model, Display* display, Options* options);
-    ~PlayController() override;
+    ~PlayController() override = default;
 
 protected:
     void processInput() override;

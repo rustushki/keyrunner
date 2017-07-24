@@ -55,11 +55,6 @@ EditController::EditController(EditorBoardModel* model, Display* display, Option
 }
 
 /**
- * Destructor.
- */
-EditController::~EditController() {}
-
-/**
  * Handle events for edit mode.
  */
 void EditController::processInput() {

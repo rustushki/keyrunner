@@ -38,11 +38,6 @@ PlayController::PlayController(PlayBoardModel *model, Display* display, Options*
     getDisplay()->addView("level_number", levelLabel);
 }
 
-/**
- * Destructor.
- */
-PlayController::~PlayController() {}
-
 void PlayController::updateLevel(long elapsedDuration) const {
     PlayBoardModel* board = getModel();
 

@@ -9,7 +9,7 @@
 class BaseController : public Controller {
 public:
     BaseController(BaseModel* model, Display* display);
-    ~BaseController() override;
+    ~BaseController() override = default;
     void gameLoop() override;
 
 protected:
