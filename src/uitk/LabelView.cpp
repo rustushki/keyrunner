@@ -237,14 +237,12 @@ void LabelView::draw(SDL_Renderer *renderer) {
         SDL_QueryTexture(textTexture, nullptr, nullptr, &w, &h);
 
         // Determine the rectangle that the text will be drawn onto
-        SDL_Rect textDestination;
-        textDestination.x = getX() + (uint32_t) round((getWidth() - w) / 2.0);
-        textDestination.y = getY() + (uint32_t) round((getHeight() - h) / 2.0);
-        textDestination.h = h;
-        textDestination.w = w;
+        SDL_Rect destination = {0, 0, w, h};
+        destination.x = getX() + (uint32_t) round((getWidth() - w) / 2.0);
+        destination.y = getY() + (uint32_t) round((getHeight() - h) / 2.0);
 
         // Draw the text into that rectangle
-        SDL_RenderCopy(renderer, textTexture, nullptr, &textDestination);
+        SDL_RenderCopy(renderer, textTexture, nullptr, &destination);
 
         // OR,
         // Draw the Icon, centered.

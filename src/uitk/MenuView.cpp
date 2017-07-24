@@ -12,11 +12,7 @@ MenuView::MenuView(Model *model, const SDL_Rect &rect) : RectangleView(model, re
 }
 
 void MenuView::addOption(std::string optionText, const std::function<void(SDL_Event)> &callBack) {
-    SDL_Rect rect;
-    rect.x = 0;
-    rect.y = 0;
-    rect.w = 0;
-    rect.h = 0;
+    SDL_Rect rect = {0, 0, 0, 0};
     auto button = new ButtonView(nullptr, rect);
     button->setText(optionText);
     button->setFontPath(FONT_PATH);
