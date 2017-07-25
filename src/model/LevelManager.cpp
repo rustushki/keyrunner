@@ -28,20 +28,22 @@ uint8_t LevelManager::getLevelCount() const {
 
         while (hiLevel >= loLevel) {
             miLevel = (uint8_t) ((hiLevel - loLevel) / 2 + loLevel);
-            if (levelExists(miLevel) && !levelExists((uint8_t) (miLevel + 1))) {
+            if (levelExists(miLevel) && !levelExists(static_cast<uint8_t>(miLevel + 1))) {
                 levelCount = miLevel;
                 break;
-            } else if (levelExists(miLevel)) {
-                loLevel = (uint8_t) (miLevel + 1);
+            }
+
+            if (levelExists(miLevel)) {
+                loLevel = static_cast<uint8_t>(miLevel + 1);
             } else {
-                hiLevel = (uint8_t) (miLevel - 1);
+                hiLevel = static_cast<uint8_t>(miLevel - 1);
             }
         }
 
         levelCount = miLevel;
     }
 
-    return (uint8_t) levelCount;
+    return static_cast<uint8_t>(levelCount);
 }
 
 /**
