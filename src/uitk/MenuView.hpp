@@ -13,6 +13,8 @@ public:
     void onMouseUp(SDL_Event event) override;
     void onKeyUp(SDL_Event event) override;
 
+    void setVisibleOptionCount(uint16_t count);
+    uint16_t getVisibleOptionCount() const;
     void addOption(std::string optionText, const std::function<void(SDL_Event)> &callBack);
     void setOptionBackgroundColor(uint32_t color);
     void setOptionTextColor(uint32_t color);
@@ -28,6 +30,7 @@ private:
     uint32_t optionTextColor;
     uint16_t cursorIndex;
     uint32_t cursorTextColor;
+    uint16_t visibleOptionCount;
 
     void sizeButtons();
     uint32_t getOptionBackgroundColor();

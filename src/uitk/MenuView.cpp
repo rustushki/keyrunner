@@ -8,6 +8,7 @@
  */
 MenuView::MenuView(Model *model, const SDL_Rect &rect) : RectangleView(model, rect) {
     setCursorIndex(0);
+    setVisibleOptionCount(0);
     cursorTextColor = 0;
 }
 
@@ -40,13 +41,21 @@ void MenuView::draw(SDL_Renderer *renderer) {
 
 /**
  * Resize the option buttons so that they fit vertically within the MenuView.
+ * <p>
+ * If the visible option count is set to 0, it will fit all options into the area. Otherwise, it will fit the visible
+ * option count of options into the area.
  */
 void MenuView::sizeButtons() {
+    uint16_t visibleOptions = getVisibleOptionCount();
+    if (visibleOptions == 0) {
+        visibleOptions = static_cast<uint16_t>(buttons.size());
+    }
+
     int buttonIndex = 0;
     for (ButtonView* button : buttons) {
         button->setX(getX());
         button->setWidth(getWidth());
-        button->setHeight(static_cast<uint16_t>(getHeight() / (buttons.size() + 1)));
+        button->setHeight(static_cast<uint16_t>(getHeight() / visibleOptions));
         button->setY(static_cast<uint16_t>(getY() + buttonIndex * button->getHeight()));
         buttonIndex++;
     }
@@ -201,4 +210,25 @@ void MenuView::onKeyUp(SDL_Event event) {
     }
 
     BaseView::onKeyUp(event);
+}
+
+/**
+ * Sets the count of visible options.
+ * <p>
+ * If 0, it will attempt to display all options on the menu. Options not displayed may still be accessed.
+ * <p>
+ * This triggers the options to be re-sized to fit inside the area of the menu.
+ * @param count
+ */
+void MenuView::setVisibleOptionCount(uint16_t count) {
+    visibleOptionCount = count;
+    sizeButtons();
+}
+
+/**
+ * Get the count of visible options.
+ * @return uint16_t
+ */
+uint16_t MenuView::getVisibleOptionCount() const {
+    return visibleOptionCount;
 }
