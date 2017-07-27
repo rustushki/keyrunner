@@ -149,12 +149,12 @@ TileCoord BoardModel::getTileCoordInDirection(TileCoord coord, Direction dir) co
  * @return TileCoord
  */
 TileCoord BoardModel::getTileCoordUp(TileCoord current) const {
-    int x = current.first + 0;
-    int y = current.second - 1;
+    auto x = current.first;
+    auto y = current.second - 1;
     if (y < 0) {
         y = getHeight() - 1;
     }
-    return {x, y};
+    return {static_cast<uint16_t>(x), static_cast<uint16_t>(y)};
 }
 
 /**
@@ -163,12 +163,12 @@ TileCoord BoardModel::getTileCoordUp(TileCoord current) const {
  * @return TileCoord
  */
 TileCoord BoardModel::getTileCoordDown(TileCoord current) const {
-    int x = current.first + 0;
-    int y = current.second + 1;
+    auto x = current.first + 0;
+    auto y = current.second + 1;
     if (y >= getHeight()) {
         y = 0;
     }
-    return {x, y};
+    return {static_cast<uint16_t>(x), static_cast<uint16_t>(y)};
 }
 
 /**
@@ -177,12 +177,12 @@ TileCoord BoardModel::getTileCoordDown(TileCoord current) const {
  * @return TileCoord
  */
 TileCoord BoardModel::getTileCoordLeft(TileCoord current) const {
-    int x = current.first - 1;
-    int y = current.second + 0;
+    auto x = current.first - 1;
+    auto y = current.second + 0;
     if (x < 0) {
         x = getWidth() - 1;
     }
-    return {x, y};
+    return {static_cast<uint16_t>(x), static_cast<uint16_t>(y)};
 }
 
 /**
@@ -191,12 +191,12 @@ TileCoord BoardModel::getTileCoordLeft(TileCoord current) const {
  * @return TileCoord
  */
 TileCoord BoardModel::getTileCoordRight(TileCoord current) const {
-    int x = current.first + 1;
-    int y = current.second + 0;
+    auto x = current.first + 1;
+    auto y = current.second + 0;
     if (x >= getWidth()) {
         x = 0;
     }
-    return {x, y};
+    return {static_cast<uint16_t>(x), static_cast<uint16_t>(y)};
 }
 
 /**
