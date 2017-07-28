@@ -225,8 +225,8 @@ void LevelManager::populateBoard() {
     // Populate the remaining tiles with the default tile.  Also, not which
     // tiles have the key and the player.
     uint16_t currentDeviationIndex = 0;
-    for (int tileX = 0; tileX < width; tileX++) {
-        for (int tileY = 0; tileY < height; tileY++) {
+    for (uint16_t tileX = 0; tileX < width; tileX++) {
+        for (uint16_t tileY = 0; tileY < height; tileY++) {
             TileCoord currentTileCoordinate(tileX, tileY);
 
             // If the tile is a deviation, use the deviation tile type
@@ -284,8 +284,8 @@ void LevelManager::writeDefaultTileType(FILE* fp) const {
 void LevelManager::writeDeviations(FILE* fp) const {
     // Count and Collect the number of Tile Deviations
     std::vector<TileCoord> deviatedTileCoordinates;
-    for (int tileX = 0; tileX < board->getWidth(); tileX++) {
-        for (int tileY = 0; tileY < board->getHeight(); tileY++) {
+    for (uint16_t tileX = 0; tileX < board->getWidth(); tileX++) {
+        for (uint16_t tileY = 0; tileY < board->getHeight(); tileY++) {
             TileCoord tileCoordinate(tileX, tileY);
             if (board->getTileType(tileCoordinate) != defaultTileType) {
                 deviatedTileCoordinates.push_back(tileCoordinate);
