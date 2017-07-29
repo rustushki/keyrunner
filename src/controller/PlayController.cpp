@@ -27,6 +27,7 @@ PlayController::PlayController(PlayBoardModel *model, Display* display, Options*
     // Create each of the views for this controller
     View* board = createBoard();
     getDisplay()->addView("board", board);
+    getDisplay()->setFocus("board");
 
     View* rectangle = createRectangle();
     getDisplay()->addView("rectangle", rectangle);
@@ -61,56 +62,6 @@ void PlayController::updateLevel(long elapsedDuration) const {
         getModel()->decrementTimeClock(elapsedDuration);
         if (getModel()->getTimeClock() <= 0) {
             getModel()->setState(LOSE);
-        }
-    }
-}
-
-/**
- * Process user input for the current frame.
- * <p>
- * Poll for events in a loop.  If the event is a directional key, process it as movement only once for the frame;
- * discarding all other directional key presses.  Also handles Q key to quit, and the SDL_QUIT event type.
- */
-void PlayController::processInput() {
-    SDL_Event event = {};
-    bool alreadyMoved = false;
-	PlayBoardModel* board = getModel();
-    while (SDL_PollEvent(&event) == 1) {
-        if (event.type == SDL_KEYDOWN) {
-            // User Presses Q
-            if (event.key.keysym.sym == SDLK_q) {
-                getModel()->setState(QUIT);
-                break;
-            }
-
-            // Limit movement to once per frame
-            if (!alreadyMoved) {
-                if (event.key.keysym.sym == SDLK_DOWN) {
-                    board->movePlayerInDirection(DIRECTION_DOWN);
-
-                } else if (event.key.keysym.sym == SDLK_UP) {
-                    board->movePlayerInDirection(DIRECTION_UP);
-
-                } else if (event.key.keysym.sym == SDLK_LEFT) {
-                    board->movePlayerInDirection(DIRECTION_LEFT);
-
-                } else if (event.key.keysym.sym == SDLK_RIGHT) {
-                    board->movePlayerInDirection(DIRECTION_RIGHT);
-
-                }
-                alreadyMoved = true;
-
-                // If the prior movement causes the level to be complete,
-                // signal that the new level may be loaded.
-                if (board->isComplete()){
-                    return;
-                }
-            }
-
-            // Handle Quit Event.
-        } else if (event.type == SDL_QUIT) {
-            getModel()->setState(QUIT);
-            break;
         }
     }
 }
@@ -171,7 +122,31 @@ View* PlayController::createRectangle() const {
  */
 View* PlayController::createBoard() const {
     SDL_Rect rect = {0, 0, getDisplay()->getWidth(), 400};
-    View* board = new BoardView(getModel(), rect);
+    auto board = new BoardView(getModel(), rect);
+
+    board->setOnKeyDownCallback([this, board] (SDL_Event event) {
+        // User Presses Q
+        if (event.key.keysym.sym == SDLK_q) {
+            getModel()->setState(QUIT);
+
+        // Move the player down on Down Arrow
+        } else if (event.key.keysym.sym == SDLK_DOWN) {
+            getModel()->movePlayerInDirection(DIRECTION_DOWN);
+
+        // Move the player up on Up Arrow
+        } else if (event.key.keysym.sym == SDLK_UP) {
+            getModel()->movePlayerInDirection(DIRECTION_UP);
+
+        // Move the player left on Left Arrow
+        } else if (event.key.keysym.sym == SDLK_LEFT) {
+            getModel()->movePlayerInDirection(DIRECTION_LEFT);
+
+        // Move the player right on Right Arrow
+        } else if (event.key.keysym.sym == SDLK_RIGHT) {
+            getModel()->movePlayerInDirection(DIRECTION_RIGHT);
+        }
+    });
+
     board->show();
     return board;
 }

@@ -11,7 +11,6 @@ public:
     ~PlayController() override = default;
 
 protected:
-    void processInput() override;
     PlayBoardModel* getModel() const override;
     void updateModel(long frameDuration) override;
 
