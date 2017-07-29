@@ -103,7 +103,7 @@ void BaseController::processInput() {
                    event.type == SDL_MOUSEMOTION) {
             auto x = (uint32_t) event.button.x;
             auto y = (uint32_t) event.button.y;
-            View *view = getDisplay()->getClickedView(x, y);
+            View *view = getDisplay()->getViewUnderCoordinate(x, y);
             if (view != nullptr) {
                 if (event.type == SDL_MOUSEBUTTONUP) {
                     view->onMouseUp(event);

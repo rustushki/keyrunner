@@ -17,7 +17,7 @@ public:
     uint16_t getHeight() const;
     uint16_t getWidth() const;
     void advanceAnimations();
-    View* getClickedView(uint32_t x, uint32_t y) const;
+    View* getViewUnderCoordinate(uint32_t x, uint32_t y) const;
     View* getViewByName(std::string name) const;
     void setFocus(std::string viewName);
     std::string getFocus() const;
