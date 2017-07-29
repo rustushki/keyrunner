@@ -140,7 +140,7 @@ View* Display::getViewByName(std::string name) const {
     View* matchingView = nullptr;
     for (auto viewPair : viewMap) {
         std::string viewName = viewPair.first;
-        if (viewName.compare(name) == 0) {
+        if (viewName == name) {
             matchingView = viewPair.second;
         }
     }
