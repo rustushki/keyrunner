@@ -205,7 +205,7 @@ bool BaseView::containsPoint(uint32_t x, uint32_t y) const {
  * @param newCallBack
  */
 void BaseView::setOnKeyUpCallback(const std::function<void(SDL_Event)> &newCallBack) {
-    this->onMouseKeyUpCallBack = newCallBack;
+    this->onKeyUpCallBack = newCallBack;
 }
 
 /**
@@ -213,5 +213,21 @@ void BaseView::setOnKeyUpCallback(const std::function<void(SDL_Event)> &newCallB
  * @param event
  */
 void BaseView::onKeyUp(SDL_Event event) {
-    this->onMouseKeyUpCallBack(event);
+    this->onKeyUpCallBack(event);
+}
+
+/**
+ * Set the callback function which will handle the key down event.
+ * @param newCallBack
+ */
+void BaseView::setOnKeyDownCallback(const std::function<void(SDL_Event)> &newCallBack) {
+    this->onKeyDownCallBack = newCallBack;
+}
+
+/**
+ * Invoke the callback function which handles the key down event.
+ * @param event
+ */
+void BaseView::onKeyDown(SDL_Event event) {
+    this->onKeyDownCallBack(event);
 }

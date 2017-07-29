@@ -18,10 +18,12 @@ public:
     void setOnMouseDownCallback(const std::function<void(SDL_Event)> &newCallBack) final;
     void setOnMouseHoverCallback(const std::function<void(SDL_Event)> &newCallBack) final;
     void setOnKeyUpCallback(const std::function<void(SDL_Event)> &newCallBack) final;
+    void setOnKeyDownCallback(const std::function<void(SDL_Event)> &newCallBack) final;
     void onMouseUp(SDL_Event event) override;
     void onMouseDown(SDL_Event event) override;
     void onMouseHover(SDL_Event event) override;
     void onKeyUp(SDL_Event event) override;
+    void onKeyDown(SDL_Event event) override;
     void setHeight(uint16_t newHeight) override;
     void setWidth(uint16_t newWidth) override;
     void setX(uint16_t newX) override;
@@ -43,7 +45,8 @@ private:
     std::function <void (SDL_Event)> onMouseUpCallBack = [] (SDL_Event event) {};
     std::function <void (SDL_Event)> onMouseDownCallBack = [] (SDL_Event event) {};
     std::function <void (SDL_Event)> onMouseHoverCallBack = [] (SDL_Event event) {};
-    std::function <void (SDL_Event)> onMouseKeyUpCallBack = [] (SDL_Event event) {};
+    std::function <void (SDL_Event)> onKeyUpCallBack = [] (SDL_Event event) {};
+    std::function <void (SDL_Event)> onKeyDownCallBack = [] (SDL_Event event) {};
 };
 
 

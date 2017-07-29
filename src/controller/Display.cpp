@@ -147,3 +147,19 @@ View* Display::getViewByName(std::string name) const {
 
     return matchingView;
 }
+
+/**
+ * Set the view which should be considered in focus.
+ * @param viewName
+ */
+void Display::setFocus(std::string viewName) {
+    this->focusedViewName = viewName;
+}
+
+/**
+ * Get the view which should be considered in focus.
+ * @return string
+ */
+std::string Display::getFocus() const {
+    return this->focusedViewName;
+}

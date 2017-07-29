@@ -10,7 +10,6 @@ public:
     ~TitleScreenController() override = default;
 
 protected:
-    void processInput() override;
     void updateModel(long frameDuration) override;
     bool checkExitConditions() const override;
 

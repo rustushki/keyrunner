@@ -66,3 +66,53 @@ void BaseController::gameLoop() {
         updateModel(SDL_GetTicks() - workStart);
     }
 }
+
+/**
+ * Polls for events and handles them.
+ * <p>
+ * Generally, handling works like this:
+ * <ul>
+ * <li>Key events are delegated to the focused view</li>
+ * <li>Mouse events are delegated to the first view under the mouse</li>
+ * <li>Quit events always cause the controller to exit</li>
+ * <ul>
+ */
+void BaseController::processInput() {
+    SDL_Event event = {};
+    while (SDL_PollEvent(&event) == 1 && getModel()->getState() != QUIT) {
+
+        // Key Down Events are passed to focused view
+        if (event.type == SDL_KEYDOWN) {
+            std::string focusedViewName = getDisplay()->getFocus();
+            View* focusedView = getDisplay()->getViewByName(focusedViewName);
+            focusedView->onKeyDown(event);
+
+        // Key Up Events are passed to focused view
+        } else if (event.type == SDL_KEYUP) {
+            std::string focusedViewName = getDisplay()->getFocus();
+            View* focusedView = getDisplay()->getViewByName(focusedViewName);
+            focusedView->onKeyUp(event);
+
+        // Quit Events will cause the game to exit
+        } else if (event.type == SDL_QUIT) {
+            getModel()->setState(QUIT);
+
+
+        // Delegate Mouse Up, Down, and Hover to the views as they apply (disregarding focus)
+        } else if (event.type == SDL_MOUSEBUTTONUP || event.type == SDL_MOUSEBUTTONDOWN ||
+                   event.type == SDL_MOUSEMOTION) {
+            auto x = (uint32_t) event.button.x;
+            auto y = (uint32_t) event.button.y;
+            View *view = getDisplay()->getClickedView(x, y);
+            if (view != nullptr) {
+                if (event.type == SDL_MOUSEBUTTONUP) {
+                    view->onMouseUp(event);
+                } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+                    view->onMouseDown(event);
+                } else if (event.type == SDL_MOUSEMOTION) {
+                    view->onMouseHover(event);
+                }
+            }
+        }
+    }
+}

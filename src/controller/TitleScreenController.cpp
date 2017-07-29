@@ -17,73 +17,6 @@ TitleScreenController::TitleScreenController(TitleScreenModel* model, Display *d
 }
 
 /**
- * Title Screen input.
- * <p>
- * Handles Q key press and the QUIT event.
- */
-void TitleScreenController::processInput() {
-    SDL_Event event = {};
-    while (SDL_PollEvent(&event) == 1 && getModel()->getState() != QUIT) {
-        // Key Down Events
-        if (event.type == SDL_KEYDOWN) {
-            // Q quits the game
-            if (event.key.keysym.sym == SDLK_q) {
-                getModel()->setState(QUIT);
-
-                // Decrement the Main Menu Cursor on UP
-            } else if (event.key.keysym.sym == SDLK_UP) {
-                auto mainMenu = dynamic_cast<MenuView *>(getDisplay()->getViewByName("main_menu"));
-                mainMenu->decrementCursor();
-
-                // Increment the Main Menu Cursor on DOWN
-            } else if (event.key.keysym.sym == SDLK_DOWN) {
-                auto mainMenu = dynamic_cast<MenuView *>(getDisplay()->getViewByName("main_menu"));
-                mainMenu->incrementCursor();
-            }
-
-        // Key Up Events
-        } else if (event.type == SDL_KEYUP) {
-            // Return
-            if (event.key.keysym.sym == SDLK_RETURN) {
-                auto mainMenu = dynamic_cast<MenuView *>(getDisplay()->getViewByName("main_menu"));
-                auto pressEnterText = getDisplay()->getViewByName("press_enter_text");
-
-                // If the main menu is already visible, pass the key press event to it
-                if (mainMenu->isVisible()) {
-                    mainMenu->onKeyUp(event);
-
-                // Otherwise, show the main menu
-                } else {
-                    pressEnterText->hide();
-                    mainMenu->show();
-                }
-            }
-
-
-        // Quit Events will cause the game to exit
-        } else if (event.type == SDL_QUIT) {
-            getModel()->setState(QUIT);
-
-        // Delegate Mouse Up, Down, and Hover to the views as they apply
-        } else if (event.type == SDL_MOUSEBUTTONUP || event.type == SDL_MOUSEBUTTONDOWN ||
-                   event.type == SDL_MOUSEMOTION) {
-            auto x = (uint32_t) event.button.x;
-            auto y = (uint32_t) event.button.y;
-            View *view = getDisplay()->getClickedView(x, y);
-            if (view != nullptr) {
-                if (event.type == SDL_MOUSEBUTTONUP) {
-                    view->onMouseUp(event);
-                } else if (event.type == SDL_MOUSEBUTTONDOWN) {
-                    view->onMouseDown(event);
-                } else if (event.type == SDL_MOUSEMOTION) {
-                    view->onMouseHover(event);
-                }
-            }
-        }
-    }
-}
-
-/**
  * Update the model.
  * @param frameDuration
  */
@@ -141,8 +74,18 @@ void TitleScreenController::createPressEnterText() {
     pressEnterText->setMarginVertical(0);
     pressEnterText->setMarginHorizontal(0);
     pressEnterText->show();
-    getDisplay()->addView("press_enter_text", pressEnterText);
 
+    pressEnterText->setOnKeyUpCallback([this, pressEnterText](SDL_Event event) {
+        if (event.key.keysym.sym == SDLK_RETURN) {
+            auto mainMenu = dynamic_cast<MenuView *>(getDisplay()->getViewByName("main_menu"));
+            pressEnterText->hide();
+            mainMenu->show();
+            getDisplay()->setFocus("main_menu");
+        }
+    });
+
+    getDisplay()->addView("press_enter_text", pressEnterText);
+    getDisplay()->setFocus("press_enter_text");
 }
 
 /**
@@ -157,14 +100,33 @@ void TitleScreenController::createMainMenu() {
     mainMenu->setOptionTextColor(0xBBBBBB);
     mainMenu->setOptionCursorTextColor(0xAA3333);
     mainMenu->setVisibleOptionCount(0);
+
     mainMenu->addOption("Play", [this](SDL_Event event) {
         getModel()->setState(PLAY);
     });
+
     mainMenu->addOption("Edit", [this](SDL_Event event) {
         getModel()->setState(EDIT);
     });
+
     mainMenu->addOption("Quit", [this](SDL_Event event) {
         getModel()->setState(QUIT);
     });
+
+    mainMenu->setOnKeyUpCallback([this, mainMenu](SDL_Event event) {
+        // Q quits the game
+        if (event.key.keysym.sym == SDLK_q) {
+            getModel()->setState(QUIT);
+
+        // Decrement the Main Menu Cursor on UP
+        } else if (event.key.keysym.sym == SDLK_UP) {
+            mainMenu->decrementCursor();
+
+        // Increment the Main Menu Cursor on DOWN
+        } else if (event.key.keysym.sym == SDLK_DOWN) {
+            mainMenu->incrementCursor();
+        }
+    });
+
     getDisplay()->addView("main_menu", mainMenu);
 }
