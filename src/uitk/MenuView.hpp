@@ -25,6 +25,8 @@ public:
     uint16_t getCursorIndex() const;
 
 private:
+    RectangleView* upArrowView;
+    RectangleView* downArrowView;
     std::vector<ButtonView*> buttons;
     uint32_t optionBackgroundColor;
     uint32_t optionTextColor;
@@ -35,6 +37,10 @@ private:
     void sizeButtons();
     uint32_t getOptionBackgroundColor();
     uint32_t getOptionTextColor();
+    void createArrows();
+    bool canScrollDown() const;
+    bool canScrollUp() const;
+    bool isScrollingEverNecessary() const;
 };
 
 #endif

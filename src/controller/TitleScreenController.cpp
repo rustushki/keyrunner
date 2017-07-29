@@ -156,6 +156,7 @@ void TitleScreenController::createMainMenu() {
     mainMenu->setOptionBackgroundColor(0x000000);
     mainMenu->setOptionTextColor(0xBBBBBB);
     mainMenu->setOptionCursorTextColor(0xAA3333);
+    mainMenu->setVisibleOptionCount(0);
     mainMenu->addOption("Play", [this](SDL_Event event) {
         getModel()->setState(PLAY);
     });

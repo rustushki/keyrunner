@@ -9,6 +9,7 @@
 MenuView::MenuView(Model *model, const SDL_Rect &rect) : RectangleView(model, rect) {
     setCursorIndex(0);
     setVisibleOptionCount(0);
+    createArrows();
     cursorTextColor = 0;
 }
 
@@ -21,7 +22,6 @@ void MenuView::addOption(std::string optionText, const std::function<void(SDL_Ev
     button->setOnMouseUpCallback(callBack);
     button->setColor(getOptionBackgroundColor());
     button->setTextColor(getOptionTextColor());
-    button->show();
     buttons.push_back(button);
 
     sizeButtons();
@@ -36,6 +36,14 @@ void MenuView::addOption(std::string optionText, const std::function<void(SDL_Ev
 void MenuView::draw(SDL_Renderer *renderer) {
     for (ButtonView* button : buttons) {
         button->draw(renderer);
+    }
+
+    if (canScrollUp()) {
+        upArrowView->draw(renderer);
+    }
+
+    if (canScrollDown()) {
+        downArrowView->draw(renderer);
     }
 }
 
@@ -232,3 +240,63 @@ void MenuView::setVisibleOptionCount(uint16_t count) {
 uint16_t MenuView::getVisibleOptionCount() const {
     return visibleOptionCount;
 }
+
+/**
+ * Create the up and down arrays of the menu.
+ */
+void MenuView::createArrows() {
+    const auto arrowHeight = 5;
+
+    SDL_Rect upRect = {getX(), getY(), getWidth(), arrowHeight};
+    upArrowView = new RectangleView(nullptr, upRect);
+    upArrowView->setColor(0xFF0000);
+
+    SDL_Rect downRect = {getX(), getY() + getHeight() - arrowHeight, getWidth(), arrowHeight};
+    downArrowView = new RectangleView(nullptr, downRect);
+    downArrowView->setColor(0x00FF00);
+}
+
+/**
+ * Returns true if scrolling is possible downwards.
+ * <p>
+ * Currently, this is set to always return true if scrolling is ever necessary.
+ * @return boolean
+ */
+bool MenuView::canScrollDown() const {
+    // Check if scrolling is ever necessary
+    return isScrollingEverNecessary();
+}
+
+/**
+ * Returns true if scrolling is possible upwards.
+ * <p>
+ * Currently, this is set to always return true if scrolling is ever necessary.
+ * @return boolean
+ */
+bool MenuView::canScrollUp() const {
+    return isScrollingEverNecessary();
+}
+
+/**
+ * Returns true if the count of items exceeds the number of visible items at a time.
+ * <p>
+ * The only exception is if the count of visible items is 0. In this case, all items will be displayed and fit within
+ * the vertical space allotted.
+ * @return boolean
+ */
+bool MenuView::isScrollingEverNecessary() const {
+    bool isScrollingEverNecessary = true;
+
+    // If the count of visible options is 0 or less, then all options will be fit into the area
+    if (getVisibleOptionCount() <= 0) {
+        isScrollingEverNecessary = false;
+    }
+
+    // If the count of visible options is more than the options available
+    if (getVisibleOptionCount() >= buttons.size()) {
+        isScrollingEverNecessary = false;
+    }
+
+    return isScrollingEverNecessary;
+}
+
