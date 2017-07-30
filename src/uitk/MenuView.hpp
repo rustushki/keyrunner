@@ -2,8 +2,8 @@
 #define MENU_VIEW_HPP
 
 #include <map>
-#include "../uitk/RectangleView.hpp"
 #include "../uitk/ButtonView.hpp"
+#include "../uitk/ImageView.hpp"
 
 class MenuView : public RectangleView {
 public:
@@ -25,8 +25,8 @@ public:
     uint16_t getCursorIndex() const;
 
 private:
-    RectangleView* upArrowView;
-    RectangleView* downArrowView;
+    ImageView* upArrowView;
+    ImageView* downArrowView;
     std::vector<ButtonView*> buttons;
     uint32_t optionBackgroundColor;
     uint32_t optionTextColor;

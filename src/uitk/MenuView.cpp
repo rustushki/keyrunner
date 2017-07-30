@@ -279,12 +279,12 @@ void MenuView::createArrows() {
     const auto arrowHeight = 5;
 
     SDL_Rect upRect = {getX(), getY(), getWidth(), arrowHeight};
-    upArrowView = new RectangleView(nullptr, upRect);
-    upArrowView->setColor(0xFF0000);
+    upArrowView = new ImageView(nullptr, upRect, ANIMATION_TYPE_ARROW_UP);
+    upArrowView->setColor(0x000000);
 
     SDL_Rect downRect = {getX(), getY() + getHeight() - arrowHeight, getWidth(), arrowHeight};
-    downArrowView = new RectangleView(nullptr, downRect);
-    downArrowView->setColor(0x00FF00);
+    downArrowView = new ImageView(nullptr, downRect, ANIMATION_TYPE_ARROW_UP);
+    downArrowView->setColor(0x000000);
 }
 
 /**
