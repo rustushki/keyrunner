@@ -13,7 +13,6 @@ public:
 
 private:
     void updateModel(long frameDuration) override;
-    void processInput() override;
     EditorBoardModel* getModel() const override;
     bool checkExitConditions() const override;
 

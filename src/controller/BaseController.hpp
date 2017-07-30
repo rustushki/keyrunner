@@ -15,7 +15,7 @@ public:
 protected:
     BaseModel* getModel() const override;
     Display* getDisplay() const override;
-    void processInput() override;
+    void processInput() final;
     void updateModel(long frameDuration) override = 0;
     bool checkExitConditions() const override = 0;
 

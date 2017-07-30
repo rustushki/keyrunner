@@ -30,6 +30,7 @@ EditController::EditController(EditorBoardModel* model, Display* display, Option
     // Editor Board
     View* board = createBoard();
     getDisplay()->addView("board", board);
+    getDisplay()->setFocus("board");
 
     // Black Bar at the Bottom
     View* editInfoBar = createRectangle();
@@ -51,45 +52,6 @@ EditController::EditController(EditorBoardModel* model, Display* display, Option
         std::stringstream viewName;
         viewName << "tile_selector_button_" << tileTypeIndex;
         display->addView(viewName.str(), tileTypeButton);
-    }
-}
-
-/**
- * Handle events for edit mode.
- */
-void EditController::processInput() {
-    // Wait for an Event
-    SDL_Event event = {};
-    while (SDL_PollEvent(&event) == 1) {
-        // Key down
-        if (event.type == SDL_KEYDOWN) {
-            // User Presses Q
-            if (event.key.keysym.sym == SDLK_q) {
-                getModel()->setState(QUIT);
-                break;
-            }
-
-        // Handle Mouse Events
-        } else if (event.type == SDL_MOUSEBUTTONUP || event.type == SDL_MOUSEBUTTONDOWN ||
-                event.type == SDL_MOUSEMOTION) {
-            auto x = static_cast<uint32_t>(event.button.x);
-            auto y = static_cast<uint32_t>(event.button.y);
-            View* view = getDisplay()->getViewUnderCoordinate(x, y);
-            if (view != nullptr) {
-                if (event.type == SDL_MOUSEBUTTONUP) {
-                    view->onMouseUp(event);
-                } else if (event.type == SDL_MOUSEBUTTONDOWN){
-                    view->onMouseDown(event);
-                } else if (event.type == SDL_MOUSEMOTION){
-                    view->onMouseHover(event);
-                }
-            }
-
-        // Handle Quit Event
-        } else if (event.type == SDL_QUIT) {
-            getModel()->setState(QUIT);
-            break;
-        }
     }
 }
 
@@ -148,6 +110,13 @@ View* EditController::createBoard() const {
         // If moving player, move the key to the current hover coordinate
         } else if (hoverBehavior == HoverBehavior::MOVE_PLAYER) {
             getModel()->setPlayerCoord(hoverCoordinate);
+        }
+    });
+
+    board->setOnKeyDownCallback([this] (SDL_Event event) {
+        // User Presses Q
+        if (event.key.keysym.sym == SDLK_q) {
+            getModel()->setState(QUIT);
         }
     });
 
