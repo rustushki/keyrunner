@@ -30,6 +30,7 @@ private:
     std::vector<ButtonView*> buttons;
     uint32_t optionBackgroundColor;
     uint32_t optionTextColor;
+    uint16_t windowTopIndex;
     uint16_t cursorIndex;
     uint32_t cursorTextColor;
     uint16_t visibleOptionCount;
@@ -41,6 +42,13 @@ private:
     bool canScrollDown() const;
     bool canScrollUp() const;
     bool isScrollingEverNecessary() const;
+    uint16_t getWindowSize() const;
+    uint16_t getWindowTopIndex() const;
+    void setWindowTopIndex(uint16_t index);
+    void incrementWindowTopIndex();
+    void decrementWindowTopIndex();
+
+    bool isCursorOutsideWindow();
 };
 
 #endif

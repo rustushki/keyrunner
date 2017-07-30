@@ -9,6 +9,7 @@
 MenuView::MenuView(Model *model, const SDL_Rect &rect) : RectangleView(model, rect) {
     setCursorIndex(0);
     setVisibleOptionCount(0);
+    setWindowTopIndex(0);
     createArrows();
     cursorTextColor = 0;
 }
@@ -30,12 +31,14 @@ void MenuView::addOption(std::string optionText, const std::function<void(SDL_Ev
 }
 
 /**
- * Draw each of the buttons on the menu.
+ * Draw each of the visible buttons on the menu.
  * @param renderer
  */
 void MenuView::draw(SDL_Renderer *renderer) {
     for (ButtonView* button : buttons) {
-        button->draw(renderer);
+        if (button->isVisible()) {
+            button->draw(renderer);
+        }
     }
 
     if (canScrollUp()) {
@@ -50,22 +53,30 @@ void MenuView::draw(SDL_Renderer *renderer) {
 /**
  * Resize the option buttons so that they fit vertically within the MenuView.
  * <p>
+ * Only take this action for buttons that fall within the current visible window of option.
+ * <p>
  * If the visible option count is set to 0, it will fit all options into the area. Otherwise, it will fit the visible
  * option count of options into the area.
  */
 void MenuView::sizeButtons() {
-    uint16_t visibleOptions = getVisibleOptionCount();
-    if (visibleOptions == 0) {
-        visibleOptions = static_cast<uint16_t>(buttons.size());
-    }
+    if (!buttons.empty()) {
+        for (auto button : buttons) {
+            button->hide();
+        }
 
-    int buttonIndex = 0;
-    for (ButtonView* button : buttons) {
-        button->setX(getX());
-        button->setWidth(getWidth());
-        button->setHeight(static_cast<uint16_t>(getHeight() / visibleOptions));
-        button->setY(static_cast<uint16_t>(getY() + buttonIndex * button->getHeight()));
-        buttonIndex++;
+        auto windowSize = getWindowSize();
+        auto slotIndex = 0;
+        for (auto optionIndex = getWindowTopIndex(); optionIndex < getWindowTopIndex() + windowSize; optionIndex++) {
+            if (optionIndex < buttons.size()) {
+                auto button = buttons[optionIndex];
+                button->setX(getX());
+                button->setWidth(getWidth());
+                button->setHeight(static_cast<uint16_t>(getHeight() / windowSize));
+                button->setY(static_cast<uint16_t>(getY() + slotIndex * button->getHeight()));
+                button->show();
+                slotIndex++;
+            }
+        }
     }
 }
 
@@ -167,24 +178,44 @@ void MenuView::setOptionCursorTextColor(uint32_t color) {
 
 /**
  * Move the cursor to the next option, wrapping around if on last.
+ * <p>
+ * If incrementing the cursor causes the cursor to fall outside of the visible window of options, also increment the
+ * visible window of options.
  */
 void MenuView::incrementCursor() {
     long newCursorIndex = getCursorIndex() + 1;
     if (newCursorIndex >= buttons.size()) {
         newCursorIndex = 0;
     }
+
     setCursorIndex(static_cast<uint16_t>(newCursorIndex));
+
+    if (isCursorOutsideWindow()) {
+        incrementWindowTopIndex();
+    }
+
+    sizeButtons();
 }
 
 /**
  * Move the cursor to the previous option, wrapping around if on first.
+ * <p>
+ * If decrementing the cursor causes the cursor to fall outside of the visible window of options, also decrement the
+ * visible window of options.
  */
 void MenuView::decrementCursor() {
     long newCursorIndex = getCursorIndex() - 1;
     if (newCursorIndex < 0) {
         newCursorIndex = buttons.size() - 1;
     }
+
     setCursorIndex(static_cast<uint16_t>(newCursorIndex));
+
+    if (isCursorOutsideWindow()) {
+        decrementWindowTopIndex();
+    }
+
+    sizeButtons();
 }
 
 /**
@@ -263,7 +294,6 @@ void MenuView::createArrows() {
  * @return boolean
  */
 bool MenuView::canScrollDown() const {
-    // Check if scrolling is ever necessary
     return isScrollingEverNecessary();
 }
 
@@ -293,10 +323,90 @@ bool MenuView::isScrollingEverNecessary() const {
     }
 
     // If the count of visible options is more than the options available
-    if (getVisibleOptionCount() >= buttons.size()) {
+    if (getWindowSize() >= buttons.size()) {
         isScrollingEverNecessary = false;
     }
 
     return isScrollingEverNecessary;
 }
 
+/**
+ * Set the top index of the visible window of options.
+ * <p>
+ * This index denotes the first visible option to be displayed on the menu.
+ * @param index
+ */
+void MenuView::setWindowTopIndex(uint16_t index) {
+    this->windowTopIndex = index;
+}
+
+/**
+ * Decrement the top index of the visible window of options.
+ * <p>
+ * If decrementing causes the top index to be negative, wrap around to the last position of the menu which still has a
+ * full window-size worth of options remaining.
+ */
+void MenuView::decrementWindowTopIndex() {
+    if (isScrollingEverNecessary()) {
+        long newWindowTopIndex = 0;
+        if (getWindowTopIndex() - 1 < 0) {
+            newWindowTopIndex = buttons.size() - getWindowSize();
+        } else {
+            newWindowTopIndex = getWindowTopIndex() - 1;
+        }
+
+        setWindowTopIndex(static_cast<uint16_t>(newWindowTopIndex));
+    }
+}
+
+/**
+ * Increment the top index of the visible window of options.
+ * <p>
+ * If incrementing causes the top index to fall after the last option in the option list, then wrap around to the first
+ * option in the option list.
+ */
+void MenuView::incrementWindowTopIndex() {
+    if (isScrollingEverNecessary()) {
+        long newWindowTopIndex = 0;
+        if (getWindowTopIndex() + 1 > buttons.size() - getWindowSize()) {
+            newWindowTopIndex = 0;
+        } else {
+            newWindowTopIndex = getWindowTopIndex() + 1;
+        }
+
+        setWindowTopIndex(static_cast<uint16_t>(newWindowTopIndex));
+    }
+}
+
+/**
+ * Get the top index of the visible window of options.
+ * <p>
+ * This index denotes the first visible option to be displayed on the menu.
+ * @return uint16_t
+ */
+uint16_t MenuView::getWindowTopIndex() const {
+    return windowTopIndex;
+}
+
+/**
+ * Determine if the cursor is currently outside of the visible options.
+ * @return boolean
+ */
+bool MenuView::isCursorOutsideWindow() {
+    return getCursorIndex() < getWindowTopIndex() || getCursorIndex() >= getWindowTopIndex() + getWindowSize();
+}
+
+/**
+ * Return the actual count of visible options.
+ * <p>
+ * Note that the visibleOptionCount could be 0. If this is the case, then this function will return the count of all the
+ * options that could be displayed.
+ * @return
+ */
+uint16_t MenuView::getWindowSize() const {
+    long windowSize = getVisibleOptionCount();
+    if (windowSize == 0) {
+        windowSize = buttons.size();
+    }
+    return static_cast<uint16_t>(windowSize);
+}
