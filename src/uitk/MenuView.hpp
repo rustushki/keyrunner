@@ -39,8 +39,8 @@ private:
     uint32_t getOptionBackgroundColor();
     uint32_t getOptionTextColor();
     void createArrows();
-    bool canScrollDown() const;
-    bool canScrollUp() const;
+    bool cantScrollDown() const;
+    bool cantScrollUp() const;
     bool isScrollingEverNecessary() const;
     uint16_t getWindowSize() const;
     uint16_t getWindowTopIndex() const;

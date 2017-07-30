@@ -41,11 +41,11 @@ void MenuView::draw(SDL_Renderer *renderer) {
         }
     }
 
-    if (canScrollUp()) {
+    if (!cantScrollUp()) {
         upArrowView->draw(renderer);
     }
 
-    if (canScrollDown()) {
+    if (!cantScrollDown()) {
         downArrowView->draw(renderer);
     }
 }
@@ -292,23 +292,19 @@ void MenuView::createArrows() {
 }
 
 /**
- * Returns true if scrolling is possible downwards.
- * <p>
- * Currently, this is set to always return true if scrolling is ever necessary.
+ * Returns true if scrolling isn't possible downwards.
  * @return boolean
  */
-bool MenuView::canScrollDown() const {
-    return isScrollingEverNecessary();
+bool MenuView::cantScrollDown() const {
+    return isScrollingEverNecessary() && (getWindowTopIndex() + 1 > buttons.size() - getWindowSize());
 }
 
 /**
- * Returns true if scrolling is possible upwards.
- * <p>
- * Currently, this is set to always return true if scrolling is ever necessary.
+ * Returns true if scrolling isn't possible upwards.
  * @return boolean
  */
-bool MenuView::canScrollUp() const {
-    return isScrollingEverNecessary();
+bool MenuView::cantScrollUp() const {
+    return isScrollingEverNecessary() && (getWindowTopIndex() - 1 < 0);
 }
 
 /**
@@ -353,7 +349,7 @@ void MenuView::setWindowTopIndex(uint16_t index) {
 void MenuView::decrementWindowTopIndex() {
     if (isScrollingEverNecessary()) {
         long newWindowTopIndex = 0;
-        if (getWindowTopIndex() - 1 < 0) {
+        if (cantScrollUp()) {
             newWindowTopIndex = buttons.size() - getWindowSize();
         } else {
             newWindowTopIndex = getWindowTopIndex() - 1;
@@ -372,7 +368,7 @@ void MenuView::decrementWindowTopIndex() {
 void MenuView::incrementWindowTopIndex() {
     if (isScrollingEverNecessary()) {
         long newWindowTopIndex = 0;
-        if (getWindowTopIndex() + 1 > buttons.size() - getWindowSize()) {
+        if (cantScrollDown()) {
             newWindowTopIndex = 0;
         } else {
             newWindowTopIndex = getWindowTopIndex() + 1;
