@@ -281,10 +281,14 @@ void MenuView::createArrows() {
     SDL_Rect upRect = {getX(), getY(), getWidth(), arrowHeight};
     upArrowView = new ImageView(nullptr, upRect, ANIMATION_TYPE_ARROW_UP);
     upArrowView->setColor(0x000000);
+    upArrowView->setHorizontalAlignment(HorizontalAlignment::CENTER);
+    upArrowView->setVerticalAlignment(VerticalAlignment::CENTER);
 
     SDL_Rect downRect = {getX(), getY() + getHeight() - arrowHeight, getWidth(), arrowHeight};
-    downArrowView = new ImageView(nullptr, downRect, ANIMATION_TYPE_ARROW_UP);
+    downArrowView = new ImageView(nullptr, downRect, ANIMATION_TYPE_ARROW_DOWN);
     downArrowView->setColor(0x000000);
+    downArrowView->setHorizontalAlignment(HorizontalAlignment::CENTER);
+    downArrowView->setVerticalAlignment(VerticalAlignment::CENTER);
 }
 
 /**

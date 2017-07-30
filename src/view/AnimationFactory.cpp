@@ -104,7 +104,7 @@ std::string AnimationFactory::getSpriteSheetFileName(AnimationType animationType
             break;
 
         case ANIMATION_TYPE_ARROW_DOWN:
-            fn = "arrow_up.png";
+            fn = "arrow_down.png";
             break;
 
         default:
