@@ -69,10 +69,25 @@ void MenuView::sizeButtons() {
         for (auto optionIndex = getWindowTopIndex(); optionIndex < getWindowTopIndex() + windowSize; optionIndex++) {
             if (optionIndex < buttons.size()) {
                 auto button = buttons[optionIndex];
+                // Button X is the same as the MenuView X
                 button->setX(getX());
+
+                // Button Width is the same as the MenuView Width
                 button->setWidth(getWidth());
-                button->setHeight(static_cast<uint16_t>(getHeight() / windowSize));
-                button->setY(static_cast<uint16_t>(getY() + slotIndex * button->getHeight()));
+
+                // Button Height is the MenuView height less the two arrows divided by the window size
+                uint16_t buttonHeight = getHeight();
+                buttonHeight -= upArrowView->getHeight();
+                buttonHeight -= downArrowView->getHeight();
+                buttonHeight /= windowSize;
+                button->setHeight(buttonHeight);
+
+                // Button Y is relative to the bottom edge of the up arrow button
+                uint16_t buttonY = getY();
+                buttonY += upArrowView->getHeight();
+                buttonY += slotIndex * button->getHeight();
+                button->setY(buttonY);
+
                 button->show();
                 slotIndex++;
             }
@@ -234,6 +249,14 @@ void MenuView::onMouseUp(SDL_Event event) {
         }
     }
 
+    if (upArrowView->containsPoint(x, y)) {
+        upArrowView->onMouseUp(event);
+    }
+
+    if (downArrowView->containsPoint(x, y)) {
+        downArrowView->onMouseUp(event);
+    }
+
     BaseView::onMouseUp(event);
 }
 
@@ -283,12 +306,19 @@ void MenuView::createArrows() {
     upArrowView->setColor(0x000000);
     upArrowView->setHorizontalAlignment(HorizontalAlignment::CENTER);
     upArrowView->setVerticalAlignment(VerticalAlignment::CENTER);
+    upArrowView->setOnMouseUpCallback([this](SDL_Event event) {
+        decrementCursor();
+    });
+
 
     SDL_Rect downRect = {getX(), getY() + getHeight() - arrowHeight, getWidth(), arrowHeight};
     downArrowView = new ImageView(nullptr, downRect, ANIMATION_TYPE_ARROW_DOWN);
     downArrowView->setColor(0x000000);
     downArrowView->setHorizontalAlignment(HorizontalAlignment::CENTER);
     downArrowView->setVerticalAlignment(VerticalAlignment::CENTER);
+    downArrowView->setOnMouseUpCallback([this](SDL_Event event) {
+        incrementCursor();
+    });
 }
 
 /**

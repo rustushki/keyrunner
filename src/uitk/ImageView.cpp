@@ -98,9 +98,9 @@ int ImageView::getHorizontalOffset() const {
 int ImageView::getVerticalOffset() const {
     int verticalOffset = 0;
     if (getVerticalAlignment() == VerticalAlignment ::CENTER) {
-        verticalOffset = (getHeight() - animation->getWidth()) / 2;
+        verticalOffset = (getHeight() - animation->getHeight()) / 2;
     } else if (getVerticalAlignment() == VerticalAlignment::BOTTOM) {
-        verticalOffset = getHeight() - animation->getWidth();
+        verticalOffset = getHeight() - animation->getHeight();
     } else {
         verticalOffset = 0;
     }
