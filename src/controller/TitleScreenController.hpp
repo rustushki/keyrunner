@@ -10,6 +10,7 @@ public:
     ~TitleScreenController() override = default;
 
 protected:
+    TitleScreenModel* getModel() const override;
     void updateModel(long frameDuration) override;
     bool checkExitConditions() const override;
 

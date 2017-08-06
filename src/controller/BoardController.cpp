@@ -1,5 +1,5 @@
+#include "../controller/BoardController.hpp"
 #include "../controller/BaseController.hpp"
-#include "BoardController.hpp"
 
 /**
  * Constructor.

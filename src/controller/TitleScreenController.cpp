@@ -154,7 +154,7 @@ void TitleScreenController::createEditorLevelSelectorMenu() {
 
     levelEditorMenu->addOption("New", [this](SDL_Event event) {});
     levelEditorMenu->addOption("Back", [this](SDL_Event event) {});
-    for (int levelNumber = 1; levelNumber <= 35; levelNumber++) {
+    for (int levelNumber = 1; levelNumber <= getModel()->getMaxLevel(); levelNumber++) {
         std::stringstream levelName;
         levelName << "Level" << " " << levelNumber;
         levelEditorMenu->addOption(levelName.str(), [this](SDL_Event event) {});
@@ -176,4 +176,12 @@ void TitleScreenController::createEditorLevelSelectorMenu() {
     });
 
     getDisplay()->addView("level_selector_menu", levelEditorMenu);
+}
+
+/**
+ * Fetch the sub-classed model for this controller.
+ * @return the model
+ */
+TitleScreenModel *TitleScreenController::getModel() const {
+    return dynamic_cast<TitleScreenModel*>(BaseController::getModel());
 }
