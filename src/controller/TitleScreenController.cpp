@@ -1,3 +1,4 @@
+#include <sstream>
 #include "../controller/TitleScreenController.hpp"
 #include "../uitk/ImageView.hpp"
 #include "../uitk/LabelView.hpp"
@@ -14,6 +15,7 @@ TitleScreenController::TitleScreenController(TitleScreenModel* model, Display *d
     createKeyRunnerText();
     createPressEnterText();
     createMainMenu();
+    createEditorLevelSelectorMenu();
 }
 
 /**
@@ -106,7 +108,10 @@ void TitleScreenController::createMainMenu() {
     });
 
     mainMenu->addOption("Edit", [this](SDL_Event event) {
-        getModel()->setState(EDIT);
+        auto levelEditorMenuName = "level_selector_menu";
+        getDisplay()->setFocus(levelEditorMenuName);
+        getDisplay()->getViewByName(levelEditorMenuName)->show();
+        getDisplay()->getViewByName("main_menu")->show();
     });
 
     mainMenu->addOption("Quit", [this](SDL_Event event) {
@@ -129,4 +134,46 @@ void TitleScreenController::createMainMenu() {
     });
 
     getDisplay()->addView("main_menu", mainMenu);
+}
+
+/**
+ * Create the Level Selector Menu.
+ * <p>
+ * This menu lets you start creating a new level OR allows you to edit an existing level. Alternately, you may select
+ * the Back option to go back to the Main Menu.
+ */
+void TitleScreenController::createEditorLevelSelectorMenu() {
+    SDL_Rect rect = {0, 240, 200, 200};
+    rect.x = (getDisplay()->getWidth() - rect.w) / 2;
+    auto levelEditorMenu = new MenuView(nullptr, rect);
+    levelEditorMenu->setColor(0x000000);
+    levelEditorMenu->setOptionBackgroundColor(0x000000);
+    levelEditorMenu->setOptionTextColor(0xBBBBBB);
+    levelEditorMenu->setOptionCursorTextColor(0xAA3333);
+    levelEditorMenu->setVisibleOptionCount(5);
+
+    levelEditorMenu->addOption("New", [this](SDL_Event event) {});
+    levelEditorMenu->addOption("Back", [this](SDL_Event event) {});
+    for (int levelNumber = 1; levelNumber <= 35; levelNumber++) {
+        std::stringstream levelName;
+        levelName << "Level" << " " << levelNumber;
+        levelEditorMenu->addOption(levelName.str(), [this](SDL_Event event) {});
+    }
+
+    levelEditorMenu->setOnKeyUpCallback([this, levelEditorMenu](SDL_Event event) {
+        // Q quits the game
+        if (event.key.keysym.sym == SDLK_q) {
+            getModel()->setState(QUIT);
+
+            // Decrement the Main Menu Cursor on UP
+        } else if (event.key.keysym.sym == SDLK_UP) {
+            levelEditorMenu->decrementCursor();
+
+            // Increment the Main Menu Cursor on DOWN
+        } else if (event.key.keysym.sym == SDLK_DOWN) {
+            levelEditorMenu->incrementCursor();
+        }
+    });
+
+    getDisplay()->addView("level_selector_menu", levelEditorMenu);
 }

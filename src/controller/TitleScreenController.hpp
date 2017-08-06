@@ -18,6 +18,7 @@ private:
     void createKeyRunnerText();
     void createPressEnterText();
     void createMainMenu();
+    void createEditorLevelSelectorMenu();
 };
 
 #endif
