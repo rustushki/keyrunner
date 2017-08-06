@@ -118,18 +118,10 @@ void TitleScreenController::createMainMenu() {
         getModel()->setState(QUIT);
     });
 
-    mainMenu->setOnKeyUpCallback([this, mainMenu](SDL_Event event) {
+    mainMenu->setOnKeyUpCallback([this](SDL_Event event) {
         // Q quits the game
         if (event.key.keysym.sym == SDLK_q) {
             getModel()->setState(QUIT);
-
-        // Decrement the Main Menu Cursor on UP
-        } else if (event.key.keysym.sym == SDLK_UP) {
-            mainMenu->decrementCursor();
-
-        // Increment the Main Menu Cursor on DOWN
-        } else if (event.key.keysym.sym == SDLK_DOWN) {
-            mainMenu->incrementCursor();
         }
     });
 
@@ -160,18 +152,10 @@ void TitleScreenController::createEditorLevelSelectorMenu() {
         levelEditorMenu->addOption(levelName.str(), [this](SDL_Event event) {});
     }
 
-    levelEditorMenu->setOnKeyUpCallback([this, levelEditorMenu](SDL_Event event) {
+    levelEditorMenu->setOnKeyUpCallback([this](SDL_Event event) {
         // Q quits the game
         if (event.key.keysym.sym == SDLK_q) {
             getModel()->setState(QUIT);
-
-            // Decrement the Main Menu Cursor on UP
-        } else if (event.key.keysym.sym == SDLK_UP) {
-            levelEditorMenu->decrementCursor();
-
-            // Increment the Main Menu Cursor on DOWN
-        } else if (event.key.keysym.sym == SDLK_DOWN) {
-            levelEditorMenu->incrementCursor();
         }
     });
 

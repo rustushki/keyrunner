@@ -263,12 +263,24 @@ void MenuView::onMouseUp(SDL_Event event) {
 /**
  * Delegates the key up event to the buttons that represent the options of the menu.
  * <p>
- * Internally, this invokes the mouse up callback for the button that is the current cursor position.
+ * Internally:
+ *  Enter - invokes the mouse up callback for the button that is the current cursor position
+ *  Arrow Up - Move decrements the cursor
+ *  Arrow Down - Increments the cursor
  * @param event
  */
 void MenuView::onKeyUp(SDL_Event event) {
+    // Enter activates the internal button
     if (event.key.keysym.sym == SDLK_RETURN) {
         buttons[getCursorIndex()]->onMouseUp(event);
+
+    // Decrement the Cursor on UP
+    } else if (event.key.keysym.sym == SDLK_UP) {
+        decrementCursor();
+
+    // Increment the Cursor on DOWN
+    } else if (event.key.keysym.sym == SDLK_DOWN) {
+        incrementCursor();
     }
 
     BaseView::onKeyUp(event);
