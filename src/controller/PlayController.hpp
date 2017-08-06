@@ -7,7 +7,7 @@
 
 class PlayController : public BoardController {
 public:
-    PlayController(PlayBoardModel* model, Display* display, Options* options);
+    PlayController(PlayBoardModel* model, Display* display, uint8_t startingLevel);
     ~PlayController() override = default;
 
 protected:

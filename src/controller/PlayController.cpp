@@ -8,18 +8,17 @@
 /**
  * Constructor.
  * <p>
- * Sets the initial value of the time clock and the starting level based on the provided command line options. Creates
- * all Views used by the PlayController.
+ * Sets the initial value of the time clock. Creates all Views used by the PlayController. Also, sets the starting
+ * level.
  * @param model
- * @param window
- * @param renderer
+ * @param display
+ * @param startingLevel
  */
-PlayController::PlayController(PlayBoardModel *model, Display* display, Options* options) : BoardController(model,
+PlayController::PlayController(PlayBoardModel *model, Display* display, uint8_t startingLevel) : BoardController(model,
         display) {
-
     // Initialize the model
     getModel()->setTimeClock(50000);
-    getModel()->setLevelNum(options->getStartingLevel());
+    getModel()->setLevelNum(startingLevel);
 
     // Read in the starting level
     getLevelManager()->read();

@@ -41,6 +41,7 @@ set(SOURCES
     src/view/EditorBoardView.cpp
     src/view/LevelNumberView.cpp
     src/view/TimerView.cpp
+    src/controller/GameManager.cpp
 )
 
 # Declare Executable.

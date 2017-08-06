@@ -8,7 +8,7 @@
 
 class EditController : public BoardController {
 public:
-    EditController(EditorBoardModel* model, Display* display, Options* options);
+    EditController(EditorBoardModel* model, Display* display, uint8_t editingLevel);
     ~EditController() override = default;
 
 private:

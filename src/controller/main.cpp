@@ -1,82 +1,9 @@
-#include <sstream>
-#include <SDL_ttf.h>
-#include "../controller/Options.hpp"
-#include "../controller/PlayController.hpp"
-#include "../controller/EditController.hpp"
-#include "../controller/TitleScreenController.hpp"
-#include "../model/TitleScreenModel.hpp"
 #include "../view/AnimationFactory.hpp"
+#include "GameManager.hpp"
 
 // Objects that don't have a home yet
 AnimationFactory* animationFactory;
 
-/**
- * Initializes SDL and SDL_ttf. Ensure SDL_Quit is called on exit.
- */
-void initializeSdl() {
-    // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        std::stringstream errorMessage;
-        errorMessage << "Couldn't initialize SDL: "<< SDL_GetError();
-        throw std::runtime_error(errorMessage.str());
-    }
-
-    // Initialize SDL_ttf
-    if (TTF_Init() == -1) {
-        std::stringstream errorMessage;
-        errorMessage << "Error initializing SDL_ttf: " << TTF_GetError();
-        throw std::runtime_error(errorMessage.str());
-    }
-
-    // Ensure SDL_Quit is called when the program exits
-    atexit(SDL_Quit);
-}
-
-/**
- * Create the SDL_Window* for the game, setting it's title.
- * @return SDL_Window*
- */
-SDL_Window* createWindow() {
-    std::stringstream title;
-    title << "Key Runner v" << VERSION;
-    SDL_Window* window = SDL_CreateWindow(title.str().c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0,
-          SDL_WINDOW_HIDDEN);
-
-    // Throw an exception if the Window was not created
-    if (window == nullptr) {
-        std::stringstream errorMessage;
-        errorMessage << "Couldn't create window: "<< SDL_GetError();
-        throw std::runtime_error(errorMessage.str());
-    }
-
-    return window;
-}
-
-/**
- * Create a renderer for the SDL_Window.
- * @param window
- * @return SDL_Renderer*
- */
-SDL_Renderer* createRenderer(SDL_Window* window) {
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
-    if (renderer == nullptr) {
-        std::stringstream errorMessage;
-        errorMessage << "Couldn't create renderer: "<< SDL_GetError();
-        throw std::runtime_error(errorMessage.str());
-    }
-
-    return renderer;
-}
-
-/**
- * Size and show the window based on the RootLayer's dimensions.
- * @param window
- * @param rootLayer
- */
-void sizeWindowAndShow(SDL_Window* window) {
-    SDL_SetWindowSize(window, 625, 440);
-    SDL_ShowWindow(window);
-}
 
 /**
  * Entry point into KeyRunner.
@@ -89,57 +16,7 @@ int main(int argc, char** argv) {
     Options options;
     options.parse(argc, argv);
 
-    // Initialize SDL
-    initializeSdl();
-    SDL_Window* window = createWindow();
-    SDL_Renderer* renderer = createRenderer(window);
-
-    // Create these view-related globals which don't have better homes
-    animationFactory = new AnimationFactory(renderer);
-
-    sizeWindowAndShow(window);
-
-    // Build the Display that will be used by the Controller
-    Display display(window, renderer);
-
-    // Start the Game Loop for the appropriate Controller
-    State state = options.getInitialState();
-
-    while (state != QUIT && state != WIN && state != LOSE) {
-        Model *model = nullptr;
-        Controller *controller = nullptr;
-
-        if (state == PLAY) {
-            model = new PlayBoardModel();
-            controller = new PlayController(dynamic_cast<PlayBoardModel*>(model), &display, &options);
-
-        } else if (state == EDIT) {
-            model = new EditorBoardModel();
-            controller = new EditController(dynamic_cast<EditorBoardModel*>(model), &display, &options);
-
-        } else if (state == TITLE) {
-            model = new TitleScreenModel();
-            controller = new TitleScreenController(dynamic_cast<TitleScreenModel*>(model), &display);
-
-        } else {
-            break;
-        }
-
-        // Set the initial state
-        model->setState(state);
-
-        // Begin the game loop
-        controller->gameLoop();
-
-        // Obtain the exit state
-        state = model->getState();
-
-        // Free some memory
-        delete model;
-        delete controller;
-    }
-
-    delete animationFactory;
-
-    return 0;
+    GameManager gameManager{options};
+    gameManager.loop();
 }
+

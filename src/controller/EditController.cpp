@@ -13,24 +13,24 @@ extern AnimationFactory* animationFactory;
  * @param model
  * @param display
  */
-EditController::EditController(EditorBoardModel* model, Display* display, Options* options) : BoardController(model,
+EditController::EditController(EditorBoardModel* model, Display* display, uint8_t editingLevel) : BoardController(model,
         display) {
-
-    // Create New Level for Edit
-    if (options->getCreateNewLevel()) {
-        getModel()->setLevelNum((uint8_t) (getLevelManager()->getLevelCount() + 1));
-        getLevelManager()->create();
-
-        // Load Existing Level for Edit
-    } else {
-        getModel()->setLevelNum(options->getStartingLevel());
-        getLevelManager()->read();
-    }
 
     // Editor Board
     View* board = createBoard();
     getDisplay()->addView("board", board);
     getDisplay()->setFocus("board");
+
+    // Create New Level for Edit
+    if (editingLevel == 0) {
+        getModel()->setLevelNum((uint8_t) (getLevelManager()->getLevelCount() + 1));
+        getLevelManager()->create();
+
+    // Load Existing Level for Edit
+    } else {
+        getModel()->setLevelNum(editingLevel);
+        getLevelManager()->read();
+    }
 
     // Black Bar at the Bottom
     View* editInfoBar = createRectangle();
