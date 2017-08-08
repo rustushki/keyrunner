@@ -70,7 +70,7 @@ void PlayController::updateLevel(long elapsedDuration) const {
  * @return the model
  */
 PlayBoardModel *PlayController::getModel() const {
-    return (PlayBoardModel*) BaseController::getModel();
+    return (PlayBoardModel*) DisplayController::getModel();
 }
 
 /**

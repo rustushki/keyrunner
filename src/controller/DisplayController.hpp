@@ -1,20 +1,20 @@
 #ifndef BASE_CONTROLLER_HPP
 #define BASE_CONTROLLER_HPP
 
+#include "../controller/Controller.hpp"
 #include "../controller/KeyRunner.hpp"
 #include "../model/Direction.hpp"
-#include "../controller/Controller.hpp"
 #include "../model/LevelManager.hpp"
 
-class BaseController : public Controller {
+class DisplayController : public Controller {
 public:
-    BaseController(BaseModel* model, Display* display);
-    ~BaseController() override = default;
+    DisplayController(BaseModel* model, Display* display);
+    ~DisplayController() override = default;
     void gameLoop() override;
+    Display* getDisplay() const;
 
 protected:
     BaseModel* getModel() const override;
-    Display* getDisplay() const override;
     void processInput() final;
     void updateModel(long frameDuration) override = 0;
     bool checkExitConditions() const override = 0;

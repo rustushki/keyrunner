@@ -1,10 +1,10 @@
 #ifndef TITLE_SCREEN_CONTROLLER_HPP
 #define TITLE_SCREEN_CONTROLLER_HPP
 
-#include "../controller/BaseController.hpp"
+#include "DisplayController.hpp"
 #include "../model/TitleScreenModel.hpp"
 
-class TitleScreenController : public BaseController {
+class TitleScreenController : public DisplayController {
 public:
     TitleScreenController(TitleScreenModel* model, Display* display);
     ~TitleScreenController() override = default;

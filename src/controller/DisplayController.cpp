@@ -1,5 +1,5 @@
 
-#include "../controller/BaseController.hpp"
+#include "DisplayController.hpp"
 
 /**
  * Constructor.
@@ -8,7 +8,7 @@
  * @param model
  * @param display
  */
-BaseController::BaseController(BaseModel* model, Display* display) {
+DisplayController::DisplayController(BaseModel* model, Display* display) {
     this->model = model;
     this->display = display;
 }
@@ -17,7 +17,7 @@ BaseController::BaseController(BaseModel* model, Display* display) {
  * Return the root model that the Controller addresses.
  * @return BaseModel*
  */
-BaseModel* BaseController::getModel() const {
+BaseModel* DisplayController::getModel() const {
     return model;
 }
 
@@ -25,7 +25,7 @@ BaseModel* BaseController::getModel() const {
  * Get the display where views are put onto the screen.
  * @return Display*
  */
-Display *BaseController::getDisplay() const {
+Display *DisplayController::getDisplay() const {
     return display;
 }
 
@@ -33,7 +33,7 @@ Display *BaseController::getDisplay() const {
  * Game loop. Update the model, prepare and display the frame, process input, and maintain a frame delay to meet a
  * certain FPS.
  */
-void BaseController::gameLoop() {
+void DisplayController::gameLoop() {
     // Limit to 25 frames per second
     uint32_t fps = 25;
     uint32_t maxDelay = 1000 / fps;
@@ -77,7 +77,7 @@ void BaseController::gameLoop() {
  * <li>Quit events always cause the controller to exit</li>
  * <ul>
  */
-void BaseController::processInput() {
+void DisplayController::processInput() {
     SDL_Event event = {};
     while (SDL_PollEvent(&event) == 1 && getModel()->getState() != QUIT) {
 

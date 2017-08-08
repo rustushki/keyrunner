@@ -1,5 +1,5 @@
 #include "../controller/BoardController.hpp"
-#include "../controller/BaseController.hpp"
+#include "DisplayController.hpp"
 
 /**
  * Constructor.
@@ -8,7 +8,7 @@
  * @param model
  * @param display
  */
-BoardController::BoardController(BoardModel *model, Display *display) : BaseController(model, display) {
+BoardController::BoardController(BoardModel *model, Display *display) : DisplayController(model, display) {
     this->levelManager = new LevelManager(model);
 }
 

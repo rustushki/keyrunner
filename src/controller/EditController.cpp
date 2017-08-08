@@ -60,7 +60,7 @@ EditController::EditController(EditorBoardModel* model, Display* display, uint8_
  * @return the model
  */
 EditorBoardModel *EditController::getModel() const {
-    return (EditorBoardModel*) BaseController::getModel();
+    return (EditorBoardModel*) DisplayController::getModel();
 }
 
 /**

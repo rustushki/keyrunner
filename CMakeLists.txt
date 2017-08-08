@@ -19,11 +19,12 @@ add_library(uitk STATIC
 
 # Source Files.
 set(SOURCES
-    src/controller/BaseController.cpp
     src/controller/BoardController.cpp
     src/controller/Controller.hpp
     src/controller/Display.cpp
+    src/controller/DisplayController.cpp
     src/controller/EditController.cpp
+    src/controller/GameManager.cpp
     src/controller/Options.cpp
     src/controller/PlayController.cpp
     src/controller/TitleScreenController.cpp
@@ -41,7 +42,6 @@ set(SOURCES
     src/view/EditorBoardView.cpp
     src/view/LevelNumberView.cpp
     src/view/TimerView.cpp
-    src/controller/GameManager.cpp
 )
 
 # Declare Executable.

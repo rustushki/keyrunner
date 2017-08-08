@@ -1,11 +1,11 @@
 #ifndef BOARD_CONTROLLER_HPP
 #define BOARD_CONTROLLER_HPP
 
-#include "../controller/BaseController.hpp"
+#include "DisplayController.hpp"
 #include "../controller/Controller.hpp"
 #include "../model/LevelManager.hpp"
 
-class BoardController : public BaseController {
+class BoardController : public DisplayController {
 public:
     BoardController(BoardModel *model, Display *display);
 
