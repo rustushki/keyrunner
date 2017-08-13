@@ -10,7 +10,6 @@ public:
     virtual Model* getModel() const = 0;
 
 protected:
-    virtual void processInput() = 0;
     virtual void updateModel(long frameDuration) = 0;
     virtual bool checkExitConditions() const = 0;
 };

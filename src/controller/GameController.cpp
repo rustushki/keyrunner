@@ -204,16 +204,6 @@ GameModel *GameController::getModel() const {
  */
 void GameController::gameLoop() {
     while (checkExitConditions()) {
-        processInput();
         updateModel(0);
     }
-}
-
-/**
- * Process input from the user.
- * <p>
- * This is really a DisplayController feature and should probably be moved lower.
- */
-void GameController::processInput() {
-    // Do nothing
 }

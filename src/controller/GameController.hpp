@@ -18,12 +18,10 @@ public:
 
 protected:
     GameModel* getModel() const final;
-    void processInput() final;
     void updateModel(long frameDuration) final;
     bool checkExitConditions() const final;
 
 private:
-    void buildCurrentController(bool firstLoop);
     void buildDisplay();
     void initializeSdl();
     SDL_Window* createWindow();
