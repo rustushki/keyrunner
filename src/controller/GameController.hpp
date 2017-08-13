@@ -1,5 +1,5 @@
-#ifndef GAME_MANAGER_HPP
-#define GAME_MANAGER_HPP
+#ifndef GAME_CONTROLLER_HPP
+#define GAME_CONTROLLER_HPP
 
 #include <SDL_video.h>
 #include "../controller/Controller.hpp"
@@ -8,14 +8,21 @@
 #include "../model/Model.hpp"
 #include "../model/State.hpp"
 #include "../view/AnimationFactory.hpp"
+#include "../model/GameModel.hpp"
 
-class GameManager {
+class GameController : public Controller {
 public:
-    explicit GameManager(Options options);
-    void loop();
+    explicit GameController(GameModel* gameModel, Options options);
+    virtual ~GameController();
+    void gameLoop() override;
+
+protected:
+    GameModel* getModel() const final;
+    void processInput() final;
+    void updateModel(long frameDuration) final;
+    bool checkExitConditions() const final;
 
 private:
-    void buildCurrentModel();
     void buildCurrentController(bool firstLoop);
     void buildDisplay();
     void initializeSdl();
@@ -23,14 +30,10 @@ private:
     void sizeWindowAndShow(SDL_Window *window);
     SDL_Renderer* createRenderer(SDL_Window *window);
 
+    GameModel* gameModel;
     Options options;
     Display *display;
-    State previousState = {};
-    Controller* previousController = nullptr;
-    Model* previousModel = nullptr;
-    State currentState = {};
-    Controller* currentController = nullptr;
-    Model* currentModel = nullptr;
+    bool firstLoop;
 };
 
 #endif

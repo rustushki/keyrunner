@@ -7,13 +7,12 @@ class Controller {
 public:
     virtual ~Controller() = default;
     virtual void gameLoop() = 0;
+    virtual Model* getModel() const = 0;
 
 protected:
-    virtual Model* getModel() const = 0;
     virtual void processInput() = 0;
     virtual void updateModel(long frameDuration) = 0;
     virtual bool checkExitConditions() const = 0;
-
 };
 
 

@@ -1,5 +1,4 @@
-#include "../view/AnimationFactory.hpp"
-#include "GameManager.hpp"
+#include "../controller/GameController.hpp"
 
 // Objects that don't have a home yet
 AnimationFactory* animationFactory;
@@ -16,7 +15,10 @@ int main(int argc, char** argv) {
     Options options;
     options.parse(argc, argv);
 
-    GameManager gameManager{options};
-    gameManager.loop();
+    // Create a GameModel and GameController and start the game
+    auto gameModel = new GameModel();
+    GameController gameController{gameModel, options};
+    gameController.gameLoop();
+    delete gameModel;
 }
 
