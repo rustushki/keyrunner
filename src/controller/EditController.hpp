@@ -2,7 +2,6 @@
 #define EDIT_CONTROLLER_HPP
 
 #include "../controller/BoardController.hpp"
-#include "../controller/Options.hpp"
 #include "../uitk/ButtonView.hpp"
 #include "../model/EditorBoardModel.hpp"
 

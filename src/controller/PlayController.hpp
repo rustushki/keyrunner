@@ -2,7 +2,6 @@
 #define PLAY_CONTROLLER_HPP
 
 #include "../controller/BoardController.hpp"
-#include "../controller/Options.hpp"
 #include "../model/PlayBoardModel.hpp"
 
 class PlayController : public BoardController {

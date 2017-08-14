@@ -11,13 +11,23 @@ extern AnimationFactory* animationFactory;
  * Constructor.
  * @param options
  */
-GameController::GameController(GameModel* gameModel, Options options) {
+GameController::GameController(GameModel* gameModel, int argc, char** argv) {
+    // Populate the game model
     this->gameModel = gameModel;
-    this->options = options;
-    this->firstLoop = true;
-    this->buildDisplay();
 
-    getModel()->setState(options.getInitialState());
+    // Indicate that the game loop has not run once yet
+    this->firstLoop = true;
+
+    // Use the OptionController to populate the OptionModel with settings from command line arguments
+    OptionModel* optionModel = getModel()->getOptionModel();
+    OptionController optionController{optionModel, argc, argv};
+    optionController.gameLoop();
+
+    // Set the initial state from the command line options
+    getModel()->setState(optionModel->getInitialState());
+
+    // Build the SDL display and window
+    this->buildDisplay();
 }
 
 /**
@@ -47,7 +57,7 @@ void GameController::updateModel(long frameDuration) {
 
         auto startingLevel = static_cast<uint8_t>(1);
         if (firstLoop) {
-            startingLevel = options.getStartingLevel();
+            startingLevel = getModel()->getOptionModel()->getStartingLevel();
         }
 
         controller = new PlayController(model, display, startingLevel);
@@ -60,12 +70,12 @@ void GameController::updateModel(long frameDuration) {
         // On first loop, pull the editing level from the command line options
         if (firstLoop) {
             // Create New Level for Edit
-            if (options.getCreateNewLevel()) {
+            if (getModel()->getOptionModel()->getCreateNewLevel()) {
                 editingLevel = 0;
 
                 // Load Existing Level for Edit
             } else {
-                editingLevel = options.getStartingLevel();
+                editingLevel = getModel()->getOptionModel()->getStartingLevel();
             }
         }
 

@@ -9,6 +9,7 @@ GameModel::GameModel() {
     this->titleScreenModel = new TitleScreenModel();
     this->editorBoardModel = new EditorBoardModel();
     this->playBoardModel = new PlayBoardModel();
+    this->optionModel = new OptionModel();
 }
 
 /**
@@ -20,6 +21,7 @@ GameModel::~GameModel() {
     delete this->titleScreenModel;
     delete this->editorBoardModel;
     delete this->playBoardModel;
+    delete this->optionModel;
 }
 
 /**
@@ -44,6 +46,14 @@ EditorBoardModel *GameModel::getEditorBoardModel() const {
  */
 PlayBoardModel *GameModel::getPlayBoardModel() const {
     return this->playBoardModel;
+}
+
+/**
+ * Fetch the option model
+ * @return OptionModel*
+ */
+OptionModel *GameModel::getOptionModel() const {
+    return this->optionModel;
 }
 
 /**

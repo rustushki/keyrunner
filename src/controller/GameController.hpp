@@ -4,7 +4,7 @@
 #include <SDL_video.h>
 #include "../controller/Controller.hpp"
 #include "../controller/Display.hpp"
-#include "../controller/Options.hpp"
+#include "../controller/OptionController.hpp"
 #include "../model/Model.hpp"
 #include "../model/State.hpp"
 #include "../view/AnimationFactory.hpp"
@@ -12,8 +12,8 @@
 
 class GameController : public Controller {
 public:
-    explicit GameController(GameModel* gameModel, Options options);
-    virtual ~GameController();
+    explicit GameController(GameModel* gameModel, int argc, char** argv);
+    ~GameController() final;
     void gameLoop() override;
 
 protected:
@@ -29,7 +29,6 @@ private:
     SDL_Renderer* createRenderer(SDL_Window *window);
 
     GameModel* gameModel;
-    Options options;
     Display *display;
     bool firstLoop;
 };

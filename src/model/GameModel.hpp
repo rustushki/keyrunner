@@ -4,6 +4,7 @@
 #include "../model/Model.hpp"
 #include "../model/TitleScreenModel.hpp"
 #include "../model/EditorBoardModel.hpp"
+#include "../model/OptionModel.hpp"
 #include "../model/PlayBoardModel.hpp"
 
 class GameModel : public Model {
@@ -16,11 +17,13 @@ public:
     TitleScreenModel* getTitleScreenModel() const;
     EditorBoardModel* getEditorBoardModel() const;
     PlayBoardModel* getPlayBoardModel() const;
+    OptionModel* getOptionModel() const;
 
 private:
     TitleScreenModel* titleScreenModel;
     EditorBoardModel* editorBoardModel;
     PlayBoardModel* playBoardModel;
+    OptionModel* optionModel;
     State state;
 };
 
