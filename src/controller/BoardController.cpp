@@ -1,5 +1,4 @@
 #include "../controller/BoardController.hpp"
-#include "DisplayController.hpp"
 
 /**
  * Constructor.
