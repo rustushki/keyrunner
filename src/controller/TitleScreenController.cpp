@@ -144,12 +144,22 @@ void TitleScreenController::createEditorLevelSelectorMenu() {
     levelEditorMenu->setOptionCursorTextColor(0xAA3333);
     levelEditorMenu->setVisibleOptionCount(5);
 
-    levelEditorMenu->addOption("New", [this](SDL_Event event) {});
+    levelEditorMenu->addOption("New", [this](SDL_Event event) {
+        getModel()->setState(EDIT);
+        getModel()->setCreateNewLevel(true);
+        getModel()->setEditorLevel(0);
+    });
+
     levelEditorMenu->addOption("Back", [this](SDL_Event event) {});
-    for (int levelNumber = 1; levelNumber <= getModel()->getMaxLevel(); levelNumber++) {
+
+    for (uint8_t levelNumber = 1; levelNumber <= getModel()->getMaxLevel(); levelNumber++) {
         std::stringstream levelName;
-        levelName << "Level" << " " << levelNumber;
-        levelEditorMenu->addOption(levelName.str(), [this](SDL_Event event) {});
+        levelName << "Level" << " " << static_cast<int>(levelNumber);
+        levelEditorMenu->addOption(levelName.str(), [this, levelNumber](SDL_Event event) {
+            getModel()->setCreateNewLevel(false);
+            getModel()->setEditorLevel(levelNumber);
+            getModel()->setState(EDIT);
+        });
     }
 
     levelEditorMenu->setOnKeyUpCallback([this](SDL_Event event) {

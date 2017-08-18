@@ -65,17 +65,20 @@ void GameController::updateModel(long frameDuration) {
     } else if (currentState == EDIT) {
         EditorBoardModel* model = getModel()->getEditorBoardModel();
 
+        // Editing Level of 0 means create new level
         auto editingLevel = static_cast<uint8_t>(0);
 
         // On first loop, pull the editing level from the command line options
         if (firstLoop) {
             // Create New Level for Edit
-            if (getModel()->getOptionModel()->getCreateNewLevel()) {
-                editingLevel = 0;
-
-                // Load Existing Level for Edit
-            } else {
+            if (!getModel()->getOptionModel()->getCreateNewLevel()) {
                 editingLevel = getModel()->getOptionModel()->getStartingLevel();
+            }
+
+        // Otherwise, pull it from the TitleScreenModel
+        } else {
+            if (!getModel()->getTitleScreenModel()->getCreateNewLevel()) {
+                editingLevel = getModel()->getTitleScreenModel()->getEditorLevel();
             }
         }
 
