@@ -16,7 +16,7 @@ protected:
 private:
     void updateLevel(long elapsedDuration) const;
     void conveyPlayer() const;
-    bool checkExitConditions() const override;
+    bool isStillExecuting() const override;
 
     View* createRectangle() const;
     View* createBoard() const;

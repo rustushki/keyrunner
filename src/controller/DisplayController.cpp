@@ -39,7 +39,7 @@ void DisplayController::gameLoop() {
     uint32_t maxDelay = 1000 / fps;
 
     // Iterate frames until the exit conditions are met
-    while (checkExitConditions()) {
+    while (isStillExecuting()) {
         // Begin preparing the frame
         uint32_t workStart = SDL_GetTicks();
 

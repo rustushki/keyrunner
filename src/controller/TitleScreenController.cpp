@@ -27,10 +27,10 @@ void TitleScreenController::updateModel(long frameDuration) {
 }
 
 /**
- * Doesn't return false until in the QUIT state.
+ * Returns true if the state is TITLE.
  * @return
  */
-bool TitleScreenController::checkExitConditions() const {
+bool TitleScreenController::isStillExecuting() const {
     return getModel()->getState() == TITLE;
 }
 

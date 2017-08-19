@@ -12,7 +12,7 @@ public:
 protected:
     TitleScreenModel* getModel() const override;
     void updateModel(long frameDuration) override;
-    bool checkExitConditions() const override;
+    bool isStillExecuting() const override;
 
 private:
     void createKeyImage();

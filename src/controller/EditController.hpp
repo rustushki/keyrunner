@@ -13,7 +13,7 @@ public:
 private:
     void updateModel(long frameDuration) override;
     EditorBoardModel* getModel() const override;
-    bool checkExitConditions() const override;
+    bool isStillExecuting() const override;
 
     View* createRectangle() const;
     View* createBoard() const;

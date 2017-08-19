@@ -17,7 +17,7 @@ protected:
     BaseModel* getModel() const override;
     void processInput();
     void updateModel(long frameDuration) override = 0;
-    bool checkExitConditions() const override = 0;
+    bool isStillExecuting() const override = 0;
 
 private:
     BaseModel* model;

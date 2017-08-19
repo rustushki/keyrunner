@@ -158,6 +158,6 @@ void OptionController::updateModel(long frameDuration) {
  * Since there is no loop, it may always return false.
  * @return boolean
  */
-bool OptionController::checkExitConditions() const {
+bool OptionController::isStillExecuting() const {
     return false;
 }

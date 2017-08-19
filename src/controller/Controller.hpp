@@ -11,7 +11,7 @@ public:
 
 protected:
     virtual void updateModel(long frameDuration) = 0;
-    virtual bool checkExitConditions() const = 0;
+    virtual bool isStillExecuting() const = 0;
 };
 
 

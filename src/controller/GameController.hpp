@@ -19,7 +19,7 @@ public:
 protected:
     GameModel* getModel() const final;
     void updateModel(long frameDuration) final;
-    bool checkExitConditions() const final;
+    bool isStillExecuting() const final;
 
 private:
     void buildDisplay();

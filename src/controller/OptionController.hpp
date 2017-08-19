@@ -12,7 +12,7 @@ public:
 
 protected:
     void updateModel(long frameDuration) final;
-    bool checkExitConditions() const final;
+    bool isStillExecuting() const final;
 
 private:
     OptionModel* optionModel;

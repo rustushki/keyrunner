@@ -232,9 +232,9 @@ View *EditController::createTileTypeButton(View* board, TileType tileType, uint8
 void EditController::updateModel(long frameDuration) {}
 
 /**
- * Returns true if the state is QUIT.
+ * Returns true if the state isn't QUIT.
  * @return
  */
-bool EditController::checkExitConditions() const {
+bool EditController::isStillExecuting() const {
     return getModel()->getState() != QUIT;
 }

@@ -106,7 +106,7 @@ void GameController::updateModel(long frameDuration) {
  * They are met if the current state is QUIT, WIN or LOSE.
  * @return boolean
  */
-bool GameController::checkExitConditions() const {
+bool GameController::isStillExecuting() const {
     State currentState = getModel()->getState();
     return currentState != QUIT && currentState != WIN && currentState != LOSE;
 }
@@ -216,7 +216,7 @@ GameModel *GameController::getModel() const {
  * While the exit conditions are not met, update the model.
  */
 void GameController::gameLoop() {
-    while (checkExitConditions()) {
+    while (isStillExecuting()) {
         updateModel(0);
     }
 }

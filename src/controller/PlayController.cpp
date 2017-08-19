@@ -181,6 +181,6 @@ void PlayController::updateModel(long frameDuration) {
  * Returns true if the model state is PLAY.
  * @return
  */
-bool PlayController::checkExitConditions() const {
+bool PlayController::isStillExecuting() const {
     return getModel()->getState() == PLAY;
 }
