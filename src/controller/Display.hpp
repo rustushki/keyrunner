@@ -12,6 +12,7 @@ public:
     ~Display();
 
     void draw() const;
+    void reset();
     void addView(std::string name, View* view);
     void deleteViewIfExists(std::string name);
     uint16_t getHeight() const;

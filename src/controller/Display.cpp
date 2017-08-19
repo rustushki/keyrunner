@@ -15,14 +15,9 @@ Display::Display(SDL_Window *window, SDL_Renderer *renderer) {
 
 /**
  * De-constructor.
- * <p>
- * Frees all the Views that are currently managed.
  */
 Display::~Display() {
-    // Free all Views
-    for (auto viewPair : viewMap) {
-        delete viewPair.second;
-    }
+    this->reset();
 }
 
 /**
@@ -162,4 +157,21 @@ void Display::setFocus(std::string viewName) {
  */
 std::string Display::getFocus() const {
     return this->focusedViewName;
+}
+
+/**
+ * Reset the display back to a clean state.
+ * <p>
+ * This will un-name all views, delete the views (thus freeing memory), clear the internal stack of views, and remove
+ * focus from any views that were in focus before.
+ */
+void Display::reset() {
+    // Free all Views
+    for (auto viewPair : viewMap) {
+        delete viewPair.second;
+    }
+
+    viewMap.clear();
+    viewNameStack.clear();
+    setFocus("");
 }

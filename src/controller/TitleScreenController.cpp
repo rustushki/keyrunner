@@ -111,7 +111,7 @@ void TitleScreenController::createMainMenu() {
         auto levelEditorMenuName = "level_selector_menu";
         getDisplay()->setFocus(levelEditorMenuName);
         getDisplay()->getViewByName(levelEditorMenuName)->show();
-        getDisplay()->getViewByName("main_menu")->show();
+        getDisplay()->getViewByName("main_menu")->hide();
     });
 
     mainMenu->addOption("Quit", [this](SDL_Event event) {

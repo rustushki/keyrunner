@@ -42,9 +42,9 @@ EditorController::EditorController(EditorBoardModel* model, Display* display, ui
     View* saveButton = createSaveButton(board, buttonSpacing);
     getDisplay()->addView("save_button", saveButton);
 
-    // Exit Button
-    View* exitButton = createExitButton(board, buttonSpacing);
-    getDisplay()->addView("exit_button", exitButton);
+    // Back Button
+    View* exitButton = createBackButton(board, buttonSpacing);
+    getDisplay()->addView("back_button", exitButton);
 
     // Tile Selector Buttons
     for (int tileTypeIndex = 0; tileTypeIndex < static_cast<int>(TileType::Count); tileTypeIndex++) {
@@ -175,25 +175,25 @@ View* EditorController::createSaveButton(View* board, uint8_t buttonSpacing) con
 }
 
 /**
- * Creates the Exit button.
+ * Creates the Back button.
  * @param board
  * @param buttonSpacing horizontal pixel distance between neighboring buttons
  * @return
  */
-View *EditorController::createExitButton(View *board, int buttonSpacing) const {
+View *EditorController::createBackButton(View *board, int buttonSpacing) const {
     SDL_Rect rect = {0, 0, 50, 30};
     rect.x = board->getWidth() - 1 * rect.w - 1 * buttonSpacing;
     rect.y = board->getHeight() + buttonSpacing;
-    auto exit = new ButtonView(nullptr, rect);
-    exit->setText("Exit");
-    exit->setColor(0x333333);
-    exit->setTextColor(0xFF0000);
-    exit->setFontPath(FONT_PATH);
-    exit->setOnMouseUpCallback([this](SDL_Event event) {
-        getModel()->setState(QUIT);
+    auto back = new ButtonView(nullptr, rect);
+    back->setText("Back");
+    back->setColor(0x333333);
+    back->setTextColor(0xFF0000);
+    back->setFontPath(FONT_PATH);
+    back->setOnMouseUpCallback([this](SDL_Event event) {
+        getModel()->setState(TITLE);
     });
-    exit->show();
-    return exit;
+    back->show();
+    return back;
 }
 
 /**
@@ -236,5 +236,5 @@ void EditorController::updateModel(long frameDuration) {}
  * @return
  */
 bool EditorController::isStillExecuting() const {
-    return getModel()->getState() != QUIT;
+    return getModel()->getState() == EDIT;
 }

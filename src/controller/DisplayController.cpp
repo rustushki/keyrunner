@@ -11,6 +11,7 @@
 DisplayController::DisplayController(BaseModel* model, Display* display) {
     this->model = model;
     this->display = display;
+    this->display->reset();
 }
 
 /**

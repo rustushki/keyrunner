@@ -90,6 +90,7 @@ void GameController::updateModel(long frameDuration) {
         throw std::logic_error("Invalid state detected");
     }
 
+    controller->getModel()->setState(currentState);
     controller->execute();
     firstLoop = false;
 
