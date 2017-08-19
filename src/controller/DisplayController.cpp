@@ -33,7 +33,7 @@ Display *DisplayController::getDisplay() const {
  * Game loop. Update the model, prepare and display the frame, process input, and maintain a frame delay to meet a
  * certain FPS.
  */
-void DisplayController::gameLoop() {
+void DisplayController::execute() {
     // Limit to 25 frames per second
     uint32_t fps = 25;
     uint32_t maxDelay = 1000 / fps;

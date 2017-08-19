@@ -6,7 +6,7 @@
 class Controller {
 public:
     virtual ~Controller() = default;
-    virtual void gameLoop() = 0;
+    virtual void execute() = 0;
     virtual Model* getModel() const = 0;
 
 protected:

@@ -10,7 +10,7 @@ class DisplayController : public Controller {
 public:
     DisplayController(BaseModel* model, Display* display);
     ~DisplayController() override = default;
-    void gameLoop() override;
+    void execute() override;
     Display* getDisplay() const;
 
 protected:

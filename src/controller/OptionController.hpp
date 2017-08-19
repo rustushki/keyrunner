@@ -7,7 +7,7 @@
 class OptionController : public Controller {
 public:
     explicit OptionController(OptionModel* model, int argc, char** argv);
-    void gameLoop() final;
+    void execute() final;
     OptionModel* getModel() const override;
 
 protected:

@@ -14,7 +14,7 @@ class GameController : public Controller {
 public:
     explicit GameController(GameModel* gameModel, int argc, char** argv);
     ~GameController() final;
-    void gameLoop() override;
+    void execute() override;
 
 protected:
     GameModel* getModel() const final;

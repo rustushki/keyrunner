@@ -13,6 +13,6 @@ int main(int argc, char** argv) {
     // Create a GameModel and GameController and start the game
     auto gameModel = new GameModel();
     GameController gameController{gameModel, argc, argv};
-    gameController.gameLoop();
+    gameController.execute();
     delete gameModel;
 }

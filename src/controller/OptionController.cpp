@@ -90,7 +90,7 @@ OptionModel* OptionController::getModel() const {
  * <p>
  * This is not so much a loop. It simply updates the model once.
  */
-void OptionController::gameLoop() {
+void OptionController::execute() {
     updateModel(0);
 }
 

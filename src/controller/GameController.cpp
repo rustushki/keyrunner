@@ -21,7 +21,7 @@ GameController::GameController(GameModel* gameModel, int argc, char** argv) {
     // Use the OptionController to populate the OptionModel with settings from command line arguments
     OptionModel* optionModel = getModel()->getOptionModel();
     OptionController optionController{optionModel, argc, argv};
-    optionController.gameLoop();
+    optionController.execute();
 
     // Set the initial state from the command line options
     getModel()->setState(optionModel->getInitialState());
@@ -90,7 +90,7 @@ void GameController::updateModel(long frameDuration) {
         throw std::logic_error("Invalid state detected");
     }
 
-    controller->gameLoop();
+    controller->execute();
     firstLoop = false;
 
     State newState = controller->getModel()->getState();
@@ -215,7 +215,7 @@ GameModel *GameController::getModel() const {
 /**
  * While the exit conditions are not met, update the model.
  */
-void GameController::gameLoop() {
+void GameController::execute() {
     while (isStillExecuting()) {
         updateModel(0);
     }
