@@ -150,7 +150,12 @@ void TitleScreenController::createEditorLevelSelectorMenu() {
         getModel()->setEditorLevel(0);
     });
 
-    levelEditorMenu->addOption("Back", [this](SDL_Event event) {});
+    levelEditorMenu->addOption("Back", [this](SDL_Event event) {
+        auto mainMenu = "main_menu";
+        getDisplay()->setFocus(mainMenu);
+        getDisplay()->getViewByName(mainMenu)->show();
+        getDisplay()->getViewByName("level_selector_menu")->hide();
+    });
 
     for (uint8_t levelNumber = 1; levelNumber <= getModel()->getMaxLevel(); levelNumber++) {
         std::stringstream levelName;
