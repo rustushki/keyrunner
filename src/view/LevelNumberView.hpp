@@ -7,8 +7,8 @@
 class LevelNumberView : public LabelView {
 public:
     LevelNumberView(BoardModel* model, const SDL_Rect &rect);
-    virtual BoardModel* getModel() const override;
-    virtual std::string getText() override;
+    BoardModel* getModel() const override;
+    std::string getText() override;
 
 };
 

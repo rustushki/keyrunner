@@ -11,7 +11,7 @@ BoardModel::BoardModel() {
     for (int row = 0; row < getHeight(); row++) {
         std::vector<TileType> tileRow;
         for (int column = 0; column < getWidth(); column++) {
-            tileRow.push_back(TILE_TYPE_EMPTY);
+            tileRow.push_back(TileType::Empty);
         }
         this->tileType.push_back(tileRow);
     }
@@ -39,7 +39,7 @@ void BoardModel::setLevelNum(uint8_t level) {
  * @return boolean
  */
 bool BoardModel::isWall(TileCoord coord) const {
-    return (tileType[coord.second][coord.first] == TILE_TYPE_WALL);
+    return (tileType[coord.second][coord.first] == TileType::Wall);
 }
 
 /**
@@ -91,9 +91,9 @@ void BoardModel::setPlayerCoord(TileCoord tileCoord) {
 bool BoardModel::isTeleporter(TileCoord coord) const {
     TileType tt = tileType[coord.second][coord.first];
 
-    return (   tt == TILE_TYPE_TELEPORTER_RED
-            || tt == TILE_TYPE_TELEPORTER_GREEN
-            || tt == TILE_TYPE_TELEPORTER_BLUE);
+    return (   tt == TileType::TeleporterRed
+            || tt == TileType::TeleporterGreen
+            || tt == TileType::TeleporterBlue);
 }
 
 /**
@@ -120,7 +120,7 @@ TileType BoardModel::getTileType(TileCoord coord) const {
  * @return boolean
  */
 bool BoardModel::isDoor(TileCoord coord) const {
-    return tileType[coord.second][coord.first] == TILE_TYPE_DOOR;
+    return tileType[coord.second][coord.first] == TileType::Door;
 }
 
 /**
@@ -149,12 +149,12 @@ TileCoord BoardModel::getTileCoordInDirection(TileCoord coord, Direction dir) co
  * @return TileCoord
  */
 TileCoord BoardModel::getTileCoordUp(TileCoord current) const {
-    int x = current.first + 0;
-    int y = current.second - 1;
+    auto x = current.first;
+    auto y = current.second - 1;
     if (y < 0) {
         y = getHeight() - 1;
     }
-    return TileCoord(x, y);
+    return {static_cast<uint16_t>(x), static_cast<uint16_t>(y)};
 }
 
 /**
@@ -163,12 +163,12 @@ TileCoord BoardModel::getTileCoordUp(TileCoord current) const {
  * @return TileCoord
  */
 TileCoord BoardModel::getTileCoordDown(TileCoord current) const {
-    int x = current.first + 0;
-    int y = current.second + 1;
+    auto x = current.first + 0;
+    auto y = current.second + 1;
     if (y >= getHeight()) {
         y = 0;
     }
-    return TileCoord(x, y);
+    return {static_cast<uint16_t>(x), static_cast<uint16_t>(y)};
 }
 
 /**
@@ -177,12 +177,12 @@ TileCoord BoardModel::getTileCoordDown(TileCoord current) const {
  * @return TileCoord
  */
 TileCoord BoardModel::getTileCoordLeft(TileCoord current) const {
-    int x = current.first - 1;
-    int y = current.second + 0;
+    auto x = current.first - 1;
+    auto y = current.second + 0;
     if (x < 0) {
         x = getWidth() - 1;
     }
-    return TileCoord(x, y);
+    return {static_cast<uint16_t>(x), static_cast<uint16_t>(y)};
 }
 
 /**
@@ -191,12 +191,12 @@ TileCoord BoardModel::getTileCoordLeft(TileCoord current) const {
  * @return TileCoord
  */
 TileCoord BoardModel::getTileCoordRight(TileCoord current) const {
-    int x = current.first + 1;
-    int y = current.second + 0;
+    auto x = current.first + 1;
+    auto y = current.second + 0;
     if (x >= getWidth()) {
         x = 0;
     }
-    return TileCoord(x, y);
+    return {static_cast<uint16_t>(x), static_cast<uint16_t>(y)};
 }
 
 /**
@@ -207,10 +207,10 @@ TileCoord BoardModel::getTileCoordRight(TileCoord current) const {
 bool BoardModel::isConveyor(TileCoord coord) const {
     TileType tt = tileType[coord.second][coord.first];
 
-    return (   tt == TILE_TYPE_CONVEY_UP
-            || tt == TILE_TYPE_CONVEY_DOWN
-            || tt == TILE_TYPE_CONVEY_RIGHT
-            || tt == TILE_TYPE_CONVEY_LEFT);
+    return (   tt == TileType::ConveyorUp
+            || tt == TileType::ConveyorDown
+            || tt == TileType::ConveyorRight
+            || tt == TileType::ConveyorLeft);
 }
 
 /**
@@ -221,13 +221,13 @@ bool BoardModel::isConveyor(TileCoord coord) const {
  */
 Direction BoardModel::getConveyorDirection(TileCoord coord) const {
     TileType tt = tileType[coord.second][coord.first];
-    if (tt == TILE_TYPE_CONVEY_UP) {
+    if (tt == TileType::ConveyorUp) {
         return DIRECTION_UP;
-    } else if (tt == TILE_TYPE_CONVEY_DOWN) {
+    } else if (tt == TileType::ConveyorDown) {
         return DIRECTION_DOWN;
-    } else if (tt == TILE_TYPE_CONVEY_RIGHT) {
+    } else if (tt == TileType::ConveyorRight) {
         return DIRECTION_RIGHT;
-    } else if (tt == TILE_TYPE_CONVEY_LEFT) {
+    } else if (tt == TileType::ConveyorLeft) {
         return DIRECTION_LEFT;
     }
 
@@ -401,21 +401,5 @@ uint16_t BoardModel::getHeight() const {
  */
 uint16_t BoardModel::getWidth() const {
     return 25;
-}
-
-/**
- * Get the state of the game.
- * @return State
- */
-State BoardModel::getState() const {
-    return state;
-}
-
-/**
- * Set the state of the game.
- * @param State
- */
-void BoardModel::setState(State state) {
-    this->state = state;
 }
 

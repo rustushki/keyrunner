@@ -1,47 +1,41 @@
 #include <stdexcept>
 #include <sstream>
-#include "../model/TileType.hpp"
-#include "../controller/KeyRunner.hpp"
+#include "../model/AnimationTypeFactory.hpp"
 
 /**
- * Constructor.
- */
-TileType::TileType() {}
-
-/**
- * Get the Animation type associated with this TileType.
+ * Builds an AnimationType from a TileType.
  * @return AnimationType
  */
-AnimationType TileType::toAnimationType() {
-    switch (*this) {
-        case TILE_TYPE_EMPTY:
+AnimationType AnimationTypeFactory::build(TileType tileType) {
+    switch (tileType) {
+        case TileType::Empty:
             return ANIMATION_TYPE_EMPTY;
 
-        case TILE_TYPE_WALL:
+        case TileType::Wall:
             return ANIMATION_TYPE_WALL;
 
-        case TILE_TYPE_DOOR:
+        case TileType::Door:
             return ANIMATION_TYPE_DOOR;
 
-        case TILE_TYPE_TELEPORTER_RED:
+        case TileType::TeleporterRed:
             return ANIMATION_TYPE_TELEPORTER_RED;
 
-        case TILE_TYPE_TELEPORTER_GREEN:
+        case TileType::TeleporterGreen:
             return ANIMATION_TYPE_TELEPORTER_GREEN;
 
-        case TILE_TYPE_TELEPORTER_BLUE:
+        case TileType::TeleporterBlue:
             return ANIMATION_TYPE_TELEPORTER_BLUE;
 
-        case TILE_TYPE_CONVEY_UP:
+        case TileType::ConveyorUp:
             return ANIMATION_TYPE_CONVEY_UP;
 
-        case TILE_TYPE_CONVEY_DOWN:
+        case TileType::ConveyorDown:
             return ANIMATION_TYPE_CONVEY_DOWN;
 
-        case TILE_TYPE_CONVEY_LEFT:
+        case TileType::ConveyorLeft:
             return ANIMATION_TYPE_CONVEY_LEFT;
 
-        case TILE_TYPE_CONVEY_RIGHT:
+        case TileType::ConveyorRight:
             return ANIMATION_TYPE_CONVEY_RIGHT;
 
         default:

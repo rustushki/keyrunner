@@ -68,18 +68,13 @@ bool Animation::advance() {
 void Animation::draw(SDL_Renderer *renderer) {
     // Look into the frame list to determine the logical coordinates of the
     // frame in the sprite sheet.
-    uint16_t frameXc = (uint16_t) (this->currentStill * 2 + 0);
-    uint16_t frameYc = (uint16_t) (this->currentStill * 2 + 1);
-    uint16_t frameX  = this->frameList[frameXc];
-    uint16_t frameY  = this->frameList[frameYc];
+    auto frameXc = static_cast<uint16_t>(this->currentStill * 2 + 0);
+    auto frameYc = static_cast<uint16_t>(this->currentStill * 2 + 1);
+    auto frameX  = this->frameList[frameXc];
+    auto frameY  = this->frameList[frameYc];
 
-    SDL_Rect r;
-    r.x = this->x;
-    r.y = this->y;
-    r.w = getWidth();
-    r.h = getHeight();
-
-    this->sheet->drawStill(renderer, frameX, frameY, r);
+    SDL_Rect destination = {x, y, getWidth(), getHeight()};
+    this->sheet->drawStill(renderer, frameX, frameY, destination);
 }
 
 /**

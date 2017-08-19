@@ -15,14 +15,9 @@ Display::Display(SDL_Window *window, SDL_Renderer *renderer) {
 
 /**
  * De-constructor.
- * <p>
- * Frees all the Views that are currently managed.
  */
 Display::~Display() {
-    // Free all Views
-    for (auto viewPair : viewMap) {
-        delete viewPair.second;
-    }
+    this->reset();
 }
 
 /**
@@ -109,7 +104,7 @@ void Display::advanceAnimations() {
 }
 
 /**
- * Given a coordinate pair, return view that was clicked, or nullptr if no view was clicked.
+ * Given a coordinate pair, return view underneath it, or nullptr if no view is underneath.
  * <p>
  * If views are stacked on top of each other, the uppermost view will be considered clicked. Any beneath will not be
  * returned.
@@ -117,7 +112,7 @@ void Display::advanceAnimations() {
  * @param y y coordinate
  * @return View*
  */
-View *Display::getClickedView(uint32_t x, uint32_t y) const {
+View *Display::getViewUnderCoordinate(uint32_t x, uint32_t y) const {
     View* matchingView = nullptr;
 
     for (auto viewNameIterator = viewNameStack.rbegin(); viewNameIterator != viewNameStack.rend(); viewNameIterator++) {
@@ -140,10 +135,43 @@ View* Display::getViewByName(std::string name) const {
     View* matchingView = nullptr;
     for (auto viewPair : viewMap) {
         std::string viewName = viewPair.first;
-        if (viewName.compare(name) == 0) {
+        if (viewName == name) {
             matchingView = viewPair.second;
         }
     }
 
     return matchingView;
+}
+
+/**
+ * Set the view which should be considered in focus.
+ * @param viewName
+ */
+void Display::setFocus(std::string viewName) {
+    this->focusedViewName = viewName;
+}
+
+/**
+ * Get the view which should be considered in focus.
+ * @return string
+ */
+std::string Display::getFocus() const {
+    return this->focusedViewName;
+}
+
+/**
+ * Reset the display back to a clean state.
+ * <p>
+ * This will un-name all views, delete the views (thus freeing memory), clear the internal stack of views, and remove
+ * focus from any views that were in focus before.
+ */
+void Display::reset() {
+    // Free all Views
+    for (auto viewPair : viewMap) {
+        delete viewPair.second;
+    }
+
+    viewMap.clear();
+    viewNameStack.clear();
+    setFocus("");
 }
