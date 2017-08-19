@@ -19,13 +19,12 @@ add_library(uitk STATIC
 
 # Source Files.
 set(SOURCES
-    src/controller/OptionController.cpp
     src/controller/BoardController.cpp
-    src/controller/Controller.hpp
     src/controller/Display.cpp
     src/controller/DisplayController.cpp
-    src/controller/EditController.cpp
+    src/controller/EditorController.cpp
     src/controller/GameController.cpp
+    src/controller/OptionController.cpp
     src/controller/PlayController.cpp
     src/controller/TitleScreenController.cpp
     src/controller/main.cpp

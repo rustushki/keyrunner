@@ -1,5 +1,5 @@
 #include <sstream>
-#include "../controller/EditController.hpp"
+#include "EditorController.hpp"
 #include "../view/EditorBoardView.hpp"
 #include "../view/AnimationFactory.hpp"
 #include "../model/AnimationTypeFactory.hpp"
@@ -13,7 +13,7 @@ extern AnimationFactory* animationFactory;
  * @param model
  * @param display
  */
-EditController::EditController(EditorBoardModel* model, Display* display, uint8_t editingLevel) : BoardController(model,
+EditorController::EditorController(EditorBoardModel* model, Display* display, uint8_t editingLevel) : BoardController(model,
         display) {
 
     // Editor Board
@@ -59,7 +59,7 @@ EditController::EditController(EditorBoardModel* model, Display* display, uint8_
  * Fetch the sub-classed model for this controller.
  * @return the model
  */
-EditorBoardModel *EditController::getModel() const {
+EditorBoardModel *EditorController::getModel() const {
     return (EditorBoardModel*) DisplayController::getModel();
 }
 
@@ -67,7 +67,7 @@ EditorBoardModel *EditController::getModel() const {
  * Creates a black rectangle.
  * @return View*
  */
-View* EditController::createRectangle() const {
+View* EditorController::createRectangle() const {
     SDL_Rect rect = {};
     rect.x = 0;
     rect.h = 40;
@@ -83,7 +83,7 @@ View* EditController::createRectangle() const {
  * Creates the Editor's BoardView.
  * @return View*
  */
-View* EditController::createBoard() const {
+View* EditorController::createBoard() const {
     SDL_Rect rect = {0, 0, getDisplay()->getWidth(), 400};
     BoardView* board = new EditorBoardView(getModel(), rect);
 
@@ -158,7 +158,7 @@ View* EditController::createBoard() const {
  * @param buttonSpacing horizontal pixel distance between neighboring buttons
  * @return
  */
-View* EditController::createSaveButton(View* board, uint8_t buttonSpacing) const {
+View* EditorController::createSaveButton(View* board, uint8_t buttonSpacing) const {
     SDL_Rect rect = {0, 0, 50, 30};
     rect.x = board->getWidth() - 2 * rect.w - 2 * buttonSpacing;
     rect.y = board->getHeight() + buttonSpacing;
@@ -180,7 +180,7 @@ View* EditController::createSaveButton(View* board, uint8_t buttonSpacing) const
  * @param buttonSpacing horizontal pixel distance between neighboring buttons
  * @return
  */
-View *EditController::createExitButton(View *board, int buttonSpacing) const {
+View *EditorController::createExitButton(View *board, int buttonSpacing) const {
     SDL_Rect rect = {0, 0, 50, 30};
     rect.x = board->getWidth() - 1 * rect.w - 1 * buttonSpacing;
     rect.y = board->getHeight() + buttonSpacing;
@@ -203,7 +203,7 @@ View *EditController::createExitButton(View *board, int buttonSpacing) const {
  * @param buttonSpacing
  * @return
  */
-View *EditController::createTileTypeButton(View* board, TileType tileType, uint8_t buttonSpacing) const {
+View *EditorController::createTileTypeButton(View* board, TileType tileType, uint8_t buttonSpacing) const {
     const uint16_t width  = 40;
     const uint16_t height = 27;
     const uint8_t initialOffset = 10;
@@ -229,12 +229,12 @@ View *EditController::createTileTypeButton(View* board, TileType tileType, uint8
  * Update the EditorBoardModel.
  * @param frameDuration
  */
-void EditController::updateModel(long frameDuration) {}
+void EditorController::updateModel(long frameDuration) {}
 
 /**
  * Returns true if the state isn't QUIT.
  * @return
  */
-bool EditController::isStillExecuting() const {
+bool EditorController::isStillExecuting() const {
     return getModel()->getState() != QUIT;
 }

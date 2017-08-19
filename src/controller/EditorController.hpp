@@ -5,10 +5,10 @@
 #include "../uitk/ButtonView.hpp"
 #include "../model/EditorBoardModel.hpp"
 
-class EditController : public BoardController {
+class EditorController : public BoardController {
 public:
-    EditController(EditorBoardModel* model, Display* display, uint8_t editingLevel);
-    ~EditController() override = default;
+    EditorController(EditorBoardModel* model, Display* display, uint8_t editingLevel);
+    ~EditorController() override = default;
 
 private:
     void updateModel(long frameDuration) override;

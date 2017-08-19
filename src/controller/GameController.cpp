@@ -1,7 +1,7 @@
 #include <sstream>
 #include <SDL_ttf.h>
 #include "../controller/PlayController.hpp"
-#include "../controller/EditController.hpp"
+#include "EditorController.hpp"
 #include "../controller/GameController.hpp"
 #include "../controller/TitleScreenController.hpp"
 
@@ -82,7 +82,7 @@ void GameController::updateModel(long frameDuration) {
             }
         }
 
-        controller = new EditController(model, display, editingLevel);
+        controller = new EditorController(model, display, editingLevel);
     } else if (currentState == TITLE) {
         controller = new TitleScreenController(getModel()->getTitleScreenModel(), display);
 
