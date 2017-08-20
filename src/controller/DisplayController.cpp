@@ -102,7 +102,6 @@ void DisplayController::processInput() {
         } else if (event.type == SDL_QUIT) {
             getModel()->setState(QUIT);
 
-
         // Delegate Mouse Up, Down, and Hover to the views as they apply (disregarding focus)
         } else if (event.type == SDL_MOUSEBUTTONUP || event.type == SDL_MOUSEBUTTONDOWN ||
                    event.type == SDL_MOUSEMOTION) {

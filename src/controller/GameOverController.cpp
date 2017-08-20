@@ -9,6 +9,7 @@
 GameOverController::GameOverController(GameOverModel *model, Display *display) : DisplayController(model, display) {
     auto mainMenu = createMainMenu();
     getDisplay()->addView("main_menu", mainMenu);
+    getDisplay()->setFocus("main_menu");
 }
 
 /**
