@@ -52,7 +52,11 @@ View *GameOverController::createMainMenu() {
     mainMenu->setVisibleOptionCount(3);
     mainMenu->addOption("Try Again", [](SDL_Event event) {});
     mainMenu->addOption("Return to Title", [](SDL_Event event) {});
-    mainMenu->addOption("Quit", [](SDL_Event event) {});
+
+    mainMenu->addOption("Quit", [this](SDL_Event event) {
+        getModel()->setState(QUIT);
+    });
+
     mainMenu->show();
     return mainMenu;
 }
