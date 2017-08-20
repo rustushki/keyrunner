@@ -4,6 +4,7 @@
 #include "EditorController.hpp"
 #include "../controller/GameController.hpp"
 #include "../controller/TitleScreenController.hpp"
+#include "GameOverController.hpp"
 
 extern AnimationFactory* animationFactory;
 
@@ -83,11 +84,16 @@ void GameController::updateModel(long frameDuration) {
         }
 
         controller = new EditorController(model, display, editingLevel);
+
     } else if (currentState == TITLE) {
         controller = new TitleScreenController(getModel()->getTitleScreenModel(), display);
 
+    } else if (currentState == LOSE) {
+        controller = new GameOverController(getModel()->getGameOverModel(), display);
+
     } else {
         throw std::logic_error("Invalid state detected");
+
     }
 
     controller->getModel()->setState(currentState);
@@ -104,12 +110,12 @@ void GameController::updateModel(long frameDuration) {
 /**
  * Confirms that the exit conditions are not yet met.
  * <p>
- * They are met if the current state is QUIT, WIN or LOSE.
+ * They are met if the current state is QUIT or WIN
  * @return boolean
  */
 bool GameController::isStillExecuting() const {
     State currentState = getModel()->getState();
-    return currentState != QUIT && currentState != WIN && currentState != LOSE;
+    return currentState != QUIT && currentState != WIN;
 }
 
 /**
