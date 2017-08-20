@@ -17,7 +17,7 @@
 PlayController::PlayController(PlayBoardModel *model, Display* display, uint8_t startingLevel) : BoardController(model,
         display) {
     // Initialize the model
-    getModel()->setTimeClock(50000);
+    getModel()->setTimeClock(500);
     getModel()->setLevelNum(startingLevel);
 
     // Read in the starting level

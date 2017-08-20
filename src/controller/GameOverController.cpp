@@ -60,6 +60,13 @@ View *GameOverController::createMainMenu() {
         getModel()->setState(QUIT);
     });
 
+    // Q quits the game
+    mainMenu->setOnKeyUpCallback([this](SDL_Event event) {
+        if (event.key.keysym.sym == SDLK_q) {
+            getModel()->setState(QUIT);
+        }
+    });
+
     mainMenu->show();
     return mainMenu;
 }

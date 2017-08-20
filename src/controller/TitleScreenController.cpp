@@ -167,8 +167,8 @@ void TitleScreenController::createEditorLevelSelectorMenu() {
         });
     }
 
+    // Q quits the game
     levelEditorMenu->setOnKeyUpCallback([this](SDL_Event event) {
-        // Q quits the game
         if (event.key.keysym.sym == SDLK_q) {
             getModel()->setState(QUIT);
         }
