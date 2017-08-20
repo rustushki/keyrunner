@@ -51,7 +51,9 @@ View *GameOverController::createMainMenu() {
     mainMenu->setOptionCursorTextColor(0xAA3333);
     mainMenu->setVisibleOptionCount(3);
     mainMenu->addOption("Try Again", [](SDL_Event event) {});
-    mainMenu->addOption("Return to Title", [](SDL_Event event) {});
+    mainMenu->addOption("Return to Title", [this](SDL_Event event) {
+        getModel()->setState(TITLE);
+    });
 
     mainMenu->addOption("Quit", [this](SDL_Event event) {
         getModel()->setState(QUIT);
