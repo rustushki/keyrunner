@@ -1,4 +1,5 @@
-#include "GameOverController.hpp"
+#include "../controller/GameOverController.hpp"
+#include "../uitk/MenuView.hpp"
 
 /**
  * Constructor.
@@ -6,12 +7,13 @@
  * @param display
  */
 GameOverController::GameOverController(GameOverModel *model, Display *display) : DisplayController(model, display) {
-    // Do nothing
+    auto mainMenu = createMainMenu();
+    getDisplay()->addView("main_menu", mainMenu);
 }
 
 /**
  * Get the GameOverModel for this controller.
- * @return
+ * @return GameOverModel*
  */
 GameOverModel* GameOverController::getModel() const {
     return dynamic_cast<GameOverModel*>(DisplayController::getModel());
@@ -29,9 +31,28 @@ void GameOverController::updateModel(long frameDuration) {
 
 /**
  * The controller will continue to execute so long as the model is in the LOSE state.
- * @return
+ * @return bool
  */
 bool GameOverController::isStillExecuting() const {
     return getModel()->getState() == LOSE;
 }
 
+/**
+ * Create the main menu of the Game Over Screen.
+ * @return View*
+ */
+View *GameOverController::createMainMenu() {
+    SDL_Rect rect = {0, 240, 200, 200};
+    rect.x = (getDisplay()->getWidth() - rect.w) / 2;
+    auto mainMenu = new MenuView(nullptr, rect);
+    mainMenu->setColor(0x000000);
+    mainMenu->setOptionBackgroundColor(0x000000);
+    mainMenu->setOptionTextColor(0xBBBBBB);
+    mainMenu->setOptionCursorTextColor(0xAA3333);
+    mainMenu->setVisibleOptionCount(3);
+    mainMenu->addOption("Try Again", [](SDL_Event event) {});
+    mainMenu->addOption("Return to Title", [](SDL_Event event) {});
+    mainMenu->addOption("Quit", [](SDL_Event event) {});
+    mainMenu->show();
+    return mainMenu;
+}
