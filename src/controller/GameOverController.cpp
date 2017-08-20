@@ -51,16 +51,23 @@ View *GameOverController::createMainMenu() {
     mainMenu->setOptionTextColor(0xBBBBBB);
     mainMenu->setOptionCursorTextColor(0xAA3333);
     mainMenu->setVisibleOptionCount(3);
-    mainMenu->addOption("Try Again", [](SDL_Event event) {});
+
+    // Selecting Try Again will cause the game to restart on the first level
+    mainMenu->addOption("Try Again", [this](SDL_Event event) {
+        getModel()->setState(PLAY);
+    });
+
+    // Selecting Return to Title will return to the title screen
     mainMenu->addOption("Return to Title", [this](SDL_Event event) {
         getModel()->setState(TITLE);
     });
 
+    // Selecting Quit will quit the game
     mainMenu->addOption("Quit", [this](SDL_Event event) {
         getModel()->setState(QUIT);
     });
 
-    // Q quits the game
+    // Pressing Q will quit the game
     mainMenu->setOnKeyUpCallback([this](SDL_Event event) {
         if (event.key.keysym.sym == SDLK_q) {
             getModel()->setState(QUIT);
