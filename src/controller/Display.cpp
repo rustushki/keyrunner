@@ -107,7 +107,7 @@ void Display::advanceAnimations() {
  * Given a coordinate pair, return view underneath it, or nullptr if no view is underneath.
  * <p>
  * If views are stacked on top of each other, the uppermost view will be considered clicked. Any beneath will not be
- * returned.
+ * returned. Invisible views will be ignored.
  * @param x x coordinate
  * @param y y coordinate
  * @return View*
@@ -117,7 +117,7 @@ View *Display::getViewUnderCoordinate(uint32_t x, uint32_t y) const {
 
     for (auto viewNameIterator = viewNameStack.rbegin(); viewNameIterator != viewNameStack.rend(); viewNameIterator++) {
         View* view = getViewByName(*viewNameIterator);
-        if (view->containsPoint(x, y)) {
+        if (view->isVisible() && view->containsPoint(x, y)) {
             matchingView = view;
             break;
         }
