@@ -13,6 +13,7 @@ public:
     void onMouseUp(SDL_Event event) override;
     void onKeyUp(SDL_Event event) override;
 
+    void setOptionFontSize(uint8_t optionFontSize);
     void setVisibleOptionCount(uint16_t count);
     uint16_t getVisibleOptionCount() const;
     void addOption(std::string optionText, const std::function<void(SDL_Event)> &callBack);
@@ -23,6 +24,7 @@ public:
     void incrementCursor();
     void decrementCursor();
     uint16_t getCursorIndex() const;
+    uint8_t getOptionFontSize() const;
 
 private:
     ImageView* upArrowView;
@@ -34,6 +36,7 @@ private:
     uint16_t cursorIndex;
     uint32_t cursorTextColor;
     uint16_t visibleOptionCount;
+    uint8_t optionFontSize;
 
     void sizeButtons();
     uint32_t getOptionBackgroundColor();
@@ -47,7 +50,6 @@ private:
     void setWindowTopIndex(uint16_t index);
     void incrementWindowTopIndex();
     void decrementWindowTopIndex();
-
     bool isCursorOutsideWindow();
 };
 

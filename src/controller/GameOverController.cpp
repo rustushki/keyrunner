@@ -43,7 +43,7 @@ bool GameOverController::isStillExecuting() const {
  * @return View*
  */
 View *GameOverController::createMainMenu() {
-    SDL_Rect rect = {0, 240, 200, 200};
+    SDL_Rect rect = {0, 240, 300, 200};
     rect.x = (getDisplay()->getWidth() - rect.w) / 2;
     auto mainMenu = new MenuView(nullptr, rect);
     mainMenu->setColor(0x000000);
@@ -51,6 +51,7 @@ View *GameOverController::createMainMenu() {
     mainMenu->setOptionTextColor(0xBBBBBB);
     mainMenu->setOptionCursorTextColor(0xAA3333);
     mainMenu->setVisibleOptionCount(3);
+    mainMenu->setOptionFontSize(40);
 
     // Selecting Try Again will cause the game to restart on the first level
     mainMenu->addOption("Try Again", [this](SDL_Event event) {
