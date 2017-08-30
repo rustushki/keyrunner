@@ -16,6 +16,7 @@ protected:
 
 private:
     View* createMainMenu();
+    View *createGameOverMenu();
 };
 
 #endif

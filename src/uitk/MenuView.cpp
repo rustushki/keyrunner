@@ -19,7 +19,7 @@ void MenuView::addOption(std::string optionText, const std::function<void(SDL_Ev
     SDL_Rect rect = {0, 0, 0, 0};
     auto button = new ButtonView(nullptr, rect);
     button->setText(optionText);
-    button->setFontPath(FONT_PATH);
+    button->setFontPath(FONT_CELTIC_HAND);
     button->setFontSize(0);
     button->setOnMouseUpCallback(callBack);
     button->setColor(getOptionBackgroundColor());

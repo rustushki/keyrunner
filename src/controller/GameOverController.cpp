@@ -10,6 +10,9 @@ GameOverController::GameOverController(GameOverModel *model, Display *display) :
     auto mainMenu = createMainMenu();
     getDisplay()->addView("main_menu", mainMenu);
     getDisplay()->setFocus("main_menu");
+
+    auto gameOverLabel = createGameOverMenu();
+    getDisplay()->addView("game_over_label", gameOverLabel);
 }
 
 /**
@@ -77,4 +80,20 @@ View *GameOverController::createMainMenu() {
 
     mainMenu->show();
     return mainMenu;
+}
+
+/**
+ * Create and return the Game Over text that appears on the the screen.
+ * @return View*
+ */
+View *GameOverController::createGameOverMenu() {
+    SDL_Rect rect = {0, 30, 300, 200};
+    rect.x = (getDisplay()->getWidth() - rect.w) / 2;
+    auto gameOverLabel = new LabelView(nullptr, rect);
+    gameOverLabel->setFontSize(0);
+    gameOverLabel->setText("Game Over");
+    gameOverLabel->setTextColor(0xFF0000);
+    gameOverLabel->setFontPath(FONT_CELTIC_HAND);
+    gameOverLabel->show();
+    return gameOverLabel;
 }
