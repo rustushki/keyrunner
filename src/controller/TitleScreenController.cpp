@@ -52,7 +52,7 @@ void TitleScreenController::createKeyRunnerText() {
     auto keyRunner = new LabelView(nullptr, rect);
     keyRunner->setText("Key Runner");
     keyRunner->setFontSize(0);
-    keyRunner->setFontPath(FONT_PATH);
+    keyRunner->setFontPath(FONT_CELTIC_HAND);
     keyRunner->setColor(0x000000);
     keyRunner->setTextColor(0xEEEEEE);
     keyRunner->setMarginVertical(0);
@@ -70,7 +70,7 @@ void TitleScreenController::createPressEnterText() {
     auto pressEnterText = new LabelView(nullptr, rect);
     pressEnterText->setText("Press Enter to Continue");
     pressEnterText->setFontSize(0);
-    pressEnterText->setFontPath(FONT_PATH);
+    pressEnterText->setFontPath(FONT_CELTIC_HAND);
     pressEnterText->setColor(0x000000);
     pressEnterText->setTextColor(0xEEEEEE);
     pressEnterText->setMarginVertical(0);
@@ -167,8 +167,8 @@ void TitleScreenController::createEditorLevelSelectorMenu() {
         });
     }
 
+    // Q quits the game
     levelEditorMenu->setOnKeyUpCallback([this](SDL_Event event) {
-        // Q quits the game
         if (event.key.keysym.sym == SDLK_q) {
             getModel()->setState(QUIT);
         }

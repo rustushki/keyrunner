@@ -16,7 +16,8 @@
 #define PATHSEP "/"
 #endif
 
-#define FONT_PATH  _ROOT_ PATHSEP "font" PATHSEP "teleindicadores.ttf"
+#define FONT_TELEINDICADORES  _ROOT_ PATHSEP "font" PATHSEP "teleindicadores.ttf"
+#define FONT_CELTIC_HAND _ROOT_ PATHSEP "font" PATHSEP "celtic_hand.ttf"
 #define LEVEL_PATH _ROOT_ PATHSEP "level" PATHSEP
 #define IMAGE_PATH _ROOT_ PATHSEP "img" PATHSEP
 

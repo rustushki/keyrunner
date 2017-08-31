@@ -166,7 +166,7 @@ View* EditorController::createSaveButton(View* board, uint8_t buttonSpacing) con
     save->setText("Save");
     save->setColor(0x333333);
     save->setTextColor(0xFF0000);
-    save->setFontPath(FONT_PATH);
+    save->setFontPath(FONT_TELEINDICADORES);
     save->setOnMouseUpCallback([this](SDL_Event event) {
         getLevelManager()->write();
     });
@@ -188,7 +188,7 @@ View *EditorController::createBackButton(View *board, int buttonSpacing) const {
     back->setText("Back");
     back->setColor(0x333333);
     back->setTextColor(0xFF0000);
-    back->setFontPath(FONT_PATH);
+    back->setFontPath(FONT_TELEINDICADORES);
     back->setOnMouseUpCallback([this](SDL_Event event) {
         getModel()->setState(TITLE);
     });

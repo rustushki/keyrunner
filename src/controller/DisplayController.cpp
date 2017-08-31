@@ -86,18 +86,21 @@ void DisplayController::processInput() {
         if (event.type == SDL_KEYDOWN) {
             std::string focusedViewName = getDisplay()->getFocus();
             View* focusedView = getDisplay()->getViewByName(focusedViewName);
-            focusedView->onKeyDown(event);
+            if (focusedView != nullptr) {
+                focusedView->onKeyDown(event);
+            }
 
         // Key Up Events are passed to focused view
         } else if (event.type == SDL_KEYUP) {
             std::string focusedViewName = getDisplay()->getFocus();
             View* focusedView = getDisplay()->getViewByName(focusedViewName);
-            focusedView->onKeyUp(event);
+            if (focusedView != nullptr) {
+                focusedView->onKeyUp(event);
+            }
 
         // Quit Events will cause the game to exit
         } else if (event.type == SDL_QUIT) {
             getModel()->setState(QUIT);
-
 
         // Delegate Mouse Up, Down, and Hover to the views as they apply (disregarding focus)
         } else if (event.type == SDL_MOUSEBUTTONUP || event.type == SDL_MOUSEBUTTONDOWN ||

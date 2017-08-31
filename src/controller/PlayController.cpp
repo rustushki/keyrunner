@@ -80,7 +80,7 @@ View* PlayController::createLevelLabel() const {
     SDL_Rect rect = {20, 0, 100, 40};
     rect.y = getDisplay()->getHeight() - rect.h;
     auto levelNumber = new LevelNumberView(getModel(), rect);
-    levelNumber->setFontPath(FONT_PATH);
+    levelNumber->setFontPath(FONT_TELEINDICADORES);
     levelNumber->setFontSize(25);
     levelNumber->setColor(0x000000);
     levelNumber->setTextColor(0xEEEEEE);
@@ -96,7 +96,7 @@ View* PlayController::createTimer() const {
     rect.x = getDisplay()->getWidth() - rect.w;
     rect.y = getDisplay()->getHeight() - rect.h;
     auto timer = new TimerView(getModel(), rect);
-    timer->setFontPath(FONT_PATH);
+    timer->setFontPath(FONT_TELEINDICADORES);
     timer->setFontSize(25);
     timer->setColor(0x000000);
     timer->setTextColor(0xEEEEEE);

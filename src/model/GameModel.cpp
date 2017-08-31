@@ -10,6 +10,7 @@ GameModel::GameModel() {
     this->editorBoardModel = new EditorBoardModel();
     this->playBoardModel = new PlayBoardModel();
     this->optionModel = new OptionModel();
+    this->gameOverModel = new GameOverModel();
 }
 
 /**
@@ -22,6 +23,7 @@ GameModel::~GameModel() {
     delete this->editorBoardModel;
     delete this->playBoardModel;
     delete this->optionModel;
+    delete this->gameOverModel;
 }
 
 /**
@@ -70,4 +72,12 @@ State GameModel::getState() const {
  */
 void GameModel::setState(State state) {
     this->state = state;
+}
+
+/**
+ * Fetch the game over model.
+ * @return GameOverModel*
+ */
+GameOverModel *GameModel::getGameOverModel() const {
+    return this->gameOverModel;
 }

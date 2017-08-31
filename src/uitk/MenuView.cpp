@@ -10,6 +10,7 @@ MenuView::MenuView(Model *model, const SDL_Rect &rect) : RectangleView(model, re
     setCursorIndex(0);
     setVisibleOptionCount(0);
     setWindowTopIndex(0);
+    setOptionFontSize(0);
     createArrows();
     cursorTextColor = 0;
 }
@@ -18,11 +19,12 @@ void MenuView::addOption(std::string optionText, const std::function<void(SDL_Ev
     SDL_Rect rect = {0, 0, 0, 0};
     auto button = new ButtonView(nullptr, rect);
     button->setText(optionText);
-    button->setFontPath(FONT_PATH);
+    button->setFontPath(FONT_CELTIC_HAND);
     button->setFontSize(0);
     button->setOnMouseUpCallback(callBack);
     button->setColor(getOptionBackgroundColor());
     button->setTextColor(getOptionTextColor());
+    button->setFontSize(getOptionFontSize());
     buttons.push_back(button);
 
     sizeButtons();
@@ -451,4 +453,27 @@ uint16_t MenuView::getWindowSize() const {
         windowSize = buttons.size();
     }
     return static_cast<uint16_t>(windowSize);
+}
+
+/**
+ * Set the font size of each of the internal buttons inside the menu.
+ * <p>
+ * 0 means that the text of each button will be procedurally fit into the height and width of the button. Be careful
+ * because this can lead to each button having irregularly sized text (unless all text strings have the same width).
+ * @param optionFontSize
+ */
+void MenuView::setOptionFontSize(uint8_t optionFontSize) {
+    this->optionFontSize = optionFontSize;
+
+    for (auto button : buttons) {
+        button->setFontSize(this->optionFontSize);
+    }
+}
+
+/**
+ * Get the font size of each of the internal buttons inside the menu.
+ * @return uint8_t
+ */
+uint8_t MenuView::getOptionFontSize() const {
+    return optionFontSize;
 }

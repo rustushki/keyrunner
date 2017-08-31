@@ -6,6 +6,7 @@
 #include "../model/EditorBoardModel.hpp"
 #include "../model/OptionModel.hpp"
 #include "../model/PlayBoardModel.hpp"
+#include "../model/GameOverModel.hpp"
 
 class GameModel : public Model {
 public:
@@ -18,12 +19,14 @@ public:
     EditorBoardModel* getEditorBoardModel() const;
     PlayBoardModel* getPlayBoardModel() const;
     OptionModel* getOptionModel() const;
+    GameOverModel *getGameOverModel() const;
 
 private:
     TitleScreenModel* titleScreenModel;
     EditorBoardModel* editorBoardModel;
     PlayBoardModel* playBoardModel;
     OptionModel* optionModel;
+    GameOverModel* gameOverModel;
     State state;
 };
 
