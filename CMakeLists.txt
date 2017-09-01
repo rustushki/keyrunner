@@ -25,6 +25,7 @@ set(SOURCES
     src/controller/EditorController.cpp
     src/controller/GameController.cpp
     src/controller/GameOverController.cpp
+    src/controller/GameWinController.cpp
     src/controller/OptionController.cpp
     src/controller/PlayController.cpp
     src/controller/TitleScreenController.cpp
@@ -35,6 +36,7 @@ set(SOURCES
     src/model/EditorBoardModel.cpp
     src/model/GameModel.cpp
     src/model/GameOverModel.cpp
+    src/model/GameWinModel.cpp
     src/model/LevelManager.cpp
     src/model/OptionModel.cpp
     src/model/PlayBoardModel.cpp
