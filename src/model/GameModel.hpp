@@ -2,11 +2,12 @@
 #define GAME_MODEL_HPP
 
 #include "../model/Model.hpp"
-#include "../model/TitleScreenModel.hpp"
 #include "../model/EditorBoardModel.hpp"
+#include "../model/GameOverModel.hpp"
+#include "../model/GameWinModel.hpp"
 #include "../model/OptionModel.hpp"
 #include "../model/PlayBoardModel.hpp"
-#include "../model/GameOverModel.hpp"
+#include "../model/TitleScreenModel.hpp"
 
 class GameModel : public Model {
 public:
@@ -20,6 +21,7 @@ public:
     PlayBoardModel* getPlayBoardModel() const;
     OptionModel* getOptionModel() const;
     GameOverModel *getGameOverModel() const;
+    GameWinModel *getGameWinModel() const;
 
 private:
     TitleScreenModel* titleScreenModel;
@@ -27,6 +29,7 @@ private:
     PlayBoardModel* playBoardModel;
     OptionModel* optionModel;
     GameOverModel* gameOverModel;
+    GameWinModel* gameWinModel;
     State state;
 };
 

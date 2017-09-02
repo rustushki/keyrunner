@@ -1,10 +1,11 @@
 #include <sstream>
 #include <SDL_ttf.h>
 #include "../controller/PlayController.hpp"
-#include "EditorController.hpp"
+#include "../controller/EditorController.hpp"
 #include "../controller/GameController.hpp"
+#include "../controller/GameOverController.hpp"
+#include "../controller/GameWinController.hpp"
 #include "../controller/TitleScreenController.hpp"
-#include "GameOverController.hpp"
 
 extern AnimationFactory* animationFactory;
 
@@ -91,6 +92,9 @@ void GameController::updateModel(long frameDuration) {
     } else if (currentState == LOSE) {
         controller = new GameOverController(getModel()->getGameOverModel(), display);
 
+    } else if (currentState == WIN) {
+        controller = new GameWinController(getModel()->getGameWinModel(), display);
+
     } else {
         throw std::logic_error("Invalid state detected");
 
@@ -115,7 +119,7 @@ void GameController::updateModel(long frameDuration) {
  */
 bool GameController::isStillExecuting() const {
     State currentState = getModel()->getState();
-    return currentState != QUIT && currentState != WIN;
+    return currentState != QUIT;
 }
 
 /**
