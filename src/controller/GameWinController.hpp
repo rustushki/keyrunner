@@ -12,6 +12,8 @@ protected:
     GameWinModel* getModel() const final;
     void updateModel(long frameDuration) override;
     bool isStillExecuting() const override;
+    View *createMenu() const;
+    View *createYouWinLabel() const;
 };
 
 #endif
