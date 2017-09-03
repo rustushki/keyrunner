@@ -14,10 +14,7 @@ parts:
     source: https://github.com/rustushki/keyrunner.git
     source-branch: feature/snapcraft-package
     plugin: cmake
-    configflags:
-      - -DCMAKE_INSTALL_PREFIX:PATH=/usr/local
-        #- -D_ROOT_=${CMAKE_INSTALL_PREFIX}/share/keyrunner
 
 apps:
   keyrunner:
-    command: usr/local/bin/keyrunner
+    command: bin/keyrunner

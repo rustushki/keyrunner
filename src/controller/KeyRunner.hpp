@@ -7,7 +7,7 @@
 #include <cstdint>
 
 #ifndef _ROOT_
-#define _ROOT_ "."
+#define _ROOT_ "/snap/keyrunner/current/share/keyrunner"
 #endif
 
 #if _WIN32
