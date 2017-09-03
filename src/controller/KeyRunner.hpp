@@ -6,9 +6,7 @@
 #include <iostream>
 #include <cstdint>
 
-#ifndef _ROOT_
 #define _ROOT_ "/snap/keyrunner/current/share/keyrunner"
-#endif
 
 #if _WIN32
 #define PATHSEP "\\"
