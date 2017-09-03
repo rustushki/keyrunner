@@ -52,8 +52,10 @@ set(SOURCES
 # Declare Executable.
 add_executable(keyrunner ${SOURCES})
 
-# Define CWD for KeyRunner.
-add_definitions(-D_ROOT_="${CMAKE_INSTALL_PREFIX}/share/keyrunner")
+# Let the preprocessor know that we're building a Snapcraft package.
+if(BUILDER_SNAP)
+	add_definitions(-DBUILDER_SNAP=1)
+endif()
 
 target_link_libraries(keyrunner uitk)
 

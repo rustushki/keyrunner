@@ -11,7 +11,7 @@
 
 // If Snapcraft was the builder, the application data root will be set by the SNAP environment variable
 #ifdef BUILDER_SNAP
-#define APPLICATION_DATA_ROOT std::string(std::getenv("SNAP"))
+#define APPLICATION_DATA_ROOT std::string(std::getenv("SNAP")) "/share/keyrunner"
 #endif
 
 #ifdef CMAKE_INSTALL_PREFIX
