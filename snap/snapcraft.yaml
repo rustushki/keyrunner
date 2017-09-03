@@ -14,6 +14,8 @@ parts:
     source: https://github.com/rustushki/keyrunner.git
     source-branch: feature/snapcraft-package
     plugin: cmake
+    configflags:
+      - -DSNAP=1
 
 apps:
   keyrunner:
