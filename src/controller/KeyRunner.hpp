@@ -6,7 +6,7 @@
 #include <iostream>
 #include <cstdint>
 
-#define _ROOT_ "$SNAP/share/keyrunner"
+#define _ROOT_ std::string(std::getenv("SNAP")) + "/share/keyrunner"
 
 #if _WIN32
 #define PATHSEP "\\"
