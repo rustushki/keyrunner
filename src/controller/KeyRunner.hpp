@@ -6,16 +6,11 @@
 #include <iostream>
 #include <cstdint>
 
-// By default, the application data root will be the current working directory
-#define APPLICATION_DATA_ROOT "."
-
 // If Snapcraft was the builder, the application data root will be set by the SNAP environment variable
 #ifdef BUILDER_SNAP
 #define APPLICATION_DATA_ROOT std::string(std::getenv("SNAP")) + "/share/keyrunner"
-#endif
-
-#ifdef CMAKE_INSTALL_PREFIX
-#define APPLICATION_DATA_ROOT CMAKE_INSTALL_PREFIX "/share/keyrunner"
+#else
+#define APPLICATION_DATA_ROOT "/usr/local/share/keyrunner"
 #endif
 
 #if _WIN32
