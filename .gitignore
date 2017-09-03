@@ -21,4 +21,5 @@ libuitk.a
 *.snap
 *.bz2
 parts
+prime
 .snapcraft
