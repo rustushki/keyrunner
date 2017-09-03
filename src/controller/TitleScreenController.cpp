@@ -71,8 +71,6 @@ void TitleScreenController::createPressEnterText() {
     pressEnterText->setText("Press Enter to Continue");
     pressEnterText->setFontSize(0);
     pressEnterText->setFontPath(FONT_CELTIC_HAND);
-    std::cout << FONT_CELTIC_HAND << std::endl;
-    std::cout << std::getenv("SNAP_DATA") << std::endl;
     pressEnterText->setColor(0x000000);
     pressEnterText->setTextColor(0xEEEEEE);
     pressEnterText->setMarginVertical(0);
