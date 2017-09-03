@@ -7,7 +7,7 @@
 #include <cstdint>
 
 // By default, the application data root will be the current working directory
-#define APPLICATION_DATA_ROOT .
+#define APPLICATION_DATA_ROOT "."
 
 // If Snapcraft was the builder, the application data root will be set by the SNAP environment variable
 #ifdef BUILDER_SNAP
