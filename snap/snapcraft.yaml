@@ -12,6 +12,7 @@ confinement: devmode
 parts:
   game:
     source: https://github.com/rustushki/keyrunner.git
+    source-branch: feature/snapcraft-package
     plugin: cmake
     configflags:
       - -DCMAKE_INSTALL_PREFIX:PATH=/usr/local
