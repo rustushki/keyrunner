@@ -15,7 +15,7 @@ parts:
     source-branch: feature/snapcraft-package
     plugin: cmake
     configflags:
-      - -DSNAP=1
+      - -DBUILDER_SNAP=1
 
 apps:
   keyrunner:
