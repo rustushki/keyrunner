@@ -10,13 +10,7 @@
 #ifdef BUILDER_SNAP
 #define APPLICATION_DATA_ROOT std::string(std::getenv("SNAP")) + "/share/keyrunner"
 #else
-#define APPLICATION_DATA_ROOT "/usr/local/share/keyrunner"
-#endif
-
-#if _WIN32
-#define PATHSEP "\\"
-#elif linux
-#define PATHSEP "/"
+#define APPLICATION_DATA_ROOT INSTALL_PREFIX "/share/keyrunner"
 #endif
 
 #define FONT_TELEINDICADORES  APPLICATION_DATA_ROOT PATHSEP "font" PATHSEP "teleindicadores.ttf"

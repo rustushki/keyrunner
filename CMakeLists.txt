@@ -55,6 +55,8 @@ add_executable(keyrunner ${SOURCES})
 # Let the preprocessor know that we're building a Snapcraft package.
 if(BUILDER_SNAP)
 	add_definitions(-DBUILDER_SNAP=1)
+else()
+	add_definitions(-DINSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
 endif()
 
 target_link_libraries(keyrunner uitk)
