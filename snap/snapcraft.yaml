@@ -1,0 +1,22 @@
+name: keyrunner
+version: '1.5.0'
+summary: A simple block puzzle/maze game
+description: |
+  Help Moschata escape certain doom. The clock is ticking and she must reach
+  the door with the key before it's too late. KeyRunner is a free game,
+  available in source code with the GPLv2 License.
+
+grade: devel
+confinement: devmode
+
+parts:
+  game:
+    source: https://github.com/rustushki/keyrunner.git
+    plugin: cmake
+    configflags:
+      - -DCMAKE_INSTALL_PREFIX:PATH=/usr/local
+        #- -D_ROOT_=${CMAKE_INSTALL_PREFIX}/share/keyrunner
+
+apps:
+  keyrunner:
+    command: usr/local/bin/keyrunner

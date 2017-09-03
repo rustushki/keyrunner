@@ -16,3 +16,9 @@ libuitk.a
 
 # Jetbrains Project
 .idea
+
+# Snapcraft Intermediates
+*.snap
+*.bz2
+parts
+.snapcraft
