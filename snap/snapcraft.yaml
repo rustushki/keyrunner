@@ -7,7 +7,7 @@ description: |
   available in source code with the GPLv2 License.
 
 grade: devel
-confinement: devmode
+confinement: strict
 
 parts:
   game:
