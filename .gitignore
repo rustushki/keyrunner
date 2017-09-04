@@ -20,6 +20,6 @@ libuitk.a
 # Snapcraft Intermediates
 *.snap
 *.bz2
+snap/.snapcraft
 parts
 prime
-.snapcraft
