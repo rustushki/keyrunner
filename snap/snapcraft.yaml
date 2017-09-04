@@ -21,4 +21,4 @@ apps:
   keyrunner:
     command: bin/keyrunner
     plugs:
-      - unity7
+      - x11
