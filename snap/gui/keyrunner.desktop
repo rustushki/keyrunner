@@ -1,0 +1,6 @@
+[Desktop Entry]
+Version=1.5.0
+Type=Application
+Name=KeyRunner
+Exec=keyrunner
+Terminal=false

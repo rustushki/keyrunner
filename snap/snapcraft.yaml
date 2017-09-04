@@ -20,7 +20,6 @@ parts:
 apps:
   keyrunner:
     command: bin/keyrunner
-    desktop: usr/share/applications/keyrunner.desktop
     plugs: [x11]
 
 icon: img/key.png
