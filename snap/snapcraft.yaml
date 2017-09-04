@@ -20,5 +20,5 @@ parts:
 apps:
   keyrunner:
     command: bin/keyrunner
-    plugs:
-      - x11
+    icon: img/key.png
+    plugs: [x11]
