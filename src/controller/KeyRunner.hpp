@@ -4,22 +4,20 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
-#include <stdint.h>
+#include <cstdint>
 
-#ifndef _ROOT_
-#define _ROOT_ "."
+// If Snapcraft was the builder, the application data root will be set by the SNAP environment variable
+#ifdef BUILDER_SNAP
+#define APPLICATION_DATA_ROOT std::string(std::getenv("SNAP")) + "/share/keyrunner"
+#else
+#define APPLICATION_DATA_ROOT INSTALL_PREFIX "/share/keyrunner"
 #endif
 
-#if _WIN32
-#define PATHSEP "\\"
-#elif linux
-#define PATHSEP "/"
-#endif
+#define FONT_TELEINDICADORES  APPLICATION_DATA_ROOT PATHSEP "font" PATHSEP "teleindicadores.ttf"
+#define FONT_CELTIC_HAND APPLICATION_DATA_ROOT PATHSEP "font" PATHSEP "celtic_hand.ttf"
+#define LEVEL_PATH APPLICATION_DATA_ROOT PATHSEP "level" PATHSEP
+#define IMAGE_PATH APPLICATION_DATA_ROOT PATHSEP "img" PATHSEP
 
-#define FONT_PATH  _ROOT_ PATHSEP "font" PATHSEP "teleindicadores.ttf"
-#define LEVEL_PATH _ROOT_ PATHSEP "level" PATHSEP
-#define IMAGE_PATH _ROOT_ PATHSEP "img" PATHSEP
-
-#define VERSION "1.4.1"
+#define VERSION "1.5.0"
 
 #endif

@@ -6,29 +6,33 @@
 class BaseView : public View {
 public:
     BaseView(Model* model, SDL_Rect rect);
-    virtual ~BaseView() override;
+    ~BaseView() override;
 
-    virtual Model* getModel() const override;
-    virtual void draw(SDL_Renderer* renderer) override = 0;
-    virtual void show() override;
-    virtual void hide() override;
-    virtual bool isVisible() const override;
-    virtual const std::vector<Animation*> getAnimations() const override;
-    virtual void setOnMouseUpCallback(const std::function<void(SDL_Event)> &newCallBack) override final;
-    virtual void setOnMouseDownCallback(const std::function<void(SDL_Event)> &newCallBack) override final;
-    virtual void setOnMouseHoverCallback(const std::function<void(SDL_Event)> &newCallBack) override final;
-    virtual void onMouseUp(SDL_Event event) override;
-    virtual void onMouseDown(SDL_Event event) override;
-    virtual void onMouseHover(SDL_Event event) override;
-    virtual void setHeight(uint16_t newHeight) override;
-    virtual void setWidth(uint16_t newWidth) override;
-    virtual void setX(uint16_t newX) override;
-    virtual void setY(uint16_t newY) override;
-    virtual uint16_t getHeight() const override;
-    virtual uint16_t getWidth() const override;
-    virtual uint16_t getX() const override;
-    virtual uint16_t getY() const override;
-    virtual bool containsPoint(uint32_t x, uint32_t y) const override;
+    Model* getModel() const override;
+    void draw(SDL_Renderer* renderer) override = 0;
+    void show() override;
+    void hide() override;
+    bool isVisible() const override;
+    const std::vector<Animation*> getAnimations() const override;
+    void setOnMouseUpCallback(const std::function<void(SDL_Event)> &newCallBack) final;
+    void setOnMouseDownCallback(const std::function<void(SDL_Event)> &newCallBack) final;
+    void setOnMouseHoverCallback(const std::function<void(SDL_Event)> &newCallBack) final;
+    void setOnKeyUpCallback(const std::function<void(SDL_Event)> &newCallBack) final;
+    void setOnKeyDownCallback(const std::function<void(SDL_Event)> &newCallBack) final;
+    void onMouseUp(SDL_Event event) override;
+    void onMouseDown(SDL_Event event) override;
+    void onMouseHover(SDL_Event event) override;
+    void onKeyUp(SDL_Event event) override;
+    void onKeyDown(SDL_Event event) override;
+    void setHeight(uint16_t newHeight) override;
+    void setWidth(uint16_t newWidth) override;
+    void setX(uint16_t newX) override;
+    void setY(uint16_t newY) override;
+    uint16_t getHeight() const override;
+    uint16_t getWidth() const override;
+    uint16_t getX() const override;
+    uint16_t getY() const override;
+    bool containsPoint(uint32_t x, uint32_t y) const override;
 
 protected:
     void addAnimation(Animation*);
@@ -41,6 +45,8 @@ private:
     std::function <void (SDL_Event)> onMouseUpCallBack = [] (SDL_Event event) {};
     std::function <void (SDL_Event)> onMouseDownCallBack = [] (SDL_Event event) {};
     std::function <void (SDL_Event)> onMouseHoverCallBack = [] (SDL_Event event) {};
+    std::function <void (SDL_Event)> onKeyUpCallBack = [] (SDL_Event event) {};
+    std::function <void (SDL_Event)> onKeyDownCallBack = [] (SDL_Event event) {};
 };
 
 

@@ -9,7 +9,7 @@
 class BoardView : public BaseView {
 public:
     BoardView(BoardModel* model, SDL_Rect rect);
-    virtual ~BoardView() override;
+    ~BoardView() override;
     void draw(SDL_Renderer* renderer) override;
     BoardModel* getModel() const override;
     uint32_t getTileWidth() const;

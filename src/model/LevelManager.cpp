@@ -28,20 +28,22 @@ uint8_t LevelManager::getLevelCount() const {
 
         while (hiLevel >= loLevel) {
             miLevel = (uint8_t) ((hiLevel - loLevel) / 2 + loLevel);
-            if (levelExists(miLevel) && !levelExists((uint8_t) (miLevel + 1))) {
+            if (levelExists(miLevel) && !levelExists(static_cast<uint8_t>(miLevel + 1))) {
                 levelCount = miLevel;
                 break;
-            } else if (levelExists(miLevel)) {
-                loLevel = (uint8_t) (miLevel + 1);
+            }
+
+            if (levelExists(miLevel)) {
+                loLevel = static_cast<uint8_t>(miLevel + 1);
             } else {
-                hiLevel = (uint8_t) (miLevel - 1);
+                hiLevel = static_cast<uint8_t>(miLevel - 1);
             }
         }
 
         levelCount = miLevel;
     }
 
-    return (uint8_t) levelCount;
+    return static_cast<uint8_t>(levelCount);
 }
 
 /**
@@ -137,7 +139,7 @@ void LevelManager::readDeviations(FILE *fp) {
         // Read Deviation Tile Type
         uint8_t tileTypeInteger;
         fread(&tileTypeInteger, sizeof(uint8_t), 1, fp);
-        TileType tileType = TileType(tileTypeInteger);
+        auto tileType = TileType(tileTypeInteger);
         deviations[TileCoord(tileX, tileY)] = tileType;
     }
 }
@@ -212,7 +214,7 @@ void LevelManager::resetLevelManager() {
     playerCoordinate.second = 0;
     keyCoordinate.first = (uint16_t) (width - 1);
     keyCoordinate.second = (uint16_t) (height - 1);
-    defaultTileType = TILE_TYPE_EMPTY;
+    defaultTileType = TileType::Empty;
     deviations.clear();
 }
 
@@ -223,8 +225,8 @@ void LevelManager::populateBoard() {
     // Populate the remaining tiles with the default tile.  Also, not which
     // tiles have the key and the player.
     uint16_t currentDeviationIndex = 0;
-    for (int tileX = 0; tileX < width; tileX++) {
-        for (int tileY = 0; tileY < height; tileY++) {
+    for (uint16_t tileX = 0; tileX < width; tileX++) {
+        for (uint16_t tileY = 0; tileY < height; tileY++) {
             TileCoord currentTileCoordinate(tileX, tileY);
 
             // If the tile is a deviation, use the deviation tile type
@@ -259,8 +261,8 @@ void LevelManager::populateBoard() {
  */
 void LevelManager::writeSize(FILE* fp) const {
     // Write Width and Height.
-    uint16_t width = static_cast<uint16_t>(board->getWidth());
-    uint16_t height = static_cast<uint16_t>(board->getHeight());
+    auto width = static_cast<uint16_t>(board->getWidth());
+    auto height = static_cast<uint16_t>(board->getHeight());
     fwrite(&width, sizeof(uint16_t), 1, fp);
     fwrite(&height, sizeof(uint16_t), 1, fp);
 }
@@ -271,7 +273,7 @@ void LevelManager::writeSize(FILE* fp) const {
  */
 void LevelManager::writeDefaultTileType(FILE* fp) const {
     // Write Default Tile Type
-    uint8_t defaultTileType = static_cast<uint8_t>(TILE_TYPE_EMPTY);
+    auto defaultTileType = static_cast<uint8_t>(TileType::Empty);
     fwrite(&defaultTileType, sizeof(uint8_t), 1, fp);
 }
 
@@ -282,8 +284,8 @@ void LevelManager::writeDefaultTileType(FILE* fp) const {
 void LevelManager::writeDeviations(FILE* fp) const {
     // Count and Collect the number of Tile Deviations
     std::vector<TileCoord> deviatedTileCoordinates;
-    for (int tileX = 0; tileX < board->getWidth(); tileX++) {
-        for (int tileY = 0; tileY < board->getHeight(); tileY++) {
+    for (uint16_t tileX = 0; tileX < board->getWidth(); tileX++) {
+        for (uint16_t tileY = 0; tileY < board->getHeight(); tileY++) {
             TileCoord tileCoordinate(tileX, tileY);
             if (board->getTileType(tileCoordinate) != defaultTileType) {
                 deviatedTileCoordinates.push_back(tileCoordinate);
@@ -292,7 +294,7 @@ void LevelManager::writeDeviations(FILE* fp) const {
     }
 
     // Write Tile Deviation Count
-    uint16_t deviationsCount = (uint16_t) deviatedTileCoordinates.size();
+    auto deviationsCount = static_cast<uint16_t>(deviatedTileCoordinates.size());
     fwrite(&deviationsCount, sizeof(uint16_t), 1, fp);
 
     // Write Each Default Tile Type Deviation.
@@ -304,7 +306,7 @@ void LevelManager::writeDeviations(FILE* fp) const {
         fwrite(&y, sizeof(uint16_t), 1, fp);
 
         // Write Deviation Tile Type
-        uint8_t tileType = static_cast<uint8_t>(board->getTileType(tileCoordinate));
+        auto tileType = static_cast<uint8_t>(board->getTileType(tileCoordinate));
         fwrite(&tileType, sizeof(uint8_t), 1, fp);
     }
 }

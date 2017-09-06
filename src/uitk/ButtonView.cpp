@@ -10,12 +10,6 @@ ButtonView::ButtonView(Model* model, const SDL_Rect &rect) : LabelView(model, re
 }
 
 /**
- * Destructor.
- */
-ButtonView::~ButtonView() {
-}
-
-/**
  * Draw the Button to the screen.
  * <p>
  * Eventually, this could support on click and hover. Right now, it does nothing more than LabelView::draw().

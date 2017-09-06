@@ -7,13 +7,13 @@
 class LabelView : public RectangleView {
 public:
     LabelView(Model* model, const SDL_Rect &rect);
-    virtual ~LabelView();
+    ~LabelView() override;
 
-    virtual void draw(SDL_Renderer* renderer) override;
+    void draw(SDL_Renderer* renderer) override;
 
     virtual std::string getText();
-    virtual uint32_t getFontSize() const;
-    virtual uint32_t getTextColor() const;
+    uint32_t getFontSize() const;
+    uint32_t getTextColor() const;
 
     virtual void setTextColor(uint32_t color);
     virtual void setText(std::string text);
@@ -23,10 +23,10 @@ public:
     virtual void setFontPath(std::string fontPath);
     virtual void setFontSize(uint32_t fontSize);
 
-    virtual void setHeight(uint16_t newHeight) override;
-    virtual void setWidth(uint16_t newWidth) override;
-    virtual void setX(uint16_t newX) override;
-    virtual void setY(uint16_t newY) override;
+    void setHeight(uint16_t newHeight) override;
+    void setWidth(uint16_t newWidth) override;
+    void setX(uint16_t newX) override;
+    void setY(uint16_t newY) override;
 
 private:
     TTF_Font* getFont(uint8_t size) const;

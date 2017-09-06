@@ -1,0 +1,25 @@
+name: keyrunner
+version: '1.5.0'
+summary: A simple block puzzle/maze game
+description: |
+  Help Moschata escape certain doom. The clock is ticking and she must reach
+  the door with the key before it's too late. KeyRunner is a free game,
+  available in source code with the GPLv2 License.
+
+grade: devel
+confinement: strict
+
+parts:
+  game:
+    source: https://github.com/rustushki/keyrunner.git
+    source-branch: feature/snapcraft-package
+    plugin: cmake
+    configflags:
+      - -DBUILDER_SNAP=1
+
+apps:
+  keyrunner:
+    command: bin/keyrunner
+    plugs: [x11]
+
+icon: img/key.png

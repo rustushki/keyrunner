@@ -1,23 +1,22 @@
 #ifndef PLAY_CONTROLLER_HPP
 #define PLAY_CONTROLLER_HPP
 
-#include "../controller/BaseController.hpp"
-#include "../controller/Options.hpp"
+#include "../controller/BoardController.hpp"
 #include "../model/PlayBoardModel.hpp"
 
-class PlayController : public BaseController {
+class PlayController : public BoardController {
 public:
-    PlayController(PlayBoardModel* model, Display* display, Options* options);
-    virtual ~PlayController() override;
-    virtual void gameLoop() override;
+    PlayController(PlayBoardModel* model, Display* display, uint8_t startingLevel);
+    ~PlayController() override = default;
 
 protected:
-    virtual void processInput() override;
     PlayBoardModel* getModel() const override;
+    void updateModel(long frameDuration) override;
 
 private:
     void updateLevel(long elapsedDuration) const;
     void conveyPlayer() const;
+    bool isStillExecuting() const override;
 
     View* createRectangle() const;
     View* createBoard() const;

@@ -7,8 +7,8 @@
 class TimerView : public LabelView {
 public:
     TimerView(PlayBoardModel* model, const SDL_Rect &rect);
-    virtual PlayBoardModel* getModel() const override;
-    virtual std::string getText() override;
+    PlayBoardModel* getModel() const override;
+    std::string getText() override;
 };
 
 #endif

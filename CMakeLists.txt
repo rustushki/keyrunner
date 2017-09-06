@@ -8,28 +8,39 @@ project (keyrunner)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${keyrunner_SOURCE_DIR}/cmake")
 
 add_library(uitk STATIC
-	src/uitk/LabelView.cpp
-	src/uitk/RectangleView.cpp
     src/uitk/Animation.cpp
     src/uitk/ButtonView.cpp
+    src/uitk/ImageView.cpp
+    src/uitk/LabelView.cpp
+    src/uitk/MenuView.cpp
+    src/uitk/RectangleView.cpp
     src/uitk/SpriteSheet.cpp
-    src/uitk/View.hpp
 )
 
 # Source Files.
 set(SOURCES
-	src/model/BoardModel.cpp
-	src/model/EditorBoardModel.cpp
-	src/model/LevelManager.cpp
-	src/model/TileType.cpp
-    src/controller/BaseController.cpp
-    src/controller/Controller.hpp
+    src/controller/BoardController.cpp
     src/controller/Display.cpp
-    src/controller/EditController.cpp
-    src/controller/Options.cpp
+    src/controller/DisplayController.cpp
+    src/controller/EditorController.cpp
+    src/controller/GameController.cpp
+    src/controller/GameOverController.cpp
+    src/controller/GameWinController.cpp
+    src/controller/OptionController.cpp
     src/controller/PlayController.cpp
+    src/controller/TitleScreenController.cpp
     src/controller/main.cpp
+    src/model/AnimationTypeFactory.cpp
+    src/model/BaseModel.cpp
+    src/model/BoardModel.cpp
+    src/model/EditorBoardModel.cpp
+    src/model/GameModel.cpp
+    src/model/GameOverModel.cpp
+    src/model/GameWinModel.cpp
+    src/model/LevelManager.cpp
+    src/model/OptionModel.cpp
     src/model/PlayBoardModel.cpp
+    src/model/TitleScreenModel.cpp
     src/uitk/BaseView.cpp
     src/view/AnimationFactory.cpp
     src/view/BoardView.cpp
@@ -41,8 +52,12 @@ set(SOURCES
 # Declare Executable.
 add_executable(keyrunner ${SOURCES})
 
-# Define CWD for KeyRunner.
-add_definitions(-D_ROOT_="${CMAKE_INSTALL_PREFIX}/share/keyrunner")
+# Let the preprocessor know that we're building a Snapcraft package.
+if(BUILDER_SNAP)
+	add_definitions(-DBUILDER_SNAP=1)
+else()
+	add_definitions(-DINSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
+endif()
 
 target_link_libraries(keyrunner uitk)
 

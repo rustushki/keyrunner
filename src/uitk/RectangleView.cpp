@@ -4,27 +4,21 @@
  * Constructor.
  * @param rect
  */
-RectangleView::RectangleView(Model* model, const SDL_Rect &rect) : BaseView(model, rect) {}
-
-/**
- * Destructor.
- */
-RectangleView::~RectangleView() {}
+RectangleView::RectangleView(Model* model, const SDL_Rect &rect) : BaseView(model, rect) {
+    // Ensure default background color is initialized to black
+    setColor(0);
+}
 
 /**
  * Draws a rectangle to the screen using the color field.
  * @param renderer
  */
 void RectangleView::draw(SDL_Renderer *renderer) {
-    uint8_t red = (uint8_t) ((color & 0xFF0000) >> 16);
-    uint8_t green = (uint8_t) ((color & 0x00FF00) >> 8);
-    uint8_t blue = (uint8_t) ((color & 0x0000FF) >> 0);
+    auto red = static_cast<uint8_t>((color & 0xFF0000) >> 16);
+    auto green = static_cast<uint8_t>((color & 0x00FF00) >> 8);
+    auto blue = static_cast<uint8_t>((color & 0x0000FF) >> 0);
     SDL_SetRenderDrawColor(renderer, red, green, blue, 0xFF);
-    SDL_Rect rect;
-    rect.x = getX();
-    rect.y = getY();
-    rect.w = getWidth();
-    rect.h = getHeight();
+    SDL_Rect rect = {getX(), getY(), getWidth(), getHeight()};
     SDL_RenderFillRect(renderer, &rect);
 }
 

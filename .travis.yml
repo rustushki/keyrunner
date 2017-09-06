@@ -1,26 +1,32 @@
 language: cpp
 dist: trusty
 addons:
-    apt:
-        sources:
-            - llvm-toolchain-trusty-4.0
-        packages:
-            - clang-4.0
-            - cmake
-            - libsdl2-dev
-            - libsdl2-image-dev
-            - libsdl2-ttf-dev
+  apt:
+    sources:
+    - llvm-toolchain-trusty-4.0
+    packages:
+    - clang-4.0
+    - cmake
+    - libsdl2-dev
+    - libsdl2-image-dev
+    - libsdl2-ttf-dev
 env:
-    - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
+- MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
 before_install:
-    - eval "${MATRIX_EVAL}"
+- eval "${MATRIX_EVAL}"
 script:
-    - cmake .
-    - make
-
-# This configuration somewhat works on master, but fails with strange error.
-#deploy:
-#  provider: releases
-#  api_key:
-#    secure: WoIQ+qSsjlvCJRr3cRoPMQSpfJHA3LMkxaKpwIMU0wDpX7Sy/HZ6fvTvS5ij1G7M9ARjFnNtH//NtgKwxjfGPtq7oF+eN7HUw9NU6Pmt0MK8+yboIe0uKKGf4Uj34q6u1rZa1wMfevnRHj2/yRVqVEgizDL3VFlDvaws9Ui34+pnuvNip4fFLEOnfAunPW82FlsARPgL0LqphikSPJjw+mUPdiGzNd/aslSz1E0wi8IVsZsOzwXf+hCT2ofzpKLo0OPM0LVeweVvZNy5CkJOJnveXkLuSLUD4w3W7Fk1rkKFDIQTFm0SaqZm6pGWytiGAVbi7SIPe1JRNvL0RCdLOj+H8r3TqB7eupFnKJ7SvcRarOAYE/lt9lYtNaesyAoQVWrmGTgni4hPf/c2CicoHchBJzA62oKIi1Xc7OHY/nikK3rfOu3pooS9vW09wNMSH2NEQTSEyoskXhFuSLy98Q/So/cAw+EF3JUG/nfqcaPiS5O8ikY7cnFZAipI6o0R2/0frJyTbaEZ8OOkq9auD+unh0T3TKRMhD6FUdlQ4TOJxt5GpMEMOiOrCXizT+9/3L433dGXge6brTE5v/H5XJpKWBnDT7O7hz09qwhAtQESiAL71fhfJF9X1XckJFRlD5DU5GFR+fFc4Kac8gztRqTt30cIQLUOcvD+ppS/tZg=
-#  file: keyrunner
+- cmake .
+- make
+after_success:
+- openssl aes-256-cbc -K $encrypted_cecb146e247f_key -iv $encrypted_cecb146e247f_iv
+  -in .snapcraft/travis_snapcraft.cfg -out .snapcraft/snapcraft.cfg -d
+sudo: required
+services:
+- docker
+deploy:
+  'on':
+    branch: master
+  provider: script
+  script: docker run -v $(pwd):$(pwd) -t snapcore/snapcraft sh -c "apt update -qq
+    && cd $(pwd) && snapcraft && snapcraft push *.snap --release edge"
+  skip_cleanup: true

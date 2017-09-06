@@ -12,7 +12,7 @@ class Level;
 
 class LevelManager {
 public:
-    LevelManager(BoardModel* board);
+    explicit LevelManager(BoardModel* board);
     uint8_t getLevelCount() const;
     bool levelExists(uint8_t levelNumber) const;
     void read();

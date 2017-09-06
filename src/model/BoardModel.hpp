@@ -1,21 +1,17 @@
 #ifndef BOARD_HPP
 #define BOARD_HPP
 
-#include <stdint.h>
+#include <cstdint>
 #include <vector>
+#include "../model/BaseModel.hpp"
 #include "../model/Direction.hpp"
 #include "../model/TileType.hpp"
-#include "../model/Model.hpp"
-#include "../model/State.hpp"
 
 typedef std::pair<uint16_t, uint16_t> TileCoord;
 
-class BoardModel : public Model {
+class BoardModel : public BaseModel {
 public:
     BoardModel();
-
-    State getState() const;
-    void setState(State state);
 
     uint16_t getHeight() const;
     uint16_t getWidth() const;
@@ -56,7 +52,6 @@ private:
     TileCoord keyCoord;
     TileCoord playerCoord;
     std::vector< std::vector<TileType> > tileType;
-    State state;
 };
 
 #endif

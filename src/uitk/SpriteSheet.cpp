@@ -51,12 +51,8 @@ uint16_t SpriteSheet::getHeight() const {
  */
 void SpriteSheet::drawStill(SDL_Renderer *renderer, uint16_t stillX, uint16_t stillY, SDL_Rect &where) {
     // Source Rect
-    SDL_Rect srcRect;
-    srcRect.w = width;
-    srcRect.h = height;
-    srcRect.x = stillX * width;
-    srcRect.y = stillY * height;
+    SDL_Rect source = {stillX * width, stillY * width, width, height};
 
     // Draw the given still of the sprite sheet to the back buffer
-    SDL_RenderCopy(renderer, texture, &srcRect, &where);
+    SDL_RenderCopy(renderer, texture, &source, &where);
 }

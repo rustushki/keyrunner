@@ -149,7 +149,7 @@ void BaseView::setX(uint16_t newX) {
  * @param newHeight
  */
 void BaseView::setY(uint16_t newY) {
-    rect.x = newY;
+    rect.y = newY;
 }
 
 /**
@@ -198,4 +198,36 @@ bool BaseView::containsPoint(uint32_t x, uint32_t y) const {
         }
     }
     return containsPoint;
+}
+
+/**
+ * Set the callback function which will handle the key up event.
+ * @param newCallBack
+ */
+void BaseView::setOnKeyUpCallback(const std::function<void(SDL_Event)> &newCallBack) {
+    this->onKeyUpCallBack = newCallBack;
+}
+
+/**
+ * Invoke the callback function which handles the key up event.
+ * @param event
+ */
+void BaseView::onKeyUp(SDL_Event event) {
+    this->onKeyUpCallBack(event);
+}
+
+/**
+ * Set the callback function which will handle the key down event.
+ * @param newCallBack
+ */
+void BaseView::setOnKeyDownCallback(const std::function<void(SDL_Event)> &newCallBack) {
+    this->onKeyDownCallBack = newCallBack;
+}
+
+/**
+ * Invoke the callback function which handles the key down event.
+ * @param event
+ */
+void BaseView::onKeyDown(SDL_Event event) {
+    this->onKeyDownCallBack(event);
 }
