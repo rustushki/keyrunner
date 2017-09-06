@@ -12,7 +12,7 @@ confinement: strict
 parts:
   game:
     source: https://github.com/rustushki/keyrunner.git
-    source-branch: feature/snapcraft-package
+    source-branch: master
     plugin: cmake
     configflags:
       - -DBUILDER_SNAP=1
