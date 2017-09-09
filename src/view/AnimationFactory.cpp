@@ -39,7 +39,7 @@ Animation* AnimationFactory::build(AnimationType animationType) {
 
         return new Animation(getSpriteSheet(animationType), frameList, stillsPerSecond);
 
-    } catch (std::invalid_argument exception) {
+    } catch (std::invalid_argument& exception) {
         std::stringstream errorMessage;
         errorMessage << "Couldn't build Animation (type = " << animationType << ") reason: " << exception.what();
         throw std::logic_error(errorMessage.str());
