@@ -24,11 +24,11 @@ private:
     void resetLevelManager();
     void populateBoard();
 
-    void readSize(FILE *fp);
-    void readDefaultTileType(FILE *fp);
-    void readInitialPlayerCoordinate(FILE *fp);
-    void readDeviations(FILE *fp);
-    void readItems(FILE *fp);
+    void readSize(FILE* fp);
+    void readDefaultTileType(FILE* fp);
+    void readInitialPlayerCoordinate(FILE* fp);
+    void readDeviations(FILE* fp);
+    void readItems(FILE* fp);
 
     void writeSize(FILE* fp) const;
     void writeDefaultTileType(FILE* fp) const;

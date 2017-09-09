@@ -8,7 +8,7 @@
 
 class ImageView : public RectangleView {
 public:
-    ImageView(Model *model, const SDL_Rect &rect, AnimationType animationType);
+    ImageView(Model* model, const SDL_Rect &rect, AnimationType animationType);
     ~ImageView() override;
     void draw(SDL_Renderer* renderer) override;
     void setHorizontalAlignment(HorizontalAlignment alignment);

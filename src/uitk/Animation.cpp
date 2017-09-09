@@ -65,7 +65,7 @@ bool Animation::advance() {
  * Draw the current frame of the animation onto the screen.
  * @param SDL_Renderer*
  */
-void Animation::draw(SDL_Renderer *renderer) {
+void Animation::draw(SDL_Renderer* renderer) {
     // Look into the frame list to determine the logical coordinates of the
     // frame in the sprite sheet.
     auto frameXc = static_cast<uint16_t>(this->currentStill * 2 + 0);

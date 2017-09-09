@@ -25,11 +25,11 @@ private:
     void buildDisplay();
     void initializeSdl();
     SDL_Window* createWindow();
-    void sizeWindowAndShow(SDL_Window *window);
-    SDL_Renderer* createRenderer(SDL_Window *window);
+    void sizeWindowAndShow(SDL_Window* window);
+    SDL_Renderer* createRenderer(SDL_Window* window);
 
     GameModel* gameModel;
-    Display *display;
+    Display* display;
     bool firstLoop;
 };
 

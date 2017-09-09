@@ -6,7 +6,7 @@
 
 class GameOverController : public DisplayController {
 public:
-    GameOverController(GameOverModel *model, Display *display);
+    GameOverController(GameOverModel* model, Display* display);
 
 
 protected:
@@ -16,7 +16,7 @@ protected:
 
 private:
     View* createMainMenu();
-    View *createGameOverMenu();
+    View* createGameOverMenu();
 };
 
 #endif

@@ -6,7 +6,7 @@
  * @param model
  * @param rect
  */
-LevelNumberView::LevelNumberView(BoardModel *model, const SDL_Rect &rect) : LabelView(model, rect) {}
+LevelNumberView::LevelNumberView(BoardModel* model, const SDL_Rect &rect) : LabelView(model, rect) {}
 
 /**
  * Gets the text of this label.

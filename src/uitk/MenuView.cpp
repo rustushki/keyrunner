@@ -6,7 +6,7 @@
  * @param model
  * @param rect
  */
-MenuView::MenuView(Model *model, const SDL_Rect &rect) : RectangleView(model, rect) {
+MenuView::MenuView(Model* model, const SDL_Rect &rect) : RectangleView(model, rect) {
     setCursorIndex(0);
     setVisibleOptionCount(0);
     setWindowTopIndex(0);
@@ -36,7 +36,7 @@ void MenuView::addOption(std::string optionText, const std::function<void(SDL_Ev
  * Draw each of the visible buttons on the menu.
  * @param renderer
  */
-void MenuView::draw(SDL_Renderer *renderer) {
+void MenuView::draw(SDL_Renderer* renderer) {
     for (ButtonView* button : buttons) {
         if (button->isVisible()) {
             button->draw(renderer);

@@ -38,7 +38,7 @@ protected:
     void addAnimation(Animation*);
 
 private:
-    Model *model;
+    Model* model;
     SDL_Rect rect;
     bool visible;
     std::vector<Animation *> animations;

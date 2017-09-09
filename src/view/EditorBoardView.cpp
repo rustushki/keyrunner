@@ -6,7 +6,7 @@
  * @param model
  * @param rect
  */
-EditorBoardView::EditorBoardView(EditorBoardModel *model, const SDL_Rect &rect) : BoardView(model, rect) {}
+EditorBoardView::EditorBoardView(EditorBoardModel* model, const SDL_Rect &rect) : BoardView(model, rect) {}
 
 /**
  * Draw the board.
@@ -14,7 +14,7 @@ EditorBoardView::EditorBoardView(EditorBoardModel *model, const SDL_Rect &rect) 
  * Also draw the tile position that the mouse is currently hovering over.
  * @param renderer
  */
-void EditorBoardView::draw(SDL_Renderer *renderer) {
+void EditorBoardView::draw(SDL_Renderer* renderer) {
     // Draw the board first
     BoardView::draw(renderer);
 

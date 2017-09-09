@@ -30,7 +30,7 @@ public:
 
 private:
     TTF_Font* getFont(uint8_t size) const;
-    SDL_Texture* makeTextTexture(SDL_Renderer *renderer) const;
+    SDL_Texture* makeTextTexture(SDL_Renderer* renderer) const;
     uint32_t chooseFontSizeToFit() const;
 
     std::string text;

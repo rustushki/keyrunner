@@ -20,8 +20,8 @@ public:
     EditorBoardModel* getEditorBoardModel() const;
     PlayBoardModel* getPlayBoardModel() const;
     OptionModel* getOptionModel() const;
-    GameOverModel *getGameOverModel() const;
-    GameWinModel *getGameWinModel() const;
+    GameOverModel* getGameOverModel() const;
+    GameWinModel* getGameWinModel() const;
 
 private:
     TitleScreenModel* titleScreenModel;

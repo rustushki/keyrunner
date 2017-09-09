@@ -6,7 +6,7 @@
  * @param model
  * @param display
  */
-GameWinController::GameWinController(BaseModel *model, Display *display) : DisplayController(model, display) {
+GameWinController::GameWinController(BaseModel* model, Display* display) : DisplayController(model, display) {
     auto youWinLabel = createYouWinLabel();
     getDisplay()->addView("you_win", youWinLabel);
 
@@ -19,7 +19,7 @@ GameWinController::GameWinController(BaseModel *model, Display *display) : Displ
  * Get the model for this controller.
  * @return GameWinModel*
  */
-GameWinModel *GameWinController::getModel() const {
+GameWinModel* GameWinController::getModel() const {
     return dynamic_cast<GameWinModel*>(DisplayController::getModel());
 }
 
@@ -43,7 +43,7 @@ bool GameWinController::isStillExecuting() const {
  * Creates a menu which allows the user to return to title or quit the game.
  * @return View*
  */
-View *GameWinController::createMenu() const {
+View* GameWinController::createMenu() const {
     SDL_Rect rect = {0, 240, 200, 200};
     rect.x = (getDisplay()->getWidth() - rect.w) / 2;
     auto returnToTitle = new MenuView(nullptr, rect);
@@ -77,7 +77,7 @@ View *GameWinController::createMenu() const {
  * Creates a label that tells the player they won.
  * @return View*
  */
-View *GameWinController::createYouWinLabel() const {
+View* GameWinController::createYouWinLabel() const {
     SDL_Rect rect = {0, 30, 300, 200};
     rect.x = (getDisplay()->getWidth() - rect.w) / 2;
     auto youWinLabel = new LabelView(nullptr, rect);

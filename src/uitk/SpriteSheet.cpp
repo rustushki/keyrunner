@@ -49,7 +49,7 @@ uint16_t SpriteSheet::getHeight() const {
  * @param stillY Y coordinate of still to draw
  * @param where draw still to this destination rectangle
  */
-void SpriteSheet::drawStill(SDL_Renderer *renderer, uint16_t stillX, uint16_t stillY, SDL_Rect &where) {
+void SpriteSheet::drawStill(SDL_Renderer* renderer, uint16_t stillX, uint16_t stillY, SDL_Rect &where) {
     // Source Rect
     SDL_Rect source = {stillX * width, stillY * width, width, height};
 

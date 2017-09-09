@@ -214,7 +214,7 @@ void LabelView::setFontPath(std::string fontPath) {
  * Given the renderer, draw a label onto it.
  * @param renderer
  */
-void LabelView::draw(SDL_Renderer *renderer) {
+void LabelView::draw(SDL_Renderer* renderer) {
     RectangleView::draw(renderer);
 
     // Fetch the text. Subclasses are allowed to have set textDirty by indirectly calling setText()

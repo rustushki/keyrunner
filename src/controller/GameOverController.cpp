@@ -6,7 +6,7 @@
  * @param model
  * @param display
  */
-GameOverController::GameOverController(GameOverModel *model, Display *display) : DisplayController(model, display) {
+GameOverController::GameOverController(GameOverModel* model, Display* display) : DisplayController(model, display) {
     auto mainMenu = createMainMenu();
     getDisplay()->addView("main_menu", mainMenu);
     getDisplay()->setFocus("main_menu");
@@ -45,7 +45,7 @@ bool GameOverController::isStillExecuting() const {
  * Create the main menu of the Game Over Screen.
  * @return View*
  */
-View *GameOverController::createMainMenu() {
+View* GameOverController::createMainMenu() {
     SDL_Rect rect = {0, 240, 300, 200};
     rect.x = (getDisplay()->getWidth() - rect.w) / 2;
     auto mainMenu = new MenuView(nullptr, rect);
@@ -86,7 +86,7 @@ View *GameOverController::createMainMenu() {
  * Create and return the Game Over text that appears on the the screen.
  * @return View*
  */
-View *GameOverController::createGameOverMenu() {
+View* GameOverController::createGameOverMenu() {
     SDL_Rect rect = {0, 30, 300, 200};
     rect.x = (getDisplay()->getWidth() - rect.w) / 2;
     auto gameOverLabel = new LabelView(nullptr, rect);
