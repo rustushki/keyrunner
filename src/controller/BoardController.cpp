@@ -7,7 +7,7 @@
  * @param model
  * @param display
  */
-BoardController::BoardController(BoardModel *model, Display *display) : DisplayController(model, display) {
+BoardController::BoardController(BoardModel* model, Display* display) : DisplayController(model, display) {
     this->levelManager = new LevelManager(model);
 }
 

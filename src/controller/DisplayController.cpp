@@ -26,7 +26,7 @@ BaseModel* DisplayController::getModel() const {
  * Get the display where views are put onto the screen.
  * @return Display*
  */
-Display *DisplayController::getDisplay() const {
+Display* DisplayController::getDisplay() const {
     return display;
 }
 
@@ -107,7 +107,7 @@ void DisplayController::processInput() {
                    event.type == SDL_MOUSEMOTION) {
             auto x = (uint32_t) event.button.x;
             auto y = (uint32_t) event.button.y;
-            View *view = getDisplay()->getViewUnderCoordinate(x, y);
+            View* view = getDisplay()->getViewUnderCoordinate(x, y);
             if (view != nullptr) {
                 if (event.type == SDL_MOUSEBUTTONUP) {
                     view->onMouseUp(event);

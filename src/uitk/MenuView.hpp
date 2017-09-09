@@ -7,7 +7,7 @@
 
 class MenuView : public RectangleView {
 public:
-    MenuView(Model *model, const SDL_Rect &rect);
+    MenuView(Model* model, const SDL_Rect &rect);
     void draw(SDL_Renderer* renderer) override;
     void onMouseHover(SDL_Event event) override;
     void onMouseUp(SDL_Event event) override;

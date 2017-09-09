@@ -27,6 +27,6 @@ std::string TimerView::getText() {
  * Get the model to which this label is bound.
  * @return PlayModel*
  */
-PlayBoardModel *TimerView::getModel() const {
+PlayBoardModel* TimerView::getModel() const {
     return (PlayBoardModel*) LabelView::getModel();
 }

@@ -18,7 +18,7 @@ private:
     View* createRectangle() const;
     View* createBoard() const;
     View* createSaveButton(View* board, uint8_t buttonSpacing) const;
-    View* createBackButton(View *board, int buttonSpacing) const;
+    View* createBackButton(View* board, int buttonSpacing) const;
     View* createTileTypeButton(View* board, TileType tileType, uint8_t buttonSpacing) const;
 };
 

@@ -59,7 +59,7 @@ EditorController::EditorController(EditorBoardModel* model, Display* display, ui
  * Fetch the sub-classed model for this controller.
  * @return the model
  */
-EditorBoardModel *EditorController::getModel() const {
+EditorBoardModel* EditorController::getModel() const {
     return (EditorBoardModel*) DisplayController::getModel();
 }
 
@@ -180,7 +180,7 @@ View* EditorController::createSaveButton(View* board, uint8_t buttonSpacing) con
  * @param buttonSpacing horizontal pixel distance between neighboring buttons
  * @return
  */
-View *EditorController::createBackButton(View *board, int buttonSpacing) const {
+View* EditorController::createBackButton(View* board, int buttonSpacing) const {
     SDL_Rect rect = {0, 0, 50, 30};
     rect.x = board->getWidth() - 1 * rect.w - 1 * buttonSpacing;
     rect.y = board->getHeight() + buttonSpacing;
@@ -203,7 +203,7 @@ View *EditorController::createBackButton(View *board, int buttonSpacing) const {
  * @param buttonSpacing
  * @return
  */
-View *EditorController::createTileTypeButton(View* board, TileType tileType, uint8_t buttonSpacing) const {
+View* EditorController::createTileTypeButton(View* board, TileType tileType, uint8_t buttonSpacing) const {
     const uint16_t width  = 40;
     const uint16_t height = 27;
     const uint8_t initialOffset = 10;

@@ -69,7 +69,7 @@ bool LevelManager::levelExists(uint8_t levelNumber) const {
  */
 void LevelManager::write() const {
     std::string levelFile = getPath(board->getLevelNum(), true);
-    FILE *fp = fopen(levelFile.c_str(), "wb");
+    FILE* fp = fopen(levelFile.c_str(), "wb");
     writeSize(fp);
     writeDefaultTileType(fp);
     writeInitialPlayerCoordinate(fp);
@@ -104,7 +104,7 @@ void LevelManager::read() {
  * Read the level's items from the persistent storage.
  * @param fp
  */
-void LevelManager::readItems(FILE *fp) {
+void LevelManager::readItems(FILE* fp) {
     // Read Count of Items.
     // Hardcoded to 1 since there can only be a key in the puzzle for now.
     uint16_t itemCount;
@@ -122,7 +122,7 @@ void LevelManager::readItems(FILE *fp) {
  * Read the level's deviations to the default tile type from the persistent storage.
  * @param fp
  */
-void LevelManager::readDeviations(FILE *fp) {
+void LevelManager::readDeviations(FILE* fp) {
     // Read Tile Deviation Count
     uint16_t deviationCount;
     fread(&deviationCount, sizeof(uint16_t), 1, fp);
@@ -148,7 +148,7 @@ void LevelManager::readDeviations(FILE *fp) {
  * Read the initial tile coordinate of the player.
  * @param fp
  */
-void LevelManager::readInitialPlayerCoordinate(FILE *fp) {
+void LevelManager::readInitialPlayerCoordinate(FILE* fp) {
     fread(&playerCoordinate.first, sizeof(uint16_t), 1, fp);
     fread(&playerCoordinate.second, sizeof(uint16_t), 1, fp);
 }
@@ -157,7 +157,7 @@ void LevelManager::readInitialPlayerCoordinate(FILE *fp) {
  * Read the default tile type.
  * @param fp
  */
-void LevelManager::readDefaultTileType(FILE *fp) {
+void LevelManager::readDefaultTileType(FILE* fp) {
     // Read Default Tile Type
     uint8_t defaultTileTypeInteger;
     fread(&defaultTileTypeInteger, sizeof(uint8_t), 1, fp);
@@ -171,7 +171,7 @@ void LevelManager::readDefaultTileType(FILE *fp) {
  * this can now be changed.
  * @param fp
  */
-void LevelManager::readSize(FILE *fp) {
+void LevelManager::readSize(FILE* fp) {
     // Read Width and Height and discard the result.
     fread(&width, sizeof(uint16_t), 1, fp);
     fread(&height, sizeof(uint16_t), 1, fp);

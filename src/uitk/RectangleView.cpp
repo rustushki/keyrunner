@@ -13,7 +13,7 @@ RectangleView::RectangleView(Model* model, const SDL_Rect &rect) : BaseView(mode
  * Draws a rectangle to the screen using the color field.
  * @param renderer
  */
-void RectangleView::draw(SDL_Renderer *renderer) {
+void RectangleView::draw(SDL_Renderer* renderer) {
     auto red = static_cast<uint8_t>((color & 0xFF0000) >> 16);
     auto green = static_cast<uint8_t>((color & 0x00FF00) >> 8);
     auto blue = static_cast<uint8_t>((color & 0x0000FF) >> 0);

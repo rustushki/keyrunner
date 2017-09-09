@@ -32,7 +32,7 @@ GameModel::~GameModel() {
  * Fetch the Title Screen's model.
  * @return TitleScreenModel*
  */
-TitleScreenModel *GameModel::getTitleScreenModel() const {
+TitleScreenModel* GameModel::getTitleScreenModel() const {
     return this->titleScreenModel;
 }
 
@@ -40,7 +40,7 @@ TitleScreenModel *GameModel::getTitleScreenModel() const {
  * Fetch the Editor's model.
  * @return EditorBoardModel*
  */
-EditorBoardModel *GameModel::getEditorBoardModel() const {
+EditorBoardModel* GameModel::getEditorBoardModel() const {
     return this->editorBoardModel;
 }
 
@@ -48,7 +48,7 @@ EditorBoardModel *GameModel::getEditorBoardModel() const {
  * Fetch the Play model.
  * @return PlayBoardModel*
  */
-PlayBoardModel *GameModel::getPlayBoardModel() const {
+PlayBoardModel* GameModel::getPlayBoardModel() const {
     return this->playBoardModel;
 }
 
@@ -56,7 +56,7 @@ PlayBoardModel *GameModel::getPlayBoardModel() const {
  * Fetch the option model
  * @return OptionModel*
  */
-OptionModel *GameModel::getOptionModel() const {
+OptionModel* GameModel::getOptionModel() const {
     return this->optionModel;
 }
 

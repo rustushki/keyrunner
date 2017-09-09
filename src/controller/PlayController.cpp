@@ -14,7 +14,7 @@
  * @param display
  * @param startingLevel
  */
-PlayController::PlayController(PlayBoardModel *model, Display* display, uint8_t startingLevel) : BoardController(model,
+PlayController::PlayController(PlayBoardModel* model, Display* display, uint8_t startingLevel) : BoardController(model,
         display) {
     // Initialize the model
     getModel()->setTimeClock(50000);
@@ -69,7 +69,7 @@ void PlayController::updateLevel(long elapsedDuration) const {
  * Fetch the sub-classed model for this controller.
  * @return the model
  */
-PlayBoardModel *PlayController::getModel() const {
+PlayBoardModel* PlayController::getModel() const {
     return (PlayBoardModel*) DisplayController::getModel();
 }
 

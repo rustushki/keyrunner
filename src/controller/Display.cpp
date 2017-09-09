@@ -8,7 +8,7 @@
  * @param window
  * @param renderer
  */
-Display::Display(SDL_Window *window, SDL_Renderer *renderer) {
+Display::Display(SDL_Window* window, SDL_Renderer* renderer) {
     this->window = window;
     this->renderer = renderer;
 }
@@ -48,7 +48,7 @@ void Display::draw() const {
  * @param name
  * @param view
  */
-void Display::addView(std::string name, View *view) {
+void Display::addView(std::string name, View* view) {
     deleteViewIfExists(name);
     viewMap[name] = view;
     viewNameStack.push_back(name);
@@ -112,7 +112,7 @@ void Display::advanceAnimations() {
  * @param y y coordinate
  * @return View*
  */
-View *Display::getViewUnderCoordinate(uint32_t x, uint32_t y) const {
+View* Display::getViewUnderCoordinate(uint32_t x, uint32_t y) const {
     View* matchingView = nullptr;
 
     for (auto viewNameIterator = viewNameStack.rbegin(); viewNameIterator != viewNameStack.rend(); viewNameIterator++) {

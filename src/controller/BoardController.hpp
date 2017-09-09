@@ -7,7 +7,7 @@
 
 class BoardController : public DisplayController {
 public:
-    BoardController(BoardModel *model, Display *display);
+    BoardController(BoardModel* model, Display* display);
 
 protected:
     LevelManager* getLevelManager() const;

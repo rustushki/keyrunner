@@ -6,14 +6,14 @@
 
 class GameWinController : public DisplayController {
 public:
-    GameWinController(BaseModel *model, Display *display);
+    GameWinController(BaseModel* model, Display* display);
 
 protected:
     GameWinModel* getModel() const final;
     void updateModel(long frameDuration) override;
     bool isStillExecuting() const override;
-    View *createMenu() const;
-    View *createYouWinLabel() const;
+    View* createMenu() const;
+    View* createYouWinLabel() const;
 };
 
 #endif

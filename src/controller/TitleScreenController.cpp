@@ -9,7 +9,7 @@
  * @param model
  * @param display
  */
-TitleScreenController::TitleScreenController(TitleScreenModel* model, Display *display) : DisplayController(model,
+TitleScreenController::TitleScreenController(TitleScreenModel* model, Display* display) : DisplayController(model,
         display) {
     createKeyImage();
     createKeyRunnerText();
@@ -181,6 +181,6 @@ void TitleScreenController::createEditorLevelSelectorMenu() {
  * Fetch the sub-classed model for this controller.
  * @return the model
  */
-TitleScreenModel *TitleScreenController::getModel() const {
+TitleScreenModel* TitleScreenController::getModel() const {
     return dynamic_cast<TitleScreenModel*>(DisplayController::getModel());
 }

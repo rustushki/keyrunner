@@ -15,7 +15,7 @@ ButtonView::ButtonView(Model* model, const SDL_Rect &rect) : LabelView(model, re
  * Eventually, this could support on click and hover. Right now, it does nothing more than LabelView::draw().
  * @param renderer
  */
-void ButtonView::draw(SDL_Renderer *renderer) {
+void ButtonView::draw(SDL_Renderer* renderer) {
     LabelView::draw(renderer);
 }
 

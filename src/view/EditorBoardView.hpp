@@ -6,12 +6,12 @@
 
 class EditorBoardView : public BoardView {
 public:
-    EditorBoardView(EditorBoardModel *model, const SDL_Rect &rect);
+    EditorBoardView(EditorBoardModel* model, const SDL_Rect &rect);
     void draw(SDL_Renderer* renderer) override;
     EditorBoardModel* getModel() const override;
 
 private:
-    void drawCursorTile(SDL_Renderer *renderer, bool justHighlight);
+    void drawCursorTile(SDL_Renderer* renderer, bool justHighlight);
 };
 
 #endif

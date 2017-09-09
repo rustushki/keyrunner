@@ -219,7 +219,7 @@ void GameController::sizeWindowAndShow(SDL_Window* window) {
  * This model contains references to all models used by the entire game.
  * @return
  */
-GameModel *GameController::getModel() const {
+GameModel* GameController::getModel() const {
     return this->gameModel;
 }
 
