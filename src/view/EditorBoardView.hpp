@@ -6,7 +6,7 @@
 
 class EditorBoardView : public BoardView {
 public:
-    EditorBoardView(EditorBoardModel* model, const SDL_Rect &rect);
+    EditorBoardView(EditorBoardModel* model, const SDL_Rect &rect, AnimationFactory* animationFactory);
     void draw(SDL_Renderer* renderer) override;
     EditorBoardModel* getModel() const override;
 

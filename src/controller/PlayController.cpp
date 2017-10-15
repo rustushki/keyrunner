@@ -121,7 +121,7 @@ View* PlayController::createRectangle() const {
  */
 View* PlayController::createBoard() const {
     SDL_Rect rect = {0, 0, getDisplay()->getWidth(), 400};
-    auto board = new BoardView(getModel(), rect);
+    auto board = new BoardView(getModel(), rect, getDisplay()->getAnimationFactory());
 
     board->setOnKeyDownCallback([this, board] (SDL_Event event) {
         // User Presses Q

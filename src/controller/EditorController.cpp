@@ -4,8 +4,6 @@
 #include "../view/AnimationFactory.hpp"
 #include "../model/AnimationTypeFactory.hpp"
 
-extern AnimationFactory* animationFactory;
-
 /**
  * Constructor.
  * <p>
@@ -85,7 +83,7 @@ View* EditorController::createRectangle() const {
  */
 View* EditorController::createBoard() const {
     SDL_Rect rect = {0, 0, getDisplay()->getWidth(), 400};
-    BoardView* board = new EditorBoardView(getModel(), rect);
+    BoardView* board = new EditorBoardView(getModel(), rect, getDisplay()->getAnimationFactory());
 
     board->setOnMouseHoverCallback([this, board] (SDL_Event event) {
         // Convert the mouse hover coordinates into a tile coordinate
@@ -216,7 +214,7 @@ View* EditorController::createTileTypeButton(View* board, TileType tileType, uin
     auto button = new ButtonView(nullptr, rect);
     button->setColor(0x333333);
     button->setTextColor(0xFF0000);
-    button->setIcon(animationFactory->build(animationType));
+    button->setIcon(getDisplay()->getAnimationFactory()->build(animationType));
     button->setOnMouseUpCallback([this, tileType] (SDL_Event event) {
         getModel()->setTileType(tileType);
     });

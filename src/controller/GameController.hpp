@@ -13,7 +13,7 @@
 class GameController : public Controller {
 public:
     explicit GameController(GameModel* gameModel, int argc, char** argv);
-    ~GameController() final;
+    ~GameController() final = default;
     void execute() override;
 
 protected:

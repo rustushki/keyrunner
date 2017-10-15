@@ -5,6 +5,7 @@
 #include <SDL_system.h>
 #include <map>
 #include "../uitk/View.hpp"
+#include "../view/AnimationFactory.hpp"
 
 class Display {
 public:
@@ -22,6 +23,7 @@ public:
     View* getViewByName(std::string name) const;
     void setFocus(std::string viewName);
     std::string getFocus() const;
+    AnimationFactory* getAnimationFactory() const;
 
 private:
     SDL_Window* window;
@@ -29,6 +31,7 @@ private:
     std::map<std::string, View*> viewMap;
     std::vector<std::string> viewNameStack;
     std::string focusedViewName;
+    AnimationFactory* animationFactory;
 };
 
 #endif

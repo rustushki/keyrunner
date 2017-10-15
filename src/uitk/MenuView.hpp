@@ -7,7 +7,7 @@
 
 class MenuView : public RectangleView {
 public:
-    MenuView(Model* model, const SDL_Rect &rect);
+    MenuView(Model* model, const SDL_Rect &rect, AnimationFactory* animationFactory);
     void draw(SDL_Renderer* renderer) override;
     void onMouseHover(SDL_Event event) override;
     void onMouseUp(SDL_Event event) override;
@@ -37,6 +37,7 @@ private:
     uint32_t cursorTextColor;
     uint16_t visibleOptionCount;
     uint8_t optionFontSize;
+    AnimationFactory* animationFactory;
 
     void sizeButtons();
     uint32_t getOptionBackgroundColor();
@@ -51,6 +52,9 @@ private:
     void incrementWindowTopIndex();
     void decrementWindowTopIndex();
     bool isCursorOutsideWindow();
+    void setAnimationFactory(AnimationFactory* animationFactory);
+    AnimationFactory* getAnimationFactory() const;
+
 };
 
 #endif

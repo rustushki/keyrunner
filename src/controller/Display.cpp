@@ -4,13 +4,14 @@
 /**
  * Constructor.
  * <p>
- * Stores the SDL_Window* and SDL_Renderer* for the display.
+ * Stores the SDL_Window* and SDL_Renderer* for the display. Builds the AnimationFactory.
  * @param window
  * @param renderer
  */
 Display::Display(SDL_Window* window, SDL_Renderer* renderer) {
     this->window = window;
     this->renderer = renderer;
+    this->animationFactory = new AnimationFactory(renderer);
 }
 
 /**
@@ -174,4 +175,14 @@ void Display::reset() {
     viewMap.clear();
     viewNameStack.clear();
     setFocus("");
+}
+
+/**
+ * Return an instance of the AnimationFactory.
+ * <p>
+ * This should be used by views which have need to build animation graphics.
+ * @return
+ */
+AnimationFactory* Display::getAnimationFactory() const {
+    return animationFactory;
 }
