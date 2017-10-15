@@ -46,7 +46,7 @@ bool GameWinController::isStillExecuting() const {
 View* GameWinController::createMenu() const {
     SDL_Rect rect = {0, 240, 200, 200};
     rect.x = (getDisplay()->getWidth() - rect.w) / 2;
-    auto returnToTitle = new MenuView(nullptr, rect);
+    auto returnToTitle = new MenuView(nullptr, rect, getDisplay()->getAnimationFactory());
     returnToTitle->setColor(0x000000);
     returnToTitle->setOptionBackgroundColor(0x000000);
     returnToTitle->setOptionTextColor(0xBBBBBB);

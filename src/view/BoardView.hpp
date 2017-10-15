@@ -4,11 +4,13 @@
 #include <map>
 #include "../uitk/BaseView.hpp"
 #include "../uitk/Animation.hpp"
+#include "../model/AnimationTypeFactory.hpp"
 #include "../model/BoardModel.hpp"
+#include "../view/AnimationFactory.hpp"
 
 class BoardView : public BaseView {
 public:
-    BoardView(BoardModel* model, SDL_Rect rect);
+    BoardView(BoardModel* model, SDL_Rect rect, AnimationFactory* animationFactory);
     ~BoardView() override;
     void draw(SDL_Renderer* renderer) override;
     BoardModel* getModel() const override;
@@ -22,14 +24,16 @@ private:
     Animation* keyAnimation;
     Animation* playerAnimation;
     std::map<AnimationType, Animation*> preBuiltAnimations;
-
-    void preBuildAnimations();
-    void freeAnimations();
-
     Animation* conveyDownAnimation;
     Animation* conveyUpAnimation;
     Animation* conveyLeftAnimation;
     Animation* conveyRightAnimation;
+    AnimationFactory* animationFactory;
+
+    void preBuildAnimations();
+    void freeAnimations();
+    AnimationFactory* getAnimationFactory() const;
+    void setAnimationFactory(AnimationFactory* animationFactory);
 };
 
 #endif

@@ -7,8 +7,6 @@
 #include "../controller/GameWinController.hpp"
 #include "../controller/TitleScreenController.hpp"
 
-extern AnimationFactory* animationFactory;
-
 /**
  * Constructor.
  * @param options
@@ -30,13 +28,6 @@ GameController::GameController(GameModel* gameModel, int argc, char** argv) {
 
     // Build the SDL display and window
     this->buildDisplay();
-}
-
-/**
- * Destructor.
- */
-GameController::~GameController() {
-    delete animationFactory;
 }
 
 /**
@@ -140,9 +131,6 @@ void GameController::buildDisplay() {
 
     // Build the Display that will be used by the Controller
     this->display = new Display(window, renderer);
-
-    // Build the global animation factory
-    animationFactory = new AnimationFactory(renderer);
 }
 
 /**

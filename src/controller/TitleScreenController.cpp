@@ -39,7 +39,7 @@ bool TitleScreenController::isStillExecuting() const {
  */
 void TitleScreenController::createKeyImage() {
     SDL_Rect rect = {30, 30, 350, 127};
-    View* keyImage = new ImageView(nullptr, rect, AnimationType::ANIMATION_TYPE_TITLE_SCREEN_KEY);
+    View* keyImage = new ImageView(nullptr, rect, getDisplay()->getAnimationFactory(), AnimationType::ANIMATION_TYPE_TITLE_SCREEN_KEY);
     keyImage->show();
     getDisplay()->addView("title_screen_key", keyImage);
 }
@@ -96,7 +96,7 @@ void TitleScreenController::createPressEnterText() {
 void TitleScreenController::createMainMenu() {
     SDL_Rect rect = {0, 240, 200, 200};
     rect.x = (getDisplay()->getWidth() - rect.w) / 2;
-    auto mainMenu = new MenuView(nullptr, rect);
+    auto mainMenu = new MenuView(nullptr, rect, getDisplay()->getAnimationFactory());
     mainMenu->setColor(0x000000);
     mainMenu->setOptionBackgroundColor(0x000000);
     mainMenu->setOptionTextColor(0xBBBBBB);
@@ -137,7 +137,7 @@ void TitleScreenController::createMainMenu() {
 void TitleScreenController::createEditorLevelSelectorMenu() {
     SDL_Rect rect = {0, 240, 200, 200};
     rect.x = (getDisplay()->getWidth() - rect.w) / 2;
-    auto levelEditorMenu = new MenuView(nullptr, rect);
+    auto levelEditorMenu = new MenuView(nullptr, rect, getDisplay()->getAnimationFactory());
     levelEditorMenu->setColor(0x000000);
     levelEditorMenu->setOptionBackgroundColor(0x000000);
     levelEditorMenu->setOptionTextColor(0xBBBBBB);

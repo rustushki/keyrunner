@@ -48,7 +48,7 @@ bool GameOverController::isStillExecuting() const {
 View* GameOverController::createMainMenu() {
     SDL_Rect rect = {0, 240, 300, 200};
     rect.x = (getDisplay()->getWidth() - rect.w) / 2;
-    auto mainMenu = new MenuView(nullptr, rect);
+    auto mainMenu = new MenuView(nullptr, rect, getDisplay()->getAnimationFactory());
     mainMenu->setColor(0x000000);
     mainMenu->setOptionBackgroundColor(0x000000);
     mainMenu->setOptionTextColor(0xBBBBBB);

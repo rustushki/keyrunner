@@ -1,8 +1,4 @@
 #include "../view/BoardView.hpp"
-#include "../view/AnimationFactory.hpp"
-#include "../model/AnimationTypeFactory.hpp"
-
-extern AnimationFactory* animationFactory;
 
 /**
  * Constructor.
@@ -11,25 +7,27 @@ extern AnimationFactory* animationFactory;
  * @param model
  * @param rect
  */
-BoardView::BoardView(BoardModel* model, SDL_Rect rect) : BaseView(model, rect) {
+BoardView::BoardView(BoardModel* model, SDL_Rect rect, AnimationFactory* animationFactory) : BaseView(model, rect) {
+    setAnimationFactory(animationFactory);
+
     preBuildAnimations();
 
-    keyAnimation = animationFactory->build(ANIMATION_TYPE_KEY);
+    keyAnimation = getAnimationFactory()->build(ANIMATION_TYPE_KEY);
     addAnimation(keyAnimation);
 
-    playerAnimation = animationFactory->build(ANIMATION_TYPE_PUMPKIN);
+    playerAnimation = getAnimationFactory()->build(ANIMATION_TYPE_PUMPKIN);
     addAnimation(playerAnimation);
 
-    conveyDownAnimation = animationFactory->build(ANIMATION_TYPE_CONVEY_DOWN);
+    conveyDownAnimation = getAnimationFactory()->build(ANIMATION_TYPE_CONVEY_DOWN);
     addAnimation(conveyDownAnimation);
 
-    conveyUpAnimation = animationFactory->build(ANIMATION_TYPE_CONVEY_UP);
+    conveyUpAnimation = getAnimationFactory()->build(ANIMATION_TYPE_CONVEY_UP);
     addAnimation(conveyUpAnimation);
 
-    conveyLeftAnimation = animationFactory->build(ANIMATION_TYPE_CONVEY_LEFT);
+    conveyLeftAnimation = getAnimationFactory()->build(ANIMATION_TYPE_CONVEY_LEFT);
     addAnimation(conveyLeftAnimation);
 
-    conveyRightAnimation = animationFactory->build(ANIMATION_TYPE_CONVEY_RIGHT);
+    conveyRightAnimation = getAnimationFactory()->build(ANIMATION_TYPE_CONVEY_RIGHT);
     addAnimation(conveyRightAnimation);
 }
 
@@ -101,7 +99,7 @@ void BoardView::draw(SDL_Renderer* renderer) {
 void BoardView::preBuildAnimations() {
     for (int index = 0; index < ANIMATION_TYPE_COUNT; index++) {
         auto animationType = static_cast<AnimationType>(index);
-        preBuiltAnimations[animationType] = animationFactory->build(animationType);
+        preBuiltAnimations[animationType] = getAnimationFactory()->build(animationType);
     }
 }
 
@@ -148,4 +146,12 @@ uint32_t BoardView::getTileWidth() const {
  */
 uint32_t BoardView::getTileHeight() const {
     return getPreBuiltAnimations()[ANIMATION_TYPE_EMPTY]->getHeight();
+}
+
+void BoardView::setAnimationFactory(AnimationFactory* animationFactory) {
+    this->animationFactory = animationFactory;
+}
+
+AnimationFactory* BoardView::getAnimationFactory() const {
+    return animationFactory;
 }

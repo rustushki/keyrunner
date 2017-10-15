@@ -1,7 +1,4 @@
 #include "ImageView.hpp"
-#include "../view/AnimationFactory.hpp"
-
-extern AnimationFactory* animationFactory;
 
 /**
  * Constructor.
@@ -11,7 +8,8 @@ extern AnimationFactory* animationFactory;
  * @param rect
  * @param animationType
  */
-ImageView::ImageView(Model* model, const SDL_Rect &rect, AnimationType animationType) : RectangleView(model, rect) {
+ImageView::ImageView(Model* model, const SDL_Rect &rect, AnimationFactory* animationFactory,
+        AnimationType animationType) : RectangleView(model, rect) {
     animation = animationFactory->build(animationType);
     setHorizontalAlignment(HorizontalAlignment::LEFT);
     setVerticalAlignment(VerticalAlignment::BOTTOM);

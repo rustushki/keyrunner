@@ -1,16 +1,17 @@
 #include "../uitk/MenuView.hpp"
-#include "../controller/KeyRunner.hpp"
 
 /**
  * Constructor.
  * @param model
  * @param rect
  */
-MenuView::MenuView(Model* model, const SDL_Rect &rect) : RectangleView(model, rect) {
+MenuView::MenuView(Model* model, const SDL_Rect &rect, AnimationFactory* animationFactory) :
+        RectangleView(model, rect) {
     setCursorIndex(0);
     setVisibleOptionCount(0);
     setWindowTopIndex(0);
     setOptionFontSize(0);
+    setAnimationFactory(animationFactory);
     createArrows();
     cursorTextColor = 0;
 }
@@ -316,7 +317,7 @@ void MenuView::createArrows() {
     const auto arrowHeight = 5;
 
     SDL_Rect upRect = {getX(), getY(), getWidth(), arrowHeight};
-    upArrowView = new ImageView(nullptr, upRect, ANIMATION_TYPE_ARROW_UP);
+    upArrowView = new ImageView(nullptr, upRect, getAnimationFactory(), ANIMATION_TYPE_ARROW_UP);
     upArrowView->setColor(0x000000);
     upArrowView->setHorizontalAlignment(HorizontalAlignment::CENTER);
     upArrowView->setVerticalAlignment(VerticalAlignment::CENTER);
@@ -326,7 +327,7 @@ void MenuView::createArrows() {
 
 
     SDL_Rect downRect = {getX(), getY() + getHeight() - arrowHeight, getWidth(), arrowHeight};
-    downArrowView = new ImageView(nullptr, downRect, ANIMATION_TYPE_ARROW_DOWN);
+    downArrowView = new ImageView(nullptr, downRect, getAnimationFactory(), ANIMATION_TYPE_ARROW_DOWN);
     downArrowView->setColor(0x000000);
     downArrowView->setHorizontalAlignment(HorizontalAlignment::CENTER);
     downArrowView->setVerticalAlignment(VerticalAlignment::CENTER);
@@ -476,4 +477,20 @@ void MenuView::setOptionFontSize(uint8_t optionFontSize) {
  */
 uint8_t MenuView::getOptionFontSize() const {
     return optionFontSize;
+}
+
+/**
+ * Set the AnimationFactory instance.
+ * @param animationFactory
+ */
+void MenuView::setAnimationFactory(AnimationFactory* animationFactory) {
+    this->animationFactory = animationFactory;
+}
+
+/**
+ * Fetch the AnimationFactory instance.
+ * @return AnimationFactory
+ */
+AnimationFactory* MenuView::getAnimationFactory() const {
+    return animationFactory;
 }

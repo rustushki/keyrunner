@@ -6,7 +6,8 @@
  * @param model
  * @param rect
  */
-EditorBoardView::EditorBoardView(EditorBoardModel* model, const SDL_Rect &rect) : BoardView(model, rect) {}
+EditorBoardView::EditorBoardView(EditorBoardModel* model, const SDL_Rect &rect, AnimationFactory* animationFactory) :
+        BoardView(model, rect, animationFactory) {}
 
 /**
  * Draw the board.
