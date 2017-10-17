@@ -23,3 +23,4 @@ libuitk.a
 snap/.snapcraft
 parts
 prime
+*snap-build*
