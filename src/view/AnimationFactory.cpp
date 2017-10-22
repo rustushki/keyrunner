@@ -21,8 +21,8 @@ AnimationFactory::AnimationFactory(SDL_Renderer* renderer) {
  * Frees the values in internal sprite sheet cache.
  */
 AnimationFactory::~AnimationFactory() {
-    for (auto iterator = spriteSheetMap.begin(); iterator != spriteSheetMap.end(); ++iterator) {
-        delete iterator->second;
+    for (auto spriteSheet : spriteSheetMap) {
+        delete &spriteSheet;
     }
 }
 

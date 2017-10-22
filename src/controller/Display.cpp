@@ -30,7 +30,7 @@ void Display::draw() const {
     SDL_RenderClear(renderer);
 
     // Redraw each View
-    for (auto viewName : viewNameStack) {
+    for (const auto& viewName : viewNameStack) {
         View* view = getViewByName(viewName);
         if (view->isVisible()) {
             view->draw(renderer);
@@ -96,7 +96,7 @@ uint16_t Display::getWidth() const {
  * Iterate over the Views currently displayed and advance each of their Animations.
  */
 void Display::advanceAnimations() {
-    for (auto viewName : viewNameStack) {
+    for (const auto& viewName : viewNameStack) {
         View* view = getViewByName(viewName);
         for (Animation* animation : view->getAnimations()) {
             animation->advance();
@@ -149,7 +149,7 @@ View* Display::getViewByName(std::string name) const {
  * @param viewName
  */
 void Display::setFocus(std::string viewName) {
-    this->focusedViewName = viewName;
+    this->focusedViewName = std::move(viewName);
 }
 
 /**

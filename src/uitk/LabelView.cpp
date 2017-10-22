@@ -45,7 +45,7 @@ void LabelView::setTextColor(uint32_t color) {
  */
 void LabelView::setText(std::string text) {
     textDirty = true;
-    this->text = text;
+    this->text = std::move(text);
 }
 
 /**
@@ -207,7 +207,7 @@ void LabelView::setIcon(Animation* animation) {
  * @param fontPath
  */
 void LabelView::setFontPath(std::string fontPath) {
-    this->fontPath = fontPath;
+    this->fontPath = std::move(fontPath);
 }
 
 /**

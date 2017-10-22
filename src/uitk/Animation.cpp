@@ -16,7 +16,7 @@ Animation::Animation(SpriteSheet* spriteSheet, std::vector<uint16_t> frameList, 
     this->sps = stillsPerSecond;
 
     // Get List of Frames for this kind of Animation.
-    this->frameList = frameList;
+    this->frameList = std::move(frameList);
 
     this->currentStill  = 0;
     this->shouldAdvance = false;
