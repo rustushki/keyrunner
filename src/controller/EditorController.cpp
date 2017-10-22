@@ -1,8 +1,6 @@
 #include <sstream>
 #include "EditorController.hpp"
 #include "../view/EditorBoardView.hpp"
-#include "../view/AnimationFactory.hpp"
-#include "../model/AnimationTypeFactory.hpp"
 
 /**
  * Constructor.

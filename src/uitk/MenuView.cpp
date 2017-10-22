@@ -19,7 +19,7 @@ MenuView::MenuView(Model* model, const SDL_Rect &rect, AnimationFactory* animati
 void MenuView::addOption(std::string optionText, const std::function<void(SDL_Event)> &callBack) {
     SDL_Rect rect = {0, 0, 0, 0};
     auto button = new ButtonView(nullptr, rect);
-    button->setText(optionText);
+    button->setText(std::move(optionText));
     button->setFontPath(FONT_CELTIC_HAND);
     button->setFontSize(0);
     button->setOnMouseUpCallback(callBack);

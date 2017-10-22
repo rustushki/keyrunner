@@ -1,8 +1,5 @@
 #include "../controller/GameController.hpp"
 
-// Objects that don't have a home yet
-AnimationFactory* animationFactory;
-
 /**
  * Entry point into KeyRunner.
  * @param argc count of arguments

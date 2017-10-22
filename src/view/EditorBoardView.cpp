@@ -1,5 +1,4 @@
 #include "../view/EditorBoardView.hpp"
-#include "../model/AnimationTypeFactory.hpp"
 
 /**
  * Constructor.
