@@ -403,3 +403,11 @@ uint16_t BoardModel::getWidth() const {
     return 25;
 }
 
+/**
+ * Get the list of loaded board entities.
+ * @return std::vector<BoardEntity*>
+ */
+std::vector<BoardEntity*> BoardModel::getBoardEntities() const {
+    return std::vector<BoardEntity*>();
+}
+

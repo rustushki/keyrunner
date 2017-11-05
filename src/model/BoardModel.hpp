@@ -6,6 +6,7 @@
 #include "../model/BaseModel.hpp"
 #include "../model/Direction.hpp"
 #include "../model/TileType.hpp"
+#include "BoardEntity.hpp"
 
 typedef std::pair<uint16_t, uint16_t> TileCoord;
 
@@ -46,6 +47,8 @@ public:
 
     bool tileCoordHasKey(TileCoord tileCoord) const;
     bool tileCoordHasPlayer(TileCoord tileCoord) const;
+
+    std::vector<BoardEntity*> getBoardEntities() const;
 
 private:
     uint8_t level;
