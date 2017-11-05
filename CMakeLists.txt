@@ -33,6 +33,7 @@ set(SOURCES
     src/controller/main.cpp
     src/model/AnimationTypeFactory.cpp
     src/model/BaseModel.cpp
+    src/model/BoardEntityType.hpp
     src/model/BoardModel.cpp
     src/model/EditorBoardModel.cpp
     src/model/GameModel.cpp
