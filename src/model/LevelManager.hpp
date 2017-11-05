@@ -35,6 +35,7 @@ private:
     void writeDeviations(FILE* fp) const;
     void writeInitialPlayerCoordinate(FILE* fp) const;
     void writeItems(FILE* fp) const;
+    void writeEntities(FILE* fp) const;
 
     uint16_t width;
     uint16_t height;

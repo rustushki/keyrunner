@@ -72,9 +72,10 @@ void LevelManager::write() const {
     FILE* fp = fopen(levelFile.c_str(), "wb");
     writeSize(fp);
     writeDefaultTileType(fp);
-    writeInitialPlayerCoordinate(fp);
+    writeInitialPlayerCoordinate(fp); // TODO: Remove
     writeDeviations(fp);
-    writeItems(fp);
+    writeItems(fp); // TODO: Remove
+    writeEntities(fp);
     fclose(fp);
 }
 
@@ -343,4 +344,27 @@ void LevelManager::writeItems(FILE* fp) const {
     fwrite(&x, sizeof(uint16_t), 1, fp);
     fwrite(&y, sizeof(uint16_t), 1, fp);
     fwrite(&itemIndex, sizeof(uint8_t), 1, fp);
+}
+
+/**
+ * Write each of the board entities into persistent storage.
+ * @param fp
+ */
+void LevelManager::writeEntities(FILE* fp) const {
+    // Write the count of Board Entities
+    uint16_t count = static_cast<uint16_t>(board->getBoardEntities().size());
+    fwrite(&count, sizeof(count), 1, fp);
+
+    // Write each entity
+    for (BoardEntity* entity : board->getBoardEntities()) {
+        uint16_t type = entity->getType();
+        fwrite(&type, sizeof(type), 1, fp);
+
+        uint32_t x = entity->getBoardX();
+        fwrite(&x, sizeof(x), 1, fp);
+
+        uint32_t y = entity->getBoardY();
+        fwrite(&y, sizeof(y), 1, fp);
+    }
+
 }
