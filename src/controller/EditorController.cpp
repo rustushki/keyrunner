@@ -1,5 +1,6 @@
 #include <sstream>
-#include "EditorController.hpp"
+#include "../controller/EditorController.hpp"
+#include "../model/Coordinate.hpp"
 #include "../view/EditorBoardView.hpp"
 
 /**
@@ -87,13 +88,13 @@ View* EditorController::createBoard() const {
         // Convert the mouse hover coordinates into a tile coordinate
         auto tileX = static_cast<uint16_t>(event.motion.x / board->getTileWidth());
         auto tileY = static_cast<uint16_t>(event.motion.y / board->getTileHeight());
-        TileCoord hoverCoordinate(tileX, tileY);
+        TileCoordinate hoverCoordinate(tileX, tileY);
 
         // If replacing, the selected tile type will overwrite the hovered over tile
         HoverBehavior hoverBehavior = getModel()->getHoverBehavior();
         if (hoverBehavior == HoverBehavior::REPLACE) {
             getModel()->changeTileType(hoverCoordinate, getModel()->getTileType());
-            getModel()->setHoverTileCoordinate(TileCoord(getModel()->getWidth(), getModel()->getHeight()));
+            getModel()->setHoverTileCoordinate(TileCoordinate(getModel()->getWidth(), getModel()->getHeight()));
 
         // If pointing, the selected tile type will hover with the mouse
         } else if (hoverBehavior == HoverBehavior::POINT) {
@@ -101,11 +102,11 @@ View* EditorController::createBoard() const {
 
         // If moving key, move the key to the current hover coordinate
         } else if (hoverBehavior == HoverBehavior::MOVE_KEY) {
-            getModel()->setKeyCoord(hoverCoordinate);
+            getModel()->setKeyCoord(hoverCoordinate.toCoordinate());
 
         // If moving player, move the key to the current hover coordinate
         } else if (hoverBehavior == HoverBehavior::MOVE_PLAYER) {
-            getModel()->setPlayerCoord(hoverCoordinate);
+            getModel()->setPlayerCoord(hoverCoordinate.toCoordinate());
         }
     });
 
@@ -117,25 +118,25 @@ View* EditorController::createBoard() const {
     });
 
     board->setOnMouseDownCallback([this, board] (SDL_Event event) {
-        auto tileX = static_cast<uint16_t>(event.button.x / board->getTileWidth());
-        auto tileY = static_cast<uint16_t>(event.button.y / board->getTileHeight());
-        TileCoord mouseCoordinate(tileX, tileY);
+        auto tileX = static_cast<uint16_t>(event.button.x);
+        auto tileY = static_cast<uint16_t>(event.button.y);
+        Coordinate mouseCoordinate(tileX, tileY);
 
         // If the key is at the mouse coordinate, hover will now move the key
         if (getModel()->getKeyCoord() == mouseCoordinate) {
             getModel()->setHoverBehavior(HoverBehavior::MOVE_KEY);
-            getModel()->setHoverTileCoordinate(TileCoord(getModel()->getWidth(), getModel()->getHeight()));
+            getModel()->setHoverTileCoordinate(TileCoordinate(getModel()->getWidth(), getModel()->getHeight()));
 
         // If the key is at the mouse coordinate, hover will now move the key
         } else if (getModel()->getPlayerCoord() == mouseCoordinate) {
             getModel()->setHoverBehavior(HoverBehavior::MOVE_PLAYER);
-            getModel()->setHoverTileCoordinate(TileCoord(getModel()->getWidth(), getModel()->getHeight()));
+            getModel()->setHoverTileCoordinate(TileCoordinate(getModel()->getWidth(), getModel()->getHeight()));
 
         // Otherwise, hover will now replace tiles, and go ahead and replace the current tile so that a mouse move is
         // not required to affect change
         } else {
             getModel()->setHoverBehavior(HoverBehavior::REPLACE);
-            getModel()->changeTileType(mouseCoordinate, getModel()->getTileType());
+            getModel()->changeTileType(mouseCoordinate.toTileCoordinate(), getModel()->getTileType());
         }
     });
 

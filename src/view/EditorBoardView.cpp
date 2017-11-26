@@ -19,10 +19,11 @@ void EditorBoardView::draw(SDL_Renderer* renderer) {
     BoardView::draw(renderer);
 
     // Determine if we should draw just the highlight, or if we should include the tile type, too
-    TileCoord hoverTileCoord = getModel()->getHoverTileCoordinate();
+    TileCoordinate hoverTileCoord = getModel()->getHoverTileCoordinate();
     bool justHighlight = false;
-    justHighlight |= (getModel()->getKeyCoord() == hoverTileCoord);
-    justHighlight |= (getModel()->getPlayerCoord() == hoverTileCoord);
+    // TODO:
+    //justHighlight |= (getModel()->getKeyCoord() == hoverTileCoord);
+    //justHighlight |= (getModel()->getPlayerCoord() == hoverTileCoord);
 
     // Draw the highlight and maybe the cursor tile
     drawCursorTile(renderer, justHighlight);
@@ -44,8 +45,8 @@ void EditorBoardView::drawCursorTile(SDL_Renderer* renderer, bool justHighlight)
     Animation* animation = preBuiltAnimations[animationType];
 
     // Convert the Hovered Tile Coordinate into a screen coordinate
-    uint16_t xPosition = getModel()->getHoverTileCoordinate().first * animation->getWidth();
-    uint16_t yPosition = getModel()->getHoverTileCoordinate().second * animation->getHeight();
+    uint16_t xPosition = static_cast<uint16_t>(getModel()->getHoverTileCoordinate().getX() * animation->getWidth());
+    uint16_t yPosition = static_cast<uint16_t>(getModel()->getHoverTileCoordinate().getY() * animation->getHeight());
 
     // Draw the animation on top of the hover coordinate, unless we're just going to draw the highlight
     if (!justHighlight) {

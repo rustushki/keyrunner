@@ -2,7 +2,11 @@
 #define BOARD_ENTITY_TYPE_HPP
 
 enum BoardEntityType {
-    PLAYER
+    PLAYER,
+    KEY,
+    TELEPORTER_RED,
+    TELEPORTER_GREEN,
+    TELEPORTER_BLUE
 };
 
 #endif

@@ -25,6 +25,8 @@ public:
 private:
     long timeClock;
     bool playerHasKey;
+
+    bool getPlayerHasKey();
 };
 
 #endif

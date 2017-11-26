@@ -38,165 +38,129 @@ void BoardModel::setLevelNum(uint8_t level) {
  * @param coord
  * @return boolean
  */
-bool BoardModel::isWall(TileCoord coord) const {
-    return (tileType[coord.second][coord.first] == TileType::Wall);
+bool BoardModel::isInWall(Coordinate coordinate) const {
+    bool isInWall = false;
+    for (HitBox* wall : getWallHitBoxes()) {
+        if (wall->contains(coordinate)) {
+            isInWall = true;
+            break;
+        }
+    }
+
+    return isInWall;
 }
 
 /**
  * Get the coordinate of the key.
- * @return TileCoord
+ * @return BoardEntityCoordinate
  */
-TileCoord BoardModel::getKeyCoord() const {
-    return keyCoord;
+Coordinate BoardModel::getKeyCoord() const {
+    auto matchingEntityVector = getEntityByType(KEY);
+    if (matchingEntityVector.empty()) {
+        throw std::logic_error("No key found on board");
+    }
+    Coordinate match = matchingEntityVector.front()->getCoordinate();
+
+    return match;
 }
 
 /**
  * Set the coordinate of the key.
- * @param tileCoord
+ * @param coordinate
  */
-void BoardModel::setKeyCoord(TileCoord tileCoord) {
-    keyCoord = tileCoord;
+void BoardModel::setKeyCoord(Coordinate coordinate) {
+    auto matchingEntityVector = getEntityByType(KEY);
+    if (matchingEntityVector.empty()) {
+        throw std::logic_error("No key found on board");
+    }
+    matchingEntityVector.front()->setCoordinate(coordinate);
 }
 
 /**
- * Get the current tile of the player.
- * @return TileCoord
+ * Search through the list of loaded board entities and find the ones that match the provided type.
+ * @param type
+ * @return std::vector<BoardEntity*>
  */
-TileCoord BoardModel::getPlayerCoord() const {
-    return playerCoord;
+std::vector<BoardEntity*> BoardModel::getEntityByType(BoardEntityType type) const {
+    std::vector<BoardEntity*> entityVector;
+    for (BoardEntity* entity : getBoardEntities()) {
+        if (entity->getType() == type) {
+            entityVector.push_back(entity);
+            break;
+        }
+    }
+
+    return entityVector;
+}
+
+/**
+ * Get the current coordinate of the player.
+ * @return BoardEntityCoordinate
+ */
+Coordinate BoardModel::getPlayerCoord() const {
+    return getPlayer()->getCoordinate();
 }
 
 /**
  * Assign a new coordinate to the player.
  * <p>
- * If the coordinate has the key, transfer ownership to the player. If the coordinate is a teleporter, move the player
- * to the matching tile.
- * @param tileCoord
+ * If the coordinate is a teleporter, move the player to the matching teleporter's coordinates.
+ * @param coordinate
  */
-void BoardModel::setPlayerCoord(TileCoord tileCoord) {
-    // Handle Teleporter Tiles and Empty Tiles
-    if (isTeleporter(tileCoord)) {
-        TileCoord matching = getMatchingTeleporterTileCoord(tileCoord);
-        playerCoord = matching;
-    } else {
-        playerCoord = tileCoord;
+void BoardModel::setPlayerCoord(Coordinate coordinate) {
+    BoardEntity* player = getPlayer();
+
+    for (BoardEntity* entity : getBoardEntities()) {
+        if (player->intersectsWithEntity(entity)) {
+            if (isTeleporter(entity)) {
+                coordinate = getMatchingTeleporter(entity)->getCoordinate();
+                break;
+            }
+        }
     }
+
+    player->setCoordinate(coordinate);
 }
 
 /**
- * Is the provided coordinate a teleporter?
- * @param TileCoord
+ * Is the provided entity a teleporter?
+ * @param BoardEntity
  * @return boolean
  */
-bool BoardModel::isTeleporter(TileCoord coord) const {
-    TileType tt = tileType[coord.second][coord.first];
+bool BoardModel::isTeleporter(BoardEntity* entity) const {
+    BoardEntityType type = entity->getType();
 
-    return (   tt == TileType::TeleporterRed
-            || tt == TileType::TeleporterGreen
-            || tt == TileType::TeleporterBlue);
+    return (   type == TELEPORTER_RED
+            || type == TELEPORTER_GREEN
+            || type == TELEPORTER_BLUE);
 }
 
 /**
  * Change the tile type of the tile at the provided tile coordinate.
- * @param coord
+ * @param tileCoordinate
  * @param newTileType
  */
-void BoardModel::changeTileType(TileCoord coord, TileType newTileType) {
-    tileType[coord.second][coord.first] = newTileType;
+void BoardModel::changeTileType(TileCoordinate tileCoordinate, TileType newTileType) {
+    tileType[tileCoordinate.getY()][tileCoordinate.getX()] = newTileType;
 }
 
 /**
  * Get the type of the tile at the provided coordinate.
- * @param coord
+ * @param tileCoordinate
  * @return TileType
  */
-TileType BoardModel::getTileType(TileCoord coord) const {
-    return tileType[coord.second][coord.first];
+TileType BoardModel::getTileType(TileCoordinate tileCoordinate) const {
+    return tileType[tileCoordinate.getY()][tileCoordinate.getX()];
 }
 
 /**
- * Is the Tile at the provided TileCoord a Door?
+ * Is the Tile containing the provided coordinate a Door?
  * @param coord
  * @return boolean
  */
-bool BoardModel::isDoor(TileCoord coord) const {
-    return tileType[coord.second][coord.first] == TileType::Door;
-}
-
-/**
- * Given a direction and a tile coordinate, return the tile coordinate to that direction.
- * @param coord
- * @param dir
- * @param TileCoord
- */
-TileCoord BoardModel::getTileCoordInDirection(TileCoord coord, Direction dir) const {
-    if (dir == DIRECTION_UP) {
-        return getTileCoordUp(coord);
-    } else if (dir == DIRECTION_DOWN) {
-        return getTileCoordDown(coord);
-    } else if (dir == DIRECTION_RIGHT) {
-        return getTileCoordRight(coord);
-    } else if (dir == DIRECTION_LEFT) {
-        return getTileCoordLeft(coord);
-    }
-
-    return getTileCoordLeft(coord);
-}
-
-/**
- * Get the tile coordinate above the provided tile coordinate
- * @param current
- * @return TileCoord
- */
-TileCoord BoardModel::getTileCoordUp(TileCoord current) const {
-    auto x = current.first;
-    auto y = current.second - 1;
-    if (y < 0) {
-        y = getHeight() - 1;
-    }
-    return {static_cast<uint16_t>(x), static_cast<uint16_t>(y)};
-}
-
-/**
- * Get the tile coordinate below the provided tile coordinate
- * @param current
- * @return TileCoord
- */
-TileCoord BoardModel::getTileCoordDown(TileCoord current) const {
-    auto x = current.first + 0;
-    auto y = current.second + 1;
-    if (y >= getHeight()) {
-        y = 0;
-    }
-    return {static_cast<uint16_t>(x), static_cast<uint16_t>(y)};
-}
-
-/**
- * Get the tile coordinate left of the provided tile coordinate
- * @param current
- * @return TileCoord
- */
-TileCoord BoardModel::getTileCoordLeft(TileCoord current) const {
-    auto x = current.first - 1;
-    auto y = current.second + 0;
-    if (x < 0) {
-        x = getWidth() - 1;
-    }
-    return {static_cast<uint16_t>(x), static_cast<uint16_t>(y)};
-}
-
-/**
- * Get the tile coordinate right of the provided tile coordinate
- * @param current
- * @return TileCoord
- */
-TileCoord BoardModel::getTileCoordRight(TileCoord current) const {
-    auto x = current.first + 1;
-    auto y = current.second + 0;
-    if (x >= getWidth()) {
-        x = 0;
-    }
-    return {static_cast<uint16_t>(x), static_cast<uint16_t>(y)};
+bool BoardModel::isInDoor(Coordinate coordinate) const {
+    TileCoordinate tileCoordinate = coordinateToTileCoordinate(coordinate);
+    return tileType[tileCoordinate.getY()][tileCoordinate.getX()] == TileType::Door;
 }
 
 /**
@@ -204,13 +168,22 @@ TileCoord BoardModel::getTileCoordRight(TileCoord current) const {
  * @param coord
  * @return boolean
  */
-bool BoardModel::isConveyor(TileCoord coord) const {
-    TileType tt = tileType[coord.second][coord.first];
+bool BoardModel::isConveyor(TileCoordinate coord) const {
+    bool isConveyor;
 
-    return (   tt == TileType::ConveyorUp
-            || tt == TileType::ConveyorDown
-            || tt == TileType::ConveyorRight
-            || tt == TileType::ConveyorLeft);
+    uint32_t x = coord.getX();
+    uint32_t y = coord.getY();
+
+    if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight()) {
+        isConveyor = false;
+    } else {
+        TileType tt = tileType[coord.getY()][coord.getX()];
+
+        isConveyor = (tt == TileType::ConveyorUp || tt == TileType::ConveyorDown || tt == TileType::ConveyorRight
+                || tt == TileType::ConveyorLeft);
+    }
+
+    return isConveyor;
 }
 
 /**
@@ -219,8 +192,8 @@ bool BoardModel::isConveyor(TileCoord coord) const {
  * @return Direction
  * @throws std::invalid_argument if tile coordinate is not for conveyor tile
  */
-Direction BoardModel::getConveyorDirection(TileCoord coord) const {
-    TileType tt = tileType[coord.second][coord.first];
+Direction BoardModel::getConveyorDirection(TileCoordinate coord) const {
+    TileType tt = tileType[coord.getY()][coord.getX()];
     if (tt == TileType::ConveyorUp) {
         return DIRECTION_UP;
     } else if (tt == TileType::ConveyorDown) {
@@ -245,146 +218,42 @@ Direction BoardModel::getConveyorDirection(TileCoord coord) const {
  * <li>If there is no suitable second place, return the current tile in the conveyor belt sequence</li>
  * </ol>
  */
-TileCoord BoardModel::getNextConveyorTileCoord(TileCoord current) const {
-    if (!isConveyor(current)) {
+Coordinate BoardModel::getNextConveyorCoordinate(Coordinate current) const {
+    if (!isConveyor(current.toTileCoordinate())) {
         std::stringstream errorMessage;
         errorMessage << "Trying to get next conveyor tile from non conveyor tile.";
         throw std::invalid_argument(errorMessage.str());
     }
 
-    Direction direction = getConveyorDirection(current);
-    Direction origDir = direction;
+    Direction direction = getConveyorDirection(current.toTileCoordinate());
 
-    // Initialize oppDir to pacify compiler
-    Direction oppDir = DIRECTION_COUNT;
+    return getCoordinateInDirection(current, direction);
+}
 
-    if (origDir == DIRECTION_UP) {
-        oppDir = DIRECTION_DOWN;
-    } else if (origDir == DIRECTION_DOWN) {
-        oppDir = DIRECTION_UP;
-    } else if (origDir == DIRECTION_RIGHT) {
-        oppDir = DIRECTION_LEFT;
-    } else if (origDir == DIRECTION_LEFT) {
-        oppDir = DIRECTION_RIGHT;
+/**
+ * Given a teleporter, return the matching teleporter.
+ * @param teleporter
+ * @return BoardEntity
+ */
+BoardEntity* BoardModel::getMatchingTeleporter(BoardEntity* teleporter) const {
+    if (!isTeleporter(teleporter)) {
+        throw std::invalid_argument("Expected teleporter");
     }
 
-    TileCoord tryTileCoord;
-    TileCoord secondPlaceCoord(getWidth(), getHeight());
-    TileCoord thirdPlaceCoord = current;
-
-    while (true) {
-
-        tryTileCoord = getTileCoordInDirection(current, direction);
-
-        if (!isWall(tryTileCoord) && !isConveyor(tryTileCoord) && secondPlaceCoord.first != getWidth()) {
-            secondPlaceCoord = tryTileCoord;
-
-        // Prefer adjacent conveyor belt tiles.  Explicitly do not place the player on a conveyor belt tile in the
-        // exact opposite direction of current travel
-        } else if (isConveyor(tryTileCoord)) {
-            if (direction != oppDir) {
-                Direction newDirection = getConveyorDirection(tryTileCoord);
-
-                TileCoord check = getTileCoordInDirection(tryTileCoord, newDirection);
-
-                if (check.first != current.first || check.second != current.second) {
-                    return tryTileCoord;
-                }
-            }
-        }
-
-        if (direction == DIRECTION_UP) {
-            direction = DIRECTION_RIGHT;
-        } else if (direction == DIRECTION_RIGHT) {
-            direction = DIRECTION_DOWN;
-        } else if (direction == DIRECTION_DOWN) {
-            direction = DIRECTION_LEFT;
-        } else if (direction == DIRECTION_LEFT) {
-            direction = DIRECTION_UP;
-        }
-
-        if (direction == DIRECTION_COUNT) {
-            direction = DIRECTION_UP;
-        }
-
-        if (direction == origDir) {
+    BoardEntity* matchingTeleporter = nullptr;
+    BoardEntityType teleporterType = teleporter->getType();
+    for (BoardEntity* entity : getBoardEntities()) {
+        if (entity->getType() == teleporterType && entity != teleporter) {
+            matchingTeleporter = entity;
             break;
         }
-
     }
 
-    if (secondPlaceCoord.first != getWidth() && secondPlaceCoord.second != getHeight()) {
-        return secondPlaceCoord;
+    if (matchingTeleporter == nullptr) {
+        throw std::logic_error("Could not find matching teleporter");
     }
 
-    return thirdPlaceCoord;
-}
-
-/**
- * Given a teleporter tile X and Y, return the matching teleporter tile's X and Y.  Return as a vector int.
- * @param coord
- * @return TileCoord
- */
-TileCoord BoardModel::getMatchingTeleporterTileCoord(TileCoord coord) const {
-
-    TileCoord matching = coord;
-
-    // Handle case where a non-teleporter tile is passed in.  Return the same
-    // tile provided.  This should never happen.
-    if (!isTeleporter(coord)) {
-        matching = coord;
-
-
-        // Normal case. Find the first matching teleporter tile.
-    } else {
-
-        // Search for the matching tile.
-        bool found = false;
-        for (uint16_t x = 0; x < getWidth(); x++) {
-            for (uint16_t y = 0; y < getHeight(); y++) {
-
-                if (x != coord.first || y != coord.second) {
-
-                    // Found a TileCoord with a Teleporter Type of the same
-                    // color which is not this tile.
-                    if (tileType[coord.second][coord.first] == tileType[y][x]) {
-                        matching = TileCoord(x, y);
-                        found = true;
-                        break;
-                    }
-
-                }
-            }
-            if (found) {
-                break;
-            }
-        }
-
-        // Handle case where there is no matching teleporter tile.
-        if (!found) {
-            matching = coord;
-        }
-    }
-
-    return matching;
-}
-
-/**
- * Return true if the provided tile coordinate has the key.
- * @param tileCoord
- * @return boolean
- */
-bool BoardModel::tileCoordHasKey(TileCoord tileCoord) const {
-    return (keyCoord == tileCoord);
-}
-
-/**
- * Return true if the provided tile coordinate has the player.
- * @param tileCoord
- * @return boolean
- */
-bool BoardModel::tileCoordHasPlayer(TileCoord tileCoord) const {
-    return (playerCoord == tileCoord);
+    return matchingTeleporter;
 }
 
 /**
@@ -408,6 +277,85 @@ uint16_t BoardModel::getWidth() const {
  * @return std::vector<BoardEntity*>
  */
 std::vector<BoardEntity*> BoardModel::getBoardEntities() const {
-    return std::vector<BoardEntity*>();
+    return this->boardEntities;
 }
 
+/**
+ * Search through the list of board entities and return the one that is the player.
+ * <p>
+ * It is a logic error if there is not a player.
+ * @return
+ */
+BoardEntity* BoardModel::getPlayer() const {
+    auto matchingEntityVector = getEntityByType(PLAYER);
+    if (matchingEntityVector.empty()) {
+        throw std::logic_error("No player found on board");
+    }
+    return matchingEntityVector.front();
+}
+
+/**
+ * Search through the list of board entities and return the one that is the key.
+ * @return
+ */
+BoardEntity* BoardModel::getKey() const {
+    auto matchingEntityVector = getEntityByType(KEY);
+    return matchingEntityVector.front();
+}
+
+/**
+ * Return the list of wall hit boxes.
+ * <p>
+ * Note that the walls are just invisible hit boxes.
+ * @return
+ */
+std::vector<HitBox*> BoardModel::getWallHitBoxes() const {
+    return wallHitBoxes;
+}
+
+/**
+ * Find the TileCoordinate to which the provided Coordinate belongs.
+ * @param coordinate
+ * @return TileCoordinate
+ */
+TileCoordinate BoardModel::coordinateToTileCoordinate(Coordinate coordinate) const {
+    auto tileX = static_cast<uint32_t>(coordinate.getX() / 25);
+    auto tileY = static_cast<uint32_t>(coordinate.getY() / 25);
+    return {tileX, tileY};
+}
+
+/**
+ * Get the coordinate 4 pixel in the provided direction.
+ * @param startingCoordinate
+ * @param direction
+ * @return Coordinate
+ */
+Coordinate BoardModel::getCoordinateInDirection(Coordinate startingCoordinate, Direction direction) const {
+    Coordinate newCoordinate{0, 0};
+
+    if (direction == DIRECTION_UP) {
+        newCoordinate = {startingCoordinate.getX(), startingCoordinate.getY() - 4};
+    }
+
+    if (direction == DIRECTION_DOWN) {
+        newCoordinate = {startingCoordinate.getX(), startingCoordinate.getY() + 4};
+    }
+
+    if (direction == DIRECTION_LEFT) {
+        newCoordinate = {startingCoordinate.getX() - 4, startingCoordinate.getY()};
+    }
+
+    if (direction == DIRECTION_RIGHT) {
+        newCoordinate = {startingCoordinate.getX() + 4, startingCoordinate.getY()};
+    }
+
+    return newCoordinate;
+}
+
+/**
+ * Replace the list of BoardEntity objects currently on the board.
+ * @param entities
+ */
+void BoardModel::setBoardEntities(std::vector<BoardEntity*> entities) {
+    this->boardEntities = std::move(entities);
+}

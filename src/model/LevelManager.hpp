@@ -26,9 +26,10 @@ private:
 
     void readSize(FILE* fp);
     void readDefaultTileType(FILE* fp);
-    void readInitialPlayerCoordinate(FILE* fp);
+    void readInitialPlayerCoordinate1to2(FILE* fp);
     void readDeviations(FILE* fp);
-    void readItems(FILE* fp);
+    void readItems1to2(FILE* fp);
+    void readEntities(FILE* fp);
 
     void writeSize(FILE* fp) const;
     void writeDefaultTileType(FILE* fp) const;
@@ -40,10 +41,11 @@ private:
     uint16_t width;
     uint16_t height;
     TileType defaultTileType;
-    std::map<TileCoord, TileType> deviations;
-    TileCoord playerCoordinate;
-    TileCoord keyCoordinate;
+    std::map<TileCoordinate, TileType> deviations;
+    Coordinate playerCoordinate{0, 0};
+    Coordinate keyCoordinate{0, 0};
     BoardModel* board;
+    std::vector<BoardEntity*> entities;
 
 };
 

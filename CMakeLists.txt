@@ -20,6 +20,11 @@ add_library(uitk STATIC
 
 # Source Files.
 set(SOURCES
+	src/model/BaseBoardEntity.cpp
+	src/model/Coordinate.cpp
+	src/model/HitBoxType.cpp
+	src/model/RectangleHitBox.cpp
+	src/model/TileCoordinate.cpp
     src/controller/BoardController.cpp
     src/controller/Display.cpp
     src/controller/DisplayController.cpp

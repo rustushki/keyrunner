@@ -26,9 +26,9 @@ TileType EditorBoardModel::getTileType() const {
 
 /**
  * Gets the coordinate of the tile which is currently being hovered over.
- * @return TileCoord
+ * @return TileCoordinate
  */
-TileCoord EditorBoardModel::getHoverTileCoordinate() const {
+TileCoordinate EditorBoardModel::getHoverTileCoordinate() const {
     return this->hoverCoordinate;
 }
 
@@ -36,7 +36,7 @@ TileCoord EditorBoardModel::getHoverTileCoordinate() const {
  * Sets the tile coordinate that the mouse is currently hovering over.
  * @param newHoverCoordinate
  */
-void EditorBoardModel::setHoverTileCoordinate(TileCoord newHoverCoordinate) {
+void EditorBoardModel::setHoverTileCoordinate(TileCoordinate newHoverCoordinate) {
     this->hoverCoordinate = newHoverCoordinate;
 }
 

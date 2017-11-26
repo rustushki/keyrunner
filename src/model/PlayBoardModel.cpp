@@ -12,7 +12,7 @@ PlayBoardModel::PlayBoardModel() {
  * @return boolean
  */
 bool PlayBoardModel::isComplete() const {
-    return (playerHasKey && isDoor(getPlayerCoord()));
+    return (playerHasKey && isInDoor(getPlayerCoord()));
 }
 
 /**
@@ -20,37 +20,24 @@ bool PlayBoardModel::isComplete() const {
  * @param direction
  */
 void PlayBoardModel::movePlayerInDirection(Direction direction) {
-    TileCoord oldTileCoord = getPlayerCoord();
-    TileCoord newTileCoord;
-    if (direction == DIRECTION_UP) {
-        newTileCoord = getTileCoordUp(oldTileCoord);
-    }
 
-    if (direction == DIRECTION_DOWN) {
-        newTileCoord = getTileCoordDown(oldTileCoord);
-    }
-
-    if (direction == DIRECTION_LEFT) {
-        newTileCoord = getTileCoordLeft(oldTileCoord);
-    }
-
-    if (direction == DIRECTION_RIGHT) {
-        newTileCoord = getTileCoordRight(oldTileCoord);
-    }
+    Coordinate newCoordinate = getCoordinateInDirection(getPlayerCoord(), direction);
 
     // Do not move player if the new tile is a wall. Do not continue evaluating criteria either, such as teleporters
-    // and wraparound. They do not apply since the player has attempt to walk into a wall
-    if (isWall(newTileCoord)) {
+    // and wraparound. They do not apply since the player has attempted to walk into a wall
+    if (isInWall(newCoordinate)) {
         return;
     }
 
     // Give the player the key if the tile has the key
-    if (tileCoordHasKey(newTileCoord)) {
-        setPlayerHasKey(true);
+    if (!getPlayerHasKey()) {
+        if (getKey()->intersectsWithCoordinate(newCoordinate)) {
+            setPlayerHasKey(true);
+        }
     }
 
-    // Move the player to the tile
-    setPlayerCoord(newTileCoord);
+    // Move the player to the coordinate
+    setPlayerCoord(newCoordinate);
 }
 
 /**
@@ -92,23 +79,32 @@ void PlayBoardModel::incrementTimeClock(long step) {
 void PlayBoardModel::setPlayerHasKey(bool playerHasKey) {
     this->playerHasKey = playerHasKey;
     if (this->playerHasKey) {
-        setKeyCoord(TileCoord(getWidth(), getHeight()));
+        setKeyCoord(Coordinate(getWidth(), getHeight()));
     }
 }
 
 /**
- * Convey the player to the next conveyor tile in the belt.
+ * Convey the player in the direction of the conveyor tile on which they stand.
  * <p>
  * If the player is not on a conveyor tile, this is a non-operation.
  */
 void PlayBoardModel::conveyPlayer() {
-    // If the player is on a conveyor tile, convey the player to the next tile on the belt
-    if (isConveyor(getPlayerCoord())) {
-        TileCoord newTileCoord = getNextConveyorTileCoord(getPlayerCoord());
-        setPlayerCoord(newTileCoord);
+    // Convert the player coordinate into a tile coordinate
+    TileCoordinate tileHoldingPlayer = coordinateToTileCoordinate(getPlayerCoord());
 
-        if (tileCoordHasKey(newTileCoord)) {
-            setPlayerHasKey(true);
+    if (isConveyor(tileHoldingPlayer)) {
+        Coordinate newCoordinate = getNextConveyorCoordinate(getPlayerCoord());
+
+        if (!getPlayerHasKey()) {
+            if (getKey()->intersectsWithCoordinate(newCoordinate)) {
+                setPlayerHasKey(true);
+            }
         }
+
+        setPlayerCoord(newCoordinate);
     }
+}
+
+bool PlayBoardModel::getPlayerHasKey() {
+    return playerHasKey;
 }

@@ -9,14 +9,14 @@ public:
     EditorBoardModel();
     void setTileType(TileType tileType);
     TileType getTileType() const;
-    TileCoord getHoverTileCoordinate() const;
-    void setHoverTileCoordinate(TileCoord newHoverCoordinate);
+    TileCoordinate getHoverTileCoordinate() const;
+    void setHoverTileCoordinate(TileCoordinate newHoverCoordinate);
     HoverBehavior getHoverBehavior();
     void setHoverBehavior(HoverBehavior newBehavior);
 
 private:
     TileType tileType;
-    TileCoord hoverCoordinate;
+    TileCoordinate hoverCoordinate{0, 0};
     HoverBehavior hoverBehavior;
 };
 

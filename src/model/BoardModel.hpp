@@ -8,8 +8,6 @@
 #include "../model/TileType.hpp"
 #include "BoardEntity.hpp"
 
-typedef std::pair<uint16_t, uint16_t> TileCoord;
-
 class BoardModel : public BaseModel {
 public:
     BoardModel();
@@ -20,41 +18,44 @@ public:
     uint8_t getLevelNum() const;
     void setLevelNum(uint8_t level);
 
-    TileCoord getKeyCoord() const;
-    void setKeyCoord(TileCoord tileCoord);
+    Coordinate getKeyCoord() const;
+    void setKeyCoord(Coordinate coordinate);
+    BoardEntity* getKey() const;
 
-    TileCoord getPlayerCoord() const;
-    void setPlayerCoord(TileCoord tileCoord);
+    Coordinate getPlayerCoord() const;
+    void setPlayerCoord(Coordinate coordinate);
+    BoardEntity* getPlayer() const;
 
-    bool isWall(TileCoord coord) const;
-    bool isTeleporter(TileCoord coord) const;
-    bool isDoor(TileCoord coord) const;
-    bool isConveyor(TileCoord coord) const;
+    bool isInWall(Coordinate coordinate) const;
+    bool isTeleporter(BoardEntity* entity) const;
+    bool isInDoor(Coordinate coordinate) const;
+    bool isConveyor(TileCoordinate coord) const;
 
-    TileType getTileType(TileCoord coord) const;
-    void changeTileType(TileCoord coord, TileType newTileType);
+    TileType getTileType(TileCoordinate tileCoordinate) const;
+    void changeTileType(TileCoordinate tileCoordinate, TileType newTileType);
 
-    TileCoord getTileCoordInDirection(TileCoord coord, Direction d) const;
-    TileCoord getTileCoordUp(TileCoord current) const;
-    TileCoord getTileCoordDown(TileCoord current) const;
-    TileCoord getTileCoordLeft(TileCoord current) const;
-    TileCoord getTileCoordRight(TileCoord current) const;
+    Direction getConveyorDirection(TileCoordinate coord) const;
+    Coordinate getNextConveyorCoordinate(Coordinate tileCoord) const;
 
-    Direction getConveyorDirection(TileCoord coord) const;
-    TileCoord getNextConveyorTileCoord(TileCoord tileCoord) const;
-
-    TileCoord getMatchingTeleporterTileCoord(TileCoord coord) const;
-
-    bool tileCoordHasKey(TileCoord tileCoord) const;
-    bool tileCoordHasPlayer(TileCoord tileCoord) const;
+    BoardEntity* getMatchingTeleporter(BoardEntity* teleporter) const;
 
     std::vector<BoardEntity*> getBoardEntities() const;
 
+    Coordinate getCoordinateInDirection(Coordinate startingCoordinate, Direction direction) const;
+
+    void setBoardEntities(std::vector<BoardEntity*> vector);
+
+protected:
+    TileCoordinate coordinateToTileCoordinate(Coordinate coordinate) const;
+
 private:
     uint8_t level;
-    TileCoord keyCoord;
-    TileCoord playerCoord;
     std::vector< std::vector<TileType> > tileType;
+    std::vector<HitBox*> wallHitBoxes;
+    std::vector<BoardEntity*> boardEntities;
+
+    std::vector<BoardEntity*> getEntityByType(BoardEntityType type) const;
+    std::vector<HitBox*> getWallHitBoxes() const;
 };
 
 #endif
