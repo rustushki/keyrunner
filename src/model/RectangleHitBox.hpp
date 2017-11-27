@@ -8,12 +8,12 @@ public:
     bool intersects(HitBox* hitBox) const override;
     bool contains(Coordinate coordinate) const override;
     Coordinate getAnchor() const override;
-    uint32_t getWidth() const;
-    uint32_t getHeight() const;
-    uint32_t getLeft() const;
-    uint32_t getRight() const;
-    uint32_t getTop() const;
-    uint32_t getBottom() const;
+    long getWidth() const;
+    long getHeight() const;
+    long getLeft() const;
+    long getRight() const;
+    long getTop() const;
+    long getBottom() const;
 
 
 private:

@@ -80,7 +80,7 @@ void Animation::draw(SDL_Renderer* renderer) {
 /**
  * Move the drawing location of this Animation elsewhere.
  */
-void Animation::move(uint32_t x, uint32_t y) {
+void Animation::move(long x, long y) {
     this->x = x;
     this->y = y;
 }

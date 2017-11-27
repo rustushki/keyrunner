@@ -45,8 +45,8 @@ void EditorBoardView::drawCursorTile(SDL_Renderer* renderer, bool justHighlight)
     Animation* animation = preBuiltAnimations[animationType];
 
     // Convert the Hovered Tile Coordinate into a screen coordinate
-    uint16_t xPosition = static_cast<uint16_t>(getModel()->getHoverTileCoordinate().getX() * animation->getWidth());
-    uint16_t yPosition = static_cast<uint16_t>(getModel()->getHoverTileCoordinate().getY() * animation->getHeight());
+    long xPosition = getModel()->getHoverTileCoordinate().getX() * animation->getWidth();
+    long yPosition = getModel()->getHoverTileCoordinate().getY() * animation->getHeight();
 
     // Draw the animation on top of the hover coordinate, unless we're just going to draw the highlight
     if (!justHighlight) {
@@ -55,7 +55,8 @@ void EditorBoardView::drawCursorTile(SDL_Renderer* renderer, bool justHighlight)
     }
 
     // Draw Highlight
-    SDL_Rect where = {xPosition, yPosition, animation->getWidth(), animation->getHeight()};
+    SDL_Rect where = {static_cast<int>(xPosition), static_cast<int>(yPosition), animation->getWidth(),
+        animation->getHeight()};
     SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0xFF, 0xFF);
     SDL_RenderDrawRect(renderer, &where);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_ADD);

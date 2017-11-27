@@ -5,7 +5,7 @@
  * @param x
  * @param y
  */
-TileCoordinate::TileCoordinate(uint32_t x, uint32_t y) : Coordinate(x, y) {}
+TileCoordinate::TileCoordinate(long x, long y) : Coordinate(x, y) {}
 
 /**
  * Convert the coordinate into a TileCoordinate.

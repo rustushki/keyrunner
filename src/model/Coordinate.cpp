@@ -5,24 +5,24 @@
  * @param x
  * @param y
  */
-Coordinate::Coordinate(uint32_t x, uint32_t y) {
+Coordinate::Coordinate(long x, long y) {
     this->x = x;
     this->y = y;
 }
 
 /**
  * Get the x dimension of the coordinate.
- * @return uint32_t
+ * @return long
  */
-uint32_t Coordinate::getX() const {
+long Coordinate::getX() const {
     return x;
 }
 
 /**
  * Get the y dimension of the coordinate.
- * @return uint32_t
+ * @return long
  */
-uint32_t Coordinate::getY() const {
+long Coordinate::getY() const {
     return y;
 }
 
@@ -41,7 +41,7 @@ bool Coordinate::operator==(Coordinate coordinate) const {
  * Set the x dimension of the coordinate
  * @param x
  */
-void Coordinate::setX(uint32_t x) {
+void Coordinate::setX(long x) {
     this->x = x;
 }
 
@@ -49,7 +49,7 @@ void Coordinate::setX(uint32_t x) {
  * Set the y dimension of the coordinate
  * @param y
  */
-void Coordinate::setY(uint32_t y) {
+void Coordinate::setY(long y) {
     this->y = y;
 }
 

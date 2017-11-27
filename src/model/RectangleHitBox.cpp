@@ -45,9 +45,9 @@ Coordinate RectangleHitBox::getAnchor() const {
 
 /**
  * Get the width of the hit box.
- * @return uint32_t
+ * @return long
  */
-uint32_t RectangleHitBox::getWidth() const {
+long RectangleHitBox::getWidth() const {
     return width;
 }
 
@@ -55,7 +55,7 @@ uint32_t RectangleHitBox::getWidth() const {
  * Get the height of the hit box.
  * @return uint32_t
  */
-uint32_t RectangleHitBox::getHeight() const {
+long RectangleHitBox::getHeight() const {
     return height;
 }
 
@@ -63,7 +63,7 @@ uint32_t RectangleHitBox::getHeight() const {
  * Get the right edge of the hit box.
  * @return uint32_t
  */
-uint32_t RectangleHitBox::getRight() const {
+long RectangleHitBox::getRight() const {
     return getAnchor().getX() + getWidth();
 }
 
@@ -71,7 +71,7 @@ uint32_t RectangleHitBox::getRight() const {
  * Get the left edge of the hit box.
  * @return uint32_t
  */
-uint32_t RectangleHitBox::getLeft() const {
+long RectangleHitBox::getLeft() const {
     return getAnchor().getX();
 }
 
@@ -79,7 +79,7 @@ uint32_t RectangleHitBox::getLeft() const {
  * Get the top edge of the hit box.
  * @return uint32_t
  */
-uint32_t RectangleHitBox::getTop() const {
+long RectangleHitBox::getTop() const {
     return getAnchor().getY();
 }
 
@@ -87,6 +87,6 @@ uint32_t RectangleHitBox::getTop() const {
  * Get the bottom edge of the hit box.
  * @return uint32_t
  */
-uint32_t RectangleHitBox::getBottom() const {
+long RectangleHitBox::getBottom() const {
     return getAnchor().getY() + getHeight();
 }

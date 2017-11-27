@@ -342,12 +342,12 @@ void LevelManager::writeDeviations(FILE* fp) const {
         // Write Deviation Tile Coordinate
         auto x = tileCoordinate.getX();
         auto y = tileCoordinate.getY();
-        fwrite(&x, sizeof(uint32_t), 1, fp);
-        fwrite(&y, sizeof(uint32_t), 1, fp);
+        fwrite(&x, sizeof(x), 1, fp);
+        fwrite(&y, sizeof(y), 1, fp);
 
         // Write Deviation Tile Type
         auto tileType = static_cast<uint8_t>(board->getTileType(tileCoordinate));
-        fwrite(&tileType, sizeof(uint8_t), 1, fp);
+        fwrite(&tileType, sizeof(tileType), 1, fp);
     }
 }
 
@@ -368,10 +368,10 @@ void LevelManager::writeEntities(FILE* fp) const {
 
         Coordinate coordinate = entity->getCoordinate();
 
-        uint32_t x = coordinate.getX();
+        long x = coordinate.getX();
         fwrite(&x, sizeof(x), 1, fp);
 
-        uint32_t y = coordinate.getY();
+        long y = coordinate.getY();
         fwrite(&y, sizeof(y), 1, fp);
     }
 

@@ -6,8 +6,8 @@
 
 class TileCoordinate : public Coordinate {
 public:
-    static const uint32_t SIZE = 25;
-    TileCoordinate(uint32_t x, uint32_t y);
+    static const long SIZE = 25;
+    TileCoordinate(long x, long y);
     explicit TileCoordinate(Coordinate coordinate);
     Coordinate toCoordinate() const;
 };

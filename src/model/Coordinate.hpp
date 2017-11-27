@@ -8,20 +8,20 @@ class TileCoordinate;
 
 class Coordinate {
 public:
-    Coordinate(uint32_t x, uint32_t y);
+    Coordinate(long x, long y);
 
-    uint32_t getX() const;
-    uint32_t getY() const;
+    long getX() const;
+    long getY() const;
 
-    void setX(uint32_t x);
-    void setY(uint32_t y);
+    void setX(long x);
+    void setY(long y);
 
     bool operator==(Coordinate coordinate) const;
     bool operator<(const Coordinate& rhs) const;
 
 private:
-    uint32_t x;
-    uint32_t y;
+    long x;
+    long y;
 
 };
 
