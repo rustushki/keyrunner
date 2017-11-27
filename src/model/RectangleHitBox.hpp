@@ -5,10 +5,9 @@
 
 class RectangleHitBox : public HitBox {
 public:
-    bool intersects(HitBox* hitBox) override;
-    bool contains(Coordinate coordinate) override;
-    uint32_t getX() const;
-    uint32_t getY() const;
+    bool intersects(HitBox* hitBox) const override;
+    bool contains(Coordinate coordinate) const override;
+    Coordinate getAnchor() const override;
     uint32_t getWidth() const;
     uint32_t getHeight() const;
     uint32_t getLeft() const;
@@ -20,8 +19,7 @@ public:
 private:
     uint32_t height;
     uint32_t width;
-    uint32_t y;
-    uint32_t x;
+    Coordinate anchor;
 };
 
 #endif

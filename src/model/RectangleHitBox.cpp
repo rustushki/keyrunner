@@ -5,7 +5,7 @@
  * @param hitBox
  * @return boolean
  */
-bool RectangleHitBox::intersects(HitBox* hitBox) {
+bool RectangleHitBox::intersects(HitBox* hitBox) const {
     bool intersects = false;
     if (hitBox->getType() == RECTANGLE) {
         auto that = dynamic_cast<RectangleHitBox*>(hitBox);
@@ -23,7 +23,7 @@ bool RectangleHitBox::intersects(HitBox* hitBox) {
  * @param coordinate
  * @return boolean
  */
-bool RectangleHitBox::contains(Coordinate coordinate) {
+bool RectangleHitBox::contains(Coordinate coordinate) const {
     bool contains = false;
 
     if (coordinate.getX() >= getLeft() && coordinate.getX() <= getRight()) {
@@ -36,19 +36,11 @@ bool RectangleHitBox::contains(Coordinate coordinate) {
 }
 
 /**
- * Get the x dimension of the top left corner of the hit box.
- * @return uint32_t
+ * Get the anchor point of the hit box.
+ * @return Coordinate
  */
-uint32_t RectangleHitBox::getX() const {
-    return x;
-}
-
-/**
- * Get the y dimension of the top left corner of the hit box.
- * @return uint32_t
- */
-uint32_t RectangleHitBox::getY() const {
-    return y;
+Coordinate RectangleHitBox::getAnchor() const {
+    return anchor;
 }
 
 /**
@@ -72,7 +64,7 @@ uint32_t RectangleHitBox::getHeight() const {
  * @return uint32_t
  */
 uint32_t RectangleHitBox::getRight() const {
-    return getX() + getWidth();
+    return getAnchor().getX() + getWidth();
 }
 
 /**
@@ -80,7 +72,7 @@ uint32_t RectangleHitBox::getRight() const {
  * @return uint32_t
  */
 uint32_t RectangleHitBox::getLeft() const {
-    return getX();
+    return getAnchor().getX();
 }
 
 /**
@@ -88,7 +80,7 @@ uint32_t RectangleHitBox::getLeft() const {
  * @return uint32_t
  */
 uint32_t RectangleHitBox::getTop() const {
-    return getY();
+    return getAnchor().getY();
 }
 
 /**
@@ -96,5 +88,5 @@ uint32_t RectangleHitBox::getTop() const {
  * @return uint32_t
  */
 uint32_t RectangleHitBox::getBottom() const {
-    return getY() + getHeight();
+    return getAnchor().getY() + getHeight();
 }

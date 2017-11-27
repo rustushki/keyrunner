@@ -6,9 +6,10 @@
 
 class HitBox {
 public:
-    virtual bool intersects(HitBox* hitBox) = 0;
-    virtual bool contains(Coordinate coordinate) = 0;
-    virtual HitBoxType getType() = 0;
+    virtual bool intersects(HitBox* hitBox) const  = 0;
+    virtual bool contains(Coordinate coordinate) const = 0;
+    virtual HitBoxType getType() const = 0;
+    virtual Coordinate getAnchor() const = 0;
 };
 
 #endif
