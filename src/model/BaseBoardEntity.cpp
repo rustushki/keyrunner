@@ -1,18 +1,16 @@
-#include "BaseBoardEntity.hpp"
+#include "../model/BaseBoardEntity.hpp"
 
 /**
  * Constructor.
  */
-BaseBoardEntity::BaseBoardEntity() : coordinate{0, 0} {}
+BaseBoardEntity::BaseBoardEntity(Coordinate coordinate, BoardEntityType type) : coordinate{coordinate}, type{type} {}
 
 /**
- * Retrieves the hitboxes associated with the BoardEntity.
- * <p>
- * Currently unimplemented.
- * @return
+ * Retrieves the hit boxes associated with the BoardEntity.
+ * @return std::vector<HitBox*>
  */
-std::vector<HitBox*> BaseBoardEntity::getHitBoxes() {
-    return std::vector<HitBox*>();
+std::vector<HitBox*> BaseBoardEntity::getHitBoxes() const {
+    return hitBoxes;
 }
 
 /**
@@ -48,10 +46,18 @@ Coordinate BaseBoardEntity::getCoordinate() {
  * <p>
  * Internally, this merely checks all the hit boxes to see if the coordinate intersects with any of them.
  * @param coordinate
- * @return
+ * @return boolean
  */
 bool BaseBoardEntity::intersectsWithCoordinate(Coordinate coordinate) {
-    return false;
+    bool intersects = false;
+    for (HitBox* hitBox : getHitBoxes()) {
+        if (hitBox->contains(coordinate)) {
+            intersects = true;
+            break;
+        }
+
+    }
+    return intersects;
 }
 
 /**
@@ -60,7 +66,21 @@ bool BaseBoardEntity::intersectsWithCoordinate(Coordinate coordinate) {
  * @return boolean
  */
 bool BaseBoardEntity::intersectsWithEntity(BoardEntity* entity) {
-    return false;
+    bool intersects = false;
+    for (HitBox* myHitBox : getHitBoxes()) {
+        for (HitBox* itsHitBox : entity->getHitBoxes()) {
+            if (myHitBox->intersects(itsHitBox)) {
+                intersects = true;
+                break;
+            }
+        }
+
+        if (intersects) {
+            break;
+        }
+    }
+
+    return intersects;
 }
 
 /**

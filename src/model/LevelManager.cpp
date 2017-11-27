@@ -123,9 +123,7 @@ void LevelManager::readItems1to2(FILE* fp) {
     keyCoordinate.setX(static_cast<uint32_t>(x * 25));
     keyCoordinate.setY(static_cast<uint32_t>(y * 25));
 
-    BoardEntity* key = new BaseBoardEntity();
-    key->setType(KEY);
-    key->setCoordinate(keyCoordinate);
+    BoardEntity* key = new BaseBoardEntity(keyCoordinate, KEY);
     entities.push_back(key);
 }
 
@@ -138,25 +136,24 @@ void LevelManager::readEntities(FILE* fp) {
     fread(&count, sizeof(uint16_t), 1, fp);
 
     for (int counter = 0; counter < count; counter++) {
-        BoardEntity* entity = new BaseBoardEntity();
 
         uint16_t type;
         fread(&type, sizeof(uint16_t), 1, fp);
-        entity->setType(static_cast<BoardEntityType>(type));
 
-        uint16_t x;
-        fread(&x, sizeof(uint32_t), 1, fp);
-        entity->getCoordinate().setX(x);
+        long x;
+        fread(&x, sizeof(x), 1, fp);
 
         uint16_t y;
         fread(&y, sizeof(uint32_t), 1, fp);
-        entity->getCoordinate().setY(y);
+
+        BoardEntity* entity = new BaseBoardEntity(Coordinate(x, y), static_cast<BoardEntityType>(type));
 
         if (type == KEY) {
             keyCoordinate = entity->getCoordinate();
         } else if (type == PLAYER) {
             playerCoordinate = entity->getCoordinate();
         }
+
     }
 
 }
@@ -198,9 +195,7 @@ void LevelManager::readInitialPlayerCoordinate1to2(FILE* fp) {
     fread(&y, sizeof(uint16_t), 1, fp);
     playerCoordinate.setX(static_cast<uint32_t>(x * 25));
     playerCoordinate.setY(static_cast<uint32_t>(y * 25));
-    BoardEntity* player = new BaseBoardEntity();
-    player->setType(PLAYER);
-    player->setCoordinate(playerCoordinate);
+    BoardEntity* player = new BaseBoardEntity(playerCoordinate, PLAYER);
     entities.push_back(player);
 }
 

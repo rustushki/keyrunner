@@ -10,7 +10,7 @@
 
 class BoardEntity {
 public:
-    virtual std::vector<HitBox*> getHitBoxes() = 0;
+    virtual std::vector<HitBox*> getHitBoxes() const = 0;
     virtual bool intersectsWithEntity(BoardEntity* entity) = 0;
     virtual bool intersectsWithCoordinate(Coordinate coordinate) = 0;
     virtual Coordinate getCoordinate() = 0;

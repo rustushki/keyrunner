@@ -5,9 +5,9 @@
 
 class BaseBoardEntity : public BoardEntity {
 public:
-    BaseBoardEntity();
+    BaseBoardEntity(Coordinate coordinate, BoardEntityType type);
 
-    std::vector<HitBox*> getHitBoxes() override;
+    std::vector<HitBox*> getHitBoxes() const override;
     bool intersectsWithEntity(BoardEntity* entity) override;
     bool intersectsWithCoordinate(Coordinate coordinate) override;
     Coordinate getCoordinate() override;
@@ -18,6 +18,7 @@ public:
 private:
     BoardEntityType type;
     Coordinate coordinate;
+    std::vector<HitBox*> hitBoxes;
 };
 
 #endif
