@@ -27,14 +27,6 @@ uint32_t Coordinate::getY() const {
 }
 
 /**
- * Convert the coordinate into a TileCoordinate.
- * @return
- */
-TileCoordinate Coordinate::toTileCoordinate() const {
-    return {x / TileCoordinate::SIZE, y / TileCoordinate::SIZE};
-}
-
-/**
  * Check to see if two coordinates are the same.
  * <p>
  * They will be if the x and y dimensions from each coordinate match.
@@ -60,3 +52,22 @@ void Coordinate::setX(uint32_t x) {
 void Coordinate::setY(uint32_t y) {
     this->y = y;
 }
+
+/**
+ * Is this tile coordinate less than another?
+ * <p>
+ * This tricky code is roughly equivalent to std::pair's operator<. It is required so that TileCoordinate can be a key
+ * in an std::map.
+ * @param rhs
+ * @return bool
+ */
+bool Coordinate::operator<(const Coordinate& rhs) const {
+    if (getX() < rhs.getX()) {
+        return true;
+    } else if (rhs.getX() < getX()) {
+        return false;
+    } else {
+        return getY() < rhs.getY();
+    }
+}
+

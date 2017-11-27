@@ -3,7 +3,8 @@
 
 #include <cstdint>
 #include <utility>
-#include "../model/TileCoordinate.hpp"
+
+class TileCoordinate;
 
 class Coordinate {
 public:
@@ -15,9 +16,8 @@ public:
     void setX(uint32_t x);
     void setY(uint32_t y);
 
-    TileCoordinate toTileCoordinate() const;
-
     bool operator==(Coordinate coordinate) const;
+    bool operator<(const Coordinate& rhs) const;
 
 private:
     uint32_t x;

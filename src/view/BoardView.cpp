@@ -1,3 +1,4 @@
+#include "../model/TileCoordinate.hpp"
 #include "../view/BoardView.hpp"
 
 /**
@@ -47,7 +48,7 @@ BoardView::~BoardView() {
 void BoardView::draw(SDL_Renderer* renderer) {
     for (uint16_t y = 0; y < getModel()->getHeight(); y++) {
         for (uint16_t x = 0; x < getModel()->getWidth(); x++) {
-            TileCoordinate currentTileCoord = TileCoordinate(x, y);
+            TileCoordinate currentTileCoord(x, y);
 
             // Convert the current TileCoordinate's TileType to an AnimationType
             TileType tileType = getModel()->getTileType(currentTileCoord);

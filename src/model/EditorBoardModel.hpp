@@ -3,6 +3,7 @@
 
 #include "../model/BoardModel.hpp"
 #include "../model/HoverBehavior.hpp"
+#include "../model/TileCoordinate.hpp"
 
 class EditorBoardModel : public BoardModel {
 public:

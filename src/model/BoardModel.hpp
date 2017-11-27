@@ -45,9 +45,6 @@ public:
 
     void setBoardEntities(std::vector<BoardEntity*> vector);
 
-protected:
-    TileCoordinate coordinateToTileCoordinate(Coordinate coordinate) const;
-
 private:
     uint8_t level;
     std::vector< std::vector<TileType> > tileType;

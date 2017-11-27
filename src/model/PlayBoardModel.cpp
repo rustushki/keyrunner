@@ -1,5 +1,6 @@
 #include "../model/BoardModel.hpp"
-#include "PlayBoardModel.hpp"
+#include "../model/PlayBoardModel.hpp"
+#include "../model/TileCoordinate.hpp"
 
 PlayBoardModel::PlayBoardModel() {
     playerHasKey = false;
@@ -90,7 +91,7 @@ void PlayBoardModel::setPlayerHasKey(bool playerHasKey) {
  */
 void PlayBoardModel::conveyPlayer() {
     // Convert the player coordinate into a tile coordinate
-    TileCoordinate tileHoldingPlayer = coordinateToTileCoordinate(getPlayerCoord());
+    TileCoordinate tileHoldingPlayer(getPlayerCoord());
 
     if (isConveyor(tileHoldingPlayer)) {
         Coordinate newCoordinate = getNextConveyorCoordinate(getPlayerCoord());

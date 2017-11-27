@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include <sstream>
 #include "../model/BoardModel.hpp"
+#include "../model/TileCoordinate.hpp"
 
 /**
  * Constructor.
@@ -159,7 +160,7 @@ TileType BoardModel::getTileType(TileCoordinate tileCoordinate) const {
  * @return boolean
  */
 bool BoardModel::isInDoor(Coordinate coordinate) const {
-    TileCoordinate tileCoordinate = coordinateToTileCoordinate(coordinate);
+    TileCoordinate tileCoordinate(coordinate);
     return tileType[tileCoordinate.getY()][tileCoordinate.getX()] == TileType::Door;
 }
 
@@ -219,13 +220,14 @@ Direction BoardModel::getConveyorDirection(TileCoordinate coord) const {
  * </ol>
  */
 Coordinate BoardModel::getNextConveyorCoordinate(Coordinate current) const {
-    if (!isConveyor(current.toTileCoordinate())) {
+    TileCoordinate tileCoordinate(current);
+    if (!isConveyor(tileCoordinate)) {
         std::stringstream errorMessage;
         errorMessage << "Trying to get next conveyor tile from non conveyor tile.";
         throw std::invalid_argument(errorMessage.str());
     }
 
-    Direction direction = getConveyorDirection(current.toTileCoordinate());
+    Direction direction = getConveyorDirection(tileCoordinate);
 
     return getCoordinateInDirection(current, direction);
 }
@@ -311,17 +313,6 @@ BoardEntity* BoardModel::getKey() const {
  */
 std::vector<HitBox*> BoardModel::getWallHitBoxes() const {
     return wallHitBoxes;
-}
-
-/**
- * Find the TileCoordinate to which the provided Coordinate belongs.
- * @param coordinate
- * @return TileCoordinate
- */
-TileCoordinate BoardModel::coordinateToTileCoordinate(Coordinate coordinate) const {
-    auto tileX = static_cast<uint32_t>(coordinate.getX() / 25);
-    auto tileY = static_cast<uint32_t>(coordinate.getY() / 25);
-    return {tileX, tileY};
 }
 
 /**

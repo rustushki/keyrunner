@@ -3,6 +3,7 @@
 #include "../controller/KeyRunner.hpp"
 #include "../model/BaseBoardEntity.hpp"
 #include "../model/LevelManager.hpp"
+#include "../model/TileCoordinate.hpp"
 
 /**
  * Constructor.

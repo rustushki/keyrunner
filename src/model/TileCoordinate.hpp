@@ -2,28 +2,14 @@
 #define TILE_COORDINATE_HPP
 
 #include <cstdint>
-class Coordinate;
+#include "../model/Coordinate.hpp"
 
-class TileCoordinate {
+class TileCoordinate : public Coordinate {
 public:
-    TileCoordinate(uint32_t x, uint32_t y);
-
-    uint32_t getX() const;
-    uint32_t getY() const;
-
-    void setX(uint32_t x);
-    void setY(uint32_t y);
-
-    Coordinate toCoordinate() const;
-
     static const uint32_t SIZE = 25;
-
-    bool operator<(const TileCoordinate& rhs) const;
-
-private:
-    uint32_t x;
-    uint32_t y;
-
+    TileCoordinate(uint32_t x, uint32_t y);
+    explicit TileCoordinate(Coordinate coordinate);
+    Coordinate toCoordinate() const;
 };
 
 #endif

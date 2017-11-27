@@ -136,7 +136,7 @@ View* EditorController::createBoard() const {
         // not required to affect change
         } else {
             getModel()->setHoverBehavior(HoverBehavior::REPLACE);
-            getModel()->changeTileType(mouseCoordinate.toTileCoordinate(), getModel()->getTileType());
+            getModel()->changeTileType(TileCoordinate(mouseCoordinate), getModel()->getTileType());
         }
     });
 
