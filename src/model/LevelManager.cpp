@@ -265,6 +265,7 @@ void LevelManager::resetLevelManager() {
     keyCoordinate.setY(0);
     defaultTileType = TileType::Empty;
     deviations.clear();
+    entities.clear();
 }
 
 /**
