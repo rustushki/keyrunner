@@ -10,6 +10,7 @@ public:
     virtual bool contains(Coordinate coordinate) const = 0;
     virtual HitBoxType getType() const = 0;
     virtual Coordinate getAnchor() const = 0;
+    virtual void setAnchor(Coordinate newAnchor) = 0;
 };
 
 #endif

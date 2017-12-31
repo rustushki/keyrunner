@@ -4,6 +4,7 @@
 #include "../model/BaseBoardEntity.hpp"
 #include "../model/LevelManager.hpp"
 #include "../model/TileCoordinate.hpp"
+#include "RectangleHitBox.hpp"
 
 /**
  * Constructor.
@@ -124,6 +125,7 @@ void LevelManager::readItems1to2(FILE* fp) {
     keyCoordinate.setY(static_cast<uint32_t>(y * 25));
 
     BoardEntity* key = new BaseBoardEntity(keyCoordinate, KEY);
+    key->getHitBoxes().push_back(new RectangleHitBox(keyCoordinate, 25, 25));
     entities.push_back(key);
 }
 
@@ -196,6 +198,7 @@ void LevelManager::readInitialPlayerCoordinate1to2(FILE* fp) {
     playerCoordinate.setX(static_cast<uint32_t>(x * 25));
     playerCoordinate.setY(static_cast<uint32_t>(y * 25));
     BoardEntity* player = new BaseBoardEntity(playerCoordinate, PLAYER);
+    player->getHitBoxes().push_back(new RectangleHitBox(playerCoordinate, 25, 25));
     entities.push_back(player);
 }
 

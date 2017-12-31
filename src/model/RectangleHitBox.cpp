@@ -1,6 +1,15 @@
 #include "../model/RectangleHitBox.hpp"
 
 /**
+ * Constructor.
+ * @param anchor
+ * @param width
+ * @param height
+ */
+RectangleHitBox::RectangleHitBox(Coordinate anchor, long width, long height) : anchor(anchor), width(width),
+        height(height) {}
+
+/**
  * Check to see if this hit box intersects with the provided.
  * @param hitBox
  * @return boolean
@@ -90,3 +99,24 @@ long RectangleHitBox::getTop() const {
 long RectangleHitBox::getBottom() const {
     return getAnchor().getY() + getHeight();
 }
+
+/**
+ * Set the point at which this hit box is anchored.
+ * <p>
+ * For a rectangle hit box, the anchor is the upper left corner.
+ * @param newAnchor
+ */
+void RectangleHitBox::setAnchor(Coordinate newAnchor) {
+    this->anchor = newAnchor;
+}
+
+/**
+ * Return the type of hit box.
+ * <p>
+ * Always returns RECTANGLE.
+ * @return HitBoxType
+ */
+HitBoxType RectangleHitBox::getType() const {
+    return RECTANGLE;
+}
+
