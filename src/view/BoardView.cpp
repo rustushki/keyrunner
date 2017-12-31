@@ -81,9 +81,11 @@ void BoardView::draw(SDL_Renderer* renderer) {
         }
     }
 
-    Coordinate key = getModel()->getKeyCoord();
-    keyAnimation->move(key.getX(), key.getY());
-    keyAnimation->draw(renderer);
+    if (!getModel()->getPlayerHasKey()) {
+        Coordinate key = getModel()->getKeyCoord();
+        keyAnimation->move(key.getX(), key.getY());
+        keyAnimation->draw(renderer);
+    }
 
     Coordinate player = getModel()->getPlayerCoord();
     playerAnimation->move(player.getX(), player.getY());

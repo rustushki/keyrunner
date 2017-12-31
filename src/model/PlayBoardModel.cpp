@@ -2,9 +2,7 @@
 #include "../model/PlayBoardModel.hpp"
 #include "../model/TileCoordinate.hpp"
 
-PlayBoardModel::PlayBoardModel() {
-    playerHasKey = false;
-}
+PlayBoardModel::PlayBoardModel() {}
 
 /**
  * Is the currently loaded level finished?
@@ -13,7 +11,7 @@ PlayBoardModel::PlayBoardModel() {
  * @return boolean
  */
 bool PlayBoardModel::isComplete() const {
-    return (playerHasKey && isInDoor(getPlayerCoord()));
+    return (getPlayerHasKey() && isInDoor(getPlayerCoord()));
 }
 
 /**
@@ -74,17 +72,6 @@ void PlayBoardModel::incrementTimeClock(long step) {
 }
 
 /**
- * Set if the player has the key.
- * @param playerHasKey
- */
-void PlayBoardModel::setPlayerHasKey(bool playerHasKey) {
-    this->playerHasKey = playerHasKey;
-    if (this->playerHasKey) {
-        setKeyCoord(Coordinate(getWidth(), getHeight()));
-    }
-}
-
-/**
  * Convey the player in the direction of the conveyor tile on which they stand.
  * <p>
  * If the player is not on a conveyor tile, this is a non-operation.
@@ -106,6 +93,3 @@ void PlayBoardModel::conveyPlayer() {
     }
 }
 
-bool PlayBoardModel::getPlayerHasKey() {
-    return playerHasKey;
-}

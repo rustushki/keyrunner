@@ -8,7 +8,7 @@
  * <p>
  * Initializes the tile type grid to be sized as getGridHeight() and getGridWidth() indicate.
  */
-BoardModel::BoardModel() {
+BoardModel::BoardModel() : playerHasKey(false) {
     for (int row = 0; row < getHeight(); row++) {
         std::vector<TileType> tileRow;
         for (int column = 0; column < getWidth(); column++) {
@@ -349,4 +349,20 @@ Coordinate BoardModel::getCoordinateInDirection(Coordinate startingCoordinate, D
  */
 void BoardModel::setBoardEntities(std::vector<BoardEntity*> entities) {
     this->boardEntities = std::move(entities);
+}
+
+/**
+ * Set if the player has the key.
+ * @param playerHasKey
+ */
+void BoardModel::setPlayerHasKey(bool playerHasKey) {
+    this->playerHasKey = playerHasKey;
+}
+
+/**
+ * Return whether or not the player current has the key.
+ * @return boolean
+ */
+bool BoardModel::getPlayerHasKey() const {
+    return playerHasKey;
 }

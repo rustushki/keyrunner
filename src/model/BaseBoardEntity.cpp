@@ -9,7 +9,7 @@ BaseBoardEntity::BaseBoardEntity(Coordinate coordinate, BoardEntityType type) : 
  * Retrieves the hit boxes associated with the BoardEntity.
  * @return std::vector<HitBox*>
  */
-std::vector<HitBox*> BaseBoardEntity::getHitBoxes() const {
+std::vector<HitBox*>& BaseBoardEntity::getHitBoxes() {
     return hitBoxes;
 }
 

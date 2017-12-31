@@ -18,15 +18,10 @@ public:
     void decrementTimeClock(long step);
     void incrementTimeClock(long step);
 
-    void setPlayerHasKey(bool playerHasKey);
-
     void conveyPlayer();
 
 private:
     long timeClock;
-    bool playerHasKey;
-
-    bool getPlayerHasKey();
 };
 
 #endif
