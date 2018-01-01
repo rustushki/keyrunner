@@ -21,6 +21,10 @@ std::vector<HitBox*>& BaseBoardEntity::getHitBoxes() {
  */
 void BaseBoardEntity::setCoordinate(Coordinate coordinate) {
     this->coordinate = coordinate;
+
+    for (HitBox* hitBox : getHitBoxes()) {
+        hitBox->setAnchor(coordinate);
+    }
 }
 
 /**

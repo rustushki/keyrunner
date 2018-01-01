@@ -30,7 +30,7 @@ void PlayBoardModel::movePlayerInDirection(Direction direction) {
 
     // Give the player the key if the tile has the key
     if (!getPlayerHasKey()) {
-        if (getKey()->intersectsWithCoordinate(newCoordinate)) {
+        if (getKey()->intersectsWithEntity(getPlayer())) {
             setPlayerHasKey(true);
         }
     }

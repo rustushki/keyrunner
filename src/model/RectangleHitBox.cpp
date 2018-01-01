@@ -18,8 +18,8 @@ bool RectangleHitBox::intersects(HitBox* hitBox) const {
     bool intersects = false;
     if (hitBox->getType() == RECTANGLE) {
         auto that = dynamic_cast<RectangleHitBox*>(hitBox);
-        if (that->getLeft() > this->getLeft() && that->getLeft() < this->getRight()) {
-            if (that->getTop() > this->getTop() && that->getTop() < this->getBottom()) {
+        if (that->getLeft() < this->getRight() && that->getRight() > this->getLeft()) {
+            if (that->getTop() < this->getBottom() && that->getBottom() > this->getTop()) {
                 intersects = true;
             }
         }
@@ -62,7 +62,7 @@ long RectangleHitBox::getWidth() const {
 
 /**
  * Get the height of the hit box.
- * @return uint32_t
+ * @return long
  */
 long RectangleHitBox::getHeight() const {
     return height;
@@ -70,7 +70,7 @@ long RectangleHitBox::getHeight() const {
 
 /**
  * Get the right edge of the hit box.
- * @return uint32_t
+ * @return long
  */
 long RectangleHitBox::getRight() const {
     return getAnchor().getX() + getWidth();
@@ -78,7 +78,7 @@ long RectangleHitBox::getRight() const {
 
 /**
  * Get the left edge of the hit box.
- * @return uint32_t
+ * @return long
  */
 long RectangleHitBox::getLeft() const {
     return getAnchor().getX();
@@ -86,7 +86,7 @@ long RectangleHitBox::getLeft() const {
 
 /**
  * Get the top edge of the hit box.
- * @return uint32_t
+ * @return long
  */
 long RectangleHitBox::getTop() const {
     return getAnchor().getY();
@@ -94,7 +94,7 @@ long RectangleHitBox::getTop() const {
 
 /**
  * Get the bottom edge of the hit box.
- * @return uint32_t
+ * @return long
  */
 long RectangleHitBox::getBottom() const {
     return getAnchor().getY() + getHeight();
