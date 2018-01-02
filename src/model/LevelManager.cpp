@@ -272,8 +272,11 @@ void LevelManager::resetLevelManager() {
  * Update the BoardModel with the data in the internal state of the LevelManager.
  */
 void LevelManager::populateBoard() {
-    // Populate the remaining tiles with the default tile.  Also, not which
-    // tiles have the key and the player.
+    // Remove all existing wall hit boxes
+    board->getWallHitBoxes().clear();
+
+    // Populate the remaining tiles with the default tile. Also, not which tiles have the key and the player. Create
+    // wall hit boxes as wall tiles are encountered
     uint16_t currentDeviationIndex = 0;
     for (uint16_t tileX = 0; tileX < width; tileX++) {
         for (uint16_t tileY = 0; tileY < height; tileY++) {
@@ -281,7 +284,17 @@ void LevelManager::populateBoard() {
 
             // If the tile is a deviation, use the deviation tile type
             if (deviations.find(currentTileCoordinate) != deviations.end()) {
-                board->changeTileType(currentTileCoordinate, deviations[currentTileCoordinate]);
+                TileType tileType = deviations[currentTileCoordinate];
+
+				// If the tile is a wall, build a wall hit box for it
+                if (tileType == TileType::Wall) {
+                    const int size = TileCoordinate::SIZE;
+                    Coordinate anchor = currentTileCoordinate.toCoordinate();
+                    HitBox* wallHitBox = new RectangleHitBox(anchor, size, size);
+                    board->getWallHitBoxes().push_back(wallHitBox);
+                }
+
+                board->changeTileType(currentTileCoordinate, tileType);
                 currentDeviationIndex++;
 
             // Otherwise, use the default tile type

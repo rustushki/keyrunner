@@ -29,7 +29,7 @@ public:
     void setPlayerHasKey(bool playerHasKey);
     bool getPlayerHasKey() const;
 
-    bool isInWall(Coordinate coordinate) const;
+    bool isHitBoxInWall(HitBox* hitBox);
     bool isTeleporter(BoardEntity* entity) const;
     bool isInDoor(Coordinate coordinate) const;
     bool isConveyor(TileCoordinate coord) const;
@@ -48,6 +48,8 @@ public:
 
     void setBoardEntities(std::vector<BoardEntity*> vector);
 
+    std::vector<HitBox*>& getWallHitBoxes();
+
 private:
     uint8_t level;
     std::vector< std::vector<TileType> > tileType;
@@ -56,7 +58,6 @@ private:
     bool playerHasKey;
 
     std::vector<BoardEntity*> getEntityByType(BoardEntityType type) const;
-    std::vector<HitBox*> getWallHitBoxes() const;
 };
 
 #endif

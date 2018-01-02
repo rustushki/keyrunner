@@ -35,14 +35,14 @@ void BoardModel::setLevelNum(uint8_t level) {
 }
 
 /**
- * Is the provided coordinate a wall?
+ * Does the provided hit box intersect with a wall?
  * @param coord
  * @return boolean
  */
-bool BoardModel::isInWall(Coordinate coordinate) const {
+bool BoardModel::isHitBoxInWall(HitBox* hitBox) {
     bool isInWall = false;
     for (HitBox* wall : getWallHitBoxes()) {
-        if (wall->contains(coordinate)) {
+        if (wall->intersects(hitBox)) {
             isInWall = true;
             break;
         }
@@ -311,7 +311,7 @@ BoardEntity* BoardModel::getKey() const {
  * Note that the walls are just invisible hit boxes.
  * @return
  */
-std::vector<HitBox*> BoardModel::getWallHitBoxes() const {
+std::vector<HitBox*>& BoardModel::getWallHitBoxes() {
     return wallHitBoxes;
 }
 
@@ -325,19 +325,19 @@ Coordinate BoardModel::getCoordinateInDirection(Coordinate startingCoordinate, D
     Coordinate newCoordinate{0, 0};
 
     if (direction == DIRECTION_UP) {
-        newCoordinate = {startingCoordinate.getX(), startingCoordinate.getY() - 4};
+        newCoordinate = {startingCoordinate.getX(), startingCoordinate.getY() - 1};
     }
 
     if (direction == DIRECTION_DOWN) {
-        newCoordinate = {startingCoordinate.getX(), startingCoordinate.getY() + 4};
+        newCoordinate = {startingCoordinate.getX(), startingCoordinate.getY() + 1};
     }
 
     if (direction == DIRECTION_LEFT) {
-        newCoordinate = {startingCoordinate.getX() - 4, startingCoordinate.getY()};
+        newCoordinate = {startingCoordinate.getX() - 1, startingCoordinate.getY()};
     }
 
     if (direction == DIRECTION_RIGHT) {
-        newCoordinate = {startingCoordinate.getX() + 4, startingCoordinate.getY()};
+        newCoordinate = {startingCoordinate.getX() + 1, startingCoordinate.getY()};
     }
 
     return newCoordinate;

@@ -22,10 +22,15 @@ void PlayBoardModel::movePlayerInDirection(Direction direction) {
 
     Coordinate newCoordinate = getCoordinateInDirection(getPlayerCoord(), direction);
 
-    // Do not move player if the new tile is a wall. Do not continue evaluating criteria either, such as teleporters
-    // and wraparound. They do not apply since the player has attempted to walk into a wall
-    if (isInWall(newCoordinate)) {
-        return;
+    // Do not move player if any of its hit boxes intersect with a wall. Do not continue evaluating criteria either,
+    // such as teleporters and wraparound. They do not apply since the player has attempted to walk into a wall
+    auto playerHitBoxes = std::vector<HitBox*>(getPlayer()->getHitBoxes());
+    for (HitBox* playerHitBox : getPlayer()->getHitBoxes()) {
+        playerHitBox->setAnchor(newCoordinate);
+
+        if (isHitBoxInWall(playerHitBox)) {
+            return;
+        }
     }
 
     // Give the player the key if the tile has the key
