@@ -11,6 +11,7 @@
 class BoardModel : public BaseModel {
 public:
     BoardModel();
+    ~BoardModel();
 
     uint16_t getHeight() const;
     uint16_t getWidth() const;
@@ -58,6 +59,7 @@ private:
     bool playerHasKey;
 
     std::vector<BoardEntity*> getEntityByType(BoardEntityType type) const;
+    void clearBoardEntities();
 };
 
 #endif

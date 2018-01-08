@@ -19,6 +19,13 @@ BoardModel::BoardModel() : playerHasKey(false) {
 }
 
 /**
+ * Destructor.
+ */
+BoardModel::~BoardModel() {
+    clearBoardEntities();
+}
+
+/**
  * Get the level number of the currently loaded level.
  * @return uint8_t
  */
@@ -348,6 +355,7 @@ Coordinate BoardModel::getCoordinateInDirection(Coordinate startingCoordinate, D
  * @param entities
  */
 void BoardModel::setBoardEntities(std::vector<BoardEntity*> entities) {
+    clearBoardEntities();
     this->boardEntities = std::move(entities);
 }
 
@@ -365,4 +373,15 @@ void BoardModel::setPlayerHasKey(bool playerHasKey) {
  */
 bool BoardModel::getPlayerHasKey() const {
     return playerHasKey;
+}
+
+/**
+ * Clears the list of loaded board entities and frees the memory associated with each.
+ */
+void BoardModel::clearBoardEntities() {
+    for (BoardEntity* entity : getBoardEntities()) {
+        delete entity;
+    }
+
+    boardEntities.clear();
 }
