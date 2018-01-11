@@ -91,13 +91,25 @@ void LevelManager::read() {
     // Read the level data and update LevelManager's internal state
     std::string levelFile = getPath(board->getLevelNum(), false);
     FILE* fp = fopen(levelFile.c_str(), "rb");
+
+    // Version 1's Order
+	// Remove after porting all levels
+    /*
     readSize(fp);
     readDefaultTileType(fp);
     readInitialPlayerCoordinate1to2(fp);
     readDeviations(fp);
     readItems1to2(fp);
-    fclose(fp);
+    */
 
+
+    // Version 2's Order
+    readSize(fp);
+    readDefaultTileType(fp);
+    readDeviations(fp);
+    readEntities(fp);
+
+    fclose(fp);
     // Populate the BoardModel from LevelManager's internal state
     populateBoard();
 }
@@ -135,18 +147,18 @@ void LevelManager::readItems1to2(FILE* fp) {
  */
 void LevelManager::readEntities(FILE* fp) {
     uint16_t count;
-    fread(&count, sizeof(uint16_t), 1, fp);
+    fread(&count, sizeof(count), 1, fp);
 
     for (int counter = 0; counter < count; counter++) {
 
         uint16_t type;
-        fread(&type, sizeof(uint16_t), 1, fp);
+        fread(&type, sizeof(type), 1, fp);
 
         long x;
         fread(&x, sizeof(x), 1, fp);
 
-        uint16_t y;
-        fread(&y, sizeof(uint32_t), 1, fp);
+        long y;
+        fread(&y, sizeof(y), 1, fp);
 
         BoardEntity* entity = new BaseBoardEntity(Coordinate(x, y), static_cast<BoardEntityType>(type));
 
@@ -154,8 +166,10 @@ void LevelManager::readEntities(FILE* fp) {
             keyCoordinate = entity->getCoordinate();
         } else if (type == PLAYER) {
             playerCoordinate = entity->getCoordinate();
+            entity->getHitBoxes().push_back(new RectangleHitBox(playerCoordinate, 25, 25));
         }
 
+        entities.push_back(entity);
     }
 
 }
@@ -352,8 +366,8 @@ void LevelManager::writeDeviations(FILE* fp) const {
     // Write Each Default Tile Type Deviation.
     for (TileCoordinate tileCoordinate : deviatedTileCoordinates) {
         // Write Deviation Tile Coordinate
-        auto x = tileCoordinate.getX();
-        auto y = tileCoordinate.getY();
+        auto x = static_cast<uint16_t>(tileCoordinate.getX());
+        auto y = static_cast<uint16_t>(tileCoordinate.getY());
         fwrite(&x, sizeof(x), 1, fp);
         fwrite(&y, sizeof(y), 1, fp);
 
