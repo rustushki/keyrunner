@@ -26,15 +26,12 @@ private:
 
     void readSize(FILE* fp);
     void readDefaultTileType(FILE* fp);
-    void readInitialPlayerCoordinate1to2(FILE* fp);
     void readDeviations(FILE* fp);
-    void readItems1to2(FILE* fp);
     void readEntities(FILE* fp);
 
     void writeSize(FILE* fp) const;
     void writeDefaultTileType(FILE* fp) const;
     void writeDeviations(FILE* fp) const;
-    void writeInitialPlayerCoordinate(FILE* fp) const;
     void writeEntities(FILE* fp) const;
 
     uint16_t width;

@@ -92,17 +92,6 @@ void LevelManager::read() {
     std::string levelFile = getPath(board->getLevelNum(), false);
     FILE* fp = fopen(levelFile.c_str(), "rb");
 
-    // Version 1's Order
-	// Remove after porting all levels
-    /*
-    readSize(fp);
-    readDefaultTileType(fp);
-    readInitialPlayerCoordinate1to2(fp);
-    readDeviations(fp);
-    readItems1to2(fp);
-    */
-
-
     // Version 2's Order
     readSize(fp);
     readDefaultTileType(fp);
@@ -112,33 +101,6 @@ void LevelManager::read() {
     fclose(fp);
     // Populate the BoardModel from LevelManager's internal state
     populateBoard();
-}
-
-/**
- * Read the level's items from the persistent storage.
- * @param fp
- */
-void LevelManager::readItems1to2(FILE* fp) {
-    // Read Count of Items.
-    // Hardcoded to 1 since there can only be a key in the puzzle for now.
-    uint16_t itemCount;
-    fread(&itemCount, sizeof(uint16_t), 1, fp);
-
-    // Read the Key Location.
-    // TODO: Add support for more items.
-    uint8_t itemIndex;
-    uint16_t x;
-    uint16_t y;
-    fread(&x, sizeof(uint16_t), 1, fp);
-    fread(&y, sizeof(uint16_t), 1, fp);
-    fread(&itemIndex, sizeof(uint8_t), 1, fp);
-
-    keyCoordinate.setX(static_cast<uint32_t>(x * 25));
-    keyCoordinate.setY(static_cast<uint32_t>(y * 25));
-
-    BoardEntity* key = new BaseBoardEntity(keyCoordinate, KEY);
-    key->getHitBoxes().push_back(new RectangleHitBox(keyCoordinate, 25, 25));
-    entities.push_back(key);
 }
 
 /**
@@ -198,22 +160,6 @@ void LevelManager::readDeviations(FILE* fp) {
         auto tileType = TileType(tileTypeInteger);
         deviations[TileCoordinate(tileX, tileY)] = tileType;
     }
-}
-
-/**
- * Read the initial tile coordinate of the player.
- * @param fp
- */
-void LevelManager::readInitialPlayerCoordinate1to2(FILE* fp) {
-    uint16_t x = 0;
-    uint16_t y = 0;
-    fread(&x, sizeof(uint16_t), 1, fp);
-    fread(&y, sizeof(uint16_t), 1, fp);
-    playerCoordinate.setX(static_cast<uint32_t>(x * 25));
-    playerCoordinate.setY(static_cast<uint32_t>(y * 25));
-    BoardEntity* player = new BaseBoardEntity(playerCoordinate, PLAYER);
-    player->getHitBoxes().push_back(new RectangleHitBox(playerCoordinate, 25, 25));
-    entities.push_back(player);
 }
 
 /**
