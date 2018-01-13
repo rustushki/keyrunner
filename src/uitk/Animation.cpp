@@ -73,7 +73,7 @@ void Animation::draw(SDL_Renderer* renderer) {
     auto frameX  = this->frameList[frameXc];
     auto frameY  = this->frameList[frameYc];
 
-    SDL_Rect destination = {static_cast<uint16_t>(x), static_cast<uint16_t>(y), getWidth(), getHeight()};
+    SDL_Rect destination = {static_cast<int>(x), static_cast<int>(y), getWidth(), getHeight()};
     this->sheet->drawStill(renderer, frameX, frameY, destination);
 }
 
