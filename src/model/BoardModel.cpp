@@ -218,15 +218,11 @@ Direction BoardModel::getConveyorDirection(TileCoordinate coord) const {
 }
 
 /**
- * Return the 'drop off' spot of this tile if its a conveyor tile. Check each tile clock wise inclusive from the current
- * tile:
- * <ol>
- * <li>If the tile is a conveyor, return that tile.</li>
- * <li>If the tile is not wall or conveyor, make that tile the backup in case no conveyor is found. (second place)</li>
- * <li>If there is no suitable second place, return the current tile in the conveyor belt sequence</li>
- * </ol>
+ * Given a coordinate, determine if the coordinate is on a conveyor tile and return the direction of the conveyor.
+ * @param current
+ * @return Direction
  */
-Coordinate BoardModel::getNextConveyorCoordinate(Coordinate current) const {
+Direction BoardModel::getDirectionOfConveyorAtCoordinate(Coordinate current) const {
     TileCoordinate tileCoordinate(current);
     if (!isConveyor(tileCoordinate)) {
         std::stringstream errorMessage;
@@ -234,9 +230,7 @@ Coordinate BoardModel::getNextConveyorCoordinate(Coordinate current) const {
         throw std::invalid_argument(errorMessage.str());
     }
 
-    Direction direction = getConveyorDirection(tileCoordinate);
-
-    return getCoordinateInDirection(current, direction);
+    return getConveyorDirection(tileCoordinate);
 }
 
 /**

@@ -86,15 +86,8 @@ void PlayBoardModel::conveyPlayer() {
     TileCoordinate tileHoldingPlayer(getPlayerCoord());
 
     if (isConveyor(tileHoldingPlayer)) {
-        Coordinate newCoordinate = getNextConveyorCoordinate(getPlayerCoord());
-
-        if (!getPlayerHasKey()) {
-            if (getKey()->intersectsWithCoordinate(newCoordinate)) {
-                setPlayerHasKey(true);
-            }
-        }
-
-        setPlayerCoord(newCoordinate);
+        Direction direction = getDirectionOfConveyorAtCoordinate(getPlayerCoord());
+        movePlayerInDirection(direction);
     }
 }
 
