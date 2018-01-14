@@ -126,6 +126,7 @@ void LevelManager::readEntities(FILE* fp) {
 
         if (type == KEY) {
             keyCoordinate = entity->getCoordinate();
+            entity->getHitBoxes().push_back(new RectangleHitBox(keyCoordinate, 25, 25));
         } else if (type == PLAYER) {
             playerCoordinate = entity->getCoordinate();
             entity->getHitBoxes().push_back(new RectangleHitBox(playerCoordinate, 25, 25));
