@@ -1,4 +1,5 @@
 #include "../model/RectangleHitBox.hpp"
+#include "../model/TileCoordinate.hpp"
 
 /**
  * Constructor.
@@ -118,5 +119,23 @@ void RectangleHitBox::setAnchor(Coordinate newAnchor) {
  */
 HitBoxType RectangleHitBox::getType() const {
     return RECTANGLE;
+}
+
+/**
+ * Return the set of TileCoordinates which intersect with this hit box.
+ * @return std::set<TileCoordinate>
+ */
+std::set<TileCoordinate> RectangleHitBox::getIntersectingTileCoordinates() const {
+    std::set<TileCoordinate> intersectingTileCoordinates;
+    TileCoordinate topLeft(getAnchor());
+    TileCoordinate bottomRight(Coordinate(getRight(), getBottom()));
+
+    for (long x = topLeft.getX(); x <= bottomRight.getX(); x++) {
+        for (long y = topLeft.getY(); y <= bottomRight.getY(); y++) {
+            intersectingTileCoordinates.insert(TileCoordinate(x, y));
+        }
+    }
+
+    return intersectingTileCoordinates;
 }
 

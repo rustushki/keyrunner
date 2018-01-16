@@ -1,6 +1,7 @@
 #ifndef HIT_BOX_HPP
 #define HIT_BOX_HPP
 
+#include <set>
 #include "../model/Coordinate.hpp"
 #include "../model/HitBoxType.hpp"
 
@@ -11,6 +12,7 @@ public:
     virtual HitBoxType getType() const = 0;
     virtual Coordinate getAnchor() const = 0;
     virtual void setAnchor(Coordinate newAnchor) = 0;
+    virtual std::set<TileCoordinate> getIntersectingTileCoordinates() const =  0;
 };
 
 #endif

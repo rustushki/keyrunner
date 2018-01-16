@@ -218,22 +218,6 @@ Direction BoardModel::getConveyorDirection(TileCoordinate coord) const {
 }
 
 /**
- * Given a coordinate, determine if the coordinate is on a conveyor tile and return the direction of the conveyor.
- * @param current
- * @return Direction
- */
-Direction BoardModel::getDirectionOfConveyorAtCoordinate(Coordinate current) const {
-    TileCoordinate tileCoordinate(current);
-    if (!isConveyor(tileCoordinate)) {
-        std::stringstream errorMessage;
-        errorMessage << "Trying to get next conveyor tile from non conveyor tile.";
-        throw std::invalid_argument(errorMessage.str());
-    }
-
-    return getConveyorDirection(tileCoordinate);
-}
-
-/**
  * Given a teleporter, return the matching teleporter.
  * @param teleporter
  * @return BoardEntity

@@ -18,7 +18,7 @@ public:
     long getTop() const;
     long getBottom() const;
     HitBoxType getType() const override;
-
+    std::set<TileCoordinate> getIntersectingTileCoordinates() const override;
 
 private:
     long height;

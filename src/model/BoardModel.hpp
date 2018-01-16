@@ -39,7 +39,6 @@ public:
     void changeTileType(TileCoordinate tileCoordinate, TileType newTileType);
 
     Direction getConveyorDirection(TileCoordinate coord) const;
-    Direction getDirectionOfConveyorAtCoordinate(Coordinate tileCoord) const;
 
     BoardEntity* getMatchingTeleporter(BoardEntity* teleporter) const;
 

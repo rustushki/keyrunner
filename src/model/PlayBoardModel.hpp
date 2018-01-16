@@ -22,6 +22,8 @@ public:
 
 private:
     long timeClock;
+
+    std::set<TileCoordinate> getTilesHoldingPlayer() const;
 };
 
 #endif

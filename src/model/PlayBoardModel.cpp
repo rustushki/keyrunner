@@ -1,3 +1,4 @@
+#include <set>
 #include "../model/BoardModel.hpp"
 #include "../model/PlayBoardModel.hpp"
 #include "../model/TileCoordinate.hpp"
@@ -77,17 +78,34 @@ void PlayBoardModel::incrementTimeClock(long step) {
 }
 
 /**
- * Convey the player in the direction of the conveyor tile on which they stand.
- * <p>
- * If the player is not on a conveyor tile, this is a non-operation.
+ * Convey the player in the directions of the conveyors on which they are standing.
  */
 void PlayBoardModel::conveyPlayer() {
-    // Convert the player coordinate into a tile coordinate
-    TileCoordinate tileHoldingPlayer(getPlayerCoord());
+    std::set<Direction> directionsToMove;
+    for (TileCoordinate tileCoordinate : getTilesHoldingPlayer()) {
+        if (isConveyor(tileCoordinate)) {
+            directionsToMove.insert(getConveyorDirection(tileCoordinate));
+        }
+    }
 
-    if (isConveyor(tileHoldingPlayer)) {
-        Direction direction = getDirectionOfConveyorAtCoordinate(getPlayerCoord());
+    for (Direction direction : directionsToMove) {
         movePlayerInDirection(direction);
     }
+}
+
+/**
+ * Get the set of TileCoordinates on which the player is standing.
+ * @return std::set<TileCoordinate>
+ */
+std::set<TileCoordinate> PlayBoardModel::getTilesHoldingPlayer() const {
+    std::set<TileCoordinate> tilesHoldingPlayer;
+
+    for (HitBox* hitBox : getPlayer()->getHitBoxes()) {
+        for (TileCoordinate tileCoordinate : hitBox->getIntersectingTileCoordinates()) {
+            tilesHoldingPlayer.insert(tileCoordinate);
+        }
+    }
+
+    return tilesHoldingPlayer;
 }
 
