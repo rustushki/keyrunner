@@ -38,7 +38,6 @@ set(SOURCES
     src/controller/main.cpp
     src/model/AnimationTypeFactory.cpp
     src/model/BaseModel.cpp
-	src/model/BinaryLevelManager.cpp
     src/model/BoardEntityType.hpp
     src/model/BoardModel.cpp
     src/model/EditorBoardModel.cpp
@@ -46,7 +45,6 @@ set(SOURCES
     src/model/GameOverModel.cpp
     src/model/GameWinModel.cpp
     src/model/JsonLevelManager.cpp
-	src/model/JsonSerialization.cpp
     src/model/OptionModel.cpp
     src/model/PlayBoardModel.cpp
     src/model/TitleScreenModel.cpp

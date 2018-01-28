@@ -3,7 +3,7 @@
 
 #include "../controller/Controller.hpp"
 #include "../controller/DisplayController.hpp"
-#include "../model/BinaryLevelManager.hpp"
+#include "../model/LevelManager.hpp"
 
 class BoardController : public DisplayController {
 public:
