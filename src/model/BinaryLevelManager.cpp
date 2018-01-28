@@ -2,25 +2,20 @@
 
 #include "../controller/KeyRunner.hpp"
 #include "../model/BaseBoardEntity.hpp"
-#include "../model/LevelManager.hpp"
+#include "../model/BinaryLevelManager.hpp"
+#include "../model/RectangleHitBox.hpp"
 #include "../model/TileCoordinate.hpp"
-#include "RectangleHitBox.hpp"
 
 /**
  * Constructor.
- * <p>
- * Builds a LevelManager which is connected to the provided BoardModel.
- * @param board
  */
-LevelManager::LevelManager(BoardModel* board) : keyCoordinate{0, 0}, playerCoordinate{0, 0} {
-    this->board = board;
-}
+BinaryLevelManager::BinaryLevelManager() : keyCoordinate{0, 0}, playerCoordinate{0, 0} {}
 
 /**
  * Get the total count of levels available for loading.
  * @return uint8_t
  */
-uint8_t LevelManager::getLevelCount() const {
+uint8_t BinaryLevelManager::getLevelCount() const {
     // Compute and statically cache the maximum count of levels for loading
     static int levelCount = -1;
     if (levelCount == -1) {
@@ -54,7 +49,7 @@ uint8_t LevelManager::getLevelCount() const {
  * @param levelNumber
  * @return boolean
  */
-bool LevelManager::levelExists(uint8_t levelNumber) const {
+bool BinaryLevelManager::levelExists(uint8_t levelNumber) const {
     std::string levelFile = getPath(levelNumber, false);
     FILE* fp = fopen(levelFile.c_str(), "rb");
 
@@ -70,13 +65,13 @@ bool LevelManager::levelExists(uint8_t levelNumber) const {
 /**
  * Writes the current state of the board into a binary-packed, persistently stored level file.
  */
-void LevelManager::write() const {
-    std::string levelFile = getPath(board->getLevelNum(), true);
+void BinaryLevelManager::write(const BoardModel* boardModel) const {
+    std::string levelFile = getPath(boardModel->getLevelNum(), true);
     FILE* fp = fopen(levelFile.c_str(), "wb");
-    writeSize(fp);
+    writeSize(fp, boardModel);
     writeDefaultTileType(fp);
-    writeDeviations(fp);
-    writeEntities(fp);
+    writeDeviations(fp, boardModel);
+    writeEntities(fp, boardModel);
     fclose(fp);
 }
 
@@ -84,12 +79,12 @@ void LevelManager::write() const {
  * Update the BoardModel with the level data associated with the BoardModel's currently set level number from the
  * binary-packed, persistently stored level file.
  */
-void LevelManager::read() {
-    // Reset the LevelManager's internal state
-    resetLevelManager();
+void BinaryLevelManager::read(BoardModel* boardModel) {
+    // Reset the BinaryLevelManager's internal state
+    resetLevelManager(boardModel);
 
-    // Read the level data and update LevelManager's internal state
-    std::string levelFile = getPath(board->getLevelNum(), false);
+    // Read the level data and update BinaryLevelManager's internal state
+    std::string levelFile = getPath(boardModel->getLevelNum(), false);
     FILE* fp = fopen(levelFile.c_str(), "rb");
 
     // Version 2's Order
@@ -99,15 +94,15 @@ void LevelManager::read() {
     readEntities(fp);
 
     fclose(fp);
-    // Populate the BoardModel from LevelManager's internal state
-    populateBoard();
+    // Populate the BoardModel from BinaryLevelManager's internal state
+    populateBoard(boardModel);
 }
 
 /**
  * Read the level's items from the persistent storage.
  * @param fp
  */
-void LevelManager::readEntities(FILE* fp) {
+void BinaryLevelManager::readEntities(FILE* fp) {
     uint16_t count;
     fread(&count, sizeof(count), 1, fp);
 
@@ -141,7 +136,7 @@ void LevelManager::readEntities(FILE* fp) {
  * Read the level's deviations to the default tile type from the persistent storage.
  * @param fp
  */
-void LevelManager::readDeviations(FILE* fp) {
+void BinaryLevelManager::readDeviations(FILE* fp) {
     // Read Tile Deviation Count
     uint16_t deviationCount;
     fread(&deviationCount, sizeof(uint16_t), 1, fp);
@@ -167,7 +162,7 @@ void LevelManager::readDeviations(FILE* fp) {
  * Read the default tile type.
  * @param fp
  */
-void LevelManager::readDefaultTileType(FILE* fp) {
+void BinaryLevelManager::readDefaultTileType(FILE* fp) {
     // Read Default Tile Type
     uint8_t defaultTileTypeInteger;
     fread(&defaultTileTypeInteger, sizeof(uint8_t), 1, fp);
@@ -181,7 +176,7 @@ void LevelManager::readDefaultTileType(FILE* fp) {
  * this can now be changed.
  * @param fp
  */
-void LevelManager::readSize(FILE* fp) {
+void BinaryLevelManager::readSize(FILE* fp) {
     // Read Width and Height and discard the result.
     fread(&width, sizeof(uint16_t), 1, fp);
     fread(&height, sizeof(uint16_t), 1, fp);
@@ -190,9 +185,9 @@ void LevelManager::readSize(FILE* fp) {
 /**
  * Create a new level whose number is determined by the BoardModel.
  */
-void LevelManager::create() {
-    resetLevelManager();
-    populateBoard();
+void BinaryLevelManager::create(BoardModel* boardModel) {
+    resetLevelManager(boardModel);
+    populateBoard(boardModel);
 }
 
 /**
@@ -201,7 +196,7 @@ void LevelManager::create() {
  * @param levelNumber
  * @param inCurrentWorkingDirectory
  */
-std::string LevelManager::getPath(uint8_t levelNumber, bool inCurrentWorkingDirectory) const {
+std::string BinaryLevelManager::getPath(uint8_t levelNumber, bool inCurrentWorkingDirectory) const {
     // Determine the prefix of the path.
     std::string prefix = LEVEL_PATH;
     if (inCurrentWorkingDirectory) {
@@ -217,9 +212,9 @@ std::string LevelManager::getPath(uint8_t levelNumber, bool inCurrentWorkingDire
 /**
  * Reset the internal state of the level manager back to defaults.
  */
-void LevelManager::resetLevelManager() {
-    width = board->getWidth();
-    height = board->getHeight();
+void BinaryLevelManager::resetLevelManager(BoardModel* boardModel) {
+    width = boardModel->getWidth();
+    height = boardModel->getHeight();
     playerCoordinate.setX(0);
     playerCoordinate.setY(0);
     keyCoordinate.setX(0);
@@ -232,9 +227,9 @@ void LevelManager::resetLevelManager() {
 /**
  * Update the BoardModel with the data in the internal state of the LevelManager.
  */
-void LevelManager::populateBoard() {
+void BinaryLevelManager::populateBoard(BoardModel* boardModel) {
     // Remove all existing wall hit boxes
-    board->getWallHitBoxes().clear();
+    boardModel->getWallHitBoxes().clear();
 
     // Populate the remaining tiles with the default tile. Also, not which tiles have the key and the player. Create
     // wall hit boxes as wall tiles are encountered
@@ -252,30 +247,30 @@ void LevelManager::populateBoard() {
                     const int size = TileCoordinate::SIZE;
                     Coordinate anchor = currentTileCoordinate.toCoordinate();
                     HitBox* wallHitBox = new RectangleHitBox(anchor, size, size);
-                    board->getWallHitBoxes().push_back(wallHitBox);
+                    boardModel->getWallHitBoxes().push_back(wallHitBox);
                 }
 
-                board->changeTileType(currentTileCoordinate, tileType);
+                boardModel->changeTileType(currentTileCoordinate, tileType);
                 currentDeviationIndex++;
 
             // Otherwise, use the default tile type
             } else {
-                board->changeTileType(currentTileCoordinate, defaultTileType);
+                boardModel->changeTileType(currentTileCoordinate, defaultTileType);
             }
         }
     }
 
-    board->setBoardEntities(entities);
+    boardModel->setBoardEntities(entities);
 }
 
 /**
  * Write the size of the BoardModel to persistent storage.
  * @param fp
  */
-void LevelManager::writeSize(FILE* fp) const {
+void BinaryLevelManager::writeSize(FILE* fp, const BoardModel* boardModel) const {
     // Write Width and Height.
-    auto width = static_cast<uint16_t>(board->getWidth());
-    auto height = static_cast<uint16_t>(board->getHeight());
+    auto width = static_cast<uint16_t>(boardModel->getWidth());
+    auto height = static_cast<uint16_t>(boardModel->getHeight());
     fwrite(&width, sizeof(uint16_t), 1, fp);
     fwrite(&height, sizeof(uint16_t), 1, fp);
 }
@@ -284,7 +279,7 @@ void LevelManager::writeSize(FILE* fp) const {
  * Write the default tile type to persistent storage.
  * @param fp
  */
-void LevelManager::writeDefaultTileType(FILE* fp) const {
+void BinaryLevelManager::writeDefaultTileType(FILE* fp) const {
     // Write Default Tile Type
     auto defaultTileType = static_cast<uint8_t>(TileType::Empty);
     fwrite(&defaultTileType, sizeof(uint8_t), 1, fp);
@@ -294,13 +289,13 @@ void LevelManager::writeDefaultTileType(FILE* fp) const {
  * Write the tiles that deviate from the default tile type to persistent storage.
  * @param fp
  */
-void LevelManager::writeDeviations(FILE* fp) const {
+void BinaryLevelManager::writeDeviations(FILE* fp, const BoardModel* boardModel) const {
     // Count and Collect the number of Tile Deviations
     std::vector<TileCoordinate> deviatedTileCoordinates;
-    for (uint16_t tileX = 0; tileX < board->getWidth(); tileX++) {
-        for (uint16_t tileY = 0; tileY < board->getHeight(); tileY++) {
+    for (uint16_t tileX = 0; tileX < boardModel->getWidth(); tileX++) {
+        for (uint16_t tileY = 0; tileY < boardModel->getHeight(); tileY++) {
             TileCoordinate tileCoordinate(tileX, tileY);
-            if (board->getTileType(tileCoordinate) != defaultTileType) {
+            if (boardModel->getTileType(tileCoordinate) != defaultTileType) {
                 deviatedTileCoordinates.push_back(tileCoordinate);
             }
         }
@@ -319,7 +314,7 @@ void LevelManager::writeDeviations(FILE* fp) const {
         fwrite(&y, sizeof(y), 1, fp);
 
         // Write Deviation Tile Type
-        auto tileType = static_cast<uint8_t>(board->getTileType(tileCoordinate));
+        auto tileType = static_cast<uint8_t>(boardModel->getTileType(tileCoordinate));
         fwrite(&tileType, sizeof(tileType), 1, fp);
     }
 }
@@ -328,13 +323,13 @@ void LevelManager::writeDeviations(FILE* fp) const {
  * Write each of the board entities into persistent storage.
  * @param fp
  */
-void LevelManager::writeEntities(FILE* fp) const {
+void BinaryLevelManager::writeEntities(FILE* fp, const BoardModel* boardModel) const {
     // Write the count of Board Entities
-    uint16_t count = static_cast<uint16_t>(board->getBoardEntities().size());
+    uint16_t count = static_cast<uint16_t>(boardModel->getBoardEntities().size());
     fwrite(&count, sizeof(count), 1, fp);
 
     // Write each entity
-    for (BoardEntity* entity : board->getBoardEntities()) {
+    for (BoardEntity* entity : boardModel->getBoardEntities()) {
 
         uint16_t type = entity->getType();
         fwrite(&type, sizeof(type), 1, fp);

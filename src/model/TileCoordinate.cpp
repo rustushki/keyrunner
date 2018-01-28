@@ -1,6 +1,11 @@
 #include "../model/TileCoordinate.hpp"
 
 /**
+ * Default constructor.
+ */
+TileCoordinate::TileCoordinate() : Coordinate(0, 0) {}
+
+/**
  * Constructor.
  * @param x
  * @param y

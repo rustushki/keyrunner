@@ -21,7 +21,7 @@ PlayController::PlayController(PlayBoardModel* model, Display* display, uint8_t 
     getModel()->setLevelNum(startingLevel);
 
     // Read in the starting level
-    getLevelManager()->read();
+    getLevelManager()->read(getModel());
 
     // Create each of the views for this controller
     View* board = createBoard();
@@ -38,21 +38,26 @@ PlayController::PlayController(PlayBoardModel* model, Display* display, uint8_t 
     getDisplay()->addView("level_number", levelLabel);
 }
 
+/**
+ * Check to see if conditions have been met to change levels during the provided elapsed duration.
+ * <p>
+ * Will check to see if level is complete, and if so if the game has been won. Will also check to see if the time clock
+ * has run down completely--which leads to game over. Either way, the model is updated accordingly.
+ * @param elapsedDuration
+ */
 void PlayController::updateLevel(long elapsedDuration) const {
-    PlayBoardModel* board = getModel();
-
     // If the level is complete,
-    if (board->isComplete()) {
+    if (getModel()->isComplete()) {
         // Check for winning conditions. If the next level is beyond the maximum level; win!
-        uint8_t nextLevel = board->getLevelNum() + (uint8_t) +1;
+        uint8_t nextLevel = getModel()->getLevelNum() + (uint8_t) +1;
         if (nextLevel > getLevelManager()->getLevelCount()) {
             getModel()->setState(WIN);
 
         // Otherwise, go to next level; adding some extra time to the clock
         } else {
-            board->setPlayerHasKey(false);
-            board->setLevelNum(nextLevel);
-            getLevelManager()->read();
+            getModel()->setPlayerHasKey(false);
+            getModel()->setLevelNum(nextLevel);
+            getLevelManager()->read(getModel());
             getModel()->incrementTimeClock(6000);
         }
 

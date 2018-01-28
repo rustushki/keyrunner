@@ -21,12 +21,12 @@ EditorController::EditorController(EditorBoardModel* model, Display* display, ui
     // Create New Level for Edit
     if (editingLevel == 0) {
         getModel()->setLevelNum((uint8_t) (getLevelManager()->getLevelCount() + 1));
-        getLevelManager()->create();
+        getLevelManager()->create(getModel());
 
     // Load Existing Level for Edit
     } else {
         getModel()->setLevelNum(editingLevel);
-        getLevelManager()->read();
+        getLevelManager()->read(getModel());
     }
 
     // Black Bar at the Bottom
@@ -165,7 +165,7 @@ View* EditorController::createSaveButton(View* board, uint8_t buttonSpacing) con
     save->setTextColor(0xFF0000);
     save->setFontPath(FONT_TELEINDICADORES);
     save->setOnMouseUpCallback([this](SDL_Event event) {
-        getLevelManager()->write();
+        getLevelManager()->write(getModel());
     });
     save->show();
     return save;

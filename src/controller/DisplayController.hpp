@@ -4,7 +4,7 @@
 #include "../controller/Controller.hpp"
 #include "../controller/KeyRunner.hpp"
 #include "../model/Direction.hpp"
-#include "../model/LevelManager.hpp"
+#include "../model/BaseModel.hpp"
 
 class DisplayController : public Controller {
 public:

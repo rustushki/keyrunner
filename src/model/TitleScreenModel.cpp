@@ -1,10 +1,11 @@
-#include "TitleScreenModel.hpp"
+#include "../model/JsonLevelManager.hpp"
+#include "../model/TitleScreenModel.hpp"
 
 /**
  * Constructor.
  */
 TitleScreenModel::TitleScreenModel() {
-    levelManager = {};
+    levelManager = new JsonLevelManager();
 }
 
 /**

@@ -4,9 +4,9 @@
 #include <cstdint>
 #include <vector>
 #include "../model/BaseModel.hpp"
+#include "../model/BoardEntity.hpp"
 #include "../model/Direction.hpp"
 #include "../model/TileType.hpp"
-#include "BoardEntity.hpp"
 
 class BoardModel : public BaseModel {
 public:

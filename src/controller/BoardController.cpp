@@ -1,4 +1,5 @@
 #include "../controller/BoardController.hpp"
+#include "../model/JsonLevelManager.hpp"
 
 /**
  * Constructor.
@@ -8,7 +9,7 @@
  * @param display
  */
 BoardController::BoardController(BoardModel* model, Display* display) : DisplayController(model, display) {
-    this->levelManager = new LevelManager(model);
+    this->levelManager = new JsonLevelManager();
 }
 
 /**

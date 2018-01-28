@@ -38,13 +38,15 @@ set(SOURCES
     src/controller/main.cpp
     src/model/AnimationTypeFactory.cpp
     src/model/BaseModel.cpp
+	src/model/BinaryLevelManager.cpp
     src/model/BoardEntityType.hpp
     src/model/BoardModel.cpp
     src/model/EditorBoardModel.cpp
     src/model/GameModel.cpp
     src/model/GameOverModel.cpp
     src/model/GameWinModel.cpp
-    src/model/LevelManager.cpp
+    src/model/JsonLevelManager.cpp
+	src/model/JsonSerialization.cpp
     src/model/OptionModel.cpp
     src/model/PlayBoardModel.cpp
     src/model/TitleScreenModel.cpp
@@ -95,6 +97,9 @@ if (SDL2_TTF_FOUND)
     include_directories(${SDL2_TTF_INCLUDE_DIRS})
     target_link_libraries (keyrunner ${SDL2_TTF_LIBRARIES})
 endif()
+
+# Include nlohmann's json library
+include_directories("json")
 
 # Require C++ 11 Support.
 include(CheckCXXCompilerFlag)

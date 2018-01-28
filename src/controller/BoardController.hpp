@@ -1,9 +1,9 @@
 #ifndef BOARD_CONTROLLER_HPP
 #define BOARD_CONTROLLER_HPP
 
-#include "DisplayController.hpp"
 #include "../controller/Controller.hpp"
-#include "../model/LevelManager.hpp"
+#include "../controller/DisplayController.hpp"
+#include "../model/BinaryLevelManager.hpp"
 
 class BoardController : public DisplayController {
 public:

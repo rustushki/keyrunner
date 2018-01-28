@@ -7,6 +7,7 @@
 class TileCoordinate : public Coordinate {
 public:
     static const long SIZE = 25;
+    TileCoordinate();
     TileCoordinate(long x, long y);
     explicit TileCoordinate(Coordinate coordinate);
     Coordinate toCoordinate() const;
