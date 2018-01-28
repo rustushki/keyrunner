@@ -109,8 +109,19 @@ void JsonLevelManager::write(const BoardModel* boardModel) const {
  * Initialize a BoardModel as an empty level.
  * @param boardModel
  */
-void JsonLevelManager::create(BoardModel* boardModel) {
+void JsonLevelManager::reset(BoardModel* boardModel) {
+    // Remove all entities from the board and replace with just a key and the player
+    std::vector<BoardEntity*> entityList;
+    entityList.push_back(new BaseBoardEntity(Coordinate(0, 0), PLAYER));
+    entityList.push_back(new BaseBoardEntity(Coordinate(TileCoordinate::SIZE, 0), KEY));
+    boardModel->setBoardEntities(entityList);
 
+    // Fill the board with empty tiles
+    for (int x = 0; x < boardModel->getWidth(); x++) {
+        for (int y = 0; y < boardModel->getHeight(); y++) {
+            boardModel->changeTileType(TileCoordinate(x, y), TileType::Empty);
+        }
+    }
 }
 
 /**

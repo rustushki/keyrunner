@@ -10,7 +10,7 @@ public:
     virtual bool levelExists(uint8_t levelNumber) const = 0;
     virtual void read(BoardModel* boardModel) = 0;
     virtual void write(const BoardModel* boardModel) const = 0;
-    virtual void create(BoardModel* boardModel) = 0;
+    virtual void reset(BoardModel* boardModel) = 0;
 };
 
 #endif

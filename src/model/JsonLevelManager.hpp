@@ -15,7 +15,7 @@ public:
     bool levelExists(uint8_t levelNumber) const override;
     void read(BoardModel* boardModel) override;
     void write(const BoardModel* boardModel) const override;
-    void create(BoardModel* boardModel) override;
+    void reset(BoardModel* boardModel) override;
 
 private:
     std::string getPath(uint8_t levelNumber, bool inCurrentWorkingDirectory) const;

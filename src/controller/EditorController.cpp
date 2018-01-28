@@ -21,7 +21,7 @@ EditorController::EditorController(EditorBoardModel* model, Display* display, ui
     // Create New Level for Edit
     if (editingLevel == 0) {
         getModel()->setLevelNum((uint8_t) (getLevelManager()->getLevelCount() + 1));
-        getLevelManager()->create(getModel());
+        getLevelManager()->reset(getModel());
 
     // Load Existing Level for Edit
     } else {
