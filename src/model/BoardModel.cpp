@@ -179,10 +179,7 @@ bool BoardModel::isInDoor(Coordinate coordinate) const {
 bool BoardModel::isConveyor(TileCoordinate coord) const {
     bool isConveyor;
 
-    uint32_t x = coord.getX();
-    uint32_t y = coord.getY();
-
-    if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight()) {
+    if (coord.getX() < 0 || coord.getY() < 0 || coord.getX() >= getWidth() || coord.getY() >= getHeight()) {
         isConveyor = false;
     } else {
         TileType tt = tileType[coord.getY()][coord.getX()];
@@ -301,7 +298,7 @@ std::vector<HitBox*>& BoardModel::getWallHitBoxes() {
 }
 
 /**
- * Get the coordinate 4 pixel in the provided direction.
+ * Get the coordinate 5 pixels in the provided direction.
  * @param startingCoordinate
  * @param direction
  * @return Coordinate
@@ -310,19 +307,19 @@ Coordinate BoardModel::getCoordinateInDirection(Coordinate startingCoordinate, D
     Coordinate newCoordinate{0, 0};
 
     if (direction == DIRECTION_UP) {
-        newCoordinate = {startingCoordinate.getX(), startingCoordinate.getY() - 1};
+        newCoordinate = {startingCoordinate.getX(), startingCoordinate.getY() - 5};
     }
 
     if (direction == DIRECTION_DOWN) {
-        newCoordinate = {startingCoordinate.getX(), startingCoordinate.getY() + 1};
+        newCoordinate = {startingCoordinate.getX(), startingCoordinate.getY() + 5};
     }
 
     if (direction == DIRECTION_LEFT) {
-        newCoordinate = {startingCoordinate.getX() - 1, startingCoordinate.getY()};
+        newCoordinate = {startingCoordinate.getX() - 5, startingCoordinate.getY()};
     }
 
     if (direction == DIRECTION_RIGHT) {
-        newCoordinate = {startingCoordinate.getX() + 1, startingCoordinate.getY()};
+        newCoordinate = {startingCoordinate.getX() + 5, startingCoordinate.getY()};
     }
 
     return newCoordinate;
