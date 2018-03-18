@@ -6,7 +6,6 @@
 #include "../model/BoardEntityType.hpp"
 #include "../model/HitBox.hpp"
 #include "../uitk/SpriteSheet.hpp"
-#include "../uitk/AnimationData.hpp"
 
 class BoardEntity {
 public:
