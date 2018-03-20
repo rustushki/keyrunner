@@ -254,11 +254,14 @@ void JsonLevelManager::fromJson(const json& j, BoardModel* boardModel) const {
 
     std::vector<BoardEntity*> entityList;
     json entities = board.at("entities");
+    const int size = TileCoordinate::SIZE;
     for (json entity : entities) {
         long x = entity.at("x");
         long y = entity.at("y");
         BoardEntityType type = entity.at("type");
-        entityList.push_back(new BaseBoardEntity(Coordinate(x, y), type));
+        BoardEntity* boardEntity = new BaseBoardEntity(Coordinate(x, y), type);
+        boardEntity->getHitBoxes().push_back(new RectangleHitBox(Coordinate(0, 0), size, size));
+        entityList.push_back(boardEntity);
     }
 
     boardModel->setBoardEntities(entityList);

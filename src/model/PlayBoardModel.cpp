@@ -3,7 +3,7 @@
 #include "../model/PlayBoardModel.hpp"
 #include "../model/TileCoordinate.hpp"
 
-PlayBoardModel::PlayBoardModel() {}
+PlayBoardModel::PlayBoardModel() : timeClock(0) {}
 
 /**
  * Is the currently loaded level finished?
@@ -20,12 +20,10 @@ bool PlayBoardModel::isComplete() const {
  * @param direction
  */
 void PlayBoardModel::movePlayerInDirection(Direction direction) {
-
     Coordinate newCoordinate = getCoordinateInDirection(getPlayerCoord(), direction);
 
     // Do not move player if any of its hit boxes intersect with a wall. Do not continue evaluating criteria either,
     // such as teleporters and wraparound. They do not apply since the player has attempted to walk into a wall
-    auto playerHitBoxes = std::vector<HitBox*>(getPlayer()->getHitBoxes());
     for (HitBox* playerHitBox : getPlayer()->getHitBoxes()) {
         playerHitBox->setAnchor(newCoordinate);
 
