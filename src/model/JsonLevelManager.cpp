@@ -260,7 +260,7 @@ void JsonLevelManager::fromJson(const json& j, BoardModel* boardModel) const {
         long y = entity.at("y");
         BoardEntityType type = entity.at("type");
         BoardEntity* boardEntity = new BaseBoardEntity(Coordinate(x, y), type);
-        boardEntity->getHitBoxes().push_back(new RectangleHitBox(Coordinate(0, 0), size, size));
+        boardEntity->getHitBoxes().push_back(new RectangleHitBox(Coordinate(x, y), size, size));
         entityList.push_back(boardEntity);
     }
 
